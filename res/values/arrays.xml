@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in app/menu examples -->
+    <string-array name="entries_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+
+    <!-- Used in app/menu examples -->
+    <string-array name="entryvalues_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+    
+    <string-array name="number_array">
+        <item>Custom 1</item>
+        <item>Custom 2</item>
+        <item>Custom 3</item>
+    </string-array>
+</resources>

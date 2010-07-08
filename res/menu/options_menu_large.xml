@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/element_picker"
+		  android:title="Element Picker" />
+	<item android:id="@+id/brush_size_picker"
+		  android:title="Brush Size Picker" />
+	<item android:id="@+id/eraser"
+		  android:title="Eraser" />
+	<item android:id="@+id/clear_screen"
+	      android:title="Clear Screen"
+	      android:icon="@android:drawable/ic_menu_delete"/>
+	<item android:id="@+id/play_pause"
+		  android:title="Play/Pause" />
+	<item android:id="@+id/toggle_size"
+	      android:title="Toggle Size"
+	      android:icon="@android:drawable/ic_menu_zoom"/>
+	<item android:id="@+id/save"
+		  android:title="Save" />
+	<item android:id="@+id/load"
+		  android:title="Load" />
+	<item android:id="@+id/load_demo"
+		  android:title="Load Demo" />
+	<item android:id="@+id/preferences"
+	      android:title="Preferences"
+	      android:icon="@android:drawable/ic_menu_preferences"/>
+	<item android:id="@+id/exit"
+		  android:title="Exit" />
+</menu>
