@@ -34,12 +34,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 
-public class DemoActivity extends Activity {
-	static final CharSequence[] elementslist = { "Sand", "Water", "Plant",
-			"Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4",
-			"C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam",
-			"Salt", "Salt Water", "Glass", "Custom Element", "Mud" };
-	static final CharSequence[] brushlist = { "1", "2", "4", "8", "16", "32" };
+public class DemoActivity extends Activity
+{
+	static final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4", "C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam", "Salt", "Salt Water", "Glass", "Custom Element", "Mud"};
+	static final CharSequence[] brushlist = {"1", "2", "4", "8", "16", "32"};
 
 	static final int maxy = 414; // 454 for g1, 815 for droid
 	static final int maxx = 319; // 319 for g1, 479 for droid
@@ -65,9 +63,10 @@ public class DemoActivity extends Activity {
 	private Sensor accSensor;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState); // Uses onCreate from the general
-											// Activity
+		// Activity
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE); // Get rid of title bar
 
@@ -77,9 +76,12 @@ public class DemoActivity extends Activity {
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-		if (ui) {
+		if (ui)
+		{
 			setContentView(R.layout.ui);
-		} else {
+		}
+		else
+		{
 			setContentView(R.layout.non_ui);
 		}
 
@@ -99,24 +101,28 @@ public class DemoActivity extends Activity {
 		control = (Control) findViewById(R.id.control);
 
 		PreferencesFromCode.setScreenOnOff(this); // finds out to keep screen on
-													// or off
+		// or off
 
 		loadcustom();
 		showDialog(1); // Pop up intro message
 	}
 
-	private final SensorEventListener mySensorListener = new SensorEventListener() {
-		public void onSensorChanged(SensorEvent event) {
+	private final SensorEventListener mySensorListener = new SensorEventListener()
+	{
+		public void onSensorChanged(SensorEvent event)
+		{
 			sendxg(event.values[0]);
 			sendyg(event.values[1]);
 		}
 
-		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		public void onAccuracyChanged(Sensor sensor, int accuracy)
+		{
 		}
 	};
 
 	@Override
-	protected void onPause() {
+	protected void onPause()
+	{
 		quicksave();
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -127,15 +133,17 @@ public class DemoActivity extends Activity {
 	}
 
 	@Override
-	protected void onResume() {
-		if (layout_ui != ui) {
+	protected void onResume()
+	{
+		if (layout_ui != ui)
+		{
 			System.exit(0);
 		}
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		myManager.registerListener(mySensorListener, accSensor,
-				SensorManager.SENSOR_DELAY_GAME);
+		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
 
-		if (settings.getBoolean("paused", true)) {
+		if (settings.getBoolean("paused", true))
+		{
 			quickload();
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
@@ -144,38 +152,46 @@ public class DemoActivity extends Activity {
 
 		boolean firstrun = settings.getBoolean("firstrun", true);
 		InputStream in;
-		if (sand_view.getWidth() < 300) {
+		if (sand_view.getWidth() < 300)
+		{
 			in = getResources().openRawResource(R.raw.save);
-		} else {
+		}
+		else
+		{
 			in = getResources().openRawResource(R.raw.droiddemo);
 		}
 
-		try {
+		try
+		{
 
 			boolean success = (new File("/sdcard/elementworks/")).mkdir();
 
-			OutputStream out = new FileOutputStream(
-					"/sdcard/elementworks/save2.txt");
+			OutputStream out = new FileOutputStream("/sdcard/elementworks/save2.txt");
 			byte[] buf = new byte[100024];
 			int len;
-			while ((len = in.read(buf)) != -1) {
+			while ((len = in.read(buf)) != -1)
+			{
 				out.write(buf, 0, len);
 			}
 			in.close();
 			out.close();
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e)
+		{
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e)
+		{
 			e.printStackTrace();
 		}
-		if (firstrun == true) {
+		if (firstrun == true)
+		{
 			loaddemov = true;
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("firstrun", false);
 			editor.commit();
 		}
 
-		if (layout_ui) {
+		if (layout_ui)
+		{
 			// This is where I set the activity for Control so that I can call
 			// showDialog() from it
 			control.setActivity(this);
@@ -187,132 +203,159 @@ public class DemoActivity extends Activity {
 	}
 
 	protected Dialog onCreateDialog(int id) // This is called when showDialog is
-											// called
+	// called
 	{
 		if (id == 1) // The first dialog - the intro message
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder
-					.setMessage(
-							"Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.")
-					.setCancelable(false).setPositiveButton("Exit",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									DemoActivity.this.finish(); // Exit button
-																// closes
-																// program
-								}
-							}).setNegativeButton("Proceed",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-									dialog.cancel(); // Proceed closes the
-														// message
-								}
-							});
+			builder.setMessage("Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.").setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					DemoActivity.this.finish(); // Exit button
+					// closes
+					// program
+				}
+			}).setNegativeButton("Proceed", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel(); // Proceed closes the
+					// message
+				}
+			});
 			AlertDialog alert = builder.create(); // Actually create the message
 			return alert; // Return the object created
-		} else if (id == 2) // Element picker
+		}
+		else if (id == 2) // Element picker
 		{
 
-			if (ui) {
+			if (ui)
+			{
 				MenuBar.eraser_on = false;
 				// Change the button to look unclicked
 				MenuBar.eraser_button.setImageResource(R.drawable.eraser);
 			}
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create
-																			// a
-																			// new
-																			// one
+			// a
+			// new
+			// one
 			builder.setTitle("Pick an element"); // Set the title
-			builder.setItems(elementslist,
-					new DialogInterface.OnClickListener() // Create the list
+			builder.setItems(elementslist, new DialogInterface.OnClickListener() // Create
+																					// the
+																					// list
+			{
+				public void onClick(DialogInterface dialog, int item)
+				{
+					if (item == 0) // Sand
 					{
-						public void onClick(DialogInterface dialog, int item) {
-							if (item == 0) // Sand
-							{
-								setelement(0);
-							} else if (item == 1) // Water
-							{
-								setelement(1);
-							} else if (item == 2) // Plant
-							{
-								setelement(4);
-							} else if (item == 3) // Wall
-							{
-								setelement(2);
-							} else if (item == 4) // Fire
-							{
-								setelement(5);
-							} else if (item == 5) // Ice
-							{
-								setelement(6);
-							} else if (item == 6)// Generator
-							{
-								setelement(7);
-							} else if (item == 7)// Oil
-							{
-								setelement(9);
-							} else if (item == 8)// Magma
-							{
-								setelement(10);
-							} else if (item == 9)// Stone
-							{
-								setelement(11);
-							} else if (item == 10)// C4
-							{
-								setelement(12);
-							} else if (item == 11)// C4++
-							{
-								setelement(13);
-							} else if (item == 12)// Fuse
-							{
-								setelement(14);
-							} else if (item == 13)// Destructible wall
-							{
-								setelement(15);
-							} else if (item == 14)// Drag
-							{
-								setelement(16);
-							} else if (item == 15)// Acid
-							{
-								setelement(17);
-							} else if (item == 16)// Steam
-							{
-								setelement(18);
-							} else if (item == 17)// Salt
-							{
-								setelement(19);
-							} else if (item == 18)// Salt-water
-							{
-								setelement(20);
-							} else if (item == 19)// Glass
-							{
-								setelement(21);
-							} else if (item == 20)// Custom 1
-							{
-								setelement(22);
-							} else if (item == 21)// Mud
-							{
-								setelement(23);
-							} else if (item == 22)// Custom 3
-							{
-								setelement(24);
-							}
-						}
-					});
+						setelement(0);
+					}
+					else if (item == 1) // Water
+					{
+						setelement(1);
+					}
+					else if (item == 2) // Plant
+					{
+						setelement(4);
+					}
+					else if (item == 3) // Wall
+					{
+						setelement(2);
+					}
+					else if (item == 4) // Fire
+					{
+						setelement(5);
+					}
+					else if (item == 5) // Ice
+					{
+						setelement(6);
+					}
+					else if (item == 6)// Generator
+					{
+						setelement(7);
+					}
+					else if (item == 7)// Oil
+					{
+						setelement(9);
+					}
+					else if (item == 8)// Magma
+					{
+						setelement(10);
+					}
+					else if (item == 9)// Stone
+					{
+						setelement(11);
+					}
+					else if (item == 10)// C4
+					{
+						setelement(12);
+					}
+					else if (item == 11)// C4++
+					{
+						setelement(13);
+					}
+					else if (item == 12)// Fuse
+					{
+						setelement(14);
+					}
+					else if (item == 13)// Destructible wall
+					{
+						setelement(15);
+					}
+					else if (item == 14)// Drag
+					{
+						setelement(16);
+					}
+					else if (item == 15)// Acid
+					{
+						setelement(17);
+					}
+					else if (item == 16)// Steam
+					{
+						setelement(18);
+					}
+					else if (item == 17)// Salt
+					{
+						setelement(19);
+					}
+					else if (item == 18)// Salt-water
+					{
+						setelement(20);
+					}
+					else if (item == 19)// Glass
+					{
+						setelement(21);
+					}
+					else if (item == 20)// Custom 1
+					{
+						setelement(22);
+					}
+					else if (item == 21)// Mud
+					{
+						setelement(23);
+					}
+					else if (item == 22)// Custom 3
+					{
+						setelement(24);
+					}
+				}
+			});
 			AlertDialog alert = builder.create(); // Create the dialog
 
 			return alert; // Return handle
-		} else if (id == 3) {
+		}
+		else if (id == 3)
+		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare
-																			// the
-																			// object
+			// the
+			// object
 			builder.setTitle("Brush Size Picker");
-			builder.setItems(brushlist, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int item) {
+			builder.setItems(brushlist, new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int item)
+				{
 					setBrushSize((int) java.lang.Math.pow(2, item));
 				}
 			});
@@ -324,17 +367,20 @@ public class DemoActivity extends Activity {
 	}
 
 	public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press
-													// Menu
+	// Menu
 	{
 		// Create an inflater to "inflate" the menu already defined in
 		// res/menu/options_menu.xml
 		// This seems to be a bit faster at loading the menu, and easier to
 		// modify
 		MenuInflater inflater = getMenuInflater();
-		if (layout_ui) {
+		if (layout_ui)
+		{
 			menu.clear();
 			inflater.inflate(R.menu.options_menu_small, menu);
-		} else {
+		}
+		else
+		{
 			menu.clear();
 			inflater.inflate(R.menu.options_menu_large, menu);
 		}
@@ -342,8 +388,10 @@ public class DemoActivity extends Activity {
 		return true;
 	}
 
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch (item.getItemId())
+		{
 		case R.id.element_picker:
 
 			showDialog(2);
@@ -361,10 +409,13 @@ public class DemoActivity extends Activity {
 			return true;
 		case R.id.play_pause:
 
-			if (play) {
+			if (play)
+			{
 				jPause();
 				play = false;
-			} else {
+			}
+			else
+			{
 				Play();
 				play = true;
 			}
@@ -375,9 +426,12 @@ public class DemoActivity extends Activity {
 			return true;
 		case R.id.toggle_size:
 
-			if (size == 1) {
+			if (size == 1)
+			{
 				size = 0;
-			} else {
+			}
+			else
+			{
 				size = 1;
 			}
 			togglesize();
@@ -396,8 +450,7 @@ public class DemoActivity extends Activity {
 			return true;
 		case R.id.preferences:
 
-			startActivity(new Intent(DemoActivity.this,
-					PreferencesFromCode.class));
+			startActivity(new Intent(DemoActivity.this, PreferencesFromCode.class));
 			return true;
 		case R.id.exit:
 
@@ -417,7 +470,8 @@ public class DemoActivity extends Activity {
 	public native static void setup(); // set up arrays and such
 
 	public native static void fd(int fstate); // sets finger up or down, 1 is
-												// down
+
+	// down
 
 	public native static void mp(int jxm, int jym); // sets x mouse and y mouse
 
@@ -453,8 +507,7 @@ public class DemoActivity extends Activity {
 
 	public native static void setAccelOnOff(int state);
 
-	public native static void setcollision(int custnumber, int elementnumb,
-			int collisionspot, int collisionnumber);
+	public native static void setcollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
 
 	public native static void savecustom();
 
@@ -468,8 +521,9 @@ public class DemoActivity extends Activity {
 
 	public native static void setgreen(int greenness);
 
-	static {
+	static
+	{
 		System.loadLibrary("sanangeles"); // Load the JNI library
-											// (libsanangeles.so)
+		// (libsanangeles.so)
 	}
 }
