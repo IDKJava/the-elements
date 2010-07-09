@@ -59,6 +59,7 @@ int maxy;
 int oldx[TPoints];
 int oldy[TPoints];
 int delete[TPoints];
+char savebuffer[3 + 1 + (2 * TPoints * 4)]; //3 bytes for size, 1 for command, the next part for data
 
 float gravx = 0; //xgravity
 float gravy = 0; //ygravity (9.8 m/s^2 usually)
@@ -173,8 +174,8 @@ int colliseelement1[TElements] =
 int collision[TElements][TElements] =
 {
 //Sand 0
-		{ 0, 28, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
+		{ 0, 28, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0,
+				1, 0, 0, 0, 0 },
 		//Water 1
 		{ 28, 3, 1, -1, 4, 23, 8, 10, 1, 3, 12, 1, 1, 1, 1, 1, -1, 19, 20, 24,
 				3, 1, 1, 1, 1 },
@@ -912,6 +913,46 @@ Java_sand_falling_opengl_DemoActivity_togglesize(JNIEnv* env, jobject thiz)
 int Java_sand_falling_opengl_DemoActivity_save(JNIEnv* env, jobject thiz)
 {
 	return saver(0); //Do a normal save
+}
+
+int preparesavebuffer(int type)
+{
+
+	int i = 0;
+	if (type == 0)
+	{
+		int length = 3 + 1 + (2 * TPoints * 4);
+		savebuffer[0] = (char)(length >> 16);
+		savebuffer[1] = (char)(length % (256 * 256) >> 8);
+		savebuffer[2] = (char)(length % (256 * 256 * 256));
+
+		savebuffer[3] = (char)0;
+		for (i=4; i < 2 * TPoints * 4; i++)
+		{
+			savebuffer[i] = (char) (spawn[i / 8] >> 8);
+			savebuffer[++i] = (char) (spawn[(i - 1) / 8] % 256);
+			savebuffer[++i] = (char) ((int)(x[(i - 2) / 8]) >> 8);
+			savebuffer[++i] = (char) ((int)(x[(i - 3) / 8]) % 256);
+			savebuffer[++i] = (char) (((int)y[(i - 4) / 8]) >> 8);
+			savebuffer[++i] = (char) ((int)(y[(i - 5) / 8]) % 256);
+			savebuffer[++i] = (char) (element[(i - 6) / 8] >> 8);
+			savebuffer[++i] = (char) (element[(i - 7) / 8] % 256);
+		}
+	}
+	else if (type = 1)
+	{
+		int length = 3 + 1 + (TElements * 2);
+		savebuffer[0] = (char)(length >> 16);
+		savebuffer[1] = (char)(length % (256 * 256) >> 8);
+		savebuffer[2] = (char)(length % (256 * 256 * 256));
+		savebuffer[3] = (char)1;
+		for (i = 4; i < 2 * TElements; i++)
+		{
+			savebuffer[i] = (char) (colliseelement1[i / 2]);
+			savebuffer[++i] = (char) (collision[22][(i - 1) / 2]);
+		}
+
+	}
 }
 int saver(int type)
 {

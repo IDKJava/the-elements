@@ -20,7 +20,7 @@ public class Control extends LinearLayout
 	
 	//Constructor
 	public Control(Context context, AttributeSet attrs)
-	{
+	{ 
 		super(context, attrs);
 	}
 
