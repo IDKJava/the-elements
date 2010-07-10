@@ -65,17 +65,17 @@ public class DemoActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState); // Uses onCreate from the general
-		// Activity
+		super.onCreate(savedInstanceState); //Uses onCreate from the general Activity
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE); // Get rid of title bar
+		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
 
 		PreferencesFromCode.setpreferences(this);
 
-		// Set Sensor + Manager
+		//Set Sensor + Manager
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+		//Set the layout based on the settings
 		if (ui)
 		{
 			setContentView(R.layout.ui);
@@ -85,26 +85,23 @@ public class DemoActivity extends Activity
 			setContentView(R.layout.non_ui);
 		}
 
-		// Sync on startup (layout_ui is not changed on preference changed for
-		// smoothness)
+		//Sync on startup (layout_ui is not changed on preference changed for smoothness)
 		layout_ui = ui;
 
-		// Need to do this otherwise it gives a nullpointerexception
+		//Need to do this otherwise it gives a nullpointerexception
 		menu_bar = new MenuBar(this, null);
 		sand_view = new SandView(this, null);
 		control = new Control(this, null);
 
-		// Set the new view and control box and menu bar to the stuff defined in
-		// layout
+		//Set the new view and control box and menu bar to the stuff defined in layout
 		menu_bar = (MenuBar) findViewById(R.id.menu_bar);
 		sand_view = (SandView) findViewById(R.id.sand_view);
 		control = (Control) findViewById(R.id.control);
 
-		PreferencesFromCode.setScreenOnOff(this); // finds out to keep screen on
-		// or off
+		PreferencesFromCode.setScreenOnOff(this); //Finds out to keep screen on or off
 
-		loadcustom();
-		showDialog(1); // Pop up intro message
+		loadcustom(); //Load the custom elements
+		showDialog(1); //Pop up intro message
 	}
 
 	private final SensorEventListener mySensorListener = new SensorEventListener()
@@ -123,13 +120,17 @@ public class DemoActivity extends Activity
 	@Override
 	protected void onPause()
 	{
+		//Quicksave
 		quicksave();
+		//Set the preferences to indicate paused
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putBoolean("paused", true);
 		editor.commit();
+		//Use the normal onPause
 		super.onPause();
-		sand_view.onPause(); // Need to call onPause for the View
+		//Call onPause for the view
+		sand_view.onPause();
 	}
 
 	@Override
@@ -142,15 +143,21 @@ public class DemoActivity extends Activity
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
 
+		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", true))
 		{
+			//Load the save
 			quickload();
+			//Set the preferences to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
 			editor.commit();
 		}
 
+		//Set firstrun
 		boolean firstrun = settings.getBoolean("firstrun", true);
+		
+		//Input the correct save file (based on screen width)
 		InputStream in;
 		if (sand_view.getWidth() < 300)
 		{
@@ -163,9 +170,10 @@ public class DemoActivity extends Activity
 
 		try
 		{
-
+			//Try to create the folder
 			boolean success = (new File("/sdcard/elementworks/")).mkdir();
 
+			//Try to copy the demo file to the save file
 			OutputStream out = new FileOutputStream("/sdcard/elementworks/save2.txt");
 			byte[] buf = new byte[100024];
 			int len;
@@ -175,13 +183,19 @@ public class DemoActivity extends Activity
 			}
 			in.close();
 			out.close();
-		} catch (FileNotFoundException e)
+		}
+		catch (FileNotFoundException e)
 		{
-			e.printStackTrace();
-		} catch (IOException e)
-		{
+			//FileNotFoundException is normal, ignore it
 			e.printStackTrace();
 		}
+		catch (IOException e)
+		{
+			//IOException is also fine, ignore
+			e.printStackTrace();
+		}
+		
+		//If it's the first run, tell it to load the demo and unset firstrun
 		if (firstrun == true)
 		{
 			loaddemov = true;
@@ -192,18 +206,19 @@ public class DemoActivity extends Activity
 
 		if (layout_ui)
 		{
-			// This is where I set the activity for Control so that I can call
-			// showDialog() from it
+			// This is where I set the activity for Control so that I can call showDialog() from it
 			control.setActivity(this);
-			// Set instance of activity for MenuBar also
+			//Set instance of activity for MenuBar also
 			menu_bar.setActivity(this);
 		}
+		
+		//Use the super onResume as well
 		super.onResume();
-		sand_view.onResume(); // Need to call onResume for the View
+		//Call onResume() for view too
+		sand_view.onResume();
 	}
 
-	protected Dialog onCreateDialog(int id) // This is called when showDialog is
-	// called
+	protected Dialog onCreateDialog(int id) //This is called when showDialog is called
 	{
 		if (id == 1) // The first dialog - the intro message
 		{
@@ -229,7 +244,6 @@ public class DemoActivity extends Activity
 		}
 		else if (id == 2) // Element picker
 		{
-
 			if (ui)
 			{
 				MenuBar.eraser_on = false;
@@ -237,14 +251,9 @@ public class DemoActivity extends Activity
 				MenuBar.eraser_button.setImageResource(R.drawable.eraser);
 			}
 
-			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create
-			// a
-			// new
-			// one
+			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 			builder.setTitle("Pick an element"); // Set the title
-			builder.setItems(elementslist, new DialogInterface.OnClickListener() // Create
-																					// the
-																					// list
+			builder.setItems(elementslist, new DialogInterface.OnClickListener() //Create the list
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
@@ -348,9 +357,7 @@ public class DemoActivity extends Activity
 		}
 		else if (id == 3)
 		{
-			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare
-			// the
-			// object
+			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
 			builder.setTitle("Brush Size Picker");
 			builder.setItems(brushlist, new DialogInterface.OnClickListener()
 			{
@@ -366,13 +373,10 @@ public class DemoActivity extends Activity
 		return null; // No need to return anything, just formality
 	}
 
-	public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press
-	// Menu
+	public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
 	{
-		// Create an inflater to "inflate" the menu already defined in
-		// res/menu/options_menu.xml
-		// This seems to be a bit faster at loading the menu, and easier to
-		// modify
+		// Create an inflater to "inflate" the menu already defined in res/menu/options_menu.xml
+		// This seems to be a bit faster at loading the menu, and easier to modify
 		MenuInflater inflater = getMenuInflater();
 		if (layout_ui)
 		{
@@ -392,138 +396,107 @@ public class DemoActivity extends Activity
 	{
 		switch (item.getItemId())
 		{
-		case R.id.element_picker:
-
-			showDialog(2);
-
-			return true;
-		case R.id.brush_size_picker:
-
-			showDialog(3);
-
-			return true;
-		case R.id.clear_screen:
-
-			setup();
-
-			return true;
-		case R.id.play_pause:
-
-			if (play)
-			{
-				jPause();
-				play = false;
-			}
-			else
-			{
-				Play();
-				play = true;
-			}
-			return true;
-		case R.id.eraser:
-
-			setelement(3);
-			return true;
-		case R.id.toggle_size:
-
-			if (size == 1)
-			{
-				size = 0;
-			}
-			else
-			{
-				size = 1;
-			}
-			togglesize();
-			return true;
-		case R.id.save:
-
-			save();
-			return true;
-		case R.id.load:
-
-			load();
-			return true;
-		case R.id.load_demo:
-
-			loaddemo();
-			return true;
-		case R.id.preferences:
-
-			startActivity(new Intent(DemoActivity.this, PreferencesFromCode.class));
-			return true;
-		case R.id.exit:
-
-			System.exit(0);
-			return true;
+			case R.id.element_picker:
+	
+				showDialog(2);
+	
+				return true;
+			case R.id.brush_size_picker:
+	
+				showDialog(3);
+	
+				return true;
+			case R.id.clear_screen:
+	
+				setup();
+	
+				return true;
+			case R.id.play_pause:
+	
+				if (play)
+				{
+					jPause();
+					play = false;
+				}
+				else
+				{
+					Play();
+					play = true;
+				}
+				return true;
+			case R.id.eraser:
+	
+				setelement(3);
+				return true;
+			case R.id.toggle_size:
+	
+				if (size == 1)
+				{
+					size = 0;
+				}
+				else
+				{
+					size = 1;
+				}
+				togglesize();
+				return true;
+			case R.id.save:
+	
+				save();
+				return true;
+			case R.id.load:
+	
+				load();
+				return true;
+			case R.id.load_demo:
+	
+				loaddemo();
+				return true;
+			case R.id.preferences:
+	
+				startActivity(new Intent(DemoActivity.this, PreferencesFromCode.class));
+				return true;
+			case R.id.exit:
+	
+				System.exit(0);
+				return true;
 		}
 		return false;
 	}
 
 	// JNI functions
 	public native static int save();
-
 	public native static int loaddemo();
-
 	public native static int load();
-
-	public native static void setup(); // set up arrays and such
-
-	public native static void fd(int fstate); // sets finger up or down, 1 is
-
-	// down
-
-	public native static void mp(int jxm, int jym); // sets x mouse and y mouse
-
+	public native static void setup(); //Set up arrays and such
+	public native static void fd(int fstate); //Sets finger up or down, 1 is down
+	public native static void mp(int jxm, int jym); //Sets x mouse and y mouse
 	public native static void tester();
-
 	public native static void Play(); // Jni play
-
 	public native static void jPause(); // Jni pause
-
 	public native static void togglesize(); // Jni toggle size
-
 	public native static void nativePause();
-
 	public native static void quicksave();
-
 	public native static void quickload();
-
 	public native static void setBackgroundColor(int colorcode);
-
 	public native static void setFlip(int flipped);
-
 	public native static void setelement(int element);
-
 	public native static void setBrushSize(int jsize);
-
 	public native static int getelement();
-
 	public native static void clearquicksave();
-
 	public native static void sendyg(float ygrav);
-
 	public native static void sendxg(float xgrav);
-
 	public native static void setAccelOnOff(int state);
-
 	public native static void setcollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
-
 	public native static void savecustom();
-
 	public native static void loadcustom();
-
 	public native static void setexplosiveness(int explosiveness);
-
 	public native static void setred(int redness);
-
 	public native static void setblue(int blueness);
-
 	public native static void setgreen(int greenness);
 
 	static
 	{
-		System.loadLibrary("sanangeles"); // Load the JNI library
-		// (libsanangeles.so)
+		System.loadLibrary("sanangeles"); // Load the JNI library (libsanangeles.so)
 	}
 }
