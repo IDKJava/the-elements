@@ -1924,9 +1924,18 @@ collide(int fp, int sp)//first particle and second particle
 				&& colliseelement1[element[fp]] != 23))
 		{ //sp is mud
 
+			//Delete the old point
+			allcoords[olxf][olyf] = -1;
+			setBitmapColor(olxf, olyf, 3);
+
+
 			DeletePoint(sp); //delete the fire
 			element[fp] = 0; //change the mud to sand
-			setBitmapColor(x[fp], y[fp], element[fp]); //update the color of mud
+
+			int xfp = x[fp], yfp = y[fp]; //Some temp variables
+
+			allcoords[xfp][yfp] = fp;
+			setBitmapColor(xfp, yfp, element[fp]); //update the color of mud
 
 		}
 		else
