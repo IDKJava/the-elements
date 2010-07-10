@@ -844,7 +844,7 @@ collide(int fp, int sp)//first particle and second particle
 			{
 				for (j = -2; j <= 2; j++)
 				{
-					if (xfp + i >= 0 && xfp + i < maxx && yfp + j > 0 && yfp
+					if (xfp + i > 0 && xfp + i < maxx && yfp + j > 0 && yfp
 							+ j < maxy && !(i == 0 && j == 0))
 					{
 						a = allcoords[xfp + i][yfp + j]; //The allcoords at the prospective point
@@ -907,7 +907,7 @@ collide(int fp, int sp)//first particle and second particle
 			{
 				for (j = -2; j <= 2; j++)
 				{
-					if (xsp + i >= 0 && xsp + i < maxx && ysp + j > 0 && ysp
+					if (xsp + i > 0 && xsp + i < maxx && ysp + j > 0 && ysp
 							+ j < maxy && !(i == 0 && j == 0))
 					{
 						a = allcoords[xsp + i][ysp + j];
@@ -1111,11 +1111,11 @@ collide(int fp, int sp)//first particle and second particle
 							element[a] = 5;
 							setBitmapColor(txpos + i, typos + j, 5);
 
-							int random = rand() % 10;
+							int random = rand() % 11;
 							random -= 5;
 							xvel[a] = random; //xvel is a random int from -5 to 5
 
-							random = rand() % 10;
+							random = rand() % 11; //mod 11 goes from 0 to 10
 							random -= 5;
 							yvel[a] = random; //yvel is a random int from -5 to 5
 						}
@@ -1192,11 +1192,11 @@ collide(int fp, int sp)//first particle and second particle
 							element[a] = 5;
 							setBitmapColor(txpos + i, typos + j, 5);
 
-							int random = rand() % 10;
+							int random = rand() % 11; //mod 11 goes from 0 to 10
 							random -= 5;
 							xvel[a] = random; //xvel is a random int from -5 to 5
 
-							random = rand() % 10;
+							random = rand() % 11;
 							random -= 5;
 							yvel[a] = random; //yvel is a random int from -5 to 5
 						}
@@ -1276,14 +1276,14 @@ collide(int fp, int sp)//first particle and second particle
 								|| collision[element[a]][5] == 15
 								|| collision[element[a]][5] == 16))
 						{
-							element[a] = 5;
-							setBitmapColor(txpos + i, typos + j, 5);
+							element[a] = 5; //change a to fire
+							setBitmapColor(txpos + i, typos + j, 5); //change color of a to that of fire
 
-							int random = rand() % 10;
+							int random = rand() % 11; // mod 11 goes from 0 to 10
 							random -= 5;
 							xvel[a] = random; //xvel is a random int from -5 to 5
 
-							random = rand() % 10;
+							random = rand() % 11;
 							random -= 5;
 							yvel[a] = random; //yvel is a random int from -5 to 5
 						}
@@ -1361,11 +1361,11 @@ collide(int fp, int sp)//first particle and second particle
 							element[a] = 5;
 							setBitmapColor(txpos + i, typos + j, 5);
 
-							int random = rand() % 10;
+							int random = rand() % 11; //mod 11 goes from 0 to 10
 							random -= 5;
 							xvel[a] = random; //xvel is a random int from -5 to 5
 
-							random = rand() % 10;
+							random = rand() % 11; //mod 11 goes from 0 to 10
 							random -= 5;
 							yvel[a] = random; //yvel is a random int from -5 to 5
 						}
