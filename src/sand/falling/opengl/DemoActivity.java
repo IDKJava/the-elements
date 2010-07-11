@@ -244,19 +244,18 @@ public class DemoActivity extends Activity
 		}
 		else if (id == 2) // Element picker
 		{
-			if (ui)
-			{
-				MenuBar.eraser_on = false;
-				// Change the button to look unclicked
-				MenuBar.eraser_button.setImageResource(R.drawable.eraser);
-			}
-
+ 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 			builder.setTitle("Pick an element"); // Set the title
 			builder.setItems(elementslist, new DialogInterface.OnClickListener() //Create the list
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
+					if (MenuBar.eraser_on == true)
+					{
+							MenuBar.seteraseroff();
+					}
+
 					if (item == 0) // Sand
 					{
 						setelement(0);

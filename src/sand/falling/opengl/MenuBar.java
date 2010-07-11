@@ -23,7 +23,7 @@ public class MenuBar extends LinearLayout
 	
 	//Used for eraser
 	static boolean eraser_on = false;
-	private int temp_element = 0;
+	private static int temp_element = 0;
 	
 	//Used for play/pause
 	static boolean play = true;
@@ -44,6 +44,14 @@ public class MenuBar extends LinearLayout
 	//Testing
 	public void hi()
 	{}
+	public static void seteraseroff()
+	{
+		eraser_button.setImageResource(R.drawable.eraser);
+		
+		eraser_on = false;
+		DemoActivity.setelement(temp_element);
+		
+	}
 
 	//Called when it's finished inflating the XML layout
 	@Override
@@ -89,6 +97,7 @@ public class MenuBar extends LinearLayout
 		);
 		//Start off the eraser in "off" position
 		eraser_button.setImageResource(R.drawable.eraser);
+		
 		
 		//Set up the OnClickListener for the play/pause button
 		play_pause_button.setOnClickListener
