@@ -844,7 +844,7 @@ collide(int fp, int sp)//first particle and second particle
 			{
 				for (j = -2; j <= 2; j++)
 				{
-					if (xfp + i > 0 && xfp + i < maxx && yfp + j > 0 && yfp
+					if (xfp + i > 1 && xfp + i < maxx && yfp + j > 0 && yfp
 							+ j < maxy && !(i == 0 && j == 0))
 					{
 						a = allcoords[xfp + i][yfp + j]; //The allcoords at the prospective point
@@ -907,7 +907,7 @@ collide(int fp, int sp)//first particle and second particle
 			{
 				for (j = -2; j <= 2; j++)
 				{
-					if (xsp + i > 0 && xsp + i < maxx && ysp + j > 0 && ysp
+					if (xsp + i > 1 && xsp + i < maxx && ysp + j > 0 && ysp
 							+ j < maxy && !(i == 0 && j == 0))
 					{
 						a = allcoords[xsp + i][ysp + j];
