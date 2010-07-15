@@ -1035,7 +1035,7 @@ int loader(int type)
 Java_sand_falling_opengl_DemoActivity_loaddemo(JNIEnv* env, jobject thiz)
 {
 	FILE *fp;
-	fp = fopen("/sdcard/save2.txt", "r");
+	fp = fopen("/sdcard/elementworks/save2.txt", "r");
 	rsetup();
 	int i;
 	int xcoordinate;
