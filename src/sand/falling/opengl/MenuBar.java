@@ -133,32 +133,18 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			    	  if (DemoActivity.play)
-			    	  {
-			    		  DemoActivity.jPause();
-			    		  if (DemoActivity.save() == 1)
-			    		  {
-			    			  Toast.makeText(context, "File Saved", Toast.LENGTH_SHORT).show();    			  
-			    		  }
-			    		  else
-			    		  {
-			    			  Toast.makeText(context, "No SDcard", Toast.LENGTH_LONG).show();    			  
-			    		  }
-			    		  DemoActivity.Play();
+			  
+		    		  if (DemoActivity.save() == 1)
+		    		  {
+		    			  Toast.makeText(context, "File Saved", Toast.LENGTH_SHORT).show();    			  
+		    		  }
+		    		  else
+		    		  {
+		    			  Toast.makeText(context, "No SDcard", Toast.LENGTH_LONG).show();    			  
+		    		  }
+		    		  
 			    		  
-			    	  }
-			    	  else
-			    	  {
-			    		  if (DemoActivity.save() == 1)
-			    		  {
-			    			  Toast.makeText(context, "File Saved", Toast.LENGTH_SHORT).show();    			  
-			    		  }
-			    		  else
-			    		  {
-			    			  Toast.makeText(context, "No SDcard", Toast.LENGTH_LONG).show();    			  
-			    		  }
-			    		 
-			    	  }
+			    	 
 				}
 			}
 		);
@@ -211,6 +197,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
+					
 					System.exit(0);
 				}
 			}
