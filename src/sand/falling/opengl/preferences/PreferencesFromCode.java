@@ -116,10 +116,10 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
         // Let's do something when my counter preference value changes
-         Log.v("DemoActivity", "onpref called");
+        //Log.v("DemoActivity", "onpref called");
         if (key == "background_color")
         {
-        	Log.v("DemoActivity", "onpref color: " + sharedPreferences.getString(key, "black"));
+        	//Log.v("DemoActivity", "onpref color: " + sharedPreferences.getString(key, "black"));
         	if (sharedPreferences.getString( key, "black").equals("black"))
         	{
         		DemoActivity.setBackgroundColor(0);
