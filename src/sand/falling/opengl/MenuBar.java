@@ -1,5 +1,6 @@
 package sand.falling.opengl;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -197,8 +198,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-					
-					System.exit(0);
+					activity.finish();
 				}
 			}
 		);
