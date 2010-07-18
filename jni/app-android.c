@@ -25,6 +25,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <android/log.h>
 
 #define TPoints 500000
 #define TElements 25
@@ -49,6 +50,8 @@ unsigned char colors[TPixels * 3]; //3 bytes/pixel
 //coordinates of all the pieces 
 float x[TPoints];
 float y[TPoints];
+
+char frozen[TPoints];
 
 int flipped = 0;
 
@@ -619,10 +622,12 @@ static long _getTime(void)
 
 void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "8");
 	importGLInit();
 	appInit();
 	gAppAlive = 1;
 	sTimeOffsetInit = 0;
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "4");
 }
 
 void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env,
@@ -693,6 +698,7 @@ void Java_sand_falling_opengl_DemoRenderer_nativeRender(JNIEnv* env)
 
 Java_sand_falling_opengl_DemoActivity_setup(JNIEnv* env, jobject thiz)
 {
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "5");
 	rsetup();
 	return;
 }
@@ -717,7 +723,9 @@ rsetup()
 		set[j] = 0;
 		avail[j] = j;
 		spawn[j] = -1;
+		frozen[j] = 0;
 	}
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "6");
 	for (o = 0; o < 1024; o++)
 	{
 		for (k = 0; k < 512; k++)
@@ -728,6 +736,7 @@ rsetup()
 			colors[3 * (k + 512 * o) + 2] = blankgreen; //0
 		}
 	}
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "7");
 	return;
 }
 Java_sand_falling_opengl_DemoActivity_jPause(JNIEnv* env, jobject thiz)
@@ -747,6 +756,7 @@ Java_sand_falling_opengl_DemoActivity_setBackgroundColor(JNIEnv* env,
 		red[3] = 0; //3 is eraser
 		blue[3] = 0;
 		green[3] = 0;
+		//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "color");
 		rsetup();
 	}
 	else if (colorcode == 1)
@@ -754,6 +764,7 @@ Java_sand_falling_opengl_DemoActivity_setBackgroundColor(JNIEnv* env,
 		red[3] = 255;
 		blue[3] = 255;
 		green[3] = 255;
+		//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "color");
 		rsetup();
 	}
 	loader(1);
@@ -1011,6 +1022,7 @@ int loader(int type)
 	{
 		fp = fopen("/sdcard/elementworks/quicksave.txt", "r");
 	}
+	__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "load");
 	rsetup();
 	int i;
 	int xcoordinate;
@@ -1031,11 +1043,13 @@ int loader(int type)
 		fclose(fp);
 		return 1;
 	}
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "load done");
 }
 Java_sand_falling_opengl_DemoActivity_loaddemo(JNIEnv* env, jobject thiz)
 {
 	FILE *fp;
 	fp = fopen("/sdcard/elementworks/save2.txt", "r");
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "demo");
 	rsetup();
 	int i;
 	int xcoordinate;
@@ -1065,6 +1079,7 @@ Java_sand_falling_opengl_DemoActivity_loadcustom(JNIEnv* env, jobject thiz)
 {
 	FILE *fp;
 	fp = fopen("/sdcard/customele.txt", "r");
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "custom");
 	rsetup();
 	int i;
 	int collisiondata;

@@ -69,6 +69,8 @@ extern int oldy[TPoints];
 
 // what type of element each piece of sand is
 extern int element[TPoints];
+//whether we calculate collisions each round for a prticle
+extern char frozen[TPoints];
 
 //The red, green, and blue components of each element color
 extern unsigned char red[TElements];    
