@@ -490,11 +490,11 @@ public class CustomMaker extends Activity
 			}
 			else if (pos == 2)
 			{
-				DemoActivity.setcollision(1, 1, elent, 1);
+				DemoActivity.setcollision(1, 24, elent, 1);
 			}
 			else if (pos == 3)
 			{
-				DemoActivity.setcollision(1, 1, elent, 3);
+				DemoActivity.setcollision(1, 24, elent, 3);
 			}
 			else if (pos == 4)
 			{
