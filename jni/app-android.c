@@ -316,11 +316,11 @@ int density[] =
 		//Glass:
 		30,
 		//Custom 1:
-		16,
-		//Custom 2:
+		1,
+		//Mud:
 		16,
 		//Custom 3:
-		16 };
+		1};
 //is solid?
 int solid[] =
 {
@@ -788,6 +788,12 @@ Java_sand_falling_opengl_DemoActivity_setblue(JNIEnv* env, jobject thiz,
 		jint blueness)
 {
 	blue[22] = blueness;
+}
+
+Java_sand_falling_opengl_DemoActivity_setdensity(JNIEnv* env, jobject thiz,
+		jint jdensity)
+{
+	density[22] = jdensity;
 }
 Java_sand_falling_opengl_DemoActivity_setFlip(JNIEnv* env, jobject thiz,
 		jint jflipped)

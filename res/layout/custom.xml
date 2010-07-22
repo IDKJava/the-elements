@@ -306,6 +306,19 @@
 			android:layout_weight="1"
 			android:layout_height="wrap_content"
 			android:layout_width="fill_parent"
+			android:padding="5px" />
+	<TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:text="@string/densitytext" 
+    />		
+	<SeekBar
+			android:id="@+id/density_slider"
+			android:layout_gravity="center"
+			android:layout_weight="1"
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
 			android:padding="5px" />		
 	
 			

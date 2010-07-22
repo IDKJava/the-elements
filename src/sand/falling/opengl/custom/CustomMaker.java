@@ -2,6 +2,7 @@ package sand.falling.opengl.custom;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,11 +52,12 @@ public class CustomMaker extends Activity
 	Spinner mudcollis = null;
 	Spinner customelecollis = null;
 
-	private final int TSeekBar = 4;
+	private final int TSeekBar = 5;
 	private SeekBar explo_slider;
 	private SeekBar red_1_slider;
 	private SeekBar blue_1_slider;
 	private SeekBar green_1_slider;
+	private SeekBar density_slider;
 
 	private int[] incustom = new int[TSpinner + TSeekBar];
 	int[] inFile = new int[TSpinner + TSeekBar];
@@ -75,7 +77,16 @@ public class CustomMaker extends Activity
 			dis = new DataInputStream(fis);
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
 			{
-				inFile[i] = dis.readInt();
+				
+				try{
+					inFile[i] = dis.readInt();
+				}catch ( EOFException e){
+					
+					e.printStackTrace();
+					inFile[i] = 0;
+					
+				}
+				
 			}
 
 		} catch (IOException e)
@@ -86,6 +97,7 @@ public class CustomMaker extends Activity
 				inFile[i] = 0;
 			}
 		}
+		
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.custom);
@@ -94,6 +106,7 @@ public class CustomMaker extends Activity
 		red_1_slider = (SeekBar) findViewById(R.id.red_1_slider);
 		blue_1_slider = (SeekBar) findViewById(R.id.blue_1_slider);
 		green_1_slider = (SeekBar) findViewById(R.id.green_1_slider);
+		density_slider = (SeekBar) findViewById(R.id.density_slider);
 
 		// set up the Spinners
 		sandcollis = (Spinner) findViewById(R.id.sandcol);
@@ -329,6 +342,29 @@ public class CustomMaker extends Activity
 		});
 		// Start off the progress bar at the value in the file
 		blue_1_slider.setProgress(inFile[3]);
+		density_slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+		{
+			public void onProgressChanged(SeekBar seekbar, int progress, boolean fromTouch)
+			{
+				// When it is dragged, set the blue value to 255 * the fraction of the bar dragged
+				int p = 100 * progress / seekbar.getMax();
+				DemoActivity.setdensity(p);
+				DemoActivity.savecustom();
+				inFile[4] = progress;
+				savecustomdata();
+			}
+
+			// These aren't needed for now
+			public void onStartTrackingTouch(SeekBar seekbar)
+			{
+			}
+
+			public void onStopTrackingTouch(SeekBar seekbar)
+			{
+			}
+		});
+		// Start off the progress bar at the value in the file
+		density_slider.setProgress(inFile[4]);
 		DemoActivity.savecustom();
 	}
 

@@ -27,5 +27,6 @@
     <string name="redtext">Redness:</string>
     <string name="bluetext">Blueness:</string>
     <string name="greentext">Greeness:</string>
+    <string name="densitytext">Density:</string>
     <string name="reaction_prompt">Select Reaction Type?</string>
 </resources>
