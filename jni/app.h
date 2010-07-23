@@ -127,6 +127,11 @@ extern int fd;
 //Current element selected
 extern int celement;
 
+extern char username[8];
+extern char password[8];
+extern char userlength;
+extern char passlength;
+
 #ifdef __cplusplus
 }
 #endif

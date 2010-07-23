@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Date;
 
 import sand.falling.opengl.custom.CustomMaker;
+import sand.falling.opengl.network.networklogin;
 import sand.falling.opengl.preferences.PreferencesFromCode;
 import sand.falling.opengl.DemoActivity;
 
@@ -33,6 +34,7 @@ public class Menu extends Activity
 	public static Button how_to_play_button;
 	public static Button custom_button;
 	public static Button about_button;
+	public static Button login_button;
 	public static Button exit_button;
 	public static Button clear_button;
 	public static boolean loaded = false;
@@ -58,6 +60,7 @@ public class Menu extends Activity
 		about_button = (Button) findViewById(R.id.about_button);
 		exit_button = (Button) findViewById(R.id.exit_button);
 		clear_button = (Button) findViewById(R.id.clear_button);
+		login_button = (Button) findViewById(R.id.login_button);
 		
 		try
 		{
@@ -109,6 +112,18 @@ public class Menu extends Activity
 				{
 					//Show the about dialog
 					showDialog(1);
+				}
+			}
+		);
+		login_button.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					
+					startActivity(new Intent(Menu.this, networklogin.class)); //start login activity
+					
 				}
 			}
 		);

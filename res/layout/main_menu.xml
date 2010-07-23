@@ -42,6 +42,12 @@
     	android:text="About"
     	android:layout_width="200sp"
     	android:layout_height="wrap_content" />
+    <!-- Login button -->	
+    <Button 
+    	android:layout_height="wrap_content" 
+    	android:layout_width="200sp" 
+    	android:text="Login" 
+    	android:id="@+id/login_button"/>
      <!-- clear save button -->
     <Button
     	android:id="@+id/clear_button"
@@ -62,4 +68,5 @@
     
 	
     	
- </LinearLayout>
+ 
+</LinearLayout>

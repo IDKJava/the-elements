@@ -494,6 +494,10 @@ public class DemoActivity extends Activity
 	public native static void setblue(int blueness);
 	public native static void setgreen(int greenness);
 	public native static void setdensity( int jdensity );
+	public native static void setUserName( char[] username);
+	public native static void setPassword ( char[] password);
+	public native static boolean login();
+	public native static boolean register();
 
 	static
 	{

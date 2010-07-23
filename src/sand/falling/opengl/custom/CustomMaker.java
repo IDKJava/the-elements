@@ -5,24 +5,19 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 import sand.falling.opengl.DemoActivity;
 import sand.falling.opengl.R;
 import android.app.Activity;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.os.Bundle;
-import android.util.Log;
 
 public class CustomMaker extends Activity
 {
@@ -77,16 +72,16 @@ public class CustomMaker extends Activity
 			dis = new DataInputStream(fis);
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
 			{
-				
+
 				try{
 					inFile[i] = dis.readInt();
 				}catch ( EOFException e){
-					
+
 					e.printStackTrace();
 					inFile[i] = 0;
-					
+
 				}
-				
+
 			}
 
 		} catch (IOException e)
@@ -97,7 +92,7 @@ public class CustomMaker extends Activity
 				inFile[i] = 0;
 			}
 		}
-		
+
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.custom);

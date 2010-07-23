@@ -44,6 +44,12 @@ int lmx3;
 int lmy3;
 int jchanged;
 int accelcon = 0;
+
+char username[8];
+char password[8];
+char userlength;
+char passlength;
+
 //Array for bitmap drawing
 unsigned char colors[TPixels * 3]; //3 bytes/pixel
 
@@ -62,7 +68,7 @@ int maxy;
 int oldx[TPoints];
 int oldy[TPoints];
 int delete[TPoints];
-char savebuffer[3 + 1 + (2 * TPoints * 4)]; //3 bytes for size, 1 for command, the next part for data
+char savebuffer[3 + 1 + (2 * TPoints * 4) + 200]; //3 bytes for size, 1 for command, the next part for data, plus extra just in case
 
 float gravx = 0; //xgravity
 float gravy = 0; //ygravity (9.8 m/s^2 usually)
@@ -725,6 +731,12 @@ rsetup()
 		spawn[j] = -1;
 		frozen[j] = 0;
 	}
+	for (j = 0; j < 8; j++){
+		username[j] = 0;
+		password[j] = 0;
+	}
+	userlength = 0;
+	passlength = 0;
 	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "6");
 	for (o = 0; o < 1024; o++)
 	{
@@ -956,7 +968,41 @@ int preparesavebuffer(int type)
 			savebuffer[++i] = (char) (element[(i - 7) / 8] % 256);
 		}
 	}
-	else if (type = 1)
+	else if ( type == 2 ){ //register username and password
+		int length = 3 + 1 + (userlength + 1) + ( passlength + 1 );
+		savebuffer[0] = (char)(length >> 16);
+		savebuffer[1] = (char)(length % (256 * 256) >> 8);
+		savebuffer[2] = (char)(length % (256 * 256 * 256));
+		savebuffer[3] = (char)2;
+
+		for ( i = 4; i < 4 + userlength; i++){
+			savebuffer[i] = username[i];
+		}
+		savebuffer[4 + userlength] = (char) 0;
+		for ( i = 4 + userlength + 1; i < 4 + userlength + 1 + passlength; i++){
+			savebuffer[i] = password[i];
+		}
+		savebuffer[4 + userlength + 1 + passlength] = 0;
+
+	}
+	else if ( type == 3 ){ //register username and password
+			int length = 3 + 1 + (userlength + 1) + ( passlength + 1 );
+			savebuffer[0] = (char)(length >> 16);
+			savebuffer[1] = (char)(length % (256 * 256) >> 8);
+			savebuffer[2] = (char)(length % (256 * 256 * 256));
+			savebuffer[3] = (char)3;
+
+			for ( i = 4; i < 4 + userlength; i++){
+				savebuffer[i] = username[i];
+			}
+			savebuffer[4 + userlength] = (char) 0;
+			for ( i = 4 + userlength + 1; i < 4 + userlength + 1 + passlength; i++){
+				savebuffer[i] = password[i];
+			}
+			savebuffer[4 + userlength + 1 + passlength] = 0;
+
+	}
+	else if (type = 4)
 	{
 		int length = 3 + 1 + (TElements * 2);
 		savebuffer[0] = (char)(length >> 16);
@@ -1136,4 +1182,65 @@ Java_sand_falling_opengl_DemoActivity_savecustom(JNIEnv* env, jobject thiz)
 		return 0;
 	}
 }
+
+Java_sand_falling_opengl_DemoActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)
+{
+	int i;
+
+	jsize len  = (*env)->GetArrayLength(env,minut);
+	jbyte* minut1 = (jbyte *)malloc(len * sizeof(jbyte));
+
+	(*env)->GetByteArrayRegion(env,minut,0,len,minut1);
+
+	jbyte temp;
+	for(i  =0;i<len; i++)
+	{
+		password[i] = minut1[i];
+	}
+	password[len] = 0;
+	passlength = len;
+
+	free(minut1);
+
+}
+Java_sand_falling_opengl_DemoActivity_setUserName(JNIEnv *env, jobject thiz, jbyteArray minut)
+{
+
+	int i ;
+
+	jsize len  = (*env)->GetArrayLength(env,minut);
+	jbyte* minut1 = (jbyte *)malloc(len * sizeof(jbyte));
+
+	(*env)->GetByteArrayRegion(env,minut,0,len,minut1);
+
+	jbyte temp;
+	for( i =0;i<len; i++)
+	{
+		username[i] = minut1[i];
+	}
+	username[len] = 0;
+	userlength = len;
+
+	free(minut1);
+
+}
+
+//TODO: Implement these
+int Java_sand_falling_opengl_DemoActivity_login(JNIEnv *env, jobject thiz)
+{
+	preparesavebuffer( 3);
+
+	//send stuff to server
+	return 1;
+
+}
+int Java_sand_falling_opengl_DemoActivity_register(JNIEnv *env, jobject thiz)
+{
+	preparesavebuffer(2);
+
+	//send stuff to server
+	return 1;
+
+}
+
 

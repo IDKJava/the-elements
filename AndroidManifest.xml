@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="sand.falling.opengl" android:versionName="4.11" android:versionCode="43"> 
+      package="sand.falling.opengl" android:versionCode="46" android:versionName="4.2"> 
     <application android:label="@string/app_name" android:icon="@drawable/icon2">
     	<activity android:name=".Menu"
     			  android:label="@string/app_name"
@@ -40,6 +40,14 @@
             </intent-filter>
         </activity>
          <activity android:name=".custom.CustomMaker"
+                  android:label="@string/app_name"
+    			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.SAMPLE_APP" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".network.networklogin"
                   android:label="@string/app_name"
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
