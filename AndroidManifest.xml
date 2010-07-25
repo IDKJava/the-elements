@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="sand.falling.opengl" android:versionCode="46" android:versionName="4.2"> 
+      package="sand.falling.opengl" android:versionCode="48" android:versionName="4.22"> 
     <application android:label="@string/app_name" android:icon="@drawable/icon2">
     	<activity android:name=".Menu"
     			  android:label="@string/app_name"
-    			  android:screenOrientation="portrait"
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
     		<intent-filter>
     			<action android:name="android.intent.action.MAIN" /> 
