@@ -222,10 +222,11 @@ CreatePoint(int k, int l, int e)
 }
 DeletePoint(int partnum)
 {
+	int tempx = x[partnum];
+	int tempy = y[partnum];
+	unFreezeParticles(tempx, tempy);
 	setBitmapColor((int) x[partnum], (int) y[partnum], 3);
 	allcoords[(int) x[partnum]][(int) y[partnum]] = -1;
-
-	unFreezeParticles(x[partnum], y[partnum]);
 	//cleaning up
 	x[partnum] = 0;
 	y[partnum] = 0;
