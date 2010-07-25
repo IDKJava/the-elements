@@ -3,8 +3,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" 
-    android:background="@drawable/backgroundcolumns" >
+    android:layout_height="fill_parent" android:background="@drawable/mm_layout_bg">
         
     <com.mobclix.android.sdk.MobclixMMABannerXLAdView 
 		android:id="@+id/banner_adview"
@@ -17,9 +16,8 @@
      <Button
     	android:id="@+id/start_game_button"
     	android:text="Play Game" 
-    	android:gravity="center"
     	android:layout_width="200sp"
-    	android:layout_height="wrap_content" />
+    	android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
     	
     
     <!-- How-to-play button -->
@@ -27,42 +25,36 @@
     	android:id="@+id/how_to_play_button"
     	android:text="How to Play"
     	android:gravity="center"
-    	android:layout_width="200sp"
-    	android:layout_height="wrap_content" />
+    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
      <!-- Custom Element button -->
     <Button
     	android:id="@+id/custom_button"
     	android:text="Custom Element Maker"
     	android:gravity="center"
-    	android:layout_width="200sp"
-    	android:layout_height="wrap_content" />	
+    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>	
     <!-- About button -->
     <Button
     	android:id="@+id/about_button"
     	android:text="About"
-    	android:layout_width="200sp"
-    	android:layout_height="wrap_content" />
+    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
     <!-- Login button -->	
     <Button 
-    	android:layout_height="wrap_content" 
     	android:layout_width="200sp" 
     	android:text="Login" 
-    	android:id="@+id/login_button"/>
+    	android:id="@+id/login_button" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
      <!-- clear save button -->
     <Button
     	android:id="@+id/clear_button"
     	android:text="Clear Quicksave"
     	android:layout_width="200sp"
-    	android:gravity="center"
-    	android:layout_height="wrap_content" />
+    	android:gravity="center" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
     	
     <!-- Exit button -->
     <Button
     	android:id="@+id/exit_button"
     	android:text="Exit"
     	android:layout_width="200sp"
-    	android:gravity="center"
-    	android:layout_height="wrap_content" />
+    	android:gravity="center" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
     	
     
     
