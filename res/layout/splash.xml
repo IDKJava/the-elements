@@ -3,7 +3,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:gravity="center"
-	android:background="@drawable/backgroundcolumns" >
+	android:background="@drawable/mm_layout_bg" >
 
 	<TextView
 		android:id="@+id/loading_text"
