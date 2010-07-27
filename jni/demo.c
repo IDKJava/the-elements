@@ -2255,6 +2255,7 @@ UpdateView()
 
 						if (fireburn[element[counter]] == 1) //Fire cycle
 						{
+							frozen[counter] = 0;
 							random = rand();
 							if (collision[element[allcoords[tempx + 1][tempy]]][element[counter]]
 									== 6 && random % 3 != 0)
@@ -2321,6 +2322,7 @@ UpdateView()
 						}
 						if (element[counter] == 8) //Spawn cycle
 						{
+							frozen[counter] = 0;
 							int check1, check2, temp;
 							for (check1 = -2; check1 <= 2; check1++)
 							{
@@ -2350,6 +2352,7 @@ UpdateView()
 						}
 						if (growing[element[counter]] == 1) //Ice cycle
 						{
+							frozen[counter] = 0;
 							int check1, check2, temp;
 							for (check1 = -1; check1 <= 1; check1++)
 							{
@@ -2367,6 +2370,7 @@ UpdateView()
 						}
 						if (condensing[element[counter]] != -1) //Steam cycle
 						{
+							frozen[counter] = 0;
 							if (rand() % 200 == 0) //1/200 chance
 							{
 								element[counter] = condensing[element[counter]]; //"Condense" the steam
@@ -2393,11 +2397,9 @@ UpdateView()
 									== tempy && element[atemporary]
 									== secondElementTemp)
 							{
-								if (element[counter] != 5 && element[counter] //don't freeze these because they need to change after a certain amount of time
-										!= 18)
-								{
-									frozen[counter]++; //increase freeze rounds count
-								}
+
+								frozen[counter]++; //increase freeze rounds count
+
 
 							}
 							else
