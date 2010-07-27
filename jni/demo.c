@@ -2013,8 +2013,8 @@ UpdateView()
 						if (solid[celement] != 1 && celement != 16 && celement
 								!= 3) //not wall, eraser, or plant, wind or fuse
 						{
-							if (xc + xm < maxx && xc + xm > 1 && yc + ym < maxy
-									&& yc + ym > 1
+							if (xc + xm < maxx && xc + xm > 0 && yc + ym < maxy
+									&& yc + ym > 0
 									&& allcoords[(int) (xc + xm)][(int) (yc
 											+ ym)] == -1 && rand() % 3 == 1)
 							{
@@ -2023,8 +2023,8 @@ UpdateView()
 						}
 						else if (solid[celement] == 1) //wall or plant or fuse should be drawn solid
 						{
-							if (xc + xm < maxx && xc + xm > 1 && yc + ym < maxy
-									&& yc + ym > 1
+							if (xc + xm < maxx && xc + xm > 0 && yc + ym < maxy
+									&& yc + ym > 0
 									&& allcoords[(int) (xc + xm)][(int) (yc
 											+ ym)] == -1)
 							{
@@ -2033,8 +2033,8 @@ UpdateView()
 						}
 						else if (celement == 16) //wind
 						{
-							if (xc + lmx < maxx && xc + lmx > 1 && yc + lmy
-									< maxy && yc + lmy > 1)
+							if (xc + lmx < maxx && xc + lmx > 0 && yc + lmy
+									< maxy && yc + lmy > 0)
 							{
 								if (allcoords[lmx + xc][lmy + yc] != -1)
 								{
@@ -2052,8 +2052,8 @@ UpdateView()
 						else
 						{ //eraser
 
-							if (xc + xm < maxx && xc + xm > 1 && yc + ym < maxy
-									&& yc + ym > 1
+							if (xc + xm < maxx && xc + xm > 0 && yc + ym < maxy
+									&& yc + ym > 0
 									&& allcoords[(int) (xc + xm)][(int) (yc
 											+ ym)] != -1)
 							{
