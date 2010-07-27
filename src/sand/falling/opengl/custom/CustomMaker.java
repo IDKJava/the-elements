@@ -67,7 +67,7 @@ public class CustomMaker extends Activity
 		try
 		{
 
-			File file = new File("/sdcard/elementworks/customeelementsave.txt");
+			File file = new File("/sdcard/elementworks/customeelementsave6.txt");
 			fis = new FileInputStream(file);
 			dis = new DataInputStream(fis);
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
@@ -740,12 +740,17 @@ public class CustomMaker extends Activity
 		try
 		{
 
-			File file = new File("/sdcard/elementworks/customeelementsave.txt");
+			File file = new File("/sdcard/elementworks/customeelementsave6.txt");
 			fos = new FileOutputStream(file);
 			dos = new DataOutputStream(fos);
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
 			{
 				dos.writeInt(inFile[i]);
+			}
+			
+			//TODO: Fix the custom element maker so we don't need this hack. 
+			for (int j = 0; j < 100; j++){
+				dos.writeInt(0);
 			}
 
 		} catch (IOException e)
