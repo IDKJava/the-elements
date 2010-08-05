@@ -27,11 +27,19 @@
 #include <stdio.h>
 #include <android/log.h>
 
+//Socket includes
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+
 #define TPoints 500000
 #define TElements 25
 #define TPixels 512*1024 //144826 for g1, 390385 for droid
 #define BLACK -16777216
 #define TCollision 28
+
+#define PORTNUM 2000
 
 int cpoint;
 int play = 1;
@@ -49,6 +57,10 @@ char username[8];
 char password[8];
 char userlength;
 char passlength;
+
+int bufferlen;
+
+char* error;
 
 //Array for bitmap drawing
 unsigned char colors[TPixels * 3]; //3 bytes/pixel
@@ -68,7 +80,7 @@ int maxy;
 int oldx[TPoints];
 int oldy[TPoints];
 int delete[TPoints];
-char savebuffer[3 + 1 + (2 * TPoints * 4) + 200]; //3 bytes for size, 1 for command, the next part for data, plus extra just in case
+char buffer[3 + 1 + (2 * TPoints * 4) + 200]; //3 bytes for size, 1 for command, the next part for data, plus extra just in case
 
 float gravx = 0; //xgravity
 float gravy = 0; //ygravity (9.8 m/s^2 usually)
@@ -611,6 +623,12 @@ int celement = 0;
 
 int gAppAlive = 1;
 
+//Socket variables
+int sockfd; //The file descriptor for the socket
+int n; //Used in sending and recieving data
+struct sockaddr_in serv_addr; //The server address struct
+struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+
 static int sWindowWidth = 320;
 static int sWindowHeight = 480;
 static int sDemoStopped = 0;
@@ -944,79 +962,136 @@ int Java_sand_falling_opengl_DemoActivity_save(JNIEnv* env, jobject thiz)
 	return saver(0); //Do a normal save
 }
 
-int preparesavebuffer(int type)
+void adduserpass (void)
 {
+	/*
+	 * Add the username and password to the save buffer. This happens every time, thus the
+	 * need for a separate function.
+	 */
 
-	int i = 0;
-	if (type == 0)
+	int i; //Counter variable
+
+	//Fill in username
+	for (i = 4; i < 4 + userlength; i++)
 	{
-		int length = 3 + 1 + (2 * TPoints * 4);
-		savebuffer[0] = (char)(length >> 16);
-		savebuffer[1] = (char)(length % (256 * 256) >> 8);
-		savebuffer[2] = (char)(length % (256 * 256 * 256));
+		buffer[i] = username[i];
+	}
+	//Add the null byte as the delimiter
+	buffer[4 + userlength] = (char) 0;
+	//Fill in password
+	for (i = 4 + userlength + 1; i < 4 + userlength + 1 + passlength; i++)
+	{
+		buffer[i] = password[i];
+	}
+	//Add the null byte as the delimiter
+	buffer[4 + userlength + 1 + passlength] = 0;
+}
 
-		savebuffer[3] = (char)0;
-		for (i=4; i < 2 * TPoints * 4; i++)
+void buildbuffer(int type)
+{
+	int i = 0;
+	//Save data
+	if(type == 0)
+	{
+		//The length of the packet, 3 bytes for length, 1 byte for command, rest for data
+		bufferlength = 3 + 1 + (userlength+1) + (passlength+1) + (2*TPoints*4);
+
+		//Fill in the 3 length bytes
+		buffer[0] = (char)(bufferlength >> 16);
+		buffer[1] = (char)(bufferlength % (256 * 256) >> 8);
+		buffer[2] = (char)(bufferlength % (256 * 256 * 256));
+
+		//The command byte is 0
+		buffer[3] = (char)0;
+
+		//Put in username and password
+		adduserpass();
+
+		//Fill in the save data
+		for (i = 4 + (userlength+1) + (passlength+1); i < (2*TPoints*4) + (userlength+1) + (passlength+1); i++)
 		{
-			savebuffer[i] = (char) (spawn[i / 8] >> 8);
-			savebuffer[++i] = (char) (spawn[(i - 1) / 8] % 256);
-			savebuffer[++i] = (char) ((int)(x[(i - 2) / 8]) >> 8);
-			savebuffer[++i] = (char) ((int)(x[(i - 3) / 8]) % 256);
-			savebuffer[++i] = (char) (((int)y[(i - 4) / 8]) >> 8);
-			savebuffer[++i] = (char) ((int)(y[(i - 5) / 8]) % 256);
-			savebuffer[++i] = (char) (element[(i - 6) / 8] >> 8);
-			savebuffer[++i] = (char) (element[(i - 7) / 8] % 256);
+			buffer[i] = (char) (spawn[i / 8] >> 8);
+			buffer[++i] = (char) (spawn[(i - 1) / 8] % 256);
+			buffer[++i] = (char) ((int)(x[(i - 2) / 8]) >> 8);
+			buffer[++i] = (char) ((int)(x[(i - 3) / 8]) % 256);
+			buffer[++i] = (char) (((int)y[(i - 4) / 8]) >> 8);
+			buffer[++i] = (char) ((int)(y[(i - 5) / 8]) % 256);
+			buffer[++i] = (char) (element[(i - 6) / 8] >> 8);
+			buffer[++i] = (char) (element[(i - 7) / 8] % 256);
 		}
+
+		//SEND DATA HERE
 	}
-	else if ( type == 2 ){ //register username and password
-		int length = 3 + 1 + (userlength + 1) + ( passlength + 1 );
-		savebuffer[0] = (char)(length >> 16);
-		savebuffer[1] = (char)(length % (256 * 256) >> 8);
-		savebuffer[2] = (char)(length % (256 * 256 * 256));
-		savebuffer[3] = (char)2;
+	//Load a save
+	else if (type == 1)
+	{
+		//Length of the packets: 3 bytes for length, 1 byte for command, rest of user and pass data
+		bufferlength = 3 + 1 + (userlength + 1) + (passlength + 1);
+		//Fill in length data
+		buffer[0] = (char)(bufferlength >> 16);
+		buffer[1] = (char)(bufferlength % (256 * 256) >> 8);
+		buffer[2] = (char)(bufferlength % (256 * 256 * 256));
+		//Command byte is 1
+		buffer[3] = (char)1;
 
-		for ( i = 4; i < 4 + userlength; i++){
-			savebuffer[i] = username[i];
-		}
-		savebuffer[4 + userlength] = (char) 0;
-		for ( i = 4 + userlength + 1; i < 4 + userlength + 1 + passlength; i++){
-			savebuffer[i] = password[i];
-		}
-		savebuffer[4 + userlength + 1 + passlength] = 0;
+		//Put in username and password
+		adduserpass();
 
+		//Add the data for what file
+		//SEND DATA HERE
 	}
-	else if ( type == 3 ){ //register username and password
-			int length = 3 + 1 + (userlength + 1) + ( passlength + 1 );
-			savebuffer[0] = (char)(length >> 16);
-			savebuffer[1] = (char)(length % (256 * 256) >> 8);
-			savebuffer[2] = (char)(length % (256 * 256 * 256));
-			savebuffer[3] = (char)3;
+	//Validate username and password
+	else if (type == 2)
+	{
+		//Length of the packets: 3 bytes for length, 1 byte for command, rest of user and pass data
+		bufferlength = 3 + 1 + (userlength + 1) + (passlength + 1);
+		//Fill in length data
+		buffer[0] = (char)(bufferlength >> 16);
+		buffer[1] = (char)(bufferlength % (256 * 256) >> 8);
+		buffer[2] = (char)(bufferlength % (256 * 256 * 256));
+		//Command byte is 2
+		buffer[3] = (char)2;
 
-			for ( i = 4; i < 4 + userlength; i++){
-				savebuffer[i] = username[i];
-			}
-			savebuffer[4 + userlength] = (char) 0;
-			for ( i = 4 + userlength + 1; i < 4 + userlength + 1 + passlength; i++){
-				savebuffer[i] = password[i];
-			}
-			savebuffer[4 + userlength + 1 + passlength] = 0;
+		//Put in username and password
+		adduserpass();
 
+		//SEND DATA HERE
 	}
+	//Register a username with a password
+	else if (type == 3)
+	{
+			//Length of packet: 3 bytes for length, 1 byte for command, rest for user and pass data
+			bufferlength = 3 + 1 + (userlength + 1) + ( passlength + 1 );
+			//Fill in length bytes
+			buffer[0] = (char)(bufferlength >> 16);
+			buffer[1] = (char)(bufferlength % (256 * 256) >> 8);
+			buffer[2] = (char)(bufferlength % (256 * 256 * 256));
+			//Command is 3
+			buffer[3] = (char)3;
+
+			//Put in username and password
+			adduserpass();
+
+			//SEND DATA HERE
+	}
+	//Send custom element data (still not used)
 	else if (type = 4)
 	{
+		/*
 		int length = 3 + 1 + (TElements * 2);
-		savebuffer[0] = (char)(length >> 16);
-		savebuffer[1] = (char)(length % (256 * 256) >> 8);
-		savebuffer[2] = (char)(length % (256 * 256 * 256));
-		savebuffer[3] = (char)1;
+		buffer[0] = (char)(length >> 16);
+		buffer[1] = (char)(length % (256 * 256) >> 8);
+		buffer[2] = (char)(length % (256 * 256 * 256));
+		buffer[3] = (char)1;
 		for (i = 4; i < 2 * TElements; i++)
 		{
-			savebuffer[i] = (char) (colliseelement1[i / 2]);
-			savebuffer[++i] = (char) (collision[22][(i - 1) / 2]);
+			buffer[i] = (char) (colliseelement1[i / 2]);
+			buffer[++i] = (char) (collision[22][(i - 1) / 2]);
 		}
-
+		*/
 	}
 }
+
 int saver(int type)
 {
 	FILE *fp;
@@ -1185,62 +1260,120 @@ Java_sand_falling_opengl_DemoActivity_savecustom(JNIEnv* env, jobject thiz)
 
 Java_sand_falling_opengl_DemoActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)
 {
-	int i;
+	int i; //Counter variable
 
+	//Get the array length of the password
 	jsize len  = (*env)->GetArrayLength(env,minut);
+	//Create a byte array with the size of the array in the byteArray object
 	jbyte* minut1 = (jbyte *)malloc(len * sizeof(jbyte));
 
+	//Extract the byteArray object to a byte array
 	(*env)->GetByteArrayRegion(env,minut,0,len,minut1);
 
-	jbyte temp;
-	for(i  =0;i<len; i++)
+	//Copy the byte array over into the password
+	for(i = 0; i < len; i++)
 	{
 		password[i] = minut1[i];
 	}
+	//Add the null byte
 	password[len] = 0;
+	//Set the length variable
 	passlength = len;
 
+	//Free the created byte array
 	free(minut1);
-
 }
+
 Java_sand_falling_opengl_DemoActivity_setUserName(JNIEnv *env, jobject thiz, jbyteArray minut)
 {
+	int i; //Counter variable
 
-	int i ;
-
+	//Get the array length of the username
 	jsize len  = (*env)->GetArrayLength(env,minut);
+	//Create a byte array with the size of the array in the byteArray object
 	jbyte* minut1 = (jbyte *)malloc(len * sizeof(jbyte));
 
+	//Extract the byteArray object to a byte array
 	(*env)->GetByteArrayRegion(env,minut,0,len,minut1);
 
-	jbyte temp;
-	for( i =0;i<len; i++)
+	//Copy the byte array over into the username
+	for(i = 0; i < len; i++)
 	{
 		username[i] = minut1[i];
 	}
+	//Add the null byte
 	username[len] = 0;
+	//Set the length variable
 	userlength = len;
 
+	//Free the created byte array
 	free(minut1);
-
 }
 
 //TODO: Implement these
 int Java_sand_falling_opengl_DemoActivity_login(JNIEnv *env, jobject thiz)
 {
-	preparesavebuffer( 3);
+	buildbuffer(3);
+	if(!sendbuffer())
+	{
+		return -1;
+	}
 
-	//send stuff to server
-	return 1;
-
+	return 0;
 }
 int Java_sand_falling_opengl_DemoActivity_register(JNIEnv *env, jobject thiz)
 {
-	preparesavebuffer(2);
+	buildbuffer(2);
+	if(!sendbuffer())
+	{
+		return -1;
+	}
 
-	//send stuff to server
-	return 1;
 
+	return 0;
+}
+int Java_sand_falling_opengl_DemoActivity_save(JNIEnv *env, jobject thiz)
+{
+	buildbuffer(0);
+	if(!sendbuffer())
+	{
+		return -1;
+	}
+	return 0;
 }
 
+bool sendbuffer(void)
+{
+	sockfd = socket(AF_INET, SOCK_STREAM, 0); //Create a socket using IPv4 and TCP
+	if(sockfd < 0)
+	{
+		error = "Could not create socket";
+		return false;
+	}
+	server = gethostbyname("71.244.112.67"); //Create the hostent using server IP
+	bzero((char*) &serv_addr, sizeof(serv_addr)); //Clear the serv_addr struct
+	serv_addr.sin_family = AF_INET; //Use IPv4
+	bcopy((char*)server->h_addr, (char*)&serv_addr.sin_addr.s_addr, server->h_length); //Use the hostent to fill the serv_addr struct
+	serv_addr.sin_port = htons(PORTNUM); //Set up the port number using network order
+	if(connect(sockfd, &serv_addr, sizeof(serv_addr)) < 0)
+	{
+		error = "Could not connect";
+		return false;
+	}
 
+	while(bufferlength > 0)
+	{
+		n = write(sockfd, savebuffer, bufferlength);
+		if(n < 0)
+		{
+			error = "Could not write to socket";
+			return false;
+		}
+		bufferlength -= n;
+	}
+}
+
+char* Java_sand_falling_opengl_DemoActivity_viewerr (JNIEnv *env, jobject thiz)
+{
+	return error;
+}
