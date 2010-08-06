@@ -33,6 +33,11 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+//Include the element characteristics file
+#include "elementproperties.h"
+//Include the collisions data file
+#include "collisions.h"
+
 #define TPoints 500000
 #define TElements 25
 #define TPixels 512*1024 //144826 for g1, 390385 for droid
@@ -58,7 +63,7 @@ char password[8];
 char userlength;
 char passlength;
 
-int bufferlen;
+int bufferlength;
 
 char* error;
 
@@ -88,188 +93,6 @@ float gravy = 0; //ygravity (9.8 m/s^2 usually)
 // what type of element each piece of sand is
 int element[TPoints];
 
-//what color each element corresponds to
-//           sand,water,wall,eraser,plant,fire,ice,generator,spawn,Oil,Magma,Stone,C4,C4++,fuse,destructable_wall,wind,acid,steam,salt,salt-water,custom 1,mud,3
-unsigned char red[] =
-{ 255, 0, 157, 0, 0, 255, 200, 255, 255, 143, 204, 100, 255, 255, 135, 176, 0,
-		150, 220, 255, 50, 200, 0, 49, 255 };
-unsigned char green[] =
-{ 213, 0, 157, 0, 255, 0, 200, 255, 255, 80, 51, 100, 255, 211, 25, 176, 0,
-		255, 220, 255, 100, 255, 213, 35, 213 };
-unsigned char blue[] =
-{ 85, 255, 157, 0, 0, 0, 255, 255, 255, 80, 0, 100, 143, 115, 30, 164, 0, 50,
-		255, 230, 200, 255, 85, 7, 85 };
-
-//fall velocity of each type
-int
-		fallvel[] =
-		{ 1, 1, 0, 0, 0, -1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, -1, 1, -1, 1, 1, 0,
-				1, 1, 1 };
-
-//collision data (LOAD FROM A FILE MAYBE?)
-//-1 -eraser stuff, shouldn't happen
-// 0 -solid solid
-// 1 -solid liquid
-// 2 -liquid solid -- DNE ANYMORE
-// 3 -liquid liquid
-// 4 -water plant
-// 5 -nonflammable fire
-// 6 -flammable fire
-// 7 -fire fire
-// 8 -ice water
-// 9 -fire ice
-//10 -hot ice
-//11 -oil hot
-//12 -magma water
-//13 -stone hot
-//14 -stone stone
-//15 -hot C4
-//16 -hot C4++
-//17 -magma destructable wall
-//18 -acid meltable
-//19 -acid water
-//20 -steam ice/water
-//21 -steam steam
-//22 -steam other
-//23 -water fire
-//24 -salt water
-//25 -salt ice
-//26 -salt-water plant
-//27 -sand-hot
-
-
-//array  of what element the custom element 1 should be in a collision with an element
-int colliseelement1[TElements] =
-{
-
-//Sand 0
-		0,
-		//Water 1
-		0,
-		//Wall 2
-		0,
-		//Eraser 3
-		0,
-		//Plant 4
-		0,
-		//Fire 5
-		0,
-		//Ice 6
-		0,
-		//Generator 7
-		0,
-		//Spawn 8
-		0,
-		//Oil 9
-		0,
-		//Magma 10
-		0,
-		//Stone 11
-		0,
-		//C4 12
-		0,
-		//C4++ 13
-		0,
-		//Fuse 14
-		0,
-		//Destructable Wall 15
-		0,
-		//Wind 16
-		0,
-		//Acid 17
-		0,
-		//Steam 18
-		0,
-		//Salt 19
-		0,
-		//Salt-water 20
-		0,
-		//Glass 21
-		0,
-		//Custom 1 22
-		0,
-		//Custom 2 23
-		0,
-		//Custom 3 24
-		0 };
-int collision[TElements][TElements] =
-{
-//Sand 0
-		{ 0, 28, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0,
-				1, 0, 0, 0, 0 },
-		//Water 1
-		{ 28, 3, 1, -1, 4, 23, 8, 10, 1, 3, 12, 1, 1, 1, 1, 1, -1, 19, 20, 24,
-				3, 1, 1, 1, 1 },
-		//Wall 2
-		{ 0, 1, 0, -1, 0, 5, 0, 10, 0, 1, 0, 0, 0, 0, 0, 0, -1, 1, 22, 0, 1, 0,
-				0, 0, 0 },
-		//Eraser 3
-		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-				-1, -1, -1, -1, -1, -1, -1, -1 },
-		//Plant 4
-		{ 0, 1, 0, -1, 0, 6, 0, 10, 0, 1, 6, 0, 0, 0, 0, 0, -1, 18, 22, 0, 26,
-				0, 0, 0, 0 },
-		//Fire 5
-		{ 5, 23, 5, -1, 6, 7, 9, 10, 5, 11, 5, 13, 15, 16, 6, 5, -1, 5, 22, 5,
-				23, 5, 5, 29, 5 },
-		//Ice 6
-		{ 0, 8, 0, -1, 0, 9, 0, 10, 0, 1, 9, 0, 0, 0, 0, 0, -1, 18, 20, 25, 25,
-				0, 0, 0, 0 },
-		//Generator 7
-		{ 10, 10, 10, -1, 10, 10, 10, 0, 0, 10, 10, 10, 10, 10, 10, 10, -1, 10,
-				10, 10, 10, 10, 10, 10, 10 },
-		//Spawn 8
-		{ 0, 1, 0, -1, 0, 5, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, -1, 1, 22, 0, 1, 0,
-				0, 0, 0 },
-		//Oil 9
-		{ 1, 3, 1, -1, 1, 11, 1, 10, 1, 3, 11, 1, 1, 1, 1, 1, -1, 18, 22, 1, 3,
-				1, 1, 1, 1 },
-		//Magma 10
-		{ 27, 12, 1, -1, 6, 5, 9, 10, 1, 11, 3, 13, 15, 16, 6, 17, -1, 18, 22,
-				1, 12, 1, 1, 30, 1 },
-		//Stone 11
-		{ 0, 1, 0, -1, 0, 13, 0, 10, 0, 1, 13, 14, 0, 0, 0, 0, -1, 18, 22, 0,
-				1, 0, 0, 0, 0 },
-		//C4 12
-		{ 0, 1, 0, -1, 0, 15, 0, 10, 0, 1, 15, 0, 0, 0, 0, -1, 18, 22, 0, 1, 0,
-				0, 0, 0 },
-		//C4++ 13
-		{ 0, 1, 0, -1, 0, 16, 0, 10, 0, 1, 16, 0, 0, 0, 0, -1, 18, 22, 0, 1, 0,
-				0, 0, 0 },
-		//Fuse 14
-		{ 0, 1, 0, -1, 0, 6, 0, 10, 0, 1, 6, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
-		//Destructable Wall 15
-		{ 0, 1, 0, -1, 0, 5, 0, 10, 0, 1, 17, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
-		//Wind 16
-		{ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-				-1, -1, -1, -1, -1, -1, -1, -1 },
-		//Acid 17
-		{ 18, 19, 1, -1, 18, 5, 18, 10, 1, 18, 18, 18, 18, 18, 18, 18, -1, 3,
-				22, 18, 18, 1, 18, 18, 18 },
-		//Steam 18
-		{ 22, 20, 22, -1, 22, 5, 20, 10, 22, 22, 22, 22, 22, 22, 22, 22, -1,
-				22, 21, 22, 20, 22, 22, 22, 22 },
-		//Salt 19
-		{ 0, 24, 0, -1, 0, 5, 25, 10, 0, 1, 1, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
-		//Salt-water 20
-		{ 1, 3, 1, -1, 26, 23, 25, 10, 1, 3, 12, 1, 1, 1, 1, 1, -1, 18, 20, 1,
-				3, 0, 1, 1, 1 },
-		//Glass 21
-		{ 0, 1, 0, -1, 0, 5, 0, 10, 0, 1, 1, 0, 0, 0, 0, 0, -1, 1, 22, 0, 1, 0,
-				0, 0, 0 },
-		//Custom 1 22
-		{ 0, 1, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
-		//Mud 2 23
-		{ 0, 1, 0, -1, 0, 29, 0, 10, 0, 1, 30, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 },
-		//Custom 3 24
-		{ 0, 1, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1,
-				0, 0, 0, 0 } };
-
 //Array to keep track of which points are used
 int set[TPoints];
 //Array of which points are available to keep CreatePoint fast
@@ -285,325 +108,6 @@ int jcounter = 0; //counter for when transfering to Java
 
 int screensize = 0; //0 = zoomed in, 1 = zoomed out
 
-
-//densities of elements
-int density[] =
-{
-//Sand:
-		16,
-		//Water:
-		10,
-		//Wall:
-		30,
-		//Eraser:
-		-1,
-		//Plant:
-		15,
-		//Fire:
-		-1,
-		//Ice:
-		9,
-		//Generator:
-		30,
-		//Spawn:
-		30,
-		//Oil:
-		5,
-		//Magma:
-		15,
-		//Stone:
-		30,
-		//C4:
-		30,
-		//C4++:
-		30,
-		//Fuse:
-		15,
-		//Wall, Destructible:
-		30,
-		//Wind:
-		-1,
-		//Acid:
-		8,
-		//Steam:
-		1,
-		//Salt:
-		30,
-		//Salt-Water:
-		11,
-		//Glass:
-		30,
-		//Custom 1:
-		1,
-		//Mud:
-		16,
-		//Custom 3:
-		1};
-//is solid?
-int solid[] =
-{
-//Sand:
-		0,
-		//Water:
-		0,
-		//Wall:
-		1,
-		//Eraser:
-		0,
-		//Plant:
-		1,
-		//Fire:
-		0,
-		//Ice:
-		0,
-		//Generator:
-		0,
-		//Spawn:
-		0,
-		//Oil:
-		0,
-		//Magma:
-		0,
-		//Stone:
-		0,
-		//C4:
-		0,
-		//C4++:
-		0,
-		//Fuse:
-		1,
-		//Wall, Destructible:
-		1,
-		//Wind:
-		0,
-		//Acid:
-		0,
-		//Steam:
-		0,
-		//Salt:
-		0,
-		//Salt-Water:
-		0,
-		//Glass:
-		0,
-		//Custom 1:
-		0,
-		//Custom 2:
-		0,
-		//Custom 3:
-		0 };
-//is solid?
-int growing[] =
-{
-//Sand:
-		0,
-		//Water:
-		0,
-		//Wall:
-		0,
-		//Eraser:
-		0,
-		//Plant:
-		0, // plant has it's own stuff
-		//Fire:
-		0,
-		//Ice:
-		1,
-		//Generator:
-		0,
-		//Spawn:
-		0,
-		//Oil:
-		0,
-		//Magma:
-		0,
-		//Stone:
-		0,
-		//C4:
-		0,
-		//C4++:
-		0,
-		//Fuse:
-		0,
-		//Wall, Destructible:
-		0,
-		//Wind:
-		0,
-		//Acid:
-		0,
-		//Steam:
-		0,
-		//Salt:
-		0,
-		//Salt-Water:
-		0,
-		//Glass:
-		0,
-		//Custom 1:
-		0,
-		//Custom 2:
-		0,
-		//Custom 3:
-		0 };
-//is condensing?
-int condensing[] =
-{
-//Sand:
-		-1,
-		//Water:
-		-1,
-		//Wall:
-		-1,
-		//Eraser:
-		-1,
-		//Plant:
-		-1, // plant has it's own stuff
-		//Fire:
-		-1,
-		//Ice:
-		-1,
-		//Generator:
-		-1,
-		//Spawn:
-		-1,
-		//Oil:
-		-1,
-		//Magma:
-		-1,
-		//Stone:
-		-1,
-		//C4:
-		-1,
-		//C4++:
-		-1,
-		//Fuse:
-		-1,
-		//Wall, Destructible:
-		-1,
-		//Wind:
-		-1,
-		//Acid:
-		-1,
-		//Steam:
-		1,
-		//Salt:
-		-1,
-		//Salt-Water:
-		-1,
-		//Glass:
-		-1,
-		//Custom 1
-		-1,
-		//Custom 2
-		-1,
-		//Custom 3
-		-1 };
-//does it burn stuff like fire?
-int fireburn[] =
-{
-//Sand:
-		0,
-		//Water:
-		0,
-		//Wall:
-		0,
-		//Eraser:
-		0,
-		//Plant:
-		0, // plant has it's own stuff
-		//Fire:
-		1,
-		//Ice:
-		0,
-		//Generator:
-		0,
-		//Spawn:
-		0,
-		//Oil:
-		0,
-		//Magma:
-		0,
-		//Stone:
-		0,
-		//C4:
-		0,
-		//C4++:
-		0,
-		//Fuse:
-		0,
-		//Wall, Destructible:
-		0,
-		//Wind:
-		0,
-		//Acid:
-		0,
-		//Steam:
-		0,
-		//Salt:
-		0,
-		//Salt-Water:
-		0,
-		//Glass:
-		0,
-		//Custom 1
-		0,
-		//Custom 2
-		0,
-		//Custom 3
-		0 };
-//how much explosiveness?
-int exploness[] =
-{
-//Sand:
-		0,
-		//Water:
-		0,
-		//Wall:
-		0,
-		//Eraser:
-		0,
-		//Plant:
-		0, // plant has it's own stuff
-		//Fire:
-		0,
-		//Ice:
-		0,
-		//Generator:
-		0,
-		//Spawn:
-		0,
-		//Oil:
-		0,
-		//Magma:
-		0,
-		//Stone:
-		0,
-		//C4:
-		10,
-		//C4++:
-		20,
-		//Fuse:
-		0,
-		//Wall, Destructible:
-		0,
-		//Wind:
-		0,
-		//Acid:
-		0,
-		//Steam:
-		0,
-		//Salt:
-		0,
-		//Salt-Water:
-		0,
-		//Glass:
-		0,
-		//Custom 1
-		0,
-		//Custom 2
-		0,
-		//Custom 3
-		0 };
 //velocities of each piece of sand
 int xvel[TPoints];
 int yvel[TPoints];
@@ -629,36 +133,18 @@ int n; //Used in sending and recieving data
 struct sockaddr_in serv_addr; //The server address struct
 struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
 
-static int sWindowWidth = 320;
-static int sWindowHeight = 480;
-static int sDemoStopped = 0;
-static long sTimeOffset = 0;
-static int sTimeOffsetInit = 0;
-static long sTimeStopped = 0;
-
-static long _getTime(void)
-{
-	struct timeval now;
-
-	gettimeofday(&now, NULL);
-	return (long) (now.tv_sec * 1000 + now.tv_usec / 1000);
-}
-
 void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
 	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "8");
 	importGLInit();
 	appInit();
 	gAppAlive = 1;
-	sTimeOffsetInit = 0;
 	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "4");
 }
 
 void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env,
 		jobject thiz, jint w, jint h)
 {
-	sWindowWidth = w;
-	sWindowHeight = h;
 	if (screensize == 0) //this didn't work before becuase tej used = instead of == (green girdle)
 	{
 		maxx = w / 2;
@@ -689,22 +175,6 @@ Java_sand_falling_opengl_DemoActivity_sendxg(JNIEnv* env, jobject thiz,
 {
 	gravx = -xgrav;
 }
-void Java_sand_falling_opengl_DemoActivity_nativePause(JNIEnv* env)
-{
-	sDemoStopped = !sDemoStopped;
-	if (sDemoStopped)
-	{
-		/* we paused the animation, so store the current
-		 * time in sTimeStopped for future nativeRender calls */
-		saver(1);
-	}
-	else
-	{
-		/* we resumed the animation, so adjust the time offset
-		 * to take care of the pause interval. */
-		loader(1);
-	}
-}
 void Java_sand_falling_opengl_DemoActivity_quickload(JNIEnv* env)
 {
 	loader(1);
@@ -717,7 +187,7 @@ void Java_sand_falling_opengl_DemoActivity_quicksave(JNIEnv* env)
 /* Call to render the next GL frame */
 void Java_sand_falling_opengl_DemoRenderer_nativeRender(JNIEnv* env)
 {
-	appRender(sWindowWidth, sWindowHeight, colors);
+	appRender(colors);
 }
 
 Java_sand_falling_opengl_DemoActivity_setup(JNIEnv* env, jobject thiz)
@@ -749,7 +219,8 @@ rsetup()
 		spawn[j] = -1;
 		frozen[j] = 0;
 	}
-	for (j = 0; j < 8; j++){
+	for (j = 0; j < 8; j++)
+	{
 		username[j] = 0;
 		password[j] = 0;
 	}
@@ -1332,23 +803,14 @@ int Java_sand_falling_opengl_DemoActivity_register(JNIEnv *env, jobject thiz)
 
 	return 0;
 }
-int Java_sand_falling_opengl_DemoActivity_save(JNIEnv *env, jobject thiz)
-{
-	buildbuffer(0);
-	if(!sendbuffer())
-	{
-		return -1;
-	}
-	return 0;
-}
 
-bool sendbuffer(void)
+int sendbuffer(void)
 {
 	sockfd = socket(AF_INET, SOCK_STREAM, 0); //Create a socket using IPv4 and TCP
 	if(sockfd < 0)
 	{
 		error = "Could not create socket";
-		return false;
+		return 0;
 	}
 	server = gethostbyname("71.244.112.67"); //Create the hostent using server IP
 	bzero((char*) &serv_addr, sizeof(serv_addr)); //Clear the serv_addr struct
@@ -1358,19 +820,21 @@ bool sendbuffer(void)
 	if(connect(sockfd, &serv_addr, sizeof(serv_addr)) < 0)
 	{
 		error = "Could not connect";
-		return false;
+		return 0;
 	}
 
 	while(bufferlength > 0)
 	{
-		n = write(sockfd, savebuffer, bufferlength);
+		n = write(sockfd, buffer, bufferlength);
 		if(n < 0)
 		{
 			error = "Could not write to socket";
-			return false;
+			return 0;
 		}
 		bufferlength -= n;
 	}
+
+	return 1;
 }
 
 char* Java_sand_falling_opengl_DemoActivity_viewerr (JNIEnv *env, jobject thiz)

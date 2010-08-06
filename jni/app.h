@@ -45,7 +45,7 @@ extern "C" {
 // The simple framework expects the application code to define these functions.
 extern void appInit();
 extern void appDeinit();
-extern void appRender(int width, int height, unsigned char colors);
+extern void appRender(unsigned char colors);
 
 /* Value is non-zero when application is alive, and 0 when it is closing.
  * Defined by the application framework.

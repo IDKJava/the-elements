@@ -474,7 +474,6 @@ public class DemoActivity extends Activity
 	public native static void Play(); // Jni play
 	public native static void jPause(); // Jni pause
 	public native static void togglesize(); // Jni toggle size
-	public native static void nativePause();
 	public native static void quicksave();
 	public native static void quickload();
 	public native static void setBackgroundColor(int colorcode);

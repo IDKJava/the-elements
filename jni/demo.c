@@ -31,69 +31,9 @@
 #include "importgl.h"
 
 #include "app.h"
-#include "shapes.h"
-#include "cams.h"
 #include <android/log.h>
 
-// Total run length is 20 * camera track base unit length (see cams.h).
-#define RUN_LENGTH  (20 * CAMTRACK_LEN)
-#undef PI
-#define PI 3.1415926535897932f
-#define RANDOM_UINT_MAX 65535
-
 static unsigned int textureID;
-
-static unsigned long sRandomSeed = 0;
-
-static void seedRandom(unsigned long seed)
-{
-	sRandomSeed = seed;
-}
-
-static unsigned long randomUInt()
-{
-	sRandomSeed = sRandomSeed * 0x343fd + 0x269ec3;
-	return sRandomSeed >> 16;
-}
-
-// Capped conversion from float to fixed.
-static long floatToFixed(float value)
-{
-	if (value < -32768)
-		value = -32768;
-	if (value > 32767)
-		value = 32767;
-	return (long) (value * 65536);
-}
-
-#define FIXED(value) floatToFixed(value)
-
-// Definition of one GL object in this demo.
-//typedef struct {
-/* Vertex array and color array are enabled for all objects, so their
- * pointers must always be valid and non-NULL. Normal array is not
- * used by the ground plane, so when its pointer is NULL then normal
- * array usage is disabled.
- *
- * Vertex array is supposed to use GL_FIXED datatype and stride 0
- * (i.e. tightly packed array). Color array is supposed to have 4
- * components per color with GL_UNSIGNED_BYTE datatype and stride 0.
- * Normal array is supposed to use GL_FIXED datatype and stride 0.
- */
-// GLfixed *vertexArray;
-//   GLubyte *colorArray;
-//  GLfixed *normalArray;
-// GLint vertexComponents;
-// GLsizei count;
-//} GLOBJECT;
-
-
-static long sStartTick = 0;
-static long sTick = 0;
-
-static int sCurrentCamTrack = 0;
-static long sCurrentCamTrackStartTick = 0;
-static long sNextCamTrackStartTick = 0x7fffffff;
 
 // Called from the app framework. is onSurfaceCreated
 void appInit()
@@ -138,7 +78,7 @@ void appDeinit()
 /* The tick is current time in milliseconds, width and height
  * are the image dimensions to be rendered.
  */
-void appRender(int width, int height, unsigned char colors)
+void appRender(unsigned char colors)
 {
 	float vertices[] =
 	{ 0.0f, 0.0f, 512.0f, 0.0f, 0.0f, 1024.0f, 512.0f, 1024.0f };
