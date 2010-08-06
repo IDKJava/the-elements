@@ -500,6 +500,6 @@ public class DemoActivity extends Activity
 
 	static
 	{
-		System.loadLibrary("sanangeles"); // Load the JNI library (libsanangeles.so)
+		System.loadLibrary("thelements"); // Load the JNI library (libsanangeles.so)
 	}
 }
