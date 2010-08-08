@@ -7,7 +7,8 @@
  * it must be added here.
  */
 
-#define TElements 25
+//Include the global macros
+#include "macros.h"
 
 int collision[TElements][TElements] =
 {

@@ -8,7 +8,9 @@
 
 #define SERVER_IP "71.244.112.67"
 #define PORTNUM 2000
-#define TPoints 500000
+
+//Include the global macros
+#include "macros.h"
 
 //General variables
 float x[TPoints];

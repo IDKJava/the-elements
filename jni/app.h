@@ -30,18 +30,9 @@
 extern "C" {
 #endif
 
+//Include the global macros
+#include "macros.h"
 
-#define WINDOW_DEFAULT_WIDTH    640
-#define WINDOW_DEFAULT_HEIGHT   480
-
-#define WINDOW_BPP              16
-
-
-#define TPoints 500000
-#define TElements 25
-#define TPixels 512*1024 //144826 for g1, 390385 for droid
-#define BLACK -16777216
-#define TCollision 28
 // The simple framework expects the application code to define these functions.
 extern void appInit();
 extern void appDeinit();

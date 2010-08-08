@@ -13,7 +13,8 @@
  *
  */
 
-#define TElements 25
+//Include the global macros
+#include "macros.h"
 
 //Define the color of the element
 unsigned char red[] =   {255, 0,   157,   0,   0, 255, 200, 255, 255, 143, 204, 100, 255, 255, 135, 176,   0, 150, 220, 255,  50, 200,   0,  49, 255};

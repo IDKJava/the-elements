@@ -31,10 +31,8 @@
 #include "saveload.h"
 //Include the server access functions
 #include "server.h"
-
-#define TPoints 500000
-#define TElements 25
-#define TPixels 512*1024
+//Include the global macros
+#include "macros.h"
 
 int cpoint;
 int play = 1;

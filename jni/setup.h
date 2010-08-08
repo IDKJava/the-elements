@@ -5,9 +5,8 @@
  * all of the arrays and variables necessary.
  */
 
-#define TPoints 500000
-#define TElements 25
-#define TPixels 512*1024
+//Include the global macros
+#include "macros.h"
 
 //All the variables that need to get set
 int loq;

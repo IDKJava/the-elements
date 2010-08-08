@@ -12,7 +12,8 @@
 #define DEMO_SAVE_FILE "/sdcard/elementworks/save2.txt"
 #define CUSTOM_ELEMENT_FILE "/sdcard/elementworks/customele.txt"
 
-#define TElements 25
+//Include the global macros
+#include "macros.h"
 
 //Declare the rsetup() function here
 void rsetup();
