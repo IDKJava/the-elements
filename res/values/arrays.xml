@@ -12,11 +12,10 @@
         <item>black</item>
         <item>white</item>
     </string-array>
-    
-    <string-array name="number_array">
-        <item>Custom 1</item>
-        <item>Custom 2</item>
-        <item>Custom 3</item>
+    <!-- Used in app/server_engage -->
+    <string-array name="ne_filter_type_array">
+        <item>Saves</item>
+        <item>Custom Elements</item>
     </string-array>
     
     <string-array name="reaction_array">

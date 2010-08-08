@@ -65,5 +65,6 @@
               android:layout_toRightOf="@+id/login_button2"
               />        
                
+<Button android:layout_toRightOf="@+id/login_button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_below="@+id/register_button" android:id="@+id/engage_test" android:text="Engage  "></Button>
 </RelativeLayout>
  

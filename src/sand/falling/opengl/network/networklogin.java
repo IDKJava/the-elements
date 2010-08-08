@@ -1,10 +1,13 @@
 package sand.falling.opengl.network;
 
 import sand.falling.opengl.DemoActivity;
+import sand.falling.opengl.Menu;
 import sand.falling.opengl.R;
+import sand.falling.opengl.Splash;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,6 +30,7 @@ public class networklogin extends Activity
 
 	static public Button launch;
 	static public Button register;
+	static public Button network_engage;
 	static public EditText usernameEditText;
 	static public EditText passwordEditText;
 	static public String sUserName;
@@ -44,7 +48,7 @@ public class networklogin extends Activity
 		// variable of type Button
 		launch = (Button) findViewById(R.id.login_button2);
 		register = (Button) findViewById(R.id.register_button);
-		
+		network_engage = (Button) findViewById(R.id.engage_test);
 		// this gets the resources in the xml file and assigns it to a
 		// local variable of type EditText
 		usernameEditText = (EditText) findViewById(R.id.txt_username);
@@ -101,6 +105,19 @@ public class networklogin extends Activity
 					// display the username and the password in string format
 					Toast.makeText(networklogin.this, " Register Username:" + sUserName + " Password:" + sPassword, Toast.LENGTH_SHORT).show();
 				}
+			}
+		}
+
+		); // end of register.setOnClickStuff
+		network_engage.setOnClickListener(new OnClickListener()
+		{
+
+			public void onClick(View viewParam)
+			{
+				
+			//Start the main app activity
+				startActivity(new Intent(networklogin.this, networkengage.class));
+			
 			}
 		}
 

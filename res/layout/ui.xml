@@ -8,7 +8,7 @@
 	<sand.falling.opengl.MenuBar
 		android:id="@+id/menu_bar"
 		android:layout_width="fill_parent"
-		android:layout_height="62px"
+		android:layout_height="42dip"
 		android:layout_weight="0"
 		android:orientation="horizontal">
     	
