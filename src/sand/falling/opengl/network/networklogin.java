@@ -1,12 +1,7 @@
 package sand.falling.opengl.network;
 
-import sand.falling.opengl.DemoActivity;
-import sand.falling.opengl.Menu;
 import sand.falling.opengl.R;
-import sand.falling.opengl.Splash;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;

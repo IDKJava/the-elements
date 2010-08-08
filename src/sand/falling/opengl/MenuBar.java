@@ -1,8 +1,8 @@
 package sand.falling.opengl;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -34,6 +34,7 @@ public class MenuBar extends LinearLayout
 	{
 		super(context, attrs);
 		this.context = context;
+		this.setGravity(Gravity.CENTER_HORIZONTAL);
 	}
 	
 	//Used to get specific instance of activity
