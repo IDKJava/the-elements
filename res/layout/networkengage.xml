@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_height="fill_parent" android:drawingCacheQuality="high" android:layout_width="fill_parent" android:background="@drawable/trans" android:visibility="visible" android:layout_gravity="top">
+  android:layout_height="fill_parent" android:drawingCacheQuality="high" android:layout_width="fill_parent" android:visibility="visible" android:layout_gravity="top">
 <MediaController android:id="@+id/ne_control" android:layout_gravity="top" android:layout_height="60dip" android:background="@drawable/ne_control_bg" android:layout_width="fill_parent" android:paddingRight="16dip" android:paddingLeft="16dip" android:visibility="visible">
 	<ImageButton android:id="@+id/ne_location_filter" android:background="@drawable/btn_ne_local" android:layout_gravity="left|center" android:layout_height="25dip" android:layout_width="25dip"></ImageButton>
 <ImageButton android:layout_gravity="right|center_vertical" android:id="@+id/ne_close" android:adjustViewBounds="true" android:background="@drawable/btn_ne_close" android:layout_width="25dip" android:layout_height="25dip"></ImageButton>
