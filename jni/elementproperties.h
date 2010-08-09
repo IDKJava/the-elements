@@ -56,7 +56,7 @@ int	fallvel[] =	{1, 1, 0, 0, 0, -1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, -1, 1, -1, 1, 
 //27 -sand-hot
 
 //Array defining what element custom element 1 acts as in a collision with each element
-int colliseelement1[TElements] =
+int colliseelement1[TCollision] =
 {
 		0, //Sand 0
 		0, //Water 1

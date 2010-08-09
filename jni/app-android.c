@@ -15,12 +15,10 @@
 #include <stdio.h>
 #include <android/log.h>
 
-//Socket includes
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-
+//Include the global variables
+#include "app.h"
+//Include the global macros
+#include "macros.h"
 //Include the initializing function
 #include "setup.h"
 //Include the element characteristics file
@@ -31,87 +29,6 @@
 #include "saveload.h"
 //Include the server access functions
 #include "server.h"
-//Include the global macros
-#include "macros.h"
-
-int cpoint;
-int play = 1;
-int size = 4;
-int lmx;
-int lmy;
-int lmx2;
-int lmy2;
-int lmx3;
-int lmy3;
-int jchanged;
-int accelcon = 0;
-
-//Username and password variables
-char username[8];
-char password[8];
-char userlength;
-char passlength;
-
-char* error;
-
-//Array for bitmap drawing
-unsigned char colors[TPixels * 3]; //3 bytes/pixel
-
-//coordinates of all the pieces 
-float x[TPoints];
-float y[TPoints];
-
-char frozen[TPoints];
-
-int flipped = 0;
-
-int maxx;
-int maxy;
-
-//old coordinates of the sand, used for collision resolving
-int oldx[TPoints];
-int oldy[TPoints];
-int delete[TPoints];
-
-float gravx = 0; //xgravity
-float gravy = 0; //ygravity (9.8 m/s^2 usually)
-
-// what type of element each piece of sand is
-int element[TPoints];
-
-//Array to keep track of which points are used
-int set[TPoints];
-//Array of which points are available to keep CreatePoint fast
-int avail[TPoints];
-//Value to keep track of location in avail array
-int loq = TPoints;
-//Array to keep track of spawn elements for spawns
-int spawn[TPoints];
-int tracker; //keeps track for the array of changed stuff
-int changed[TPixels * 10]; //array of changed stuff
-int newvalue[TPixels * 10]; //values of the changed stuff
-int jcounter = 0; //counter for when transfering to Java
-
-int screensize = 0; //0 = zoomed in, 1 = zoomed out
-
-//velocities of each piece of sand
-int xvel[TPoints];
-int yvel[TPoints];
-
-// A map of all the coordinates on the screen
-int allcoords[900][900];
-
-//will be the mouse positions
-int xm = -1;
-int ym = 50;
-
-//finger down?
-int fd;
-
-//Current element selected
-int celement = 0;
-
-int gAppAlive = 1;
 
 void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
@@ -165,7 +82,7 @@ void Java_sand_falling_opengl_DemoActivity_quicksave(JNIEnv* env)
 /* Call to render the next GL frame */
 void Java_sand_falling_opengl_DemoRenderer_nativeRender(JNIEnv* env)
 {
-	appRender(colors);
+	appRender();
 }
 
 void Java_sand_falling_opengl_DemoActivity_setup(JNIEnv* env, jobject thiz)
@@ -276,10 +193,6 @@ void Java_sand_falling_opengl_DemoActivity_mp(JNIEnv* env, jobject thiz, jint jx
 	//setting the mouse position when given stuff from jdk
 	if (xm != -1)
 	{
-		lmx3 = lmx2; //this way we can find difference from 3 frames ago
-		lmy3 = lmy2;
-		lmy2 = lmy;
-		lmx2 = lmx;
 		lmx = xm;
 		lmy = ym;
 

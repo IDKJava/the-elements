@@ -28,10 +28,10 @@
 #include <float.h>
 #include <assert.h>
 
+//Include the GL importing functions
 #include "importgl.h"
-
+//Include the global variables
 #include "app.h"
-#include <android/log.h>
 
 static unsigned int textureID;
 
@@ -61,8 +61,7 @@ void appInit()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	//Generate the tex image
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 1024, 0, GL_RGB,
-			GL_UNSIGNED_BYTE, colors);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Disable tex (clean up)
 	glDisable(GL_TEXTURE_2D);
@@ -78,7 +77,7 @@ void appDeinit()
 /* The tick is current time in milliseconds, width and height
  * are the image dimensions to be rendered.
  */
-void appRender(unsigned char colors)
+void appRender()
 {
 	float vertices[] =
 	{ 0.0f, 0.0f, 512.0f, 0.0f, 0.0f, 1024.0f, 512.0f, 1024.0f };

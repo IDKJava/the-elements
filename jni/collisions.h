@@ -7,6 +7,9 @@
  * it must be added here.
  */
 
+#ifndef COLLISIONS_H_INCLUDED
+#define COLLISIONS_H_INCLUDED
+
 //Include the global macros
 #include "macros.h"
 
@@ -63,3 +66,5 @@ int collision[TElements][TElements] =
 		//Custom 3 24
 		{0, 1, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1, 0, 0, 0, 0}
 };
+
+#endif

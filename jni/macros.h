@@ -8,7 +8,14 @@
  * adding new elements)
  */
 
+#ifndef MACROS_H_INCLUDED
+#define MACROS_H_INCLUDED
+
 #define TPoints 500000
 #define TElements 25
 #define TPixels 512*1024
 #define TCollision 28
+#define WIDTH 512
+#define HEIGHT 1024
+
+#endif

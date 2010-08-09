@@ -1,25 +1,10 @@
-/* San Angeles Observation OpenGL ES version example
- * Copyright 2004-2005 Jetro Lauha
- * All rights reserved.
- * Web: http://iki.fi/jetro/ 
- * 
- * This source is free software; you can redistribute it and/or
- * modify it under the terms of EITHER:
- *   (1) The GNU Lesser General Public License as published by the Free
- *       Software Foundation; either version 2.1 of the License, or (at
- *       your option) any later version. The text of the GNU Lesser
- *       General Public License is included with this source in the
- *       file LICENSE-LGPL.txt.
- *   (2) The BSD-style license that is included with this source in
- *       the file LICENSE-BSD.txt.
- *
- * This source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the files
- * LICENSE-LGPL.txt and LICENSE-BSD.txt for more details.
- *
- * $Id: app.h,v 1.5 2009/12/25 18:54:25 cvs Exp $
- * $Revision: 1.5 $
+/*
+ * app.h
+ * --------------------------------
+ * Contains all the extern declarations for
+ * our variables, so that they are essentially
+ * global external variables accessible from
+ * all files necessary.
  */
 
 #ifndef APP_H_INCLUDED
@@ -36,92 +21,118 @@ extern "C" {
 // The simple framework expects the application code to define these functions.
 extern void appInit();
 extern void appDeinit();
-extern void appRender(unsigned char colors);
+extern void appRender();
 
 /* Value is non-zero when application is alive, and 0 when it is closing.
  * Defined by the application framework.
  */
 extern int gAppAlive;
 
+//Current element selected
+extern int celement;
+//Current point during processing
 extern int cpoint;
+//Play state
 extern int play;
+//Size variable
 extern int size;
 
 //Array for bitmap drawing
-extern unsigned char colors[TPixels*3];   // 3 bytes per pixel
+extern unsigned char colors[TPixels*3]; // 3 bytes per pixel
 
-//coordinates of all the pieces 
+//Coordinates
 extern float x[TPoints];
 extern float y[TPoints];
-
-//old coordinates of the sand, used for collision resolving
+//Old coordinates (for collision resolving)
 extern int oldx[TPoints];
 extern int oldy[TPoints];
+//Velocities
+extern int xvel[TPoints];
+extern int yvel[TPoints];
 
-// what type of element each piece of sand is
+//Element type
 extern int element[TPoints];
-//whether we calculate collisions each round for a prticle
+//Frozen state
 extern char frozen[TPoints];
+//Spawn type
+extern int spawn[TPoints];
 
-//The red, green, and blue components of each element color
-extern unsigned char red[TElements];    
-extern unsigned char green[TElements];  
-extern unsigned char blue[TElements];  
-//fall velocity of each type
+//RGB properties
+extern unsigned char red[TElements];
+extern unsigned char green[TElements];
+extern unsigned char blue[TElements];
+//Fall velocity property
 extern int fallvel[TElements];
+//Density property
+extern int density[TElements];
+//Solid property
 extern int solid[TElements];
+//Growing property
 extern int growing[TElements];
+//Condensing property
 extern int condensing[TElements];
+//Fire-like burning property
 extern int fireburn[TElements];
+//Explosiveness property
 extern int exploness[TElements];
 
+//Custom element collision data
 extern int colliseelement1[TCollision];
 
+//Collision matrix
 extern int collision[TElements][TElements];
+
+//Index set state
 extern int set[TPoints];
-//Array of which points are available to keep CreatePoint fast
+//Index available state
 extern int avail[TPoints];
-//Value to keep track of location in avail array
+
+//Location in avail array
 extern int loq;
-extern int spawn[TPoints]; //Array of spawn elements for all spawns
-extern int screensize; //zoomed in or not
-extern int lmx; 
-extern int lmy;
-extern int lmx2;
-extern int lmy2;
-extern int lmy3;
-extern int lmx3;
+//Zoom value
+extern int screensize;
+
+//Gravity values
 extern float gravx;
 extern float gravy;
-extern int accelcon; //0 for off, 1 for on
 
-//densities of elements
-extern int density[];
-
-
-//velocities of each piece of sand
-extern int xvel[TPoints]; 
-extern int yvel[TPoints];
-extern int maxx;
-extern int maxy;
-// A map of all the coordinates on the screen
-extern int allcoords[900][900];    
-
-//will be the mouse positions
-extern int xm;  
-extern int ym;
+//Accelerometer control state
+extern int accelcon;
+//Flipped state
 extern int flipped;
 
-//finger down?
+//The extent of the screen (what area to draw in)
+extern int maxx;
+extern int maxy;
+
+// A map of all the coordinates on the screen
+extern int allcoords[WIDTH][HEIGHT];
+
+//Mouse positions
+extern int xm;  
+extern int ym;
+//Old mouse positions
+extern int lmx;
+extern int lmy;
+//Finger down state
 extern int fd;
 
-//Current element selected
-extern int celement;
-
+//Buffer building variables
 extern char username[8];
 extern char password[8];
 extern char userlength;
 extern char passlength;
+extern char buffer[3 + 1 + (2 * TPoints * 4) + 200];
+extern int bufferlength;
+
+//Error variable
+extern char* error;
+
+//Socket variables
+extern int sockfd; //The file descriptor for the socket
+extern int n; //Used in sending and recieving data
+extern struct sockaddr_in serv_addr; //The server address struct
+extern struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
 
 #ifdef __cplusplus
 }
@@ -129,5 +140,3 @@ extern char passlength;
 
 
 #endif // !APP_H_INCLUDED
-
-

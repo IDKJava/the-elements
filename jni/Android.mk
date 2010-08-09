@@ -8,9 +8,13 @@ LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL
 
 LOCAL_SRC_FILES := \
+    app-android.c \
+	app.c \
     importgl.c \
     game.c \
-    app-android.c \
+    server.c \
+    saveload.c \
+    setup.c \
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 
