@@ -17,7 +17,8 @@
     	android:id="@+id/start_game_button"
     	android:text="Play Game" 
     	android:layout_width="200sp"
-    	android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
     	
     
     <!-- How-to-play button -->
@@ -25,36 +26,48 @@
     	android:id="@+id/how_to_play_button"
     	android:text="How to Play"
     	android:gravity="center"
-    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:layout_width="200sp" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
      <!-- Custom Element button -->
     <Button
     	android:id="@+id/custom_button"
     	android:text="Custom Element Maker"
     	android:gravity="center"
-    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>	
+    	android:layout_width="200sp" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>	
     <!-- About button -->
     <Button
     	android:id="@+id/about_button"
     	android:text="About"
-    	android:layout_width="200sp" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:layout_width="200sp" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
     <!-- Login button -->	
     <Button 
     	android:layout_width="200sp" 
     	android:text="Login" 
-    	android:id="@+id/login_button" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:id="@+id/login_button" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
      <!-- clear save button -->
     <Button
     	android:id="@+id/clear_button"
     	android:text="Clear Quicksave"
     	android:layout_width="200sp"
-    	android:gravity="center" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:gravity="center" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
     	
     <!-- Exit button -->
     <Button
     	android:id="@+id/exit_button"
     	android:text="Exit"
     	android:layout_width="200sp"
-    	android:gravity="center" android:background="@drawable/btn_mm" android:layout_height="wrap_content"/>
+    	android:gravity="center" 
+    	android:background="@drawable/btn_mm" 
+    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
     	
     
     

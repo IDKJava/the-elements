@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -47,6 +46,7 @@ public class networkengage extends Activity {
         	//Most values are blank as this is simply filler (for now)
         	add_entity("", "", i, 0);
         }
+        
         //Get ne_close to go to the Menu activity
         ne_close.setOnClickListener(new OnClickListener()
 		{
@@ -59,7 +59,7 @@ public class networkengage extends Activity {
 			
 			}
 		});
-	}	
+	} // end onCreate method
 
 	
 	
@@ -80,8 +80,6 @@ public class networkengage extends Activity {
 		/* Find Tablelayout defined in networkengage.xml */
 	    TableLayout tl = (TableLayout)findViewById(R.id.entity_container);
 	    // Find the scroll view
-	    ScrollView sv = (ScrollView)findViewById(R.id.entity_scrollview);
-	    sv.setBackgroundResource(R.drawable.bg_ne_scrollview);
 	    
         buttonContainer = new LinearLayout(this);
         /* Create a new row to be added. */
@@ -91,10 +89,10 @@ public class networkengage extends Activity {
         tr.setLayoutParams(new LayoutParams(
                                 LayoutParams.FILL_PARENT, 
                                 LayoutParams.WRAP_CONTENT));
-        
+        tr.setBackgroundResource(R.drawable.bg_ne_entity);
         tr.setLongClickable(true);
         tr.setClickable(true);
-        tr.setBackgroundResource(R.drawable.bg_ne_entity);
+        
         //tr.setBackgroundColor(Color.argb(100, 226, 226, 226));        
         /* Create a Textview for the file name */
         TextView filename = new TextView(this);
@@ -125,6 +123,18 @@ public class networkengage extends Activity {
 	        /* Add Button to row. */
 	        buttonContainer.addView(actionButton);
 	        tr.addView(buttonContainer);
+	    //Add a test click event
+        tr.setOnClickListener(new OnClickListener()
+		{
+
+			public void onClick(View viewParam)
+			{
+				
+			//Start the main app activity
+				startActivity(new Intent(networkengage.this, Menu.class));
+			
+			}
+		});
         /* Add row to TableLayout. */
         tl.addView(tr,new TableLayout.LayoutParams(
                         LayoutParams.FILL_PARENT, 

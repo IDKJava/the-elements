@@ -37,9 +37,7 @@ public class Control extends LinearLayout
 		//Define the ImageButton and SeekBar set before using the res ids
 		control_button = (ImageButton) findViewById(R.id.element_picker_button);
 		brush_size_slider = (SeekBar) findViewById(R.id.brush_size_slider);
-		
 
-		this.setBackgroundResource(R.drawable.ctrl_bg);
 		//Set a click listener for the button which should pop up element picker dialog when clicked
 		control_button.setOnClickListener
 			(
