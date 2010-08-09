@@ -12,6 +12,8 @@
 #include "importgl.h"
 //Include the global variables
 #include "app.h"
+//Include the update function
+#include "update.h"
 
 void appInit(void);
 void appDeinit(void);

@@ -18,6 +18,7 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/sysmacros.h \
  /home/looterguf/workspace/DemoActivity/jni/app.h \
  /home/looterguf/workspace/DemoActivity/jni/macros.h \
+ /home/looterguf/workspace/DemoActivity/jni/points.h \
  /home/looterguf/workspace/DemoActivity/jni/setup.h
 
 /home/looterguf/workspace/DemoActivity/jni/saveload.h:
@@ -55,5 +56,7 @@
 /home/looterguf/workspace/DemoActivity/jni/app.h:
 
 /home/looterguf/workspace/DemoActivity/jni/macros.h:
+
+/home/looterguf/workspace/DemoActivity/jni/points.h:
 
 /home/looterguf/workspace/DemoActivity/jni/setup.h:

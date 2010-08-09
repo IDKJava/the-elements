@@ -21,11 +21,6 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/limits.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/machine/internal_types.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/machine/limits.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/time.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/time.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/time.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/asm/siginfo.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/asm-generic/siginfo.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdlib.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/string.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/malloc.h \
@@ -33,13 +28,13 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/strings.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/memory.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdio.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/android/log.h \
  /home/looterguf/workspace/DemoActivity/jni/app.h \
  /home/looterguf/workspace/DemoActivity/jni/macros.h \
  /home/looterguf/workspace/DemoActivity/jni/setup.h \
  /home/looterguf/workspace/DemoActivity/jni/elementproperties.h \
  /home/looterguf/workspace/DemoActivity/jni/collisions.h \
  /home/looterguf/workspace/DemoActivity/jni/saveload.h \
+ /home/looterguf/workspace/DemoActivity/jni/points.h \
  /home/looterguf/workspace/DemoActivity/jni/server.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/socket.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/socket.h \
@@ -57,7 +52,14 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/byteorder/generic.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/in6.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netinet/in6.h \
- /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h
+ /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h \
+ /home/looterguf/workspace/DemoActivity/jni/gl.h \
+ /home/looterguf/workspace/DemoActivity/jni/importgl.h \
+ /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/gl.h \
+ /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/glplatform.h \
+ /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/KHR/khrplatform.h \
+ /home/looterguf/workspace/DemoActivity/jni/update.h \
+ /home/looterguf/workspace/DemoActivity/jni/collide.h
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/jni.h:
 
@@ -101,16 +103,6 @@
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/machine/limits.h:
 
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/time.h:
-
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/time.h:
-
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/time.h:
-
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/asm/siginfo.h:
-
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/asm-generic/siginfo.h:
-
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdlib.h:
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/string.h:
@@ -125,8 +117,6 @@
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdio.h:
 
-/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/android/log.h:
-
 /home/looterguf/workspace/DemoActivity/jni/app.h:
 
 /home/looterguf/workspace/DemoActivity/jni/macros.h:
@@ -138,6 +128,8 @@
 /home/looterguf/workspace/DemoActivity/jni/collisions.h:
 
 /home/looterguf/workspace/DemoActivity/jni/saveload.h:
+
+/home/looterguf/workspace/DemoActivity/jni/points.h:
 
 /home/looterguf/workspace/DemoActivity/jni/server.h:
 
@@ -174,3 +166,17 @@
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netinet/in6.h:
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h:
+
+/home/looterguf/workspace/DemoActivity/jni/gl.h:
+
+/home/looterguf/workspace/DemoActivity/jni/importgl.h:
+
+/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/gl.h:
+
+/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/glplatform.h:
+
+/home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/KHR/khrplatform.h:
+
+/home/looterguf/workspace/DemoActivity/jni/update.h:
+
+/home/looterguf/workspace/DemoActivity/jni/collide.h:

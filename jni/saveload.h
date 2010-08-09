@@ -22,6 +22,8 @@
 #include "app.h"
 //Include the global macros
 #include "macros.h"
+//Include points functions
+#include "points.h"
 //Include the initializer function
 #include "setup.h"
 

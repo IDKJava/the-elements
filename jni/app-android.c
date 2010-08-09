@@ -8,12 +8,9 @@
 
 #include <jni.h>
 #include <math.h>
-#include <sys/time.h>
-#include <time.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <android/log.h>
+//#include <android/log.h>
 
 //Include the global variables
 #include "app.h"
@@ -29,6 +26,8 @@
 #include "saveload.h"
 //Include the server access functions
 #include "server.h"
+//Include the rendering functions
+#include "gl.h"
 
 void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
@@ -39,8 +38,7 @@ void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize 
 	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "4");
 }
 
-void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env,
-		jobject thiz, jint w, jint h)
+void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
 {
 	if (screensize == 0) //this didn't work before becuase tej used = instead of == (green girdle)
 	{

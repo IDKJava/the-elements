@@ -1,40 +1,14 @@
-/* San Angeles Observation OpenGL ES version example
- * Copyright 2004-2005 Jetro Lauha
- * All rights reserved.
- * Web: http://iki.fi/jetro/
- *
- * This source is free software; you can redistribute it and/or
- * modify it under the terms of EITHER:
- *   (1) The GNU Lesser General Public License as published by the Free
- *       Software Foundation; either version 2.1 of the License, or (at
- *       your option) any later version. The text of the GNU Lesser
- *       General Public License is included with this source in the
- *       file LICENSE-LGPL.txt.
- *   (2) The BSD-style license that is included with this source in
- *       the file LICENSE-BSD.txt.
- *
- * This source is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the files
- * LICENSE-LGPL.txt and LICENSE-BSD.txt for more details.
- *
- * $Id: demo.c,v 1.8 2009/12/25 18:54:25 cvs Exp $
- * $Revision: 1.8 $
+/*
+ * update.c
+ * -----------------------------------
+ * Defines the function UpdateView(), which
+ * is called every frame to update all the
+ * particles' positions.
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include <float.h>
-#include <assert.h>
+#include "update.h"
 
-//Include the global variables
-#include "app.h"
-//Include the points functions
-#include "points.h"
-//Include the collision function
-#include "collide.h"
-
-UpdateView()
+void UpdateView(void)
 {
 
 	if (fd == 1) // if the finger is down
