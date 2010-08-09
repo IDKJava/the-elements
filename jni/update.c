@@ -29,6 +29,10 @@
 
 //Include the global variables
 #include "app.h"
+//Include the points functions
+#include "points.h"
+//Include the collision function
+#include "collide.h"
 
 UpdateView()
 {

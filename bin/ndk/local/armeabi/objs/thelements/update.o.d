@@ -22,7 +22,9 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/memory.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/assert.h \
  /home/looterguf/workspace/DemoActivity/jni/app.h \
- /home/looterguf/workspace/DemoActivity/jni/macros.h
+ /home/looterguf/workspace/DemoActivity/jni/macros.h \
+ /home/looterguf/workspace/DemoActivity/jni/points.h \
+ /home/looterguf/workspace/DemoActivity/jni/collide.h
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/string.h:
 
@@ -69,3 +71,7 @@
 /home/looterguf/workspace/DemoActivity/jni/app.h:
 
 /home/looterguf/workspace/DemoActivity/jni/macros.h:
+
+/home/looterguf/workspace/DemoActivity/jni/points.h:
+
+/home/looterguf/workspace/DemoActivity/jni/collide.h:

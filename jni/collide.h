@@ -14,6 +14,8 @@
 #include <stdlib.h>
 //Include the global variables
 #include "app.h"
+//Include the points functions
+#include "points.h"
 
 void collide (int fp, int sp);
 
