@@ -105,8 +105,6 @@ void UpdateView(void)
 				int random = rand();
 				if (element[counter] == 5 && ((random % 7) == 0))
 				{
-
-					unFreezeParticles(x[counter], y[counter]);
 					DeletePoint(counter);
 				}
 				else
@@ -140,12 +138,10 @@ void UpdateView(void)
 					}
 					if (xvel[counter] > 0)
 					{
-						if ((oelement == 15 || oelement == 21) && xvel[counter]
-								> 5)
+						if ((oelement == 15 || oelement == 21) && xvel[counter] > 5)
 						{
 							element[counter] = 0; //change particle to sand if the velocity on the wall is great enough							
-							setBitmapColor((int) x[counter], (int) y[counter],
-									0); //Set the color also
+							setBitmapColor((int) x[counter], (int) y[counter], 0); //Set the color also
 						}
 						else if (oelement == 15 || oelement == 21)
 						{
@@ -165,11 +161,9 @@ void UpdateView(void)
 								&& xvel[counter] < -5)
 						{
 							element[counter] = 0; //change particle to sand if the velocity on the wall is great enough							
-							setBitmapColor((int) x[counter], (int) y[counter],
-									0); //Set the color also
+							setBitmapColor((int) x[counter], (int) y[counter] ,0); //Set the color also
 						}
-						else if (element[counter] == 15 || element[counter]
-								== 21)
+						else if (element[counter] == 15 || element[counter] == 21)
 						{
 							x[counter] = ox;
 							y[counter] = oy;
@@ -186,8 +180,7 @@ void UpdateView(void)
 								&& yvel[counter] > 5)
 						{
 							element[counter] = 0; //change particle to sand if the velocity on the wall is great enough							
-							setBitmapColor((int) x[counter], (int) y[counter],
-									0); //Set the color also
+							setBitmapColor((int) x[counter], (int) y[counter], 0); //Set the color also
 						}
 						else if (element[counter] == 15 || element[counter]
 								== 21)
@@ -375,10 +368,11 @@ void UpdateView(void)
 								{
 									temp = allcoords[tempx + check1][tempy
 											+ check2];
-									if (temp != -1 && element[temp] == 1
-											&& rand() % 10 == 0)
+									if (temp != -1 && element[temp] == 1 && rand() % 10 == 0)
 									{
 										element[temp] = element[counter]; //Change water to ice
+										setBitmapColor(x[temp], y[temp], element[temp]); //not quite sure why this wasn't here before, idk how it was working
+										frozen[temp] = 0;
 									}
 								}
 							}

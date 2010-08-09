@@ -11,7 +11,7 @@
 
 void collide(int fp, int sp)//first particle and second particle
 {
-	int temporary = collision[22][0];
+	int temporary = collision[22][0]; //not sure what this does
 	int olyf = oldy[fp];
 	int olxf = oldx[fp];
 	int olxs = oldx[sp];
@@ -419,8 +419,7 @@ void collide(int fp, int sp)//first particle and second particle
 								x[fp] = olxf;
 								element[fp] = 4; // change it to plant
 								allcoords[(int) x[fp]][(int) y[fp]] = fp; //set the allcoords
-								setBitmapColor((int) x[fp], (int) y[fp],
-										element[fp]); //set the bitmapcolor
+								setBitmapColor((int) x[fp], (int) y[fp], element[fp]); //set the bitmapcolor
 								return;
 							}
 

@@ -115,7 +115,7 @@ int density[] =
 		1,	//Custom 3:
 };
 //Is it solid (i.e. fallvel == 0)
-//As far as I can tell, it's not used yet
+//As far as I can tell, it's not used yet, should be though
 int solid[] =
 {
 		0,	//Sand:
@@ -145,7 +145,7 @@ int solid[] =
 		0,	//Custom 3:
 };
 //Does it grow
-//As far as I can tell, not used yet
+//Might be used?  I can't remember
 int growing[] =
 {
 		0, //Sand:
@@ -176,7 +176,7 @@ int growing[] =
 };
 
 //Does it condense
-//As far as I can tell, not implemented yet
+//not implemented yet
 int condensing[] =
 {
 		-1, //Sand:
@@ -207,7 +207,7 @@ int condensing[] =
 };
 
 //Does it burn things?
-//As far as I can tell, not implemented yet
+//Used in update to check to see if it burns similar to fire
 int fireburn[] =
 {
 		0, //Sand:
@@ -238,7 +238,7 @@ int fireburn[] =
 };
 
 //How explosive is it?
-//As far as I can tell, not implemented yet
+//used in collide function within collision of C4 and C4++
 int exploness[] =
 {
 		0, //Sand:

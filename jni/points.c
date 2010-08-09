@@ -63,7 +63,10 @@ void setBitmapColor(int xpos, int ypos, int element)
 	colors[3 * (xpos + ypos * 512) + 1] = green[element];
 	colors[3 * (xpos + ypos * 512) + 2] = blue[element];
 }
+void createBitmapFromPoints()
+{
 
+}
 //this function unfreezes particles around a point
 void unFreezeParticles(int xcentre, int ycentre)
 {
