@@ -14,7 +14,9 @@
 
 void CreatePoint(int k, int l, int e);
 void DeletePoint(int partnum);
+void setElement(int particle, int element);
 void setBitmapColor(int xpos, int ypos, int element);
+void createBitmapFromPoints(void);
 void unFreezeParticles(int xcentre, int ycentre);
 
 #endif

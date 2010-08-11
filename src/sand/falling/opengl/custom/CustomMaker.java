@@ -21,8 +21,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class CustomMaker extends Activity
 {
-
-	private final int TSpinner = 20;
+	private static final int TSpinner = 20;
 
 	ArrayAdapter<CharSequence> sandcoladp = null;
 	ArrayAdapter<CharSequence> adapter = null;
@@ -749,11 +748,13 @@ public class CustomMaker extends Activity
 			}
 			
 			//TODO: Fix the custom element maker so we don't need this hack. 
-			for (int j = 0; j < 100; j++){
+			for (int j = 0; j < 100; j++)
+			{
 				dos.writeInt(0);
 			}
 
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}

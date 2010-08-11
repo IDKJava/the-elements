@@ -57,15 +57,21 @@ void DeletePoint(int partnum)
 
 }
 
+void setElement(int particle, int element)
+{
+	element[particle] = element;
+	setBitmapColor(x[particle], y[particle], element);
+}
+
 void setBitmapColor(int xpos, int ypos, int element)
 {
 	colors[3 * (xpos + ypos * 512)] = red[element];
 	colors[3 * (xpos + ypos * 512) + 1] = green[element];
 	colors[3 * (xpos + ypos * 512) + 2] = blue[element];
 }
-void createBitmapFromPoints()
+void createBitmapFromPoints(void)
 {
-
+	//Not implemented yet
 }
 //this function unfreezes particles around a point
 void unFreezeParticles(int xcentre, int ycentre)
