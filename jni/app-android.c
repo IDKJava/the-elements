@@ -96,6 +96,10 @@ void Java_sand_falling_opengl_DemoActivity_Play(JNIEnv* env, jobject thiz)
 {
 	play = 1;
 }
+int Java_sand_falling_opengl_DemoActivity_getPlayState(JNIEnv* env, jobject thiz)
+{
+	return play;
+}
 
 void Java_sand_falling_opengl_DemoActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint colorcode)
 {

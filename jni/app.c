@@ -21,13 +21,13 @@ void appRender();
 int gAppAlive;
 
 //Current element selected
-int celement;
+int celement = 0;
 //Current point during processing
-int cpoint;
+int cpoint = 0;
 //Play state
-int play;
+int play = 1;
 //Size variable
-int size;
+int size = 4;
 
 //Array for bitmap drawing
 unsigned char colors[TPixels*3]; // 3 bytes per pixel

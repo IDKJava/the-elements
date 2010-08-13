@@ -473,6 +473,7 @@ public class DemoActivity extends Activity
 	public native static void tester();
 	public native static void Play(); // Jni play
 	public native static void jPause(); // Jni pause
+	public native static int  getPlayState(); //Get the play state
 	public native static void togglesize(); // Jni toggle size
 	public native static void quicksave();
 	public native static void quickload();

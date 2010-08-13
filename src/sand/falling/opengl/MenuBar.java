@@ -97,8 +97,16 @@ public class MenuBar extends LinearLayout
 				}
 			}
 		);
-		//Start off the eraser in "off" position
-		eraser_button.setImageResource(R.drawable.eraser);
+		if(DemoActivity.getelement() == 3) //If the current element is eraser
+		{
+			 //Start off the button to being on
+			eraser_button.setImageResource(R.drawable.eraser_on);
+		}
+		else
+		{
+			//Start off the eraser in "off" position
+			eraser_button.setImageResource(R.drawable.eraser);
+		}
 		
 		
 		//Set up the OnClickListener for the play/pause button
@@ -125,7 +133,14 @@ public class MenuBar extends LinearLayout
 				
 			}
 		);
-		play_pause_button.setImageResource(R.drawable.pause);
+		if(DemoActivity.getPlayState() == 1)
+		{
+			play_pause_button.setImageResource(R.drawable.pause);
+		}
+		else
+		{
+			play_pause_button.setImageResource(R.drawable.play);
+		}
 		
 		//Set up the OnClickListener for the save button
 		save_button.setOnClickListener

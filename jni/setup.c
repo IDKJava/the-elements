@@ -12,7 +12,6 @@ void rsetup()
 	int j, o, k;
 	loq = TPoints;
 	cpoint = 0;
-	play = 1;
 	size = 4;
 	unsigned char blankred = red[3];
 	unsigned char blankgreen = green[3];

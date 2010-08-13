@@ -57,17 +57,17 @@ void DeletePoint(int partnum)
 
 }
 
-void setElement(int particle, int element)
+void setElement(int particle, int newelement)
 {
-	element[particle] = element;
-	setBitmapColor(x[particle], y[particle], element);
+	element[particle] = newelement;
+	setBitmapColor(x[particle], y[particle], newelement);
 }
 
-void setBitmapColor(int xpos, int ypos, int element)
+void setBitmapColor(int xpos, int ypos, int newelement)
 {
-	colors[3 * (xpos + ypos * 512)] = red[element];
-	colors[3 * (xpos + ypos * 512) + 1] = green[element];
-	colors[3 * (xpos + ypos * 512) + 2] = blue[element];
+	colors[3 * (xpos + ypos * 512)] = red[newelement];
+	colors[3 * (xpos + ypos * 512) + 1] = green[newelement];
+	colors[3 * (xpos + ypos * 512) + 2] = blue[newelement];
 }
 void createBitmapFromPoints(void)
 {
