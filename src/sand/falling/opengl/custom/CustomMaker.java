@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class CustomMaker extends Activity
 {
 	private static final int TSpinner = 20;
+	private static final int TSeekBar = 5;
 
 	ArrayAdapter<CharSequence> sandcoladp = null;
 	ArrayAdapter<CharSequence> adapter = null;
@@ -46,7 +47,6 @@ public class CustomMaker extends Activity
 	Spinner mudcollis = null;
 	Spinner customelecollis = null;
 
-	private final int TSeekBar = 5;
 	private SeekBar explo_slider;
 	private SeekBar red_1_slider;
 	private SeekBar blue_1_slider;
@@ -65,27 +65,37 @@ public class CustomMaker extends Activity
 
 		try
 		{
-
-			File file = new File("/sdcard/elementworks/customeelementsave6.txt");
+			File file = new File("/sdcard/elementworks/customproperties.txt");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			
 			fis = new FileInputStream(file);
 			dis = new DataInputStream(fis);
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
 			{
 
-				try{
+				try
+				{
 					inFile[i] = dis.readInt();
-				}catch ( EOFException e){
-
+				}
+				catch (EOFException e)
+				{
 					e.printStackTrace();
 					inFile[i] = 0;
-
 				}
 
 			}
 
-		} catch (IOException e)
+		}
+		catch (IOException e)
 		{
-			e.printStackTrace();
+			if(!(new File("/sdcard/elementworks")).mkdir())
+			{
+				e.printStackTrace();
+			}
+			
 			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
 			{
 				inFile[i] = 0;
@@ -108,140 +118,140 @@ public class CustomMaker extends Activity
 		sandcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		sandcollis.setAdapter(sandcoladp);
 		sandcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		sandcollis.setSelection(inFile[4]);
+		sandcollis.setSelection(inFile[5]);
 
 		watercollis = (Spinner) findViewById(R.id.watercol);
 		ArrayAdapter<CharSequence> watercoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		watercoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		watercollis.setAdapter(watercoladp);
 		watercollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		watercollis.setSelection(inFile[5]);
+		watercollis.setSelection(inFile[6]);
 
 		wallcollis = (Spinner) findViewById(R.id.wallcol);
 		ArrayAdapter<CharSequence> wallcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		wallcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		wallcollis.setAdapter(wallcoladp);
 		wallcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		wallcollis.setSelection(inFile[6]);
+		wallcollis.setSelection(inFile[7]);
 
 		plantcollis = (Spinner) findViewById(R.id.plantcol);
 		ArrayAdapter<CharSequence> plantcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		plantcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		plantcollis.setAdapter(plantcoladp);
 		plantcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		plantcollis.setSelection(inFile[7]);
+		plantcollis.setSelection(inFile[8]);
 
 		firecollis = (Spinner) findViewById(R.id.firecol);
 		ArrayAdapter<CharSequence> firecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		firecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		firecollis.setAdapter(firecoladp);
 		firecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		firecollis.setSelection(inFile[8]);
+		firecollis.setSelection(inFile[9]);
 
 		icecollis = (Spinner) findViewById(R.id.icecol);
 		ArrayAdapter<CharSequence> icecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		icecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		icecollis.setAdapter(icecoladp);
 		icecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		icecollis.setSelection(inFile[9]);
+		icecollis.setSelection(inFile[10]);
 
 		oilcollis = (Spinner) findViewById(R.id.oilcol);
 		ArrayAdapter<CharSequence> oilcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		oilcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		oilcollis.setAdapter(oilcoladp);
 		oilcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		oilcollis.setSelection(inFile[10]);
+		oilcollis.setSelection(inFile[11]);
 
 		magmacollis = (Spinner) findViewById(R.id.magmacol);
 		ArrayAdapter<CharSequence> magmacoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		magmacoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		magmacollis.setAdapter(magmacoladp);
 		magmacollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		magmacollis.setSelection(inFile[11]);
+		magmacollis.setSelection(inFile[12]);
 
 		stonecollis = (Spinner) findViewById(R.id.stonecol);
 		ArrayAdapter<CharSequence> stonecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		stonecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		stonecollis.setAdapter(stonecoladp);
 		stonecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		stonecollis.setSelection(inFile[12]);
+		stonecollis.setSelection(inFile[13]);
 
 		C4collis = (Spinner) findViewById(R.id.C4col);
 		ArrayAdapter<CharSequence> C4coladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		C4coladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		C4collis.setAdapter(C4coladp);
 		C4collis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		C4collis.setSelection(inFile[13]);
+		C4collis.setSelection(inFile[14]);
 
 		C4pluscollis = (Spinner) findViewById(R.id.C4pluscol);
 		ArrayAdapter<CharSequence> C4pluscoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		C4pluscoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		C4pluscollis.setAdapter(C4pluscoladp);
 		C4pluscollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		C4pluscollis.setSelection(inFile[14]);
+		C4pluscollis.setSelection(inFile[15]);
 
 		fusecollis = (Spinner) findViewById(R.id.fusecol);
 		ArrayAdapter<CharSequence> fusecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		fusecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		fusecollis.setAdapter(fusecoladp);
 		fusecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		fusecollis.setSelection(inFile[15]);
+		fusecollis.setSelection(inFile[16]);
 
 		destwallcollis = (Spinner) findViewById(R.id.destructablewallcol);
 		ArrayAdapter<CharSequence> destwallcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		destwallcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		destwallcollis.setAdapter(destwallcoladp);
 		destwallcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		destwallcollis.setSelection(inFile[16]);
+		destwallcollis.setSelection(inFile[17]);
 
 		acidcollis = (Spinner) findViewById(R.id.acidcol);
 		ArrayAdapter<CharSequence> acidcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		acidcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		acidcollis.setAdapter(acidcoladp);
 		acidcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		acidcollis.setSelection(inFile[17]);
+		acidcollis.setSelection(inFile[18]);
 
 		steamcollis = (Spinner) findViewById(R.id.steamcol);
 		ArrayAdapter<CharSequence> steamcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		steamcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		steamcollis.setAdapter(steamcoladp);
 		steamcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		steamcollis.setSelection(inFile[18]);
+		steamcollis.setSelection(inFile[19]);
 
 		saltcollis = (Spinner) findViewById(R.id.saltcol);
 		ArrayAdapter<CharSequence> saltcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		saltcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		saltcollis.setAdapter(saltcoladp);
 		saltcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		saltcollis.setSelection(inFile[19]);
+		saltcollis.setSelection(inFile[20]);
 
 		saltwatercollis = (Spinner) findViewById(R.id.saltwatercol);
 		ArrayAdapter<CharSequence> saltwatercoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		saltwatercoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		saltwatercollis.setAdapter(saltwatercoladp);
 		saltwatercollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		saltwatercollis.setSelection(inFile[20]);
+		saltwatercollis.setSelection(inFile[21]);
 
 		glasscollis = (Spinner) findViewById(R.id.glasscol);
 		ArrayAdapter<CharSequence> glasscoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		glasscoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		glasscollis.setAdapter(glasscoladp);
 		glasscollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		glasscollis.setSelection(inFile[21]);
+		glasscollis.setSelection(inFile[22]);
+		
+		customelecollis = (Spinner) findViewById(R.id.customelecol);
+		ArrayAdapter<CharSequence> customelecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
+		customelecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		customelecollis.setAdapter(customelecoladp);
+		customelecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
+		customelecollis.setSelection(inFile[23]);
 
 		mudcollis = (Spinner) findViewById(R.id.mudcol);
 		ArrayAdapter<CharSequence> mudcoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
 		mudcoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mudcollis.setAdapter(mudcoladp);
 		mudcollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		mudcollis.setSelection(inFile[23]);
-
-		customelecollis = (Spinner) findViewById(R.id.customelecol);
-		ArrayAdapter<CharSequence> customelecoladp = ArrayAdapter.createFromResource(this, R.array.reaction_array, android.R.layout.simple_spinner_item);
-		customelecoladp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		customelecollis.setAdapter(customelecoladp);
-		customelecollis.setOnItemSelectedListener(new MyOnItemSelectedListener());
-		customelecollis.setSelection(inFile[22]);
+		mudcollis.setSelection(inFile[24]);
 
 		explo_slider.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 		{
@@ -250,7 +260,6 @@ public class CustomMaker extends Activity
 				// When it is dragged, set the explosion value to 100 * the fraction of the bar dragged
 				int p = 100 * progress / seekbar.getMax();
 				DemoActivity.setexplosiveness(p);
-				DemoActivity.savecustom();
 				inFile[0] = progress;
 				savecustomdata();
 			}
@@ -273,7 +282,6 @@ public class CustomMaker extends Activity
 				// When it is dragged, set the red value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
 				DemoActivity.setred(p);
-				DemoActivity.savecustom();
 				inFile[1] = progress;
 				savecustomdata();
 			}
@@ -297,7 +305,6 @@ public class CustomMaker extends Activity
 				// When it is dragged, set the green value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
 				DemoActivity.setgreen(p);
-				DemoActivity.savecustom();
 				inFile[2] = progress;
 				savecustomdata();
 			}
@@ -320,7 +327,6 @@ public class CustomMaker extends Activity
 				// When it is dragged, set the blue value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
 				DemoActivity.setblue(p);
-				DemoActivity.savecustom();
 				inFile[3] = progress;
 				savecustomdata();
 			}
@@ -343,7 +349,6 @@ public class CustomMaker extends Activity
 				// When it is dragged, set the blue value to 255 * the fraction of the bar dragged
 				int p = 100 * progress / seekbar.getMax();
 				DemoActivity.setdensity(p);
-				DemoActivity.savecustom();
 				inFile[4] = progress;
 				savecustomdata();
 			}
@@ -359,16 +364,13 @@ public class CustomMaker extends Activity
 		});
 		// Start off the progress bar at the value in the file
 		density_slider.setProgress(inFile[4]);
-		DemoActivity.savecustom();
 	}
 
 	public class MyOnItemSelectedListener implements OnItemSelectedListener
 	{
-
 		public void onItemSelected(AdapterView<?> parent, View view, int pos, long id)
 		{
-
-			int ffileindex = 4; // temp var, initialized to 4 to start b.c
+			int ffileindex = 5; // temp var, initialized to 5 to start b.c
 			// that's where the first collis is in array
 			int rfileindex = 0; // one we'll actually use
 			// pos starts at 0
@@ -495,7 +497,6 @@ public class CustomMaker extends Activity
 
 			inFile[rfileindex] = pos;
 			savecustomdata();
-
 		}
 
 		public void onNothingSelected(AdapterView parent)
@@ -503,262 +504,316 @@ public class CustomMaker extends Activity
 			// Do nothing.
 		}
 
-		public void collisioner(int elent, int pos)
-		{ //TODO: change this massive thing to a switch statement
-
-			// setcollision(int custnumber, int elementnumb, int collisionspot,
-			// int collisionnumber);
-			// which custom element, the element the custom should be like, the
-			// element colliding with, collision type
-			if (pos == 0)
-			{
-				DemoActivity.setcollision(1, 0, elent, 0);
-			}
-			else if (pos == 1)
-			{
-				DemoActivity.setcollision(1, 0, elent, 1);
-			}
-			else if (pos == 2)
-			{
-				DemoActivity.setcollision(1, 24, elent, 1);
-			}
-			else if (pos == 3)
-			{
-				DemoActivity.setcollision(1, 24, elent, 3);
-			}
-			else if (pos == 4)
-			{
-				DemoActivity.setcollision(1, 1, elent, 4);
-			}
-			else if (pos == 5)
-			{
-				DemoActivity.setcollision(1, 4, elent, 4);
-			}
-			else if (pos == 6)
-			{
-				DemoActivity.setcollision(1, 5, elent, 5);
-			}
-			else if (pos == 7)
-			{
-				DemoActivity.setcollision(1, 0, elent, 5);
-			}
-			else if (pos == 8)
-			{
-				DemoActivity.setcollision(1, 5, elent, 7);
-			}
-			else if (pos == 9)
-			{
-				DemoActivity.setcollision(1, 1, elent, 8);
-			}
-			else if (pos == 10)
-			{
-				DemoActivity.setcollision(1, 6, elent, 8);
-			}
-			else if (pos == 11)
-			{
-				DemoActivity.setcollision(1, 5, elent, 9);
-			}
-			else if (pos == 12)
-			{
-				DemoActivity.setcollision(1, 6, elent, 9);
-			}
-			else if (pos == 13)
-			{
-				DemoActivity.setcollision(1, 10, elent, 10);
-			}
-			else if (pos == 14)
-			{
-				DemoActivity.setcollision(1, 6, elent, 10);
-			}
-			else if (pos == 15)
-			{
-				DemoActivity.setcollision(1, 9, elent, 11);
-			}
-			else if (pos == 16)
-			{
-				DemoActivity.setcollision(1, 10, elent, 11);
-			}
-			else if (pos == 17)
-			{
-				DemoActivity.setcollision(1, 10, elent, 12);
-			}
-			else if (pos == 18)
-			{
-				DemoActivity.setcollision(1, 1, elent, 12);
-			}
-			else if (pos == 19)
-			{
-				DemoActivity.setcollision(1, 11, elent, 13);
-			}
-			else if (pos == 20)
-			{
-				DemoActivity.setcollision(1, 10, elent, 13);
-			}
-			else if (pos == 21)
-			{
-				DemoActivity.setcollision(1, 11, elent, 14);
-			}
-			else if (pos == 22)
-			{
-				DemoActivity.setcollision(1, 10, elent, 15);
-			}
-			else if (pos == 23)
-			{
-				DemoActivity.setcollision(1, 12, elent, 15);
-			}
-			else if (pos == 24)
-			{
-				DemoActivity.setcollision(1, 10, elent, 17);
-			}
-			else if (pos == 25)
-			{
-				DemoActivity.setcollision(1, 15, elent, 17);
-			}
-			else if (pos == 26)
-			{
-				DemoActivity.setcollision(1, 17, elent, 18);
-			}
-			else if (pos == 27)
-			{
-				DemoActivity.setcollision(1, 0, elent, 18);
-			}
-			else if (pos == 28)
-			{
-				DemoActivity.setcollision(1, 17, elent, 19);
-			}
-			else if (pos == 29)
-			{
-				DemoActivity.setcollision(1, 1, elent, 19);
-			}
-			else if (pos == 30)
-			{
-				DemoActivity.setcollision(1, 18, elent, 20);
-			}
-			else if (pos == 31)
-			{
-				DemoActivity.setcollision(1, 1, elent, 20);
-			}
-			else if (pos == 32)
-			{
-				DemoActivity.setcollision(1, 18, elent, 21);
-			}
-			else if (pos == 33)
-			{
-				DemoActivity.setcollision(1, 18, elent, 22);
-			}
-			else if (pos == 34)
-			{
-				DemoActivity.setcollision(1, 0, elent, 22);
-			}
-			else if (pos == 35)
-			{
-				DemoActivity.setcollision(1, 1, elent, 23);
-			}
-			else if (pos == 36)
-			{
-				DemoActivity.setcollision(1, 5, elent, 23);
-			}
-			else if (pos == 37)
-			{
-				DemoActivity.setcollision(1, 19, elent, 24);
-			}
-			else if (pos == 38)
-			{
-				DemoActivity.setcollision(1, 1, elent, 24);
-			}
-			else if (pos == 39)
-			{
-				DemoActivity.setcollision(1, 19, elent, 25);
-			}
-			else if (pos == 40)
-			{
-				DemoActivity.setcollision(1, 6, elent, 25);
-			}
-			else if (pos == 41)
-			{
-				DemoActivity.setcollision(1, 20, elent, 26);
-			}
-			else if (pos == 42)
-			{
-				DemoActivity.setcollision(1, 4, elent, 26);
-			}
-			else if (pos == 43)
-			{
-				DemoActivity.setcollision(1, 0, elent, 27);
-			}
-			else if (pos == 44)
-			{
-				DemoActivity.setcollision(1, 10, elent, 27);
-			}
-			else if (pos == 45)
-			{
-				DemoActivity.setcollision(1, 4, elent, 6);
-			}
-			else if (pos == 46)
-			{
-				DemoActivity.setcollision(1, 5, elent, 6);
-			}
-			else if (pos == 47)
-			{
-				DemoActivity.setcollision(1, 1, elent, 28);
-			}
-			else if (pos == 48)
-			{
-				DemoActivity.setcollision(1, 0, elent, 28);
-			}
-			else if (pos == 49)
-			{
-				DemoActivity.setcollision(1, 23, elent, 29);
-			}
-			else if (pos == 50)
-			{
-				DemoActivity.setcollision(1, 5, elent, 29);
-			}
-			else if (pos == 51)
-			{
-				DemoActivity.setcollision(1, 23, elent, 30);
-			}
-			else if (pos == 52)
-			{
-				DemoActivity.setcollision(1, 10, elent, 30);
-			}
-
-			DemoActivity.savecustom();
-
-		}
 
 	}
 
 	public void savecustomdata()
-	{ // used to save the custom element data to a
-		// file
-
+	{
+		// Saves the custom element properties (set by the sliders) to a file
 		FileOutputStream fos;
 		DataOutputStream dos;
 
 		try
 		{
-
-			File file = new File("/sdcard/elementworks/customeelementsave6.txt");
+			File file = new File("/sdcard/elementworks/customproperties.txt");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
 			fos = new FileOutputStream(file);
 			dos = new DataOutputStream(fos);
-			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
+			for (int i = 0; i < (TSpinner + TSeekBar); i++)
 			{
 				dos.writeInt(inFile[i]);
 			}
-			
-			//TODO: Fix the custom element maker so we don't need this hack. 
-			for (int j = 0; j < 100; j++)
-			{
-				dos.writeInt(0);
-			}
-
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			if(!(new File("/sdcard/elementworks")).mkdir())
+			{
+				e.printStackTrace();
+			}
 		}
-
 	}
+	
+	public static void collisioner(int elent, int pos)
+	{ //TODO: change this massive thing to a switch statement
 
+		// setcollision(int custnumber, int elementnumb, int collisionspot,
+		// int collisionnumber);
+		// which custom element, the element the custom should be like, the
+		// element colliding with, collision type
+		if (pos == 0)
+		{
+			DemoActivity.setcollision(1, 0, elent, 0);
+		}
+		else if (pos == 1)
+		{
+			DemoActivity.setcollision(1, 0, elent, 1);
+		}
+		else if (pos == 2)
+		{
+			DemoActivity.setcollision(1, 24, elent, 1);
+		}
+		else if (pos == 3)
+		{
+			DemoActivity.setcollision(1, 24, elent, 3);
+		}
+		else if (pos == 4)
+		{
+			DemoActivity.setcollision(1, 1, elent, 4);
+		}
+		else if (pos == 5)
+		{
+			DemoActivity.setcollision(1, 4, elent, 4);
+		}
+		else if (pos == 6)
+		{
+			DemoActivity.setcollision(1, 5, elent, 5);
+		}
+		else if (pos == 7)
+		{
+			DemoActivity.setcollision(1, 0, elent, 5);
+		}
+		else if (pos == 8)
+		{
+			DemoActivity.setcollision(1, 5, elent, 7);
+		}
+		else if (pos == 9)
+		{
+			DemoActivity.setcollision(1, 1, elent, 8);
+		}
+		else if (pos == 10)
+		{
+			DemoActivity.setcollision(1, 6, elent, 8);
+		}
+		else if (pos == 11)
+		{
+			DemoActivity.setcollision(1, 5, elent, 9);
+		}
+		else if (pos == 12)
+		{
+			DemoActivity.setcollision(1, 6, elent, 9);
+		}
+		else if (pos == 13)
+		{
+			DemoActivity.setcollision(1, 10, elent, 10);
+		}
+		else if (pos == 14)
+		{
+			DemoActivity.setcollision(1, 6, elent, 10);
+		}
+		else if (pos == 15)
+		{
+			DemoActivity.setcollision(1, 9, elent, 11);
+		}
+		else if (pos == 16)
+		{
+			DemoActivity.setcollision(1, 10, elent, 11);
+		}
+		else if (pos == 17)
+		{
+			DemoActivity.setcollision(1, 10, elent, 12);
+		}
+		else if (pos == 18)
+		{
+			DemoActivity.setcollision(1, 1, elent, 12);
+		}
+		else if (pos == 19)
+		{
+			DemoActivity.setcollision(1, 11, elent, 13);
+		}
+		else if (pos == 20)
+		{
+			DemoActivity.setcollision(1, 10, elent, 13);
+		}
+		else if (pos == 21)
+		{
+			DemoActivity.setcollision(1, 11, elent, 14);
+		}
+		else if (pos == 22)
+		{
+			DemoActivity.setcollision(1, 10, elent, 15);
+		}
+		else if (pos == 23)
+		{
+			DemoActivity.setcollision(1, 12, elent, 15);
+		}
+		else if (pos == 24)
+		{
+			DemoActivity.setcollision(1, 10, elent, 17);
+		}
+		else if (pos == 25)
+		{
+			DemoActivity.setcollision(1, 15, elent, 17);
+		}
+		else if (pos == 26)
+		{
+			DemoActivity.setcollision(1, 17, elent, 18);
+		}
+		else if (pos == 27)
+		{
+			DemoActivity.setcollision(1, 0, elent, 18);
+		}
+		else if (pos == 28)
+		{
+			DemoActivity.setcollision(1, 17, elent, 19);
+		}
+		else if (pos == 29)
+		{
+			DemoActivity.setcollision(1, 1, elent, 19);
+		}
+		else if (pos == 30)
+		{
+			DemoActivity.setcollision(1, 18, elent, 20);
+		}
+		else if (pos == 31)
+		{
+			DemoActivity.setcollision(1, 1, elent, 20);
+		}
+		else if (pos == 32)
+		{
+			DemoActivity.setcollision(1, 18, elent, 21);
+		}
+		else if (pos == 33)
+		{
+			DemoActivity.setcollision(1, 18, elent, 22);
+		}
+		else if (pos == 34)
+		{
+			DemoActivity.setcollision(1, 0, elent, 22);
+		}
+		else if (pos == 35)
+		{
+			DemoActivity.setcollision(1, 1, elent, 23);
+		}
+		else if (pos == 36)
+		{
+			DemoActivity.setcollision(1, 5, elent, 23);
+		}
+		else if (pos == 37)
+		{
+			DemoActivity.setcollision(1, 19, elent, 24);
+		}
+		else if (pos == 38)
+		{
+			DemoActivity.setcollision(1, 1, elent, 24);
+		}
+		else if (pos == 39)
+		{
+			DemoActivity.setcollision(1, 19, elent, 25);
+		}
+		else if (pos == 40)
+		{
+			DemoActivity.setcollision(1, 6, elent, 25);
+		}
+		else if (pos == 41)
+		{
+			DemoActivity.setcollision(1, 20, elent, 26);
+		}
+		else if (pos == 42)
+		{
+			DemoActivity.setcollision(1, 4, elent, 26);
+		}
+		else if (pos == 43)
+		{
+			DemoActivity.setcollision(1, 0, elent, 27);
+		}
+		else if (pos == 44)
+		{
+			DemoActivity.setcollision(1, 10, elent, 27);
+		}
+		else if (pos == 45)
+		{
+			DemoActivity.setcollision(1, 4, elent, 6);
+		}
+		else if (pos == 46)
+		{
+			DemoActivity.setcollision(1, 5, elent, 6);
+		}
+		else if (pos == 47)
+		{
+			DemoActivity.setcollision(1, 1, elent, 28);
+		}
+		else if (pos == 48)
+		{
+			DemoActivity.setcollision(1, 0, elent, 28);
+		}
+		else if (pos == 49)
+		{
+			DemoActivity.setcollision(1, 23, elent, 29);
+		}
+		else if (pos == 50)
+		{
+			DemoActivity.setcollision(1, 5, elent, 29);
+		}
+		else if (pos == 51)
+		{
+			DemoActivity.setcollision(1, 23, elent, 30);
+		}
+		else if (pos == 52)
+		{
+			DemoActivity.setcollision(1, 10, elent, 30);
+		}
+	}
+	
+	//Call this function to initialize custom data from the file
+	public static void loadCustom()
+	{
+		int inFile[] = new int[TSpinner + TSeekBar];
+		FileInputStream fis;
+		DataInputStream dis;
+
+		try
+		{
+			File file = new File("/sdcard/elementworks/customproperties.txt");
+			if(!file.exists())
+			{
+				file.createNewFile();
+			}
+			
+			fis = new FileInputStream(file);
+			dis = new DataInputStream(fis);
+			for (int i = 0; i < (TSpinner + TSeekBar); ++i)
+			{
+				try
+				{
+					inFile[i] = dis.readInt();
+				}
+				catch (EOFException e)
+				{
+					e.printStackTrace();
+					inFile[i] = 0;
+				}
+			}
+		}
+		catch (IOException e)
+		{
+			if(!(new File("/sdcard/elementworks")).mkdir())
+			{
+				e.printStackTrace();
+			}
+			
+			for (int i = 0; i < (TSpinner + TSeekBar); i++)
+			{
+				inFile[i] = 0;
+			}
+		}
+		
+		//Loop through and set the stuff now
+		DemoActivity.setexplosiveness(inFile[0]);
+		DemoActivity.setred(inFile[1]);
+		DemoActivity.setgreen(inFile[2]);
+		DemoActivity.setblue(inFile[3]);
+		DemoActivity.setdensity(inFile[4]);
+		for(int i = 0, j = 5; i < DemoActivity.elementslist.length + 2; i++)
+		{
+			if(i == 3 || i == 7 || i == 8 || i == 16)
+			{
+				continue;
+			}
+			collisioner(i, inFile[j]);
+			j++;
+		}
+	}
 }

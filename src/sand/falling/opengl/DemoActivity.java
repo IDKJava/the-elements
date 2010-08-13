@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.util.List;
 
 import sand.falling.opengl.preferences.PreferencesFromCode;
+import sand.falling.opengl.custom.CustomMaker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,7 +37,7 @@ import android.view.Window;
 
 public class DemoActivity extends Activity
 {
-	static final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4", "C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam", "Salt", "Salt Water", "Glass", "Custom Element", "Mud"};
+	public static final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4", "C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam", "Salt", "Salt Water", "Glass", "Custom Element", "Mud"};
 	static final CharSequence[] brushlist = {"1", "2", "4", "8", "16", "32"};
 
 	static final int maxy = 414; // 454 for g1, 815 for droid
@@ -100,8 +101,7 @@ public class DemoActivity extends Activity
 
 		PreferencesFromCode.setScreenOnOff(this); //Finds out to keep screen on or off
 
-		loadcustom(); //Load the custom elements
-		showDialog(1); //Pop up intro message
+		CustomMaker.loadCustom(); //Load the custom elements
 	}
 
 	private final SensorEventListener mySensorListener = new SensorEventListener()
@@ -202,6 +202,8 @@ public class DemoActivity extends Activity
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("firstrun", false);
 			editor.commit();
+
+			showDialog(1); //Pop up intro message
 		}
 
 		if (layout_ui)
@@ -223,7 +225,7 @@ public class DemoActivity extends Activity
 		if (id == 1) // The first dialog - the intro message
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.").setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener()
+			builder.setMessage(R.string.App_Intro).setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int id)
 				{
@@ -481,14 +483,12 @@ public class DemoActivity extends Activity
 	public native static void setFlip(int flipped);
 	public native static void setelement(int element);
 	public native static void setBrushSize(int jsize);
-	public native static int getelement();
+	public native static int  getelement();
 	public native static void clearquicksave();
 	public native static void sendyg(float ygrav);
 	public native static void sendxg(float xgrav);
 	public native static void setAccelOnOff(int state);
 	public native static void setcollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
-	public native static void savecustom();
-	public native static void loadcustom();
 	public native static void setexplosiveness(int explosiveness);
 	public native static void setred(int redness);
 	public native static void setblue(int blueness);

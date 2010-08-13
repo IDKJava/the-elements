@@ -278,14 +278,6 @@ void Java_sand_falling_opengl_DemoActivity_loaddemo(JNIEnv* env, jobject thiz)
 {
 	loadDemoFile();
 }
-void Java_sand_falling_opengl_DemoActivity_loadcustom(JNIEnv* env, jobject thiz)
-{
-	loadCustomFile();
-}
-void Java_sand_falling_opengl_DemoActivity_savecustom(JNIEnv* env, jobject thiz)
-{
-	saveCustomFile();
-}
 
 void Java_sand_falling_opengl_DemoActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)
 {

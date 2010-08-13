@@ -14,7 +14,6 @@
 #define SAVE_FILE "/sdcard/elementworks/save.txt"
 #define QUICK_SAVE_FILE "/sdcard/elementworks/quicksave.txt"
 #define DEMO_SAVE_FILE "/sdcard/elementworks/save2.txt"
-#define CUSTOM_ELEMENT_FILE "/sdcard/elementworks/customele.txt"
 
 //Include the FILE type
 #include <stdio.h>
@@ -31,7 +30,5 @@ int saver(int type);
 int loader(int type);
 void removeQuicksave(void);
 int loadDemoFile(void);
-int loadCustomFile(void);
-int saveCustomFile(void);
 
 #endif
