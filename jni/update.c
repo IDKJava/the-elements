@@ -220,6 +220,9 @@ void UpdateView(void)
 				{
 					if (element[counter] == 5) //If it's fire
 					{
+						//Move it back
+						y[counter] = oy;
+						x[counter] = ox;
 						//Delete it
 						DeletePoint(counter);
 						continue;

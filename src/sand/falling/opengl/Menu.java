@@ -30,6 +30,7 @@ import com.mobclix.android.sdk.MobclixIABRectangleMAdView;
 
 public class Menu extends Activity
 {
+	public static MobclixMMABannerXLAdView banner_adview;
 	public static Button start_game_button;
 	public static Button how_to_play_button;
 	public static Button custom_button;
@@ -50,8 +51,16 @@ public class Menu extends Activity
 		stime = System.currentTimeMillis();
 		
 		setContentView(R.layout.main_menu);
-		//Define all the objects
-		MobclixMMABannerXLAdView banner_adview = (MobclixMMABannerXLAdView) findViewById(R.id.banner_adview);
+		
+		try
+		{
+			//Define all the objects
+			MobclixMMABannerXLAdView banner_adview = (MobclixMMABannerXLAdView) findViewById(R.id.banner_adview);
+		}
+		catch (NullPointerException e)
+		{
+			e.printStackTrace();
+		}
 		
 		
 		start_game_button = (Button) findViewById(R.id.start_game_button);
@@ -71,11 +80,6 @@ public class Menu extends Activity
 			e.printStackTrace();
 		}
 		
-		
-		//MobclixIABRectangleMAdView rectangle_adview = (MobclixIABRectangleMAdView) findViewById(R.id.rectangle_adview); 
-		
-		
-		//rectangle_adview.getAd();
 		
 		start_game_button.setOnClickListener
 		(

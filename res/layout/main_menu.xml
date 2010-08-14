@@ -13,7 +13,7 @@
 		android:layout_gravity="center"
 	/>
     <!-- Start game button --> 
-     <Button
+    <Button
     	android:id="@+id/start_game_button"
     	android:text="Play Game" 
     	android:layout_width="200sp"
