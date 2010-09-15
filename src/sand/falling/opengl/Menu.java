@@ -208,11 +208,12 @@ public class Menu extends Activity
 		}
 		
 		WebView how_to_play = new WebView(this);
+		how_to_play.setBackgroundColor(0x00000000);
 		how_to_play.loadData(data.toString(), "text/html", "ascii");
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(true);
-		builder.setTitle("How to Play Element Works");
+		builder.setTitle("How to Play The Elements");
 		builder.setView(how_to_play);
 		builder.show();
 	}
