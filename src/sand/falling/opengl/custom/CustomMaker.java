@@ -8,7 +8,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import sand.falling.opengl.DemoActivity;
+import sand.falling.opengl.MainActivity;
 import sand.falling.opengl.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -259,7 +259,7 @@ public class CustomMaker extends Activity
 			{
 				// When it is dragged, set the explosion value to 100 * the fraction of the bar dragged
 				int p = 100 * progress / seekbar.getMax();
-				DemoActivity.setexplosiveness(p);
+				MainActivity.setexplosiveness(p);
 				inFile[0] = progress;
 				savecustomdata();
 			}
@@ -281,7 +281,7 @@ public class CustomMaker extends Activity
 			{
 				// When it is dragged, set the red value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
-				DemoActivity.setred(p);
+				MainActivity.setred(p);
 				inFile[1] = progress;
 				savecustomdata();
 			}
@@ -304,7 +304,7 @@ public class CustomMaker extends Activity
 			{
 				// When it is dragged, set the green value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
-				DemoActivity.setgreen(p);
+				MainActivity.setgreen(p);
 				inFile[2] = progress;
 				savecustomdata();
 			}
@@ -326,7 +326,7 @@ public class CustomMaker extends Activity
 			{
 				// When it is dragged, set the blue value to 255 * the fraction of the bar dragged
 				int p = 255 * progress / seekbar.getMax();
-				DemoActivity.setblue(p);
+				MainActivity.setblue(p);
 				inFile[3] = progress;
 				savecustomdata();
 			}
@@ -348,7 +348,7 @@ public class CustomMaker extends Activity
 			{
 				// When it is dragged, set the blue value to 255 * the fraction of the bar dragged
 				int p = 100 * progress / seekbar.getMax();
-				DemoActivity.setdensity(p);
+				MainActivity.setdensity(p);
 				inFile[4] = progress;
 				savecustomdata();
 			}
@@ -545,215 +545,215 @@ public class CustomMaker extends Activity
 		// element colliding with, collision type
 		if (pos == 0)
 		{
-			DemoActivity.setcollision(1, 0, elent, 0);
+			MainActivity.setcollision(1, 0, elent, 0);
 		}
 		else if (pos == 1)
 		{
-			DemoActivity.setcollision(1, 0, elent, 1);
+			MainActivity.setcollision(1, 0, elent, 1);
 		}
 		else if (pos == 2)
 		{
-			DemoActivity.setcollision(1, 24, elent, 1);
+			MainActivity.setcollision(1, 24, elent, 1);
 		}
 		else if (pos == 3)
 		{
-			DemoActivity.setcollision(1, 24, elent, 3);
+			MainActivity.setcollision(1, 24, elent, 3);
 		}
 		else if (pos == 4)
 		{
-			DemoActivity.setcollision(1, 1, elent, 4);
+			MainActivity.setcollision(1, 1, elent, 4);
 		}
 		else if (pos == 5)
 		{
-			DemoActivity.setcollision(1, 4, elent, 4);
+			MainActivity.setcollision(1, 4, elent, 4);
 		}
 		else if (pos == 6)
 		{
-			DemoActivity.setcollision(1, 5, elent, 5);
+			MainActivity.setcollision(1, 5, elent, 5);
 		}
 		else if (pos == 7)
 		{
-			DemoActivity.setcollision(1, 0, elent, 5);
+			MainActivity.setcollision(1, 0, elent, 5);
 		}
 		else if (pos == 8)
 		{
-			DemoActivity.setcollision(1, 5, elent, 7);
+			MainActivity.setcollision(1, 5, elent, 7);
 		}
 		else if (pos == 9)
 		{
-			DemoActivity.setcollision(1, 1, elent, 8);
+			MainActivity.setcollision(1, 1, elent, 8);
 		}
 		else if (pos == 10)
 		{
-			DemoActivity.setcollision(1, 6, elent, 8);
+			MainActivity.setcollision(1, 6, elent, 8);
 		}
 		else if (pos == 11)
 		{
-			DemoActivity.setcollision(1, 5, elent, 9);
+			MainActivity.setcollision(1, 5, elent, 9);
 		}
 		else if (pos == 12)
 		{
-			DemoActivity.setcollision(1, 6, elent, 9);
+			MainActivity.setcollision(1, 6, elent, 9);
 		}
 		else if (pos == 13)
 		{
-			DemoActivity.setcollision(1, 10, elent, 10);
+			MainActivity.setcollision(1, 10, elent, 10);
 		}
 		else if (pos == 14)
 		{
-			DemoActivity.setcollision(1, 6, elent, 10);
+			MainActivity.setcollision(1, 6, elent, 10);
 		}
 		else if (pos == 15)
 		{
-			DemoActivity.setcollision(1, 9, elent, 11);
+			MainActivity.setcollision(1, 9, elent, 11);
 		}
 		else if (pos == 16)
 		{
-			DemoActivity.setcollision(1, 10, elent, 11);
+			MainActivity.setcollision(1, 10, elent, 11);
 		}
 		else if (pos == 17)
 		{
-			DemoActivity.setcollision(1, 10, elent, 12);
+			MainActivity.setcollision(1, 10, elent, 12);
 		}
 		else if (pos == 18)
 		{
-			DemoActivity.setcollision(1, 1, elent, 12);
+			MainActivity.setcollision(1, 1, elent, 12);
 		}
 		else if (pos == 19)
 		{
-			DemoActivity.setcollision(1, 11, elent, 13);
+			MainActivity.setcollision(1, 11, elent, 13);
 		}
 		else if (pos == 20)
 		{
-			DemoActivity.setcollision(1, 10, elent, 13);
+			MainActivity.setcollision(1, 10, elent, 13);
 		}
 		else if (pos == 21)
 		{
-			DemoActivity.setcollision(1, 11, elent, 14);
+			MainActivity.setcollision(1, 11, elent, 14);
 		}
 		else if (pos == 22)
 		{
-			DemoActivity.setcollision(1, 10, elent, 15);
+			MainActivity.setcollision(1, 10, elent, 15);
 		}
 		else if (pos == 23)
 		{
-			DemoActivity.setcollision(1, 12, elent, 15);
+			MainActivity.setcollision(1, 12, elent, 15);
 		}
 		else if (pos == 24)
 		{
-			DemoActivity.setcollision(1, 10, elent, 17);
+			MainActivity.setcollision(1, 10, elent, 17);
 		}
 		else if (pos == 25)
 		{
-			DemoActivity.setcollision(1, 15, elent, 17);
+			MainActivity.setcollision(1, 15, elent, 17);
 		}
 		else if (pos == 26)
 		{
-			DemoActivity.setcollision(1, 17, elent, 18);
+			MainActivity.setcollision(1, 17, elent, 18);
 		}
 		else if (pos == 27)
 		{
-			DemoActivity.setcollision(1, 0, elent, 18);
+			MainActivity.setcollision(1, 0, elent, 18);
 		}
 		else if (pos == 28)
 		{
-			DemoActivity.setcollision(1, 17, elent, 19);
+			MainActivity.setcollision(1, 17, elent, 19);
 		}
 		else if (pos == 29)
 		{
-			DemoActivity.setcollision(1, 1, elent, 19);
+			MainActivity.setcollision(1, 1, elent, 19);
 		}
 		else if (pos == 30)
 		{
-			DemoActivity.setcollision(1, 18, elent, 20);
+			MainActivity.setcollision(1, 18, elent, 20);
 		}
 		else if (pos == 31)
 		{
-			DemoActivity.setcollision(1, 1, elent, 20);
+			MainActivity.setcollision(1, 1, elent, 20);
 		}
 		else if (pos == 32)
 		{
-			DemoActivity.setcollision(1, 18, elent, 21);
+			MainActivity.setcollision(1, 18, elent, 21);
 		}
 		else if (pos == 33)
 		{
-			DemoActivity.setcollision(1, 18, elent, 22);
+			MainActivity.setcollision(1, 18, elent, 22);
 		}
 		else if (pos == 34)
 		{
-			DemoActivity.setcollision(1, 0, elent, 22);
+			MainActivity.setcollision(1, 0, elent, 22);
 		}
 		else if (pos == 35)
 		{
-			DemoActivity.setcollision(1, 1, elent, 23);
+			MainActivity.setcollision(1, 1, elent, 23);
 		}
 		else if (pos == 36)
 		{
-			DemoActivity.setcollision(1, 5, elent, 23);
+			MainActivity.setcollision(1, 5, elent, 23);
 		}
 		else if (pos == 37)
 		{
-			DemoActivity.setcollision(1, 19, elent, 24);
+			MainActivity.setcollision(1, 19, elent, 24);
 		}
 		else if (pos == 38)
 		{
-			DemoActivity.setcollision(1, 1, elent, 24);
+			MainActivity.setcollision(1, 1, elent, 24);
 		}
 		else if (pos == 39)
 		{
-			DemoActivity.setcollision(1, 19, elent, 25);
+			MainActivity.setcollision(1, 19, elent, 25);
 		}
 		else if (pos == 40)
 		{
-			DemoActivity.setcollision(1, 6, elent, 25);
+			MainActivity.setcollision(1, 6, elent, 25);
 		}
 		else if (pos == 41)
 		{
-			DemoActivity.setcollision(1, 20, elent, 26);
+			MainActivity.setcollision(1, 20, elent, 26);
 		}
 		else if (pos == 42)
 		{
-			DemoActivity.setcollision(1, 4, elent, 26);
+			MainActivity.setcollision(1, 4, elent, 26);
 		}
 		else if (pos == 43)
 		{
-			DemoActivity.setcollision(1, 0, elent, 27);
+			MainActivity.setcollision(1, 0, elent, 27);
 		}
 		else if (pos == 44)
 		{
-			DemoActivity.setcollision(1, 10, elent, 27);
+			MainActivity.setcollision(1, 10, elent, 27);
 		}
 		else if (pos == 45)
 		{
-			DemoActivity.setcollision(1, 4, elent, 6);
+			MainActivity.setcollision(1, 4, elent, 6);
 		}
 		else if (pos == 46)
 		{
-			DemoActivity.setcollision(1, 5, elent, 6);
+			MainActivity.setcollision(1, 5, elent, 6);
 		}
 		else if (pos == 47)
 		{
-			DemoActivity.setcollision(1, 1, elent, 28);
+			MainActivity.setcollision(1, 1, elent, 28);
 		}
 		else if (pos == 48)
 		{
-			DemoActivity.setcollision(1, 0, elent, 28);
+			MainActivity.setcollision(1, 0, elent, 28);
 		}
 		else if (pos == 49)
 		{
-			DemoActivity.setcollision(1, 23, elent, 29);
+			MainActivity.setcollision(1, 23, elent, 29);
 		}
 		else if (pos == 50)
 		{
-			DemoActivity.setcollision(1, 5, elent, 29);
+			MainActivity.setcollision(1, 5, elent, 29);
 		}
 		else if (pos == 51)
 		{
-			DemoActivity.setcollision(1, 23, elent, 30);
+			MainActivity.setcollision(1, 23, elent, 30);
 		}
 		else if (pos == 52)
 		{
-			DemoActivity.setcollision(1, 10, elent, 30);
+			MainActivity.setcollision(1, 10, elent, 30);
 		}
 	}
 	
@@ -801,12 +801,12 @@ public class CustomMaker extends Activity
 		}
 		
 		//Loop through and set the stuff now
-		DemoActivity.setexplosiveness(inFile[0]);
-		DemoActivity.setred(inFile[1]);
-		DemoActivity.setgreen(inFile[2]);
-		DemoActivity.setblue(inFile[3]);
-		DemoActivity.setdensity(inFile[4]);
-		for(int i = 0, j = 5; i < DemoActivity.elementslist.length + 2; i++)
+		MainActivity.setexplosiveness(inFile[0]);
+		MainActivity.setred(inFile[1]);
+		MainActivity.setgreen(inFile[2]);
+		MainActivity.setblue(inFile[3]);
+		MainActivity.setdensity(inFile[4]);
+		for(int i = 0, j = 5; i < MainActivity.elementslist.length + 2; i++)
 		{
 			if(i == 3 || i == 7 || i == 8 || i == 16)
 			{

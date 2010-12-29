@@ -35,7 +35,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 
-public class DemoActivity extends Activity
+public class MainActivity extends Activity
 {
 	public static final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4", "C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam", "Salt", "Salt Water", "Glass", "Custom Element", "Mud"};
 	static final CharSequence[] brushlist = {"1", "2", "4", "8", "16", "32"};
@@ -229,7 +229,7 @@ public class DemoActivity extends Activity
 			{
 				public void onClick(DialogInterface dialog, int id)
 				{
-					DemoActivity.this.finish(); // Exit button
+					MainActivity.this.finish(); // Exit button
 					// closes
 					// program
 				}
@@ -455,7 +455,7 @@ public class DemoActivity extends Activity
 				return true;
 			case R.id.preferences:
 	
-				startActivity(new Intent(DemoActivity.this, PreferencesFromCode.class));
+				startActivity(new Intent(MainActivity.this, PreferencesFromCode.class));
 				return true;
 			case R.id.exit:
 	

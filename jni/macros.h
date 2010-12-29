@@ -13,9 +13,9 @@
 
 #define TPoints 500000
 #define TElements 25
-#define TPixels 512*1024
+#define TPixels 768*1024
 #define TCollision 28
-#define WIDTH 512
+#define WIDTH 768
 #define HEIGHT 1024
 
 #endif

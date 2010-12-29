@@ -33,7 +33,7 @@ public class SandView extends GLSurfaceView
     	{
 			if (fd != 1) //if it has changed
 			{
-				DemoActivity.fd(1); //sets the finger state in jni
+				MainActivity.fd(1); //sets the finger state in jni
     		}
     		else
     		{
@@ -42,18 +42,18 @@ public class SandView extends GLSurfaceView
     	}
     	else if (event.getAction() == MotionEvent.ACTION_UP)
     	{
-    		DemoActivity.fd(2);
+    		MainActivity.fd(2);
     	}
     	
-    	if(DemoActivity.size == 0)
+    	if(MainActivity.size == 0)
     	{
     		//Both x and y are halved because it needs to be zoomed in
-    		DemoActivity.mp((int)event.getX()/2, (int)event.getY()/2); //sets the mouse position in jdk
+    		MainActivity.mp((int)event.getX()/2, (int)event.getY()/2); //sets the mouse position in jdk
     	}
     	else
     	{
     		//Not zoomed in
-    		DemoActivity.mp((int)event.getX(), (int)event.getY()); //sets the mouse position in jdk		
+    		MainActivity.mp((int)event.getX(), (int)event.getY()); //sets the mouse position in jdk		
     	}
     	
     	return true;
@@ -73,10 +73,10 @@ class DemoRenderer implements GLSurfaceView.Renderer
     {
         //gl.glViewport(0, 0, w, h);
         nativeResize(w, h);
-        if (DemoActivity.loaddemov == true) //loads the demo from the sdcard on first run.
+        if (MainActivity.loaddemov == true) //loads the demo from the sdcard on first run.
         {
-        	DemoActivity.loaddemo();
-        	DemoActivity.loaddemov = false;
+        	MainActivity.loaddemo();
+        	MainActivity.loaddemov = false;
         }
     }
 

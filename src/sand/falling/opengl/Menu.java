@@ -9,7 +9,7 @@ import java.util.Date;
 import sand.falling.opengl.custom.CustomMaker;
 import sand.falling.opengl.network.networklogin;
 import sand.falling.opengl.preferences.PreferencesFromCode;
-import sand.falling.opengl.DemoActivity;
+import sand.falling.opengl.MainActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -149,7 +149,7 @@ public class Menu extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					DemoActivity.clearquicksave();
+					MainActivity.clearquicksave();
 					Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}

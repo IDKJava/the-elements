@@ -1,7 +1,7 @@
 package sand.falling.opengl.preferences;
 
 
-import sand.falling.opengl.DemoActivity;
+import sand.falling.opengl.MainActivity;
 import sand.falling.opengl.R;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -122,11 +122,11 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
         	//Log.v("DemoActivity", "onpref color: " + sharedPreferences.getString(key, "black"));
         	if (sharedPreferences.getString( key, "black").equals("black"))
         	{
-        		DemoActivity.setBackgroundColor(0);
+        		MainActivity.setBackgroundColor(0);
         	}
         	else
         	{
-        		DemoActivity.setBackgroundColor(1);
+        		MainActivity.setBackgroundColor(1);
         	}
         }
         else if (key == "flip_settings")
@@ -134,29 +134,29 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
         	Log.v("DemoActivity", "onpref flip");
         	if ( sharedPreferences.getBoolean(key, false) == true)
         	{
-        		DemoActivity.setFlip(1);
+        		MainActivity.setFlip(1);
         	}
         	else
         	{
-        		DemoActivity.setFlip(0);
+        		MainActivity.setFlip(0);
         	}
         }
         else if (key == "ui")
         {
-        	DemoActivity.ui = sharedPreferences.getBoolean(key, true);
+        	MainActivity.ui = sharedPreferences.getBoolean(key, true);
         	Toast.makeText(this, "UI changed: please restart for effect", Toast.LENGTH_LONG).show();
         }
         else if (key == "sleep")
         {
-        	DemoActivity.sand_view.setKeepScreenOn(sharedPreferences.getBoolean(key,true));
+        	MainActivity.sand_view.setKeepScreenOn(sharedPreferences.getBoolean(key,true));
         }
         else if (key == "accel_control")
         {
         	if ( sharedPreferences.getBoolean(key,false) == true){
-        		DemoActivity.setAccelOnOff(1);
+        		MainActivity.setAccelOnOff(1);
         	}
         	else{
-        		DemoActivity.setAccelOnOff(0);
+        		MainActivity.setAccelOnOff(0);
         	}
         }
     }
@@ -167,40 +167,40 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
             PreferenceManager.getDefaultSharedPreferences(context);
     	if (sharedPreferences.getString("background_color", "black").equals("black"))
     	{
-    		DemoActivity.setBackgroundColor(0);
+    		MainActivity.setBackgroundColor(0);
     	}
     	else
     	{  
-    		DemoActivity.setBackgroundColor(1);
+    		MainActivity.setBackgroundColor(1);
     	}
     	if (sharedPreferences.getBoolean("flip_settings", false) == true) //flip screen stuff
     	{
-    		DemoActivity.setFlip(1);
+    		MainActivity.setFlip(1);
     	}
     	else
     	{
-    		DemoActivity.setFlip(0);
+    		MainActivity.setFlip(0);
     	}
     	if (sharedPreferences.getBoolean("accel_control", false) == true) //flip screen stuff
     	{
-    		DemoActivity.setAccelOnOff(1);
+    		MainActivity.setAccelOnOff(1);
     	}
     	else
     	{
-    		DemoActivity.setAccelOnOff(0);
+    		MainActivity.setAccelOnOff(0);
     	}
     	
  
     	
     	//Set the bool variable ui in the Activity
-    	DemoActivity.ui = sharedPreferences.getBoolean("ui", true);
+    	MainActivity.ui = sharedPreferences.getBoolean("ui", true);
     }
     public static void setScreenOnOff(Context context) //set screen on or off, needs to be seperate because sand_view is created after setPrefs is called
     {
     	final SharedPreferences sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(context);
     	
-    	DemoActivity.sand_view.setKeepScreenOn(sharedPreferences.getBoolean("screen",true)); //keep screen on or not
+    	MainActivity.sand_view.setKeepScreenOn(sharedPreferences.getBoolean("screen",true)); //keep screen on or not
     	
     }
 }

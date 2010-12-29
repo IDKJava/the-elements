@@ -10,7 +10,7 @@ import android.widget.SeekBar;
 public class Control extends LinearLayout
 {
 	//The instance of the current activity is stored here and modified through setActvity (call from DemoActivity)
-	private DemoActivity activity;
+	private MainActivity activity;
 	
 	//Two objects in the control area
 	private ImageButton control_button;
@@ -25,7 +25,7 @@ public class Control extends LinearLayout
 	}
 
 	//Sets the current instance of the activity
-	public void setActivity(DemoActivity act)
+	public void setActivity(MainActivity act)
 	{
 		activity = act;
 	}
@@ -61,7 +61,7 @@ public class Control extends LinearLayout
 						{
 							//When it is dragged, set the brush size to 32 * the fraction of the bar dragged
 							int p = 32 * progress/seekbar.getMax();
-							DemoActivity.setBrushSize(p);
+							MainActivity.setBrushSize(p);
 						}
 						//These aren't needed for now
 						public void onStartTrackingTouch(SeekBar seekbar) {}

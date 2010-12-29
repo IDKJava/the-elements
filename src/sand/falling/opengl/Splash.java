@@ -21,7 +21,7 @@ public class Splash extends Activity
 					public void run()
 					{
 						//Create an Intent to start DemoActivity
-						Intent mainIntent = new Intent(Splash.this, DemoActivity.class);
+						Intent mainIntent = new Intent(Splash.this, MainActivity.class);
 						Splash.this.startActivity(mainIntent);
 						Splash.this.finish();
 					}
