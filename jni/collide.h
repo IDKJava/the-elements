@@ -12,10 +12,14 @@
 
 //Include stdlib for random
 #include <stdlib.h>
+//Include stdio for itoa
+#include <stdio.h>
 //Include the global variables
 #include "app.h"
 //Include the points functions
 #include "points.h"
+//Include logging
+//#include <android/log.h>
 
 void collide (int fp, int sp);
 

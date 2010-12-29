@@ -12,7 +12,7 @@ void rsetup()
 	int j, o, k;
 	loq = TPoints;
 	cpoint = 0;
-	size = 4;
+	//size = 4;  if size stuff is failing this may need to be uncommented
 	unsigned char blankred = red[3];
 	unsigned char blankgreen = green[3];
 	unsigned char blankblue = blue[3];

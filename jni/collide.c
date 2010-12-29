@@ -824,7 +824,12 @@ void collide(int fp, int sp)//first particle and second particle
 					{
 						tpart = allcoords[txpos + i][typos + j];
 
-						if (tpart != -1
+						if ( tpart >= TPoints )
+						{
+							//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4-Hot Error");
+							break;
+						}
+						if (tpart >= 0 // used to be != -1, this might be getting some bad input somehow and then sending a bad index so changed
 								&& (fallvel[element[tpart]] != 0
 										|| element[tpart] == 15
 										|| element[tpart] == 21)) //if there's a particle there & it's not immovable
@@ -882,6 +887,7 @@ void collide(int fp, int sp)//first particle and second particle
 		}
 		else //sp is C4
 		{
+			//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4-Hot 2");
 			//put back the hot
 			x[fp] = olxf;
 			y[fp] = olyf;
@@ -964,6 +970,7 @@ void collide(int fp, int sp)//first particle and second particle
 	}
 	else if (type == 16) // C4++ - hot
 	{
+		//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4++-Hot");
 		if (element[fp] == 13 || (element[fp] == 22
 				&& colliseelement1[element[sp]] == 13) || (element[sp] == 22
 				&& colliseelement1[element[fp]] != 13)) //fp is C4++
@@ -1050,6 +1057,7 @@ void collide(int fp, int sp)//first particle and second particle
 		}
 		else //sp is C4++
 		{
+			//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4++-Hot 2");
 			//put back the hot
 			x[fp] = olxf;
 			y[fp] = olyf;
@@ -1063,6 +1071,7 @@ void collide(int fp, int sp)//first particle and second particle
 			//this section is for explosion, giving velocities to particles around explosion
 			int i, j; //counters, i is the x, j is the y
 			int tpart, telement; //temp particle index /element
+			//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4++-Hot 2 Part 1");
 			for (i = -2 * exploness[spelement]; i <= 2 * exploness[spelement]; i++)
 			{
 				for (j = -2 * exploness[spelement]; j <= 2
@@ -1072,8 +1081,9 @@ void collide(int fp, int sp)//first particle and second particle
 							&& typos + j > 1) //if within bounds
 					{
 						tpart = allcoords[txpos + i][typos + j];
+						//__android_log_print(ANDROID_LOG_ERROR,"DemoActivity","tpart: [%d]",tpart );
 
-						if (tpart != -1
+						if (tpart >= 0
 								&& (fallvel[element[tpart]] != 0
 										|| element[tpart] == 15
 										|| element[tpart] == 21)) //if there's a particle there
@@ -1093,6 +1103,7 @@ void collide(int fp, int sp)//first particle and second particle
 
 			//Look at all the points around the explosion, if explosive change to fire and add velocity,
 			// if flammable, just change to fire, if empty, change to fire and add velocity
+			//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4++-Hot 2 Part 2");
 			int a; //Temp allcoords
 			for (i = -2; i <= 2; i++)
 			{
@@ -1129,6 +1140,7 @@ void collide(int fp, int sp)//first particle and second particle
 					}
 				}
 			}
+			//__android_log_write(ANDROID_LOG_ERROR,"DemoActivity","C4++-Hot 2 Part 3");
 		}
 	}
 	else if (type == 17) //Magma - Destructible Wall

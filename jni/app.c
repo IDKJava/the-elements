@@ -1,3 +1,30 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*
  * app.c
  * -------------------------
@@ -26,7 +53,7 @@ int celement = 0;
 int cpoint = 0;
 //Play state
 int play = 1;
-//Size variable
+//Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
 int size = 4;
 
 //Array for bitmap drawing
@@ -36,18 +63,18 @@ unsigned char colors[TPixels*3]; // 3 bytes per pixel
 float x[TPoints];
 float y[TPoints];
 //Old coordinates (for collision resolving)
-int oldx[TPoints];
-int oldy[TPoints];
+short int oldx[TPoints];
+short int oldy[TPoints];
 //Velocities
-int xvel[TPoints];
-int yvel[TPoints];
+short int xvel[TPoints];
+short int yvel[TPoints];
 
 //Element type
-int element[TPoints];
+char element[TPoints];
 //Frozen state
 char frozen[TPoints];
 //Spawn type
-int spawn[TPoints];
+char spawn[TPoints];
 
 //RGB properties
 unsigned char red[TElements];

@@ -44,18 +44,18 @@ extern unsigned char colors[TPixels*3]; // 3 bytes per pixel
 extern float x[TPoints];
 extern float y[TPoints];
 //Old coordinates (for collision resolving)
-extern int oldx[TPoints];
-extern int oldy[TPoints];
+extern short int oldx[TPoints];
+extern short int oldy[TPoints];
 //Velocities
-extern int xvel[TPoints];
-extern int yvel[TPoints];
+extern short int xvel[TPoints];
+extern short int yvel[TPoints];
 
 //Element type
-extern int element[TPoints];
+extern char element[TPoints];
 //Frozen state
 extern char frozen[TPoints];
 //Spawn type
-extern int spawn[TPoints];
+extern char spawn[TPoints];
 
 //RGB properties
 extern unsigned char red[TElements];

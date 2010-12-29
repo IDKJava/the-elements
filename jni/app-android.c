@@ -186,12 +186,13 @@ void Java_sand_falling_opengl_DemoActivity_fd(JNIEnv* env, jobject thiz, jint fs
 	fd = fstate;
 	if (fd == 1)
 	{
-		xm = -1;
+		xm = -1; // to prevent drawing from the previous point, invalidate the mouse pointer
 	}
 	return;
 }
 void Java_sand_falling_opengl_DemoActivity_mp(JNIEnv* env, jobject thiz, jint jxm, jint jym)
 {
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "mp start");
 	//setting the mouse position when given stuff from jdk
 	if (xm != -1)
 	{
@@ -205,10 +206,10 @@ void Java_sand_falling_opengl_DemoActivity_mp(JNIEnv* env, jobject thiz, jint jx
 		int dist = sqrt(xc * xc + yc * yc); //distance between two points
 
 
-		if (dist > 0 && celement != 16) //if it's not the same place and 
+		if (dist > 0 && celement != 16) //if it's not the same place and not wind
 		{
-			int xd = xc / dist; // change divided by distance
-			int yd = yc / dist;
+			float xd = (float)xc / (float)dist; // change divided by distance
+			float yd = (float)yc / (float)dist;
 			int counter;
 			int oldplay = play;
 			play = 0;
@@ -223,6 +224,7 @@ void Java_sand_falling_opengl_DemoActivity_mp(JNIEnv* env, jobject thiz, jint jx
 	}
 	xm = jxm;
 	ym = jym;
+	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "mp end");
 	return;
 }
 void Java_sand_falling_opengl_DemoActivity_clearquicksave(JNIEnv* env, jobject thiz)
