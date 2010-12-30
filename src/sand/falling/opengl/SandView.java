@@ -27,7 +27,6 @@ public class SandView extends GLSurfaceView
     //and then use the sleep tactic
     public boolean onTouchEvent(final MotionEvent event) //Finger down
     {
-    	
     	// Gets the mouse position
     	if (event.getAction() == MotionEvent.ACTION_DOWN)
     	{

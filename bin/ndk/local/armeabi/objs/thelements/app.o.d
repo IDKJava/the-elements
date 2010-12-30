@@ -1,8 +1,8 @@
-/home/looterguf/workspace/DemoActivity/bin/ndk/local/armeabi/objs/thelements/app.o: \
- /home/looterguf/workspace/DemoActivity/jni/app.c \
- /home/looterguf/workspace/DemoActivity/jni/macros.h \
- /home/looterguf/workspace/DemoActivity/jni/server.h \
- /home/looterguf/workspace/DemoActivity/jni/app.h \
+/home/looterguf/workspace/TheElements/bin/ndk/local/armeabi/objs/thelements/app.o: \
+ /home/looterguf/workspace/TheElements/jni/app.c \
+ /home/looterguf/workspace/TheElements/jni/macros.h \
+ /home/looterguf/workspace/TheElements/jni/server.h \
+ /home/looterguf/workspace/TheElements/jni/app.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/types.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdint.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/_types.h \
@@ -36,11 +36,11 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/strings.h
 
-/home/looterguf/workspace/DemoActivity/jni/macros.h:
+/home/looterguf/workspace/TheElements/jni/macros.h:
 
-/home/looterguf/workspace/DemoActivity/jni/server.h:
+/home/looterguf/workspace/TheElements/jni/server.h:
 
-/home/looterguf/workspace/DemoActivity/jni/app.h:
+/home/looterguf/workspace/TheElements/jni/app.h:
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/types.h:
 

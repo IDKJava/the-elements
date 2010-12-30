@@ -1,5 +1,5 @@
-/home/looterguf/workspace/DemoActivity/bin/ndk/local/armeabi/objs/thelements/app-android.o: \
- /home/looterguf/workspace/DemoActivity/jni/app-android.c \
+/home/looterguf/workspace/TheElements/bin/ndk/local/armeabi/objs/thelements/app-android.o: \
+ /home/looterguf/workspace/TheElements/jni/app-android.c \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/jni.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/math.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/cdefs.h \
@@ -28,14 +28,14 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/strings.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/memory.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdio.h \
- /home/looterguf/workspace/DemoActivity/jni/app.h \
- /home/looterguf/workspace/DemoActivity/jni/macros.h \
- /home/looterguf/workspace/DemoActivity/jni/setup.h \
- /home/looterguf/workspace/DemoActivity/jni/elementproperties.h \
- /home/looterguf/workspace/DemoActivity/jni/collisions.h \
- /home/looterguf/workspace/DemoActivity/jni/saveload.h \
- /home/looterguf/workspace/DemoActivity/jni/points.h \
- /home/looterguf/workspace/DemoActivity/jni/server.h \
+ /home/looterguf/workspace/TheElements/jni/app.h \
+ /home/looterguf/workspace/TheElements/jni/macros.h \
+ /home/looterguf/workspace/TheElements/jni/setup.h \
+ /home/looterguf/workspace/TheElements/jni/elementproperties.h \
+ /home/looterguf/workspace/TheElements/jni/collisions.h \
+ /home/looterguf/workspace/TheElements/jni/saveload.h \
+ /home/looterguf/workspace/TheElements/jni/points.h \
+ /home/looterguf/workspace/TheElements/jni/server.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/socket.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/socket.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/asm/socket.h \
@@ -53,13 +53,13 @@
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/linux/in6.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netinet/in6.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h \
- /home/looterguf/workspace/DemoActivity/jni/gl.h \
- /home/looterguf/workspace/DemoActivity/jni/importgl.h \
+ /home/looterguf/workspace/TheElements/jni/gl.h \
+ /home/looterguf/workspace/TheElements/jni/importgl.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/gl.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/glplatform.h \
  /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/KHR/khrplatform.h \
- /home/looterguf/workspace/DemoActivity/jni/update.h \
- /home/looterguf/workspace/DemoActivity/jni/collide.h
+ /home/looterguf/workspace/TheElements/jni/update.h \
+ /home/looterguf/workspace/TheElements/jni/collide.h
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/jni.h:
 
@@ -117,21 +117,21 @@
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/stdio.h:
 
-/home/looterguf/workspace/DemoActivity/jni/app.h:
+/home/looterguf/workspace/TheElements/jni/app.h:
 
-/home/looterguf/workspace/DemoActivity/jni/macros.h:
+/home/looterguf/workspace/TheElements/jni/macros.h:
 
-/home/looterguf/workspace/DemoActivity/jni/setup.h:
+/home/looterguf/workspace/TheElements/jni/setup.h:
 
-/home/looterguf/workspace/DemoActivity/jni/elementproperties.h:
+/home/looterguf/workspace/TheElements/jni/elementproperties.h:
 
-/home/looterguf/workspace/DemoActivity/jni/collisions.h:
+/home/looterguf/workspace/TheElements/jni/collisions.h:
 
-/home/looterguf/workspace/DemoActivity/jni/saveload.h:
+/home/looterguf/workspace/TheElements/jni/saveload.h:
 
-/home/looterguf/workspace/DemoActivity/jni/points.h:
+/home/looterguf/workspace/TheElements/jni/points.h:
 
-/home/looterguf/workspace/DemoActivity/jni/server.h:
+/home/looterguf/workspace/TheElements/jni/server.h:
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/sys/socket.h:
 
@@ -167,9 +167,9 @@
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/netdb.h:
 
-/home/looterguf/workspace/DemoActivity/jni/gl.h:
+/home/looterguf/workspace/TheElements/jni/gl.h:
 
-/home/looterguf/workspace/DemoActivity/jni/importgl.h:
+/home/looterguf/workspace/TheElements/jni/importgl.h:
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/GLES/gl.h:
 
@@ -177,6 +177,6 @@
 
 /home/looterguf/android-ndk-r4/build/platforms/android-4/arch-arm/usr/include/KHR/khrplatform.h:
 
-/home/looterguf/workspace/DemoActivity/jni/update.h:
+/home/looterguf/workspace/TheElements/jni/update.h:
 
-/home/looterguf/workspace/DemoActivity/jni/collide.h:
+/home/looterguf/workspace/TheElements/jni/collide.h:
