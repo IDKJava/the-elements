@@ -359,7 +359,9 @@ void UpdateView(void)
 							&& element[counter] == oelement
 							&& x[atemporary] == tempx
 							&& y[atemporary] == tempy
-							&& element[atemporary] == secondElementTemp)
+							&& element[atemporary] == secondElementTemp
+							&& xvel[counter] == 0
+							&& yvel[counter] == 0)
 					{
 						frozen[counter]++; //Increment the frozen count
 					}
@@ -377,7 +379,7 @@ void UpdateView(void)
 						}
 					}
 				}
-				else //Sapce particle is trying to move to is free or is itself
+				else //Space particle is trying to move to is free or is itself
 				{
 					//Space particle is trying to move to is free
 					if (atemporary != counter)
