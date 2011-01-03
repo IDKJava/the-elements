@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Falling Sandpaper</string>
+    <string name="element_prompt">Which Custom Element?</string>
+    <string name="custom_element_title">Custom Element Maker</string>
+    <string name="sand_prompt">How to react with sand:</string>
+    <string name="water_prompt">How to react with water:</string>
+    <string name="wall_prompt">How to react with wall:</string>
+    <string name="plant_prompt">How to react with plant:</string>
+    <string name="fire_prompt">How to react with fire:</string>
+    <string name="ice_prompt">How to react with ice:</string>
+    <string name="oil_prompt">How to react with oil:</string>
+    <string name="magma_prompt">How to react with magma:</string>
+    <string name="stone_prompt">How to react with stone:</string>
+    <string name="C4_prompt">How to react with C4:</string>
+    <string name="C4plus_prompt">How to react with C4++:</string>
+    <string name="Fuse_prompt">How to react with fuse:</string>
+    <string name="DestructableWall_prompt">How to react with destructable wall:</string>
+    <string name="Acid_prompt">How to react with acid:</string>
+    <string name="Steam_prompt">How to react with steam:</string>
+    <string name="Salt_prompt">How to react with salt:</string>
+    <string name="SaltWater_prompt">How to react with salt water:</string>
+    <string name="Glass_prompt">How to react with glass:</string>
+    <string name="CustomEle_prompt">How to react with custom element:</string>
+    <string name="Mud_prompt">How to react with mud:</string>
+    <string name="explonesstext">Explosiveness:</string>
+    <string name="redtext">Redness:</string>
+    <string name="bluetext">Blueness:</string>
+    <string name="greentext">Greeness:</string>
+    <string name="description">Play with many different elements and watch them react on your homescreen</string>
+    <string name="reaction_prompt">Select Reaction Type?</string>
+    <string name="look_feel_title">Look and Feel</string>
+    <string name="other_title">Other</string>
+<string name="accel_pref_title">Accelerometer Control</string>
+<string name="game_cat_title">Game</string>
+<string name="accel_pref_summary">Turn accelerometer control of gravity on/off</string>
+<string name="random_pref_title">Random Selection</string>
+<string name="random_pref_summary">Selection of next element random or in sequence</string>
+<string name="back_color_pref_title">Background Color</string>
+<string name="back_color_pref_summary">Sets the color of the background</string>
+</resources>
