@@ -60,19 +60,19 @@ void Java_sand_falling_opengl_DemoRenderer_nativeDone(JNIEnv* env)
 }
 
 //these two get the gravity from the java code
-void Java_sand_falling_opengl_MainActivity_sendyg(JNIEnv* env, jobject thiz, jfloat ygrav)
+void Java_sand_falling_opengl_MainActivity_sendYGrav(JNIEnv* env, jobject thiz, jfloat ygrav)
 {
 	gravy = ygrav;
 }
-void Java_sand_falling_opengl_MainActivity_sendxg(JNIEnv* env, jobject thiz, jfloat xgrav)
+void Java_sand_falling_opengl_MainActivity_sendXGrav(JNIEnv* env, jobject thiz, jfloat xgrav)
 {
 	gravx = -xgrav;
 }
-void Java_sand_falling_opengl_MainActivity_quickload(JNIEnv* env)
+void Java_sand_falling_opengl_MainActivity_quickLoad(JNIEnv* env)
 {
 	loader(1);
 }
-void Java_sand_falling_opengl_MainActivity_quicksave(JNIEnv* env)
+void Java_sand_falling_opengl_MainActivity_quickSave(JNIEnv* env)
 {
 	saver(1);
 }
@@ -88,11 +88,11 @@ void Java_sand_falling_opengl_MainActivity_setup(JNIEnv* env, jobject thiz)
 	shouldClear = 1;
 }
 
-void Java_sand_falling_opengl_MainActivity_jPause(JNIEnv* env, jobject thiz)
+void Java_sand_falling_opengl_MainActivity_pause(JNIEnv* env, jobject thiz)
 {
 	play = 0;
 }
-void Java_sand_falling_opengl_MainActivity_Play(JNIEnv* env, jobject thiz)
+void Java_sand_falling_opengl_MainActivity_play(JNIEnv* env, jobject thiz)
 {
 	play = 1;
 }
@@ -121,24 +121,24 @@ void Java_sand_falling_opengl_MainActivity_setBackgroundColor(JNIEnv* env, jobje
 	}
 	loader(1);
 }
-void Java_sand_falling_opengl_MainActivity_setexplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
+void Java_sand_falling_opengl_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
 {
 	exploness[22] = explosiveness;
 }
-void Java_sand_falling_opengl_MainActivity_setred(JNIEnv* env, jobject thiz, jint redness)
+void Java_sand_falling_opengl_MainActivity_setRed(JNIEnv* env, jobject thiz, jint redness)
 {
 	red[22] = redness;
 }
-void Java_sand_falling_opengl_MainActivity_setgreen(JNIEnv* env, jobject thiz, jint greenness)
+void Java_sand_falling_opengl_MainActivity_setGreen(JNIEnv* env, jobject thiz, jint greenness)
 {
 	green[22] = greenness;
 }
-void Java_sand_falling_opengl_MainActivity_setblue(JNIEnv* env, jobject thiz, jint blueness)
+void Java_sand_falling_opengl_MainActivity_setBlue(JNIEnv* env, jobject thiz, jint blueness)
 {
 	blue[22] = blueness;
 }
 
-void Java_sand_falling_opengl_MainActivity_setdensity(JNIEnv* env, jobject thiz, jint jdensity)
+void Java_sand_falling_opengl_MainActivity_setDensity(JNIEnv* env, jobject thiz, jint jdensity)
 {
 	density[22] = jdensity;
 }
@@ -146,7 +146,7 @@ void Java_sand_falling_opengl_MainActivity_setFlip(JNIEnv* env, jobject thiz, ji
 {
 	flipped = jflipped;
 }
-void Java_sand_falling_opengl_MainActivity_setcollision(JNIEnv* env, jobject thiz, jint custnum, jint elementnumb, jint colspot, jint colnum)
+void Java_sand_falling_opengl_MainActivity_setCollision(JNIEnv* env, jobject thiz, jint custnum, jint elementnumb, jint colspot, jint colnum)
 {
 	if (custnum == 1)
 	{
@@ -179,7 +179,7 @@ void Java_sand_falling_opengl_MainActivity_setcollision(JNIEnv* env, jobject thi
 	}
 }
 
-void Java_sand_falling_opengl_MainActivity_fd(JNIEnv* env, jobject thiz, jint fstate)
+void Java_sand_falling_opengl_MainActivity_setFingerState(JNIEnv* env, jobject thiz, jint fstate)
 {
 	//setting finger up or down from onTouch
 
@@ -190,7 +190,7 @@ void Java_sand_falling_opengl_MainActivity_fd(JNIEnv* env, jobject thiz, jint fs
 	}
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_mp(JNIEnv* env, jobject thiz, jint jxm, jint jym)
+void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject thiz, jint xpos, jint ypos)
 {
 	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp start");
 	//setting the mouse position when given stuff from jdk
@@ -199,8 +199,8 @@ void Java_sand_falling_opengl_MainActivity_mp(JNIEnv* env, jobject thiz, jint jx
 		lmx = xm;
 		lmy = ym;
 
-		int xc = jxm - lmx; //change in x (delta x)
-		int yc = jym - lmy; //change in y (delta y)
+		int xc = xpos - lmx; //change in x (delta x)
+		int yc = ypos - lmy; //change in y (delta y)
 
 
 		int dist = sqrt(xc * xc + yc * yc); //distance between two points
@@ -222,22 +222,22 @@ void Java_sand_falling_opengl_MainActivity_mp(JNIEnv* env, jobject thiz, jint jx
 			play = oldplay;
 		}
 	}
-	xm = jxm;
-	ym = jym;
+	xm = xpos;
+	ym = ypos;
 	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp end");
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_clearquicksave(JNIEnv* env, jobject thiz)
+void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject thiz)
 {
 	removeQuicksave();
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_setelement(JNIEnv* env, jobject thiz, jint jelement)
+void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
 {
 	celement = jelement;
 	return;
 }
-int Java_sand_falling_opengl_MainActivity_getelement(JNIEnv* env, jobject thiz)
+int Java_sand_falling_opengl_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
 	return celement;
 }
@@ -251,7 +251,7 @@ void Java_sand_falling_opengl_MainActivity_setAccelOnOff(JNIEnv* env, jobject th
 	accelcon = state;
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_togglesize(JNIEnv* env, jobject thiz)
+void Java_sand_falling_opengl_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 {
 	if (screensize == 0) //not zoomed in, *2 to zoom out
 	{
@@ -276,7 +276,7 @@ int Java_sand_falling_opengl_MainActivity_load(JNIEnv* env, jobject thiz)
 	return loader(0); // call the load function, normal load
 }
 
-void Java_sand_falling_opengl_MainActivity_loaddemo(JNIEnv* env, jobject thiz)
+void Java_sand_falling_opengl_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
 {
 	loadDemoFile();
 }
@@ -307,7 +307,7 @@ void Java_sand_falling_opengl_MainActivity_setPassword(JNIEnv *env, jobject thiz
 	free(minut1);
 }
 
-void Java_sand_falling_opengl_MainActivity_setUserName(JNIEnv *env, jobject thiz, jbyteArray minut)
+void Java_sand_falling_opengl_MainActivity_setUsername(JNIEnv *env, jobject thiz, jbyteArray minut)
 {
 	int i; //Counter variable
 
@@ -355,7 +355,7 @@ int Java_sand_falling_opengl_MainActivity_register(JNIEnv *env, jobject thiz)
 	return 0;
 }
 
-char* Java_sand_falling_opengl_MainActivity_viewerr (JNIEnv *env, jobject thiz)
+char* Java_sand_falling_opengl_MainActivity_viewErr (JNIEnv *env, jobject thiz)
 {
 	return error;
 }

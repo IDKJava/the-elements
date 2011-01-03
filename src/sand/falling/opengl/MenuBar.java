@@ -51,7 +51,7 @@ public class MenuBar extends LinearLayout
 		eraser_button.setImageResource(R.drawable.eraser);
 		
 		eraser_on = false;
-		MainActivity.setelement(temp_element);
+		MainActivity.setElement(temp_element);
 		
 	}
 
@@ -79,7 +79,7 @@ public class MenuBar extends LinearLayout
 					if(eraser_on)
 					{
 						eraser_on = false;
-						MainActivity.setelement(temp_element);
+						MainActivity.setElement(temp_element);
 						
 						//Change the button to look unclicked
 						eraser_button.setImageResource(R.drawable.eraser);
@@ -88,8 +88,8 @@ public class MenuBar extends LinearLayout
 					else
 					{
 						eraser_on = true;
-						temp_element = MainActivity.getelement();
-						MainActivity.setelement(3);
+						temp_element = MainActivity.getElement();
+						MainActivity.setElement(3);
 						
 						//Change the button to look clicked
 						eraser_button.setImageResource(R.drawable.eraser_on);
@@ -97,7 +97,7 @@ public class MenuBar extends LinearLayout
 				}
 			}
 		);
-		if(MainActivity.getelement() == 3) //If the current element is eraser
+		if(MainActivity.getElement() == 3) //If the current element is eraser
 		{
 			 //Start off the button to being on
 			eraser_button.setImageResource(R.drawable.eraser_on);
@@ -121,13 +121,13 @@ public class MenuBar extends LinearLayout
 					{
 						play = false;
 						play_pause_button.setImageResource(R.drawable.play);
-						MainActivity.jPause();
+						MainActivity.pause();
 					}
 					else
 					{
 						play = true;
 						play_pause_button.setImageResource(R.drawable.pause);
-						MainActivity.Play();
+						MainActivity.play();
 					}
 				}
 				
@@ -194,7 +194,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			    	  if (MainActivity.loaddemo() == 1)
+			    	  if (MainActivity.loadDemo() == 1)
 			    	  {
 			    		  Toast.makeText(context, "Demo Loaded", Toast.LENGTH_SHORT).show();
 			    	  }
