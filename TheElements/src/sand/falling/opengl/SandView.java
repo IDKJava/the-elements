@@ -4,7 +4,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import android.content.Context;
-import android.hardware.Sensor;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -32,7 +31,7 @@ public class SandView extends GLSurfaceView
     	{
 			if (fd != 1) //if it has changed
 			{
-				MainActivity.fd(1); //sets the finger state in jni
+				MainActivity.setFingerState(1); //sets the finger state in jni
     		}
     		else
     		{
@@ -41,18 +40,18 @@ public class SandView extends GLSurfaceView
     	}
     	else if (event.getAction() == MotionEvent.ACTION_UP)
     	{
-    		MainActivity.fd(2);
+    		MainActivity.setFingerState(2);
     	}
     	
     	if(MainActivity.size == 0)
     	{
     		//Both x and y are halved because it needs to be zoomed in
-    		MainActivity.mp((int)event.getX()/2, (int)event.getY()/2); //sets the mouse position in jdk
+    		MainActivity.setMouseLocation((int)event.getX()/2, (int)event.getY()/2); //sets the mouse position in jdk
     	}
     	else
     	{
     		//Not zoomed in
-    		MainActivity.mp((int)event.getX(), (int)event.getY()); //sets the mouse position in jdk		
+    		MainActivity.setMouseLocation((int)event.getX(), (int)event.getY()); //sets the mouse position in jdk		
     	}
     	
     	return true;
@@ -74,7 +73,7 @@ class DemoRenderer implements GLSurfaceView.Renderer
         nativeResize(w, h);
         if (MainActivity.loaddemov == true) //loads the demo from the sdcard on first run.
         {
-        	MainActivity.loaddemo();
+        	MainActivity.loadDemo();
         	MainActivity.loaddemov = false;
         }
     }

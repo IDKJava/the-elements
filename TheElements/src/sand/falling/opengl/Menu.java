@@ -4,11 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
 
 import sand.falling.opengl.custom.CustomMaker;
 import sand.falling.opengl.network.networklogin;
-import sand.falling.opengl.preferences.PreferencesFromCode;
 import sand.falling.opengl.MainActivity;
 
 import android.app.Activity;
@@ -16,7 +14,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -26,7 +24,6 @@ import android.widget.Toast;
 
 import com.mobclix.android.sdk.MobclixAdView;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
-import com.mobclix.android.sdk.MobclixIABRectangleMAdView;
 
 public class Menu extends Activity
 {
@@ -55,7 +52,7 @@ public class Menu extends Activity
 		try
 		{
 			//Define all the objects
-			MobclixMMABannerXLAdView banner_adview = (MobclixMMABannerXLAdView) findViewById(R.id.banner_adview);
+			banner_adview = (MobclixMMABannerXLAdView) findViewById(R.id.banner_adview);
 		}
 		catch (NullPointerException e)
 		{
@@ -149,7 +146,7 @@ public class Menu extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					MainActivity.clearquicksave();
+					MainActivity.clearQuickSave();
 					Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}

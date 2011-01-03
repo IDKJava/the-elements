@@ -108,8 +108,8 @@ public class MainActivity extends Activity
 	{
 		public void onSensorChanged(SensorEvent event)
 		{
-			sendxg(event.values[0]);
-			sendyg(event.values[1]);
+			sendXGrav(event.values[0]);
+			sendYGrav(event.values[1]);
 		}
 
 		public void onAccuracyChanged(Sensor sensor, int accuracy)
@@ -121,7 +121,7 @@ public class MainActivity extends Activity
 	protected void onPause()
 	{
 		//Quicksave
-		quicksave();
+		quickSave();
 		//Set the preferences to indicate paused
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -147,7 +147,7 @@ public class MainActivity extends Activity
 		if (settings.getBoolean("paused", true))
 		{
 			//Load the save
-			quickload();
+			quickLoad();
 			//Set the preferences to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
@@ -171,7 +171,7 @@ public class MainActivity extends Activity
 		try
 		{
 			//Try to create the folder
-			boolean success = (new File("/sdcard/elementworks/")).mkdir();
+			(new File("/sdcard/elementworks/")).mkdir();
 
 			//Try to copy the demo file to the save file
 			OutputStream out = new FileOutputStream("/sdcard/elementworks/save2.txt");
@@ -260,95 +260,95 @@ public class MainActivity extends Activity
 
 					if (item == 0) // Sand
 					{
-						setelement(0);
+						setElement(0);
 					}
 					else if (item == 1) // Water
 					{
-						setelement(1);
+						setElement(1);
 					}
 					else if (item == 2) // Plant
 					{
-						setelement(4);
+						setElement(4);
 					}
 					else if (item == 3) // Wall
 					{
-						setelement(2);
+						setElement(2);
 					}
 					else if (item == 4) // Fire
 					{
-						setelement(5);
+						setElement(5);
 					}
 					else if (item == 5) // Ice
 					{
-						setelement(6);
+						setElement(6);
 					}
 					else if (item == 6)// Generator
 					{
-						setelement(7);
+						setElement(7);
 					}
 					else if (item == 7)// Oil
 					{
-						setelement(9);
+						setElement(9);
 					}
 					else if (item == 8)// Magma
 					{
-						setelement(10);
+						setElement(10);
 					}
 					else if (item == 9)// Stone
 					{
-						setelement(11);
+						setElement(11);
 					}
 					else if (item == 10)// C4
 					{
-						setelement(12);
+						setElement(12);
 					}
 					else if (item == 11)// C4++
 					{
-						setelement(13);
+						setElement(13);
 					}
 					else if (item == 12)// Fuse
 					{
-						setelement(14);
+						setElement(14);
 					}
 					else if (item == 13)// Destructible wall
 					{
-						setelement(15);
+						setElement(15);
 					}
 					else if (item == 14)// Drag
 					{
-						setelement(16);
+						setElement(16);
 					}
 					else if (item == 15)// Acid
 					{
-						setelement(17);
+						setElement(17);
 					}
 					else if (item == 16)// Steam
 					{
-						setelement(18);
+						setElement(18);
 					}
 					else if (item == 17)// Salt
 					{
-						setelement(19);
+						setElement(19);
 					}
 					else if (item == 18)// Salt-water
 					{
-						setelement(20);
+						setElement(20);
 					}
 					else if (item == 19)// Glass
 					{
-						setelement(21);
+						setElement(21);
 					}
 					else if (item == 20)// Custom 1
 					{
-						setelement(22);
+						setElement(22);
 					}
 					else if (item == 21)// Mud
 					{
-						setelement(23);
+						setElement(23);
 					}
 					else if (item == 22)// Custom 3
 					{
-						setelement(24);
+						setElement(24);
 					}
 				}
 			});
@@ -416,17 +416,17 @@ public class MainActivity extends Activity
 	
 				if (play)
 				{
-					jPause();
+					pause();
 				}
 				else
 				{
-					Play();
+					play();
 				}
 				play = !play;
 				return true;
 			case R.id.eraser:
 	
-				setelement(3);
+				setElement(3);
 				return true;
 			case R.id.toggle_size:
 	
@@ -438,7 +438,7 @@ public class MainActivity extends Activity
 				{
 					size = 1;
 				}
-				togglesize();
+				toggleSize();
 				return true;
 			case R.id.save:
 	
@@ -450,7 +450,7 @@ public class MainActivity extends Activity
 				return true;
 			case R.id.load_demo:
 	
-				loaddemo();
+				loadDemo();
 				return true;
 			case R.id.preferences:
 	
@@ -466,40 +466,40 @@ public class MainActivity extends Activity
 
 	// JNI functions
 	public native static int save();
-	public native static int loaddemo();
+	public native static int loadDemo();
 	public native static int load();
 	public native static void setup(); //Set up arrays and such
-	public native static void fd(int fstate); //Sets finger up or down, 1 is down
-	public native static void mp(int jxm, int jym); //Sets x mouse and y mouse
+	public native static void setFingerState(int fingerstate); //Sets finger up or down, 1 is down
+	public native static void setMouseLocation(int xpos, int ypos); //Sets x mouse and y mouse
 	public native static void tester();
-	public native static void Play(); // Jni play
-	public native static void jPause(); // Jni pause
+	public native static void play(); // Jni play
+	public native static void pause(); // Jni pause
 	public native static int  getPlayState(); //Get the play state
-	public native static void togglesize(); // Jni toggle size
-	public native static void quicksave();
-	public native static void quickload();
+	public native static void toggleSize(); // Jni toggle size
+	public native static void quickSave();
+	public native static void quickLoad();
 	public native static void setBackgroundColor(int colorcode);
 	public native static void setFlip(int flipped);
-	public native static void setelement(int element);
+	public native static void setElement(int element);
 	public native static void setBrushSize(int jsize);
-	public native static int  getelement();
-	public native static void clearquicksave();
-	public native static void sendyg(float ygrav);
-	public native static void sendxg(float xgrav);
+	public native static int  getElement();
+	public native static void clearQuickSave();
+	public native static void sendYGrav(float ygrav);
+	public native static void sendXGrav(float xgrav);
 	public native static void setAccelOnOff(int state);
-	public native static void setcollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
-	public native static void setexplosiveness(int explosiveness);
-	public native static void setred(int redness);
-	public native static void setblue(int blueness);
-	public native static void setgreen(int greenness);
-	public native static void setdensity( int jdensity );
-	public native static void setUserName( char[] username);
+	public native static void setCollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
+	public native static void setExplosiveness(int explosiveness);
+	public native static void setRed(int redness);
+	public native static void setBlue(int blueness);
+	public native static void setGreen(int greenness);
+	public native static void setDensity( int jdensity );
+	public native static void setUsername( char[] username);
 	public native static void setPassword ( char[] password);
 	public native static boolean login();
 	public native static boolean register();
 
 	static
 	{
-		System.loadLibrary("thelements"); // Load the JNI library (libsanangeles.so)
+		System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
 	}
 }
