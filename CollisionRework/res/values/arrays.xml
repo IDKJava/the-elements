@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in app/menu examples -->
+    <string-array name="entries_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+
+    <!-- Used in app/menu examples -->
+    <string-array name="entryvalues_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+    <!-- Used in app/server_engage -->
+    <string-array name="ne_filter_type_array">
+        <item>Saves</item>
+        <item>Custom Elements</item>
+    </string-array>
+    
+    <string-array name="reaction_array">
+        <item>solid - solid</item>  <!-- 0 -->
+        <item>solid - liquid</item> <!-- 1 -->
+        <item>liquid - solid</item> <!-- 2 -->
+        <item> liquid - liquid</item> <!-- 3 -->
+        <item> water - plant</item> <!-- 4 -->
+        <item> plant - water</item> <!-- 5 -->
+        <item> fire - nonflammable</item> <!-- 6 -->
+        <item> nonflammable - fire</item> <!-- 7 -->
+        <item> fire - fire</item> <!-- 8 -->
+        <item> water - ice </item> <!-- 9 -->
+        <item> ice - water</item> <!-- 10 -->
+        <item> fire - ice</item> <!-- 11 -->
+        <item> ice - fire</item> <!-- 12 -->
+        <item> hot - ice</item> <!-- 13 -->
+        <item> ice - hot</item> <!-- 14 -->
+        <item> oil - hot</item> <!-- 15 -->
+        <item> hot - oil</item> <!-- 16 -->
+        <item> magma - water</item> <!-- 17 -->
+        <item> water - magma</item> <!-- 18 -->
+        <item> stone - hot</item> <!-- 19 -->
+        <item> hot - stone</item> <!-- 20 -->
+        <item> stone - stone</item> <!-- 21 -->
+        <item> hot - C4</item> <!-- 22 -->
+    	<item> C4 - hot</item> <!-- 23 -->
+    	<item> magma - destructable wall</item> <!-- 24 -->
+    	<item> destructable wall - magma</item> <!-- 25 -->
+    	<item> acid - meltable </item> <!-- 26 -->
+    	<item> meltable - acid</item> <!-- 27 -->
+    	<item> acid - water</item> <!-- 28 -->
+    	<item> water - acid</item> <!-- 29 -->
+    	<item> steam - ice/water</item> <!-- 30 -->
+    	<item> ice/water - steam</item> <!-- 31 -->
+    	<item> steam - steam</item> <!-- 32 -->
+    	<item> steam - other</item> <!-- 33 -->
+    	<item> other - steam</item> <!-- 34 -->
+    	<item> water - fire</item> <!-- 35 -->
+    	<item> fire - water</item> <!-- 36 -->
+    	<item> salt - water</item> <!-- 37 -->
+    	<item> water - salt</item> <!-- 38 -->
+    	<item> salt - ice</item> <!-- 39 -->
+    	<item> ice - salt</item> <!-- 40 -->
+    	<item> salt-water - plant</item> <!-- 41 -->
+    	<item> plant - saltwater</item> <!-- 42 -->
+    	<item> sand - hot</item> <!-- 43 -->
+    	<item> hot - sand</item> <!-- 44 -->
+    	<item> flammable - fire</item> <!-- 45 -->
+    	<item> fire - flammable</item> <!-- 46 -->
+    	<item> water - sand</item> <!--  47 -->
+    	<item> sand - water</item> <!-- 48 -->
+    	<item> mud - fire</item> <!-- 49 -->         
+    	<item> fire - mud</item> <!-- 50 -->
+    	<item> mud - magma</item><!-- 51 -->
+    	<item> magma - mud</item><!-- 52 -->
+    </string-array>
+</resources>
