@@ -10,7 +10,7 @@
 //Include the server functions
 #include "server.h"
 
-// The simple framework expects the application code to define these functions.
+//The simple framework expects the application code to define these functions.
 void appInit();
 void appDeinit();
 void appRender();
@@ -25,97 +25,102 @@ int celement = 0;
 //Current point during processing
 int cpoint = 0;
 //Play state
-int play = 1;
+int play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-int size = 4;
+int size = DEFAULT_BRUSH_SIZE;
 
 //Array for bitmap drawing
-unsigned char colors[TPixels*3]; // 3 bytes per pixel
+unsigned char colors[];
+
+//Screen dimensions
+int screenWidth;
+int screenHeight;
+//Workspace dimensions
+int workWidth;
+int workHeight;
 
 //Coordinates
-float x[TPoints];
-float y[TPoints];
+float x[];
+float y[];
 //Old coordinates (for collision resolving)
-short int oldx[TPoints];
-short int oldy[TPoints];
+short int oldx[];
+short int oldy[];
 //Velocities
-short int xvel[TPoints];
-short int yvel[TPoints];
+short int xvel[];
+short int yvel[];
 
 //Element type
-char element[TPoints];
+char element[];
 //Frozen state
-char frozen[TPoints];
+char frozen[];
 //Spawn type
-char spawn[TPoints];
+char spawn[];
 
 //RGB properties
-unsigned char red[TElements];
-unsigned char green[TElements];
-unsigned char blue[TElements];
+unsigned char red[];
+unsigned char green[];
+unsigned char blue[];
 //Fall velocity property
-int fallvel[TElements];
-//Density property
-int density[TElements];
-//Solid property
-int solid[TElements];
-//Growing property
-int growing[TElements];
-//Condensing property
-int condensing[TElements];
-//Fire-like burning property
-int fireburn[TElements];
-//Explosiveness property
-int exploness[TElements];
-
-//Custom element collision data
-int colliseelement1[TCollision];
+int fallVel[];
+//Density property - 1 - 10
+int density[];
+//State property - solid = 0, liquid = 1, gaseous = 2
+int state[];
+//Special property - indexed special effects occurring every fram
+int special[];
+//Special value - a number used in special effects (if any)
+int specialVal[];
+//Heat value - 1 - 10
+int heat[];
 
 //Collision matrix
-int collision[TElements][TElements];
+int collision[][];
 
 //Index set state
-int set[TPoints];
+int set[];
 //Index available state
-int avail[TPoints];
+int avail[];
 
 //Location in avail array
 int loq;
 //Zoom value
-int screensize;
+int zoom;
 
+/* Accelerometer stuff being taken out for now
 //Gravity values
-float gravx;
-float gravy;
+float gravX;
+float gravY;
 
 //Accelerometer control state
 int accelcon;
 //Flipped state
 int flipped;
+*/
 
-//The extent of the screen (what area to draw in)
-int maxx;
-int maxy;
+//Set when a clear is requested, unset when cleared
+char shouldClear = FALSE;
+//Set when a mouse update is requested, unset when udpated
+char shouldUpdateMouse = FALSE;
 
-char shouldClear = 0;
-// A map of all the coordinates on the screen
-int allcoords[WIDTH][HEIGHT];
+//A map of all the pixelsmaxx
+int allcoords[][];
 
 //Mouse positions
-int xm;
-int ym;
+int mouseX;
+int mouseY;
 //Old mouse positions
-int lmx;
-int lmy;
+int lastMouseX;
+int lastMouseY;
 //Finger down state
-int fd;
+int fingerState;
 
+/*Network stuff taken out for now
 //Buffer building variables
 char username[8];
 char password[8];
 char userlength;
 char passlength;
-char buffer[ 1/*3 + 1 + (2 * TPoints * 4) + 200*/];
+char buffer[3 + 1 + (2 * TPoints * 4) + 200];
 int bufferlength;
 
 //Error variable
@@ -126,3 +131,4 @@ int sockfd; //The file descriptor for the socket
 int n; //Used in sending and recieving data
 struct sockaddr_in serv_addr; //The server address struct
 struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+*/

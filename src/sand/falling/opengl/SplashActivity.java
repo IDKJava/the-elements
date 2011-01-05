@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class Splash extends Activity
+public class SplashActivity extends Activity
 {
 	@Override
 	protected void onCreate (Bundle savedInstanceState)
@@ -21,9 +21,9 @@ public class Splash extends Activity
 					public void run()
 					{
 						//Create an Intent to start DemoActivity
-						Intent mainIntent = new Intent(Splash.this, MainActivity.class);
-						Splash.this.startActivity(mainIntent);
-						Splash.this.finish();
+						Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+						SplashActivity.this.startActivity(mainIntent);
+						SplashActivity.this.finish();
 					}
 				}, 5);
 	}

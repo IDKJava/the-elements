@@ -8,80 +8,87 @@
 
 #include "saveload.h"
 
-int saver(int type)
+char saver(int type)
 {
 	FILE *fp;
-	if (type == 0) //If it's a normal save
+	if (type == NORMAL_SAVE)
 	{
 		fp = fopen(SAVE_FILE, "w");
 	}
-	else if (type == 1) //If it's a quicksave (it's being paused)
+	else if (type == QUICK_SAVE)
 	{
 		fp = fopen(QUICK_SAVE_FILE, "w");
 	}
+
 	if (fp != NULL)
 	{
-		int counter, added_to_file = 0;
-		for (counter = 0; counter < TPoints; counter++)
+		int counter, addedToFile = FALSE;
+		for (counter = 0; counter < maxPoints; counter++)
 		{
-			if (set[counter] == 1)
+			if (set[counter] == TRUE)
 			{
 				fprintf(fp, "%d %d %d %d ", spawn[counter], (int) x[counter],
 						(int) y[counter], element[counter]); //Save the spawn, x y, and element of each current point
-				added_to_file = 1;
+				addedToFile = TRUE;
 			}
 		}
 		fclose(fp);
-		if (added_to_file == 0)
+		if (addedToFile == FALSE)
 		{
-			if (type == 0)
+			if (type == NORMAL_SAVE)
 			{
 				remove(SAVE_FILE);
 			}
-			else if (type == 1)
+			else if (type == QUICK_SAVE)
 			{
 				remove(QUICK_SAVE_FILE);
 			}
 		}
-		return 1; //success
+		return TRUE; //success
 	}
 	else
 	{
-		return 0; //error: didn't open file, prolly sdcard not there
+		return FALSE; //error: didn't open file, prolly sdcard not there
 	}
 }
 
-int loader(int type)
+char loader(int type)
 {
 	FILE *fp;
-	if (type == 0) //normal load
+	if (type == NORMAL_LOAD)
 	{
 		fp = fopen(SAVE_FILE, "r");
 	}
-	else if (type == 1) //quickload
+	else if (type == QUICK_LOAD)
 	{
 		fp = fopen(QUICK_SAVE_FILE, "r");
 	}
-	rsetup();
-	int i;
-	int xcoordinate;
-	int ycoordinate;
-	int loadelement;
-	int spawnv;
+	else if (type == DEMO_LOAD)
+	{
+		fp = fopen(DEMO_SAVE_FILE, "r");
+	}
 
-	if (fp != NULL)
+	rsetup();
+	int xCoordinate;
+	int yCoordinate;
+	int loadElement;
+	int spawnV;
+
+	if(fp != NULL)
 	{
 		while (!feof(fp))
 		{
-			fscanf(fp, "%d%d%d%d", &spawnv, &xcoordinate, &ycoordinate,
-					&loadelement);
-			spawn[avail[loq - 1]] = spawnv;
-			CreatePoint(xcoordinate, ycoordinate, loadelement);
+			fscanf(fp, "%d%d%d%d", &spawnV, &xCoordinate, &yCoordinate,
+					&loadElement);
+			spawn[avail[loq - 1]] = spawnV;
+			CreatePoint(xCoordinate, yCoordinate, loadElement);
 		}
 
 		fclose(fp);
-		return 1;
+		return TRUE;
 	}
+
+	return FALSE;
 }
 
 void removeQuicksave(void)
@@ -89,33 +96,7 @@ void removeQuicksave(void)
 	remove(QUICK_SAVE_FILE);
 }
 
-int loadDemoFile()
+char loadDemoFile()
 {
-	FILE *fp;
-	fp = fopen(DEMO_SAVE_FILE, "r");
-	//__android_log_write(ANDROID_LOG_INFO, "DemoActivity", "demo");
-	rsetup();
-	int i;
-	int xcoordinate;
-	int ycoordinate;
-	int loadelement;
-	int spawnv;
-
-	if (fp != NULL)
-	{
-		while (!feof(fp))
-		{
-			fscanf(fp, "%d%d%d%d", &spawnv, &xcoordinate, &ycoordinate,
-					&loadelement);
-			spawn[avail[loq - 1]] = spawnv;
-			CreatePoint(xcoordinate, ycoordinate, loadelement);
-		}
-
-		fclose(fp);
-		return 1;
-	}
-	else
-	{
-		return 0;
-	}
+	return loader(DEMO_LOAD);
 }
