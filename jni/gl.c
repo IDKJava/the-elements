@@ -12,11 +12,11 @@ static unsigned int textureID;
 // Called from the app framework. is onSurfaceCreated
 void appInit()
 {
-	glShadeModel(GL_SMOOTH);
+	glShadeModel(GL_FLAT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-	glClearDepthf(1.0f);
-	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	//glClearDepthf(1.0f);
+	//glEnable(GL_DEPTH_TEST);
+	//glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
 	//Generate the new texture
@@ -35,7 +35,7 @@ void appInit()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	//Generate the tex image
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 512, 1024, 0, GL_RGB, GL_UNSIGNED_BYTE, colors);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Disable tex (clean up)
 	glDisable(GL_TEXTURE_2D);
@@ -48,19 +48,16 @@ void appDeinit()
 }
 
 // Called from the app framework.
-/* The tick is current time in milliseconds, width and height
- * are the image dimensions to be rendered.
- */
 void appRender()
 {
 	float vertices[] =
-	{ 0.0f, 0.0f, 512.0f, 0.0f, 0.0f, 1024.0f, 512.0f, 1024.0f };
+	{0.0f, 0.0f, (float)screenWidth, 0.0f, 0.0f, (float)screenHeight, (float)screenWidth, (float)screenHeight};
 
 	float texture[] =
-	{ 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f };
+	{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
 	unsigned char indices[] =
-	{ 0, 1, 3, 0, 3, 2 };
+	{0, 1, 3, 0, 3, 2};
 
 	UpdateView();
 
@@ -70,18 +67,17 @@ void appRender()
 
 	if (flipped == 0)
 	{
-		glOrthof(0.0f, (float) maxx, (float) maxy, 0.0f, 1.0f, -1.0f); //--Device
+		glOrthof(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, 1.0f, -1.0f); //--Device
 	}
 	else
 	{
-		glOrthof(0.0f, (float) maxx, 0.0f, (float) -maxy, 1.0f, -1.0f); //--Emulator
+		glOrthof(0.0f, (float)screenWidth, 0.0f, (float)-screenHeight, 1.0f, -1.0f); //--Emulator
 	}
 
 	//Draw the texture stuff --------------------------------------------------------------
 	glEnable(GL_TEXTURE_2D);
 
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 512, maxy, GL_RGB,
-			GL_UNSIGNED_BYTE, colors);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, screenWidth, screenHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Enable the vertex and coord arrays
 	glEnableClientState(GL_VERTEX_ARRAY);

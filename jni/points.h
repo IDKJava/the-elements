@@ -11,12 +11,14 @@
 
 //Include global variables
 #include "app.h"
+//Include macros
+#include "macros.h"
 
-void CreatePoint(int k, int l, int e);
-void DeletePoint(int partnum);
-void setElement(int particle, int element);
-void setBitmapColor(int xpos, int ypos, int element);
+void CreatePoint(int xCoord, int yCoord, int elementVal);
+void DeletePoint(int index);
+void setElement(int particle, int newelement);
+void setBitmapColor(int xCoord, int yCoord, int newelement);
 void createBitmapFromPoints(void);
-void unFreezeParticles(int xcentre, int ycentre);
+void unFreezeParticles(int xCoord, int yCoord);
 
 #endif

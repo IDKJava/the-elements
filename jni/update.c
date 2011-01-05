@@ -12,11 +12,11 @@ void UpdateView(void)
 {
 	if (shouldClear)
 	{
-		rsetup();
-		shouldClear = 0;
+		setup();
+		shouldClear = FALSE;
 	}
-	//If the finger is down
-	if (fd == 1)
+	//Draw points
+	if (fingerState == FINGER_DOWN)
 	{
 		if (ym != 0)
 		{
@@ -60,7 +60,6 @@ void UpdateView(void)
 							{
 								DeletePoint(allcoords[xm + xc][ym + yc]);
 							}
-
 						}
 					}
 				}
@@ -69,7 +68,7 @@ void UpdateView(void)
 
 	}
 
-	if (play == 1)
+	if (play == TRUE)
 	{
 		int counter;
 		int rtop; //used to prevent bugs when fire reaches the top

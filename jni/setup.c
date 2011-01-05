@@ -1,36 +1,26 @@
 /*
  * setup.c
  * -----------------------------
- * Defines the rsetup function, which initializes
+ * Defines the setup function, which initializes
  * all of the arrays and variables necessary.
  */
 
 #include "setup.h"
 
-void rsetup()
+void setup()
 {
-	int j, o, k;
-	loq = TPoints-1;
-	cpoint = 0;
-	//size = 4;  if size stuff is failing this may need to be uncommented
-	unsigned char blankred = red[3];
-	unsigned char blankgreen = green[3];
-	unsigned char blankblue = blue[3];
+	int i, j;
+	loq = MAX_POINTS;
+	unsigned char blankRed = red[3];
+	unsigned char blankGreen = green[3];
+	unsigned char blankBlue = blue[3];
 
-	for (j = 0; j < TPoints; j++)
+	for (i = 0; i < MAX_POINTS; i++)
 	{
-		x[j] = -1;
-		y[j] = -1;
-		xvel[j] = 0;
-		yvel[j] = 0;
-		element[j] = 0;
-		oldx[j] = 0;
-		oldy[j] = 0;
-		set[j] = 0;
-		avail[j] = j;
-		spawn[j] = -1;
-		frozen[j] = 0;
+		set[i] = 0;
+		avail[i] = i;
 	}
+	/* Network stuff not needed
 	for (j = 0; j < 8; j++)
 	{
 		username[j] = 0;
@@ -38,15 +28,42 @@ void rsetup()
 	}
 	userlength = 0;
 	passlength = 0;
+	*/
 
-	for (o = 0; o < HEIGHT; o++)
+	for (i = 0; i < workHeight; i++)
 	{
-		for (k = 0; k < WIDTH; k++)
+		for (j = 0; j < workWidth; j++)
 		{
-			allcoords[k][o] = -1; // -1 is empty
-			colors[3 * (k + WIDTH * o)] = blankred; //0
-			colors[3 * (k + WIDTH * o) + 1] = blankblue; //0
-			colors[3 * (k + WIDTH * o) + 2] = blankgreen; //0
+			//Clear the points array
+			allcoords[getIndex(j, i)] = -1;
+			//Clear the pixels array
+			colors[3 * (i * workHeight + j)] = blankRed;
+			colors[3 * (i * workHeight + j) + 1] = blankGreen;
+			colors[3 * (i * workHeight + j) + 2] = blankBlue;
 		}
 	}
+}
+
+//Set up all the variable sized arrays
+void arraySetup()
+{
+	//Calculate the number of pixels
+	int points = workWidth * workHeight;
+
+	//TODO: Load custom elements
+	//Calculate numElements
+	numElements = NUM_BASE_ELEMENTS; //Changed later
+
+	//Allocate memory
+	colors = malloc(3 * points * sizeof(char));
+	red = malloc(points * sizeof(char));
+	green = malloc(points * sizeof(char));
+	blue = malloc(points * sizeof(char));
+
+	fallVel = malloc(numElements * sizeof(int));
+	density = malloc(numElements * sizeof(int));
+	state = malloc(numElements * sizeof(int));
+	special = malloc(numElements * sizeof(int));
+
+	allcoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 }

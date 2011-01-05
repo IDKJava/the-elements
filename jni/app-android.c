@@ -29,18 +29,14 @@
 //Include the rendering functions
 #include "gl.h"
 
-void Java_sand_falling_opengl_DemoRenderer_nativeInit(JNIEnv* env) //Initialize graphics
+void Java_sand_falling_opengl_SandViewRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
-	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "8");
 	importGLInit();
 	appInit();
-	gAppAlive = 1;
-	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "4");
 }
-
-void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
+void Java_sand_falling_opengl_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
 {
-	if (screensize == 0) //this didn't work before becuase tej used = instead of == (green girdle)
+	if (zoom == ZOOMED_IN)
 	{
 		maxx = w / 2;
 		maxy = h / 2;
@@ -52,49 +48,48 @@ void Java_sand_falling_opengl_DemoRenderer_nativeResize(JNIEnv* env, jobject thi
 	}
 	appInit();
 }
-
-void Java_sand_falling_opengl_DemoRenderer_nativeDone(JNIEnv* env)
+void Java_sand_falling_opengl_SandViewRenderer_nativeDone(JNIEnv* env)
 {
 	appDeinit();
 	importGLDeinit();
 }
-
-//these two get the gravity from the java code
-void Java_sand_falling_opengl_MainActivity_sendYGrav(JNIEnv* env, jobject thiz, jfloat ygrav)
-{
-	gravy = ygrav;
-}
-void Java_sand_falling_opengl_MainActivity_sendXGrav(JNIEnv* env, jobject thiz, jfloat xgrav)
-{
-	gravx = -xgrav;
-}
-void Java_sand_falling_opengl_MainActivity_quickLoad(JNIEnv* env)
-{
-	loader(1);
-}
-void Java_sand_falling_opengl_MainActivity_quickSave(JNIEnv* env)
-{
-	saver(1);
-}
-
-/* Call to render the next GL frame */
 void Java_sand_falling_opengl_DemoRenderer_nativeRender(JNIEnv* env)
 {
 	appRender();
 }
 
-void Java_sand_falling_opengl_MainActivity_setup(JNIEnv* env, jobject thiz)
+/* Accelerometer stuff taken out for now
+//these two get the gravity from the java code
+void Java_sand_falling_opengl_MainActivity_setYGrav(JNIEnv* env, jobject thiz, jfloat ygrav)
 {
-	shouldClear = 1;
+	gravy = ygrav;
+}
+void Java_sand_falling_opengl_MainActivity_setXGrav(JNIEnv* env, jobject thiz, jfloat xgrav)
+{
+	gravx = -xgrav;
+}
+*/
+void Java_sand_falling_opengl_MainActivity_quickLoad(JNIEnv* env)
+{
+	load(QUICK_LOAD);
+}
+void Java_sand_falling_opengl_MainActivity_quickSave(JNIEnv* env)
+{
+	save(QUICK_SAVE);
+}
+
+void Java_sand_falling_opengl_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
+{
+	shouldClear = TRUE;
 }
 
 void Java_sand_falling_opengl_MainActivity_pause(JNIEnv* env, jobject thiz)
 {
-	play = 0;
+	play = FALSE;
 }
 void Java_sand_falling_opengl_MainActivity_play(JNIEnv* env, jobject thiz)
 {
-	play = 1;
+	play = TRUE;
 }
 int Java_sand_falling_opengl_MainActivity_getPlayState(JNIEnv* env, jobject thiz)
 {
@@ -108,26 +103,20 @@ void Java_sand_falling_opengl_MainActivity_setDimensions(JNIEnv* env, jobject th
 	screenHeight = height - height%2;
 }
 
-void Java_sand_falling_opengl_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint colorcode)
+void Java_sand_falling_opengl_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint redValue, jint greenValue, jint blueValue)
 {
-	if (colorcode == 0)
-	{
-		red[3] = 0; //3 is eraser
-		blue[3] = 0;
-		green[3] = 0;
-		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "color");
-		rsetup();
-	}
-	else if (colorcode == 1)
-	{
-		red[3] = 255;
-		blue[3] = 255;
-		green[3] = 255;
-		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "color");
-		rsetup();
-	}
-	loader(1);
+	//Set the eraser color to the background color, used as the reference whenever background color is needed
+	red[3] = redValue;
+	green[3] = greenValue;
+	blue[3] = blueValue;
+	
+	//Call setup again
+	setup();
+
+	//Reload
+	load(QUICK_LOAD);
 }
+/* Custom element stuff that will be changed
 void Java_sand_falling_opengl_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
 {
 	exploness[22] = explosiveness;
@@ -144,15 +133,16 @@ void Java_sand_falling_opengl_MainActivity_setBlue(JNIEnv* env, jobject thiz, ji
 {
 	blue[22] = blueness;
 }
-
 void Java_sand_falling_opengl_MainActivity_setDensity(JNIEnv* env, jobject thiz, jint jdensity)
 {
 	density[22] = jdensity;
 }
+*/
 void Java_sand_falling_opengl_MainActivity_setFlip(JNIEnv* env, jobject thiz, jint jflipped)
 {
 	flipped = jflipped;
 }
+/* Custom element stuff that will be changed
 void Java_sand_falling_opengl_MainActivity_setCollision(JNIEnv* env, jobject thiz, jint custnum, jint elementnumb, jint colspot, jint colnum)
 {
 	if (custnum == 1)
@@ -185,19 +175,16 @@ void Java_sand_falling_opengl_MainActivity_setCollision(JNIEnv* env, jobject thi
 		fireburn[22] = 1;
 	}
 }
+*/
 
-void Java_sand_falling_opengl_MainActivity_setFingerState(JNIEnv* env, jobject thiz, jint fstate)
+void Java_sand_falling_opengl_MainActivity_setFingerState(JNIEnv* env, jobject thiz, jint state)
 {
-	fingerState = fstate;
-	if (fingerState == 1)
-	{
-		mouseX = -1; //To prevent drawing from the previous point, invalidate the mouse pointer
-	}
-	return;
+	fingerState = state;
+	//To prevent drawing from the previous point, invalidate the mouse pointer
+	mouseX = -1;
 }
 void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject thiz, jint xpos, jint ypos)
 {
-	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp start");
 	//Set the mouse position and draw lines if needed
 	if (mouseX != -1)
 	{
@@ -211,7 +198,7 @@ void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject
 		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
 
 
-		if (distance > 0 && celement != 16) //if it's not the same place and not wind
+		if (distance > 0 && cElement != 16) //if it's not the same place and not wind
 		{
 			float dx = (float)changeX / (float)distance; // change divided by distance
 			float dy = (float)changeY / (float)distance;
@@ -229,8 +216,6 @@ void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject
 	}
 	mouseX = xpos;
 	mouseY = ypos;
-	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp end");
-	return;
 }
 void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject thiz)
 {
@@ -239,23 +224,25 @@ void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject t
 }
 void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
 {
-	celement = jelement;
+	cElement = jelement;
 	return;
 }
 int Java_sand_falling_opengl_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
-	return celement;
+	return cElement;
 }
-void Java_sand_falling_opengl_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jint jsize)
+void Java_sand_falling_opengl_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jint jbrushSize)
 {
-	size = jsize;
+	brushSize = jbrushSize;
 	return;
 }
+/* Acclerometer stuff going back in later
 void Java_sand_falling_opengl_MainActivity_setAccelOnOff(JNIEnv* env, jobject thiz, jint state)
 {
 	accelcon = state;
 	return;
 }
+*/
 void Java_sand_falling_opengl_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 {
 	if (zoom == ZOOMED_IN)
@@ -275,12 +262,12 @@ void Java_sand_falling_opengl_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 }
 char Java_sand_falling_opengl_MainActivity_save(JNIEnv* env, jobject thiz)
 {
-	return saver(NORMAL_SAVE); //Do a normal save
+	return save(NORMAL_SAVE);
 }
 
 char Java_sand_falling_opengl_MainActivity_load(JNIEnv* env, jobject thiz)
 {
-	return loader(NORMAL_LOAD); // call the load function, normal load
+	return load(NORMAL_LOAD);
 }
 
 char Java_sand_falling_opengl_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
@@ -288,6 +275,7 @@ char Java_sand_falling_opengl_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
 	return loadDemoFile();
 }
 
+/* Network stuff not included for now
 void Java_sand_falling_opengl_MainActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)
 {
 	int i; //Counter variable
@@ -313,7 +301,6 @@ void Java_sand_falling_opengl_MainActivity_setPassword(JNIEnv *env, jobject thiz
 	//Free the created byte array
 	free(minut1);
 }
-
 void Java_sand_falling_opengl_MainActivity_setUsername(JNIEnv *env, jobject thiz, jbyteArray minut)
 {
 	int i; //Counter variable
@@ -339,7 +326,6 @@ void Java_sand_falling_opengl_MainActivity_setUsername(JNIEnv *env, jobject thiz
 	//Free the created byte array
 	free(minut1);
 }
-
 int Java_sand_falling_opengl_MainActivity_login(JNIEnv *env, jobject thiz)
 {
 	buildbuffer(3);
@@ -361,8 +347,8 @@ int Java_sand_falling_opengl_MainActivity_register(JNIEnv *env, jobject thiz)
 
 	return 0;
 }
-
 char* Java_sand_falling_opengl_MainActivity_viewErr (JNIEnv *env, jobject thiz)
 {
 	return error;
 }
+*/
