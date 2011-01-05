@@ -38,8 +38,17 @@ import android.view.Window;
 
 public class MainActivity extends Activity
 {
+	//Constants for zoom
 	public static final int ZOOMED_IN = 0;
 	public static final int ZOOMED_OUT = 1;
+	
+	//Constants for dialogue ids
+	private static final int INTRO_MESSAGE = 1;
+	private static final int ELEMENT_PICKER = 2;
+	private static final int BRUSH_SIZE_PICKER = 3;
+	
+	//Constant for the eraser element
+	public static final int ERASER_ELEMENT = 3;
 	
 	static CharSequence[] elementslist;
 
@@ -212,7 +221,7 @@ public class MainActivity extends Activity
 
 		if (layout_ui)
 		{
-			// This is where I set the activity for Control so that I can call showDialog() from it
+			//This is where I set the activity for Control so that I can call showDialog() from it
 			control.setActivity(this);
 			//Set instance of activity for MenuBar also
 			menu_bar.setActivity(this);
@@ -226,10 +235,10 @@ public class MainActivity extends Activity
 
 	protected Dialog onCreateDialog(int id) //This is called when showDialog is called
 	{
-		if (id == 1) // The first dialog - the intro message
+		if (id == INTRO_MESSAGE) // The first dialog - the intro message
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.App_Intro).setCancelable(false).setPositiveButton("Exit", new DialogInterface.OnClickListener()
+			builder.setMessage(R.string.app_intro).setCancelable(false).setPositiveButton(R.string.exit, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int id)
 				{
@@ -237,7 +246,7 @@ public class MainActivity extends Activity
 					// closes
 					// program
 				}
-			}).setNegativeButton("Proceed", new DialogInterface.OnClickListener()
+			}).setNegativeButton(R.string.proceed, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int id)
 				{
@@ -248,18 +257,17 @@ public class MainActivity extends Activity
 			AlertDialog alert = builder.create(); // Actually create the message
 			return alert; // Return the object created
 		}
-		else if (id == 2) // Element picker
+		else if (id == ELEMENT_PICKER) // Element picker
 		{
- 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
-			builder.setTitle("Pick an element"); // Set the title
+			builder.setTitle(R.string.element_picker); // Set the title
 			builder.setItems(elementslist, new DialogInterface.OnClickListener() //Create the list
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
-					if (MenuBar.eraser_on == true)
+					if (MenuBar.eraser_on)
 					{
-							MenuBar.seteraseroff();
+							MenuBar.setEraserOff();
 					}
 
 					if (item == 0) // Sand
@@ -360,10 +368,10 @@ public class MainActivity extends Activity
 
 			return alert; // Return handle
 		}
-		else if (id == 3)
+		else if (id == BRUSH_SIZE_PICKER)
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
-			builder.setTitle("Brush Size Picker");
+			builder.setTitle(R.string.brush_size_picker);
 			builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int item)
@@ -380,7 +388,7 @@ public class MainActivity extends Activity
 
 	public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
 	{
-		// Create an inflater to "inflate" the menu already defined in res/menu/options_menu.xml
+		// Create an inflater to inflate the menu already defined in res/menu/options_menu.xml
 		// This seems to be a bit faster at loading the menu, and easier to modify
 		MenuInflater inflater = getMenuInflater();
 		if (layout_ui)
@@ -413,7 +421,7 @@ public class MainActivity extends Activity
 				return true;
 			case R.id.clear_screen:
 	
-				setup();
+				clearScreen();
 	
 				return true;
 			case R.id.play_pause:
@@ -474,13 +482,11 @@ public class MainActivity extends Activity
 		return size == ZOOMED_IN;
 	}
 
-	// JNI functions
+	//JNI functions
 	public native static int save();
 	public native static int loadDemo();
 	public native static int load();
-	public native static void setup(); //Set up arrays and such
-	public native static void setFingerState(int fingerstate); //Sets finger up or down, 1 is down
-	public native static void setMouseLocation(int xpos, int ypos); //Sets x mouse and y mouse
+	public native static void clearScreen(); //Set up arrays and such
 	public native static void tester();
 	public native static void play(); // Jni play
 	public native static void pause(); // Jni pause
@@ -499,11 +505,6 @@ public class MainActivity extends Activity
 	public native static void setDimensions(int width, int height);
 	public native static void setAccelOnOff(int state);
 	public native static void setCollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
-	public native static void setExplosiveness(int explosiveness);
-	public native static void setRed(int redness);
-	public native static void setBlue(int blueness);
-	public native static void setGreen(int greenness);
-	public native static void setDensity( int jdensity );
 	public native static void setUsername( char[] username);
 	public native static void setPassword ( char[] password);
 	public native static boolean login();

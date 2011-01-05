@@ -9,7 +9,7 @@
 
 #ifndef APP_H_INCLUDED
 #define APP_H_INCLUDED
-
+MAX_POINTS
 
 #ifdef __cplusplus
 extern "C" {
@@ -18,24 +18,29 @@ extern "C" {
 //Include the global macros
 #include "macros.h"
 
-//The simple framework expects the application code to define these functions.
-extern void appInit();
-extern void appDeinit();
-extern void appRender();
-
-/* Value is non-zero when application is alive, and 0 when it is closing.
- * Defined by the application framework.
+/*
+ * FUNCTIONS
  */
-extern int gAppAlive;
+
+int getIndex(int x, int y);
+
+/*
+ * VARIABLES
+ */
+
+//extern int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-extern int celement;
+extern int cElement;
 //Current point during processing
-extern int cpoint;
+extern int cPoint;
 //Play state
 extern int play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-extern int size;
+extern int brushSize;
+
+//The number of elements available
+extern int numElements;
 
 //Array for bitmap drawing
 extern unsigned char colors[];
@@ -61,21 +66,19 @@ extern short int yvel[];
 extern char element[];
 //Frozen state
 extern char frozen[];
-//Spawn type
-extern char spawn[];
 
-//RGB properties
-extern unsigned char red[];
-extern unsigned char green[];
-extern unsigned char blue[];
-//Fall velocity property
-extern int fallVel[];
-//Density property - 1 - 10
-extern int density[];
-//State property - solid = 0, liquid = 1, gaseous = 2
-extern int state[];
-//Special property - indexed special effects occurring every fram
-extern int special[];
+//RGB properties (variable arrays)
+extern unsigned char *red;
+extern unsigned char *green;
+extern unsigned char *blue;
+//Fall velocity property (a variable-size array)
+extern int *fallVel;
+//Density property - 1 - 10 (a variable-size array)
+extern int *density;
+//State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
+extern int *state;
+//Special property - indexed special effects occurring every frame (a variable-size array)
+extern int *special;
 //Special value - a number used in special effects (if any)
 extern int specialVal[];
 //Heat value - 1 - 10
@@ -89,7 +92,7 @@ extern int set[];
 //Index available state
 extern int avail[];
 
-//Location in avail array
+//Points to the index AFTER the top of the stack
 extern int loq;
 //Zoom value
 extern int zoom;
@@ -115,8 +118,11 @@ extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
 
-//A map of all the pixels
-extern int allcoords[][];
+//Finger state
+extern int fingerState;
+
+//A map of all the points (a two-dimensional variable-size array)
+extern int *allcoords;
 
 //Mouse positions
 extern int mouseX;
@@ -124,8 +130,6 @@ extern int mouseY;
 //Old mouse positions
 extern int lastMouseX;
 extern int lastMouseY;
-//Finger down state
-extern int fingerState;
 
 /*Network stuff taken out for now
 //Buffer building variables

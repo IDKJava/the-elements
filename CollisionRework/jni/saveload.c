@@ -8,7 +8,7 @@
 
 #include "saveload.h"
 
-char saver(int type)
+char save(int type)
 {
 	FILE *fp;
 	if (type == NORMAL_SAVE)
@@ -52,7 +52,7 @@ char saver(int type)
 	}
 }
 
-char loader(int type)
+char load(int type)
 {
 	FILE *fp;
 	if (type == NORMAL_LOAD)
@@ -68,7 +68,7 @@ char loader(int type)
 		fp = fopen(DEMO_SAVE_FILE, "r");
 	}
 
-	rsetup();
+	setup();
 	int xCoordinate;
 	int yCoordinate;
 	int loadElement;
@@ -98,5 +98,12 @@ void removeQuicksave(void)
 
 char loadDemoFile()
 {
-	return loader(DEMO_LOAD);
+	return load(DEMO_LOAD);
 }
+
+//TODO:
+void saveCustomElement(CustomElement createdCustomElement) {}
+void loadCustomElements(void) {}
+void saveAtmosphere(Atmosphere createAtmosphere) {}
+void loadAtmosphere(void) {}
+int getCustomElementsNumber(void) {}

@@ -14,6 +14,9 @@
 //Include the global macros
 #include "macros.h"
 
-void rsetup(void);
+//Set up the workspace
+void setup(void);
+//Set up the variable sized arrays
+void arraySetup(void);
 
 #endif

@@ -43,16 +43,13 @@ public class MenuBar extends LinearLayout
 		activity = act;
 	}
 	
-	//Testing
-	public void hi()
-	{}
-	public static void seteraseroff()
+	//Set the eraser to the off position
+	public static void setEraserOff()
 	{
-		eraser_button.setImageResource(R.drawable.eraser);
-		
 		eraser_on = false;
+		eraser_button.setImageResource(R.drawable.eraser);
+			
 		MainActivity.setElement(temp_element);
-		
 	}
 
 	//Called when it's finished inflating the XML layout
@@ -78,7 +75,6 @@ public class MenuBar extends LinearLayout
 					//If it was on eraser, swap back to regular element
 					if(eraser_on)
 					{
-						eraser_on = false;
 						MainActivity.setElement(temp_element);
 						
 						//Change the button to look unclicked
@@ -87,13 +83,13 @@ public class MenuBar extends LinearLayout
 					//If it is on a normal element, go to eraser and store that element for later
 					else
 					{
-						eraser_on = true;
 						temp_element = MainActivity.getElement();
-						MainActivity.setElement(3);
+						MainActivity.setElement(MainActivity.ERASER_ELEMENT);
 						
 						//Change the button to look clicked
 						eraser_button.setImageResource(R.drawable.eraser_on);
 					}
+					eraser_on = !eraser_on;
 				}
 			}
 		);

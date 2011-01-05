@@ -10,27 +10,36 @@
 //Include the server functions
 #include "server.h"
 
-//The simple framework expects the application code to define these functions.
-void appInit();
-void appDeinit();
-void appRender();
-
-/* Value is non-zero when application is alive, and 0 when it is closing.
- * Defined by the application framework.
+/*
+ * FUNCTIONS
  */
-int gAppAlive;
+
+//Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
+int getIndex(int x, int y)
+{
+	return x*workWidth + y;
+}
+
+/*
+ * VARIABLES
+ */
+
+//int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-int celement = 0;
+int cElement = 0;
 //Current point during processing
-int cpoint = 0;
+int cPoint = 0;
 //Play state
 int play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-int size = DEFAULT_BRUSH_SIZE;
+int brushSize = DEFAULT_BRUSH_SIZE;
 
-//Array for bitmap drawing
-unsigned char colors[];
+//The number of elements available
+int numElements;
+
+//Array for bitmap drawing (a variable-size array)
+unsigned char *colors;
 
 //Screen dimensions
 int screenWidth;
@@ -40,48 +49,46 @@ int workWidth;
 int workHeight;
 
 //Coordinates
-float x[];
-float y[];
+float x[MAX_POINTS];
+float y[MAX_POINTS];
 //Old coordinates (for collision resolving)
-short int oldx[];
-short int oldy[];
+short int oldx[MAX_POINTS];
+short int oldy[MAX_POINTS];
 //Velocities
-short int xvel[];
-short int yvel[];
+short int xvel[MAX_POINTS];
+short int yvel[MAX_POINTS];
 
 //Element type
-char element[];
+char element[MAX_POINTS];
 //Frozen state
-char frozen[];
-//Spawn type
-char spawn[];
+char frozen[MAX_POINTS];
 
-//RGB properties
-unsigned char red[];
-unsigned char green[];
-unsigned char blue[];
-//Fall velocity property
-int fallVel[];
-//Density property - 1 - 10
-int density[];
-//State property - solid = 0, liquid = 1, gaseous = 2
-int state[];
-//Special property - indexed special effects occurring every fram
-int special[];
+//RGB properties (variable arrays)
+unsigned char *red;
+unsigned char *green;
+unsigned char *blue;
+//Fall velocity property (a variable-size array)
+int *fallVel;
+//Density property - 1 - 10 (a variable-size array)
+int *density;
+//State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
+int *state;
+//Special property - indexed special effects occurring every frame (a variable-size array)
+int *special;
 //Special value - a number used in special effects (if any)
-int specialVal[];
+int specialVal[MAX_POINTS];
 //Heat value - 1 - 10
-int heat[];
+int heat[MAX_POINTS];
 
-//Collision matrix
-int collision[][];
+//Collision matrix (a two-dimensional variable-size array)
+int *collision;
 
 //Index set state
-int set[];
+int set[MAX_POINTS];
 //Index available state
-int avail[];
+int avail[MAX_POINTS];
 
-//Location in avail array
+//Points to the index AFTER the top of the stack
 int loq;
 //Zoom value
 int zoom;
@@ -102,8 +109,11 @@ char shouldClear = FALSE;
 //Set when a mouse update is requested, unset when udpated
 char shouldUpdateMouse = FALSE;
 
-//A map of all the pixelsmaxx
-int allcoords[][];
+//Finger state
+int fingerState = FINGER_UP;
+
+//A map of all the points (a two-dimensional variable-size array)
+int *allcoords;
 
 //Mouse positions
 int mouseX;
@@ -111,8 +121,6 @@ int mouseY;
 //Old mouse positions
 int lastMouseX;
 int lastMouseY;
-//Finger down state
-int fingerState;
 
 /*Network stuff taken out for now
 //Buffer building variables

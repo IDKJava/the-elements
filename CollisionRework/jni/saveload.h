@@ -10,10 +10,15 @@
 #ifndef SAVELOAD_H_INCLUDED
 #define SAVELOAD_H_INCLUDED
 
-//Define the file locations so that they can be easily changed
-#define SAVE_FILE "/sdcard/elementworks/save.txt"
-#define QUICK_SAVE_FILE "/sdcard/elementworks/quicksave.txt"
-#define DEMO_SAVE_FILE "/sdcard/elementworks/save2.txt"
+//File/folder locations
+#define ROOT_FOLDER "/sdcard/thelements/"
+#define SAVES_FOLDER "/sdcard/thelements/saves/"
+#define CUSTOM_ELEMENTS_FOLDER "/sdcard/thelements/elements/"
+#define ATMOSPHERES_FOLDER "/sdcard/thelements/atmospheres/"
+//File extensions
+#define SAVE_EXTENSION ".sav"
+#define ELEMENT_EXTENSION ".ele"
+#define ATMOSPHERE_EXTENSION ".atm"
 
 //Include the FILE type
 #include <stdio.h>
@@ -26,9 +31,14 @@
 //Include the initializer function
 #include "setup.h"
 
-char saver(int type);
-char loader(int type);
+char save(int type);
+char load(int type);
 void removeQuicksave(void);
 char loadDemoFile(void);
+void saveCustomElement(CustomElement createdCustomElement);
+void loadCustomElements(void);
+void saveAtmosphere(Atmosphere createAtmosphere);
+void loadAtmosphere(void);
+int getCustomElementsNumber(void);
 
 #endif

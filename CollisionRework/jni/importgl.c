@@ -1,9 +1,4 @@
-/* San Angeles Observation OpenGL ES version example
- * Copyright 2004-2005 Jetro Lauha
- * All rights reserved.
- * Web: http://iki.fi/jetro/
- *
- * This source is free software; you can redistribute it and/or
+/* This source is free software; you can redistribute it and/or
  * modify it under the terms of EITHER:
  *   (1) The GNU Lesser General Public License as published by the Free
  *       Software Foundation; either version 2.1 of the License, or (at
@@ -17,9 +12,6 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the files
  * LICENSE-LGPL.txt and LICENSE-BSD.txt for more details.
- *
- * $Id: importgl.c,v 1.4 2005/02/08 18:42:55 tonic Exp $
- * $Revision: 1.4 $
  */
 
 #undef WIN32

@@ -12,18 +12,17 @@ import android.view.MotionEvent;
 public class SandView extends GLSurfaceView
 {
 	private static final int FINGER_DOWN = 1;
-	private static final int FINGER_UP = 2;
+	private static final int FINGER_UP = 0;
 
-    private DemoRenderer mRenderer; //Declare the renderer
+    private SandViewRenderer mRenderer; //Declare the renderer
 	
     //Constructor
     public SandView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-    	mRenderer = new DemoRenderer(); //Set up the Renderer for the View
-        setRenderer(mRenderer); //Associate it with this view
-        
         MainActivity.setDimensions(getWidth(), getHeight());
+    	mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
+        setRenderer(mRenderer); //Associate it with this view
     }
 
     //When a touch screen event occurs
@@ -32,30 +31,33 @@ public class SandView extends GLSurfaceView
     	//Set the touch state in JNI
     	if (event.getAction() == MotionEvent.ACTION_DOWN)
     	{
-			MainActivity.setFingerState(FINGER_DOWN);
+			setFingerState(FINGER_DOWN);
     	}
-    	else if (event.getAction() == MotionEvent.ACTION_UP)
+    	else if(event.getAction() == MotionEvent.ACTION_UP)
     	{
-    		MainActivity.setFingerState(FINGER_UP);
+    		setFingerState(FINGER_UP);
     	}
     	
     	//Set the touch position in JNI
     	if(MainActivity.zoomedIn())
     	{
     		//Both x and y are halved because it needs to be zoomed in
-    		MainActivity.setMouseLocation((int)event.getX()/2, (int)event.getY()/2);
+    		setMouseLocation((int)event.getX()/2, (int)event.getY()/2);
     	}
     	else
     	{
     		//X and y are normal, because it is zoomed out
-    		MainActivity.setMouseLocation((int)event.getX(), (int)event.getY());	
+    		setMouseLocation((int)event.getX(), (int)event.getY());	
     	}
     	
     	return true;
     }
+    
+    private static native void setFingerState(int state);
+    private static native void setMouseLocation(int xpos, int ypos);
 }
 
-class DemoRenderer implements GLSurfaceView.Renderer
+class SandViewRenderer implements GLSurfaceView.Renderer
 {
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {

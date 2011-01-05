@@ -29,5 +29,9 @@
     <string name="greentext">Greeness:</string>
     <string name="densitytext">Density:</string>
     <string name="reaction_prompt">Select Reaction Type?</string>
-<string name="App_Intro">Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.</string>
+<string name="app_intro">Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.</string>
+<string name="brush_size_picker">Brush Size Picker</string>
+<string name="element_picker">Palette</string>
+<string name="proceed">Proceed</string>
+<string name="exit">Exit</string>
 </resources>
