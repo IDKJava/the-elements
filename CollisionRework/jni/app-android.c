@@ -101,6 +101,13 @@ int Java_sand_falling_opengl_MainActivity_getPlayState(JNIEnv* env, jobject thiz
 	return play;
 }
 
+void Java_sand_falling_opengl_MainActivity_setDimensions(JNIEnv* env, jobject thiz, jint width, jint height)
+{
+	//Decrease by 1 pixel if not divisible by two
+	screenWidth = width - width%2;
+	screenHeight = height - height%2;
+}
+
 void Java_sand_falling_opengl_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint colorcode)
 {
 	if (colorcode == 0)
@@ -181,49 +188,47 @@ void Java_sand_falling_opengl_MainActivity_setCollision(JNIEnv* env, jobject thi
 
 void Java_sand_falling_opengl_MainActivity_setFingerState(JNIEnv* env, jobject thiz, jint fstate)
 {
-	//setting finger up or down from onTouch
-
-	fd = fstate;
-	if (fd == 1)
+	fingerState = fstate;
+	if (fingerState == 1)
 	{
-		xm = -1; // to prevent drawing from the previous point, invalidate the mouse pointer
+		mouseX = -1; //To prevent drawing from the previous point, invalidate the mouse pointer
 	}
 	return;
 }
 void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject thiz, jint xpos, jint ypos)
 {
 	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp start");
-	//setting the mouse position when given stuff from jdk
-	if (xm != -1)
+	//Set the mouse position and draw lines if needed
+	if (mouseX != -1)
 	{
-		lmx = xm;
-		lmy = ym;
+		lastMouseX = mouseX;
+		lastMouseY = mouseY;
 
-		int xc = xpos - lmx; //change in x (delta x)
-		int yc = ypos - lmy; //change in y (delta y)
-
-
-		int dist = sqrt(xc * xc + yc * yc); //distance between two points
+		int changeX = xpos - lastMouseX; //change in x (delta x)
+		int changeY = ypos - lastMouseY; //change in y (delta y)
 
 
-		if (dist > 0 && celement != 16) //if it's not the same place and not wind
+		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
+
+
+		if (distance > 0 && celement != 16) //if it's not the same place and not wind
 		{
-			float xd = (float)xc / (float)dist; // change divided by distance
-			float yd = (float)yc / (float)dist;
+			float dx = (float)changeX / (float)distance; // change divided by distance
+			float dy = (float)changeY / (float)distance;
 			int counter;
 			int oldplay = play;
-			play = 0;
-			for (counter = 0; counter <= dist; counter++)
+			play = FALSE;
+			for (counter = 0; counter <= distance; counter++)
 			{
-				ym = yd * counter + lmy;
-				xm = xd * counter + lmx;
+				mouseY = dy * counter + lastMouseY;
+				mouseX = dx * counter + lastMouseX;
 				UpdateView();
 			}
 			play = oldplay;
 		}
 	}
-	xm = xpos;
-	ym = ypos;
+	mouseX = xpos;
+	mouseY = ypos;
 	//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "mp end");
 	return;
 }
@@ -253,32 +258,34 @@ void Java_sand_falling_opengl_MainActivity_setAccelOnOff(JNIEnv* env, jobject th
 }
 void Java_sand_falling_opengl_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 {
-	if (screensize == 0) //not zoomed in, *2 to zoom out
+	if (zoom == ZOOMED_IN)
 	{
-		screensize = 1;
-		maxx = maxx * 2;
-		maxy = maxy * 2;
+		//Multiply by two to zoom out
+		zoom = ZOOMED_OUT;
+		workWidth = workWidth * 2;
+		workHeight = workWidth * 2;
 	}
 	else
 	{
-		screensize = 0; //zoomed in
-		maxx = maxx / 2;
-		maxy = maxy / 2;
+		//Divide by two to zoom in
+		zoom = ZOOMED_IN;
+		workWidth = workWidth / 2;
+		workHeight = workHeight / 2;
 	}
 }
-int Java_sand_falling_opengl_MainActivity_save(JNIEnv* env, jobject thiz)
+char Java_sand_falling_opengl_MainActivity_save(JNIEnv* env, jobject thiz)
 {
-	return saver(0); //Do a normal save
+	return saver(NORMAL_SAVE); //Do a normal save
 }
 
-int Java_sand_falling_opengl_MainActivity_load(JNIEnv* env, jobject thiz)
+char Java_sand_falling_opengl_MainActivity_load(JNIEnv* env, jobject thiz)
 {
-	return loader(0); // call the load function, normal load
+	return loader(NORMAL_LOAD); // call the load function, normal load
 }
 
-void Java_sand_falling_opengl_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
+char Java_sand_falling_opengl_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
 {
-	loadDemoFile();
+	return loadDemoFile();
 }
 
 void Java_sand_falling_opengl_MainActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)

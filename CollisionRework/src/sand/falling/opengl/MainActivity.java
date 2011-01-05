@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -37,15 +38,14 @@ import android.view.Window;
 
 public class MainActivity extends Activity
 {
-	public static final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4", "C4++", "Fuse", "Destructible Wall", "Drag", "Acid", "Steam", "Salt", "Salt Water", "Glass", "Custom Element", "Mud"};
-	static final CharSequence[] brushlist = {"1", "2", "4", "8", "16", "32"};
+	public static final int ZOOMED_IN = 0;
+	public static final int ZOOMED_OUT = 1;
+	
+	static CharSequence[] elementslist;
 
-	static final int maxy = 414; // 454 for g1, 815 for droid
-	static final int maxx = 319; // 319 for g1, 479 for droid
-	static public boolean play = true;
-	static public int speed = 1;
-	static public int skip = 1;
-	static public int size = 0;
+	public static boolean play = true;
+	public static int speed = 1;
+	public static int size = ZOOMED_IN; //Zoomed in or not
 
 	private SensorManager mSensorManager;
 
@@ -100,8 +100,15 @@ public class MainActivity extends Activity
 		control = (Control) findViewById(R.id.control);
 
 		PreferencesFromCode.setScreenOnOff(this); //Finds out to keep screen on or off
-
-		CustomMaker.loadCustom(); //Load the custom elements
+		
+		//Set up the elements list
+		Resources res = getResources();
+		elementslist = res.getTextArray(R.array.elements_list);
+		
+		//Load the custom elements
+		CustomMaker.loadCustom();
+		
+		//Add custom elements to the elements list
 	}
 
 	private final SensorEventListener mySensorListener = new SensorEventListener()
@@ -120,7 +127,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		//Quicksave
+		//QuickSave
 		quickSave();
 		//Set the preferences to indicate paused
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -148,14 +155,11 @@ public class MainActivity extends Activity
 		{
 			//Load the save
 			quickLoad();
-			//Set the preferences to indicate unpaused
+			//Set the preferencWhen a tes to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
 			editor.commit();
 		}
-
-		//Set firstrun
-		boolean firstrun = settings.getBoolean("firstrun", true);
 		
 		//Input the correct save file (based on screen width)
 		InputStream in;
@@ -196,7 +200,7 @@ public class MainActivity extends Activity
 		}
 		
 		//If it's the first run, tell it to load the demo and unset firstrun
-		if (firstrun == true)
+		if (settings.getBoolean("firstrun", true))
 		{
 			loaddemov = true;
 			SharedPreferences.Editor editor = settings.edit();
@@ -360,7 +364,7 @@ public class MainActivity extends Activity
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
 			builder.setTitle("Brush Size Picker");
-			builder.setItems(brushlist, new DialogInterface.OnClickListener()
+			builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
@@ -463,6 +467,12 @@ public class MainActivity extends Activity
 		}
 		return false;
 	}
+	
+	//Check whether or not the game is zoomed in
+	public static boolean zoomedIn()
+	{
+		return size == ZOOMED_IN;
+	}
 
 	// JNI functions
 	public native static int save();
@@ -486,6 +496,7 @@ public class MainActivity extends Activity
 	public native static void clearQuickSave();
 	public native static void sendYGrav(float ygrav);
 	public native static void sendXGrav(float xgrav);
+	public native static void setDimensions(int width, int height);
 	public native static void setAccelOnOff(int state);
 	public native static void setCollision(int custnumber, int elementnumb, int collisionspot, int collisionnumber);
 	public native static void setExplosiveness(int explosiveness);

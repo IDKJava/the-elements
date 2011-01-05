@@ -18,7 +18,7 @@ extern "C" {
 //Include the global macros
 #include "macros.h"
 
-// The simple framework expects the application code to define these functions.
+//The simple framework expects the application code to define these functions.
 extern void appInit();
 extern void appDeinit();
 extern void appRender();
@@ -34,107 +34,117 @@ extern int celement;
 extern int cpoint;
 //Play state
 extern int play;
-//Size variable
+//Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
 extern int size;
 
 //Array for bitmap drawing
-extern unsigned char colors[TPixels*3]; // 3 bytes per pixel
+extern unsigned char colors[];
+
+//Screen dimensions
+extern int screenWidth;
+extern int screenHeight;
+//Workspace dimensions
+extern int workWidth;
+extern int workHeight;
 
 //Coordinates
-extern float x[TPoints];
-extern float y[TPoints];
+extern float x[];
+extern float y[];
 //Old coordinates (for collision resolving)
-extern short int oldx[TPoints];
-extern short int oldy[TPoints];
+extern short int oldx[];
+extern short int oldy[];
 //Velocities
-extern short int xvel[TPoints];
-extern short int yvel[TPoints];
+extern short int xvel[];
+extern short int yvel[];
 
 //Element type
-extern char element[TPoints];
+extern char element[];
 //Frozen state
-extern char frozen[TPoints];
+extern char frozen[];
 //Spawn type
-extern char spawn[TPoints];
+extern char spawn[];
 
 //RGB properties
-extern unsigned char red[TElements];
-extern unsigned char green[TElements];
-extern unsigned char blue[TElements];
+extern unsigned char red[];
+extern unsigned char green[];
+extern unsigned char blue[];
 //Fall velocity property
-extern int fallvel[TElements];
-//Density property
-extern int density[TElements];
-//Solid property
-extern int solid[TElements];
-//Growing property
-extern int growing[TElements];
-//Condensing property
-extern int condensing[TElements];
-//Fire-like burning property
-extern int fireburn[TElements];
-//Explosiveness property
-extern int exploness[TElements];
-
-extern char shouldClear;
-
-//Custom element collision data
-extern int colliseelement1[TCollision];
+extern int fallVel[];
+//Density property - 1 - 10
+extern int density[];
+//State property - solid = 0, liquid = 1, gaseous = 2
+extern int state[];
+//Special property - indexed special effects occurring every fram
+extern int special[];
+//Special value - a number used in special effects (if any)
+extern int specialVal[];
+//Heat value - 1 - 10
+extern int heat[];
 
 //Collision matrix
-extern int collision[TElements][TElements];
+extern int collision[][];
 
 //Index set state
-extern int set[TPoints];
+extern int set[];
 //Index available state
-extern int avail[TPoints];
+extern int avail[];
 
 //Location in avail array
 extern int loq;
 //Zoom value
-extern int screensize;
+extern int zoom;
 
+/* Accelerometer stuff being taken out for now
 //Gravity values
-extern float gravx;
-extern float gravy;
+float gravX;
+float gravY;
 
 //Accelerometer control state
-extern int accelcon;
+int accelcon;
 //Flipped state
-extern int flipped;
+int flipped;
+*/
+//Screen dimensions
+int screenWidth;
+int screenHeight;
+//Workspace dimensions
+int workWidth;
+int workHeight;
+//Set when a clear is requested, unset when cleared
+extern char shouldClear;
+//Set when a mouse update is requested, unset when udpated
+extern char shouldUpdateMouse;
 
-//The extent of the screen (what area to draw in)
-extern int maxx;
-extern int maxy;
-
-// A map of all the coordinates on the screen
-extern int allcoords[WIDTH][HEIGHT];
+//A map of all the pixels
+extern int allcoords[][];
 
 //Mouse positions
-extern int xm;  
-extern int ym;
+extern int mouseX;
+extern int mouseY;
 //Old mouse positions
-extern int lmx;
-extern int lmy;
+extern int lastMouseX;
+extern int lastMouseY;
 //Finger down state
-extern int fd;
+extern int fingerState;
 
+/*Network stuff taken out for now
 //Buffer building variables
-extern char username[8];
-extern char password[8];
-extern char userlength;
-extern char passlength;
-extern char buffer[ 1/*3 + 1 + (2 * TPoints * 4) + 200*/];
-extern int bufferlength;
+char username[8];
+char password[8];
+char userlength;
+char passlength;
+char buffer[3 + 1 + (2 * TPoints * 4) + 200];
+int bufferlength;
 
 //Error variable
-extern char* error;
+char* error;
 
 //Socket variables
-extern int sockfd; //The file descriptor for the socket
-extern int n; //Used in sending and recieving data
-extern struct sockaddr_in serv_addr; //The server address struct
-extern struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+int sockfd; //The file descriptor for the socket
+int n; //Used in sending and recieving data
+struct sockaddr_in serv_addr; //The server address struct
+struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+*/
 
 #ifdef __cplusplus
 }

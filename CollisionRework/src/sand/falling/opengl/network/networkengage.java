@@ -1,6 +1,6 @@
 package sand.falling.opengl.network;
 
-import sand.falling.opengl.Menu;
+import sand.falling.opengl.MenuActivity;
 import sand.falling.opengl.R;
 import android.app.Activity;
 import android.content.Intent;
@@ -55,7 +55,7 @@ public class networkengage extends Activity {
 			{
 				
 			//Start the main app activity
-				startActivity(new Intent(networkengage.this, Menu.class));
+				startActivity(new Intent(networkengage.this, MenuActivity.class));
 			
 			}
 		});
@@ -131,7 +131,7 @@ public class networkengage extends Activity {
 			{
 				
 			//Start the main app activity
-				startActivity(new Intent(networkengage.this, Menu.class));
+				startActivity(new Intent(networkengage.this, MenuActivity.class));
 			
 			}
 		});

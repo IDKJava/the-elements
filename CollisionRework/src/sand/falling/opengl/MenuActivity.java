@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.mobclix.android.sdk.MobclixAdView;
 import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
 
-public class Menu extends Activity
+public class MenuActivity extends Activity
 {
 	public static MobclixMMABannerXLAdView banner_adview;
 	public static Button start_game_button;
@@ -87,7 +87,7 @@ public class Menu extends Activity
 					if (System.currentTimeMillis() - stime >= 1000)
 					{
 					//Start the main app activity
-						startActivity(new Intent(Menu.this, Splash.class));
+						startActivity(new Intent(MenuActivity.this, SplashActivity.class));
 					}
 				}
 			}
@@ -123,7 +123,7 @@ public class Menu extends Activity
 				public void onClick(View v)
 				{
 					
-					startActivity(new Intent(Menu.this, networklogin.class)); //start login activity
+					startActivity(new Intent(MenuActivity.this, networklogin.class)); //start login activity
 					
 				}
 			}
@@ -135,7 +135,7 @@ public class Menu extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					 startActivity(new Intent(Menu.this, CustomMaker.class));
+					 startActivity(new Intent(MenuActivity.this, CustomMaker.class));
 				}
 			}
 		);

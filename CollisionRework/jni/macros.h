@@ -11,11 +11,23 @@
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
-#define TPoints 500000
-#define TElements 25
-#define TPixels 768*1024
-#define TCollision 28
-#define WIDTH 768
-#define HEIGHT 1024
+#define MAX_POINTS 500000
+#define BASE_ELEMENTS 25
+
+#define PLAY 1
+#define PAUSE 0
+
+#define DEFAULT_BRUSH_SIZE 4
+
+#define ZOOMED_IN 0
+#define ZOOMED_OUT 1
+
+#define TRUE 1
+#define FALSE 0
+
+#define NORMAL_SAVE 0
+#define QUICK_SAVE 1
+#define NORMAL_LOAD 0
+#define QUICK_LOAD 1
 
 #endif

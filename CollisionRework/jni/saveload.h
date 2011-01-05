@@ -26,9 +26,9 @@
 //Include the initializer function
 #include "setup.h"
 
-int saver(int type);
-int loader(int type);
+char saver(int type);
+char loader(int type);
 void removeQuicksave(void);
-int loadDemoFile(void);
+char loadDemoFile(void);
 
 #endif

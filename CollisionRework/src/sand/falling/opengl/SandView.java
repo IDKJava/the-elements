@@ -6,58 +6,53 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
+//import android.util.Log;
 import android.view.MotionEvent;
 
 public class SandView extends GLSurfaceView
 {
-	private static int fd; //Set the "finger down" variable
+	private static final int FINGER_DOWN = 1;
+	private static final int FINGER_UP = 2;
+
+    private DemoRenderer mRenderer; //Declare the renderer
 	
+    //Constructor
     public SandView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
     	mRenderer = new DemoRenderer(); //Set up the Renderer for the View
-        setRenderer(mRenderer); //Set it as the main
-        Log.v("DemoActivity", "SandView Constructor");
+        setRenderer(mRenderer); //Associate it with this view
         
+        MainActivity.setDimensions(getWidth(), getHeight());
     }
 
-    //When finger is held down, flood of events killing framerate, need to put in it's own thread at some point
-    //and then use the sleep tactic
-    public boolean onTouchEvent(final MotionEvent event) //Finger down
+    //When a touch screen event occurs
+    public boolean onTouchEvent(final MotionEvent event)
     {
-    	// Gets the mouse position
+    	//Set the touch state in JNI
     	if (event.getAction() == MotionEvent.ACTION_DOWN)
     	{
-			if (fd != 1) //if it has changed
-			{
-				MainActivity.setFingerState(1); //sets the finger state in jni
-    		}
-    		else
-    		{
-    			fd = 1;
-    		}
+			MainActivity.setFingerState(FINGER_DOWN);
     	}
     	else if (event.getAction() == MotionEvent.ACTION_UP)
     	{
-    		MainActivity.setFingerState(2);
+    		MainActivity.setFingerState(FINGER_UP);
     	}
     	
-    	if(MainActivity.size == 0)
+    	//Set the touch position in JNI
+    	if(MainActivity.zoomedIn())
     	{
     		//Both x and y are halved because it needs to be zoomed in
-    		MainActivity.setMouseLocation((int)event.getX()/2, (int)event.getY()/2); //sets the mouse position in jdk
+    		MainActivity.setMouseLocation((int)event.getX()/2, (int)event.getY()/2);
     	}
     	else
     	{
-    		//Not zoomed in
-    		MainActivity.setMouseLocation((int)event.getX(), (int)event.getY()); //sets the mouse position in jdk		
+    		//X and y are normal, because it is zoomed out
+    		MainActivity.setMouseLocation((int)event.getX(), (int)event.getY());	
     	}
     	
     	return true;
     }
-
-    DemoRenderer mRenderer; //Declare the renderer
 }
 
 class DemoRenderer implements GLSurfaceView.Renderer
@@ -69,7 +64,6 @@ class DemoRenderer implements GLSurfaceView.Renderer
 
     public void onSurfaceChanged(GL10 gl, int w, int h)
     {
-        //gl.glViewport(0, 0, w, h);
         nativeResize(w, h);
         if (MainActivity.loaddemov == true) //loads the demo from the sdcard on first run.
         {
