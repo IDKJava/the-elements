@@ -47,11 +47,15 @@ void setup()
 //Set up all the variable sized arrays
 void arraySetup()
 {
+	//Variables for special size and special value size, because these are variable-sized multidimensional arrays
+	
 	//Calculate the number of pixels
 	int points = workWidth * workHeight;
 
 	//TODO: Load custom elements
 	//Calculate numElements
+	//Calculate special size
+	//Calculate special value size
 	numElements = NUM_BASE_ELEMENTS; //Changed later
 
 	//Make sure everything is deallocated
@@ -63,6 +67,7 @@ void arraySetup()
 	free(density);
 	free(state);
 	free(special);
+	free(specialVal);
 	free(drawSolid);
 	free(inertia);
 	free(allCoords);
@@ -77,8 +82,23 @@ void arraySetup()
 	density = malloc(numElements * sizeof(int));
 	state = malloc(numElements * sizeof(int));
 	special = malloc(numElements * sizeof(int));
-	drawSolid = malloc(numElements * sizeof(int));
 	inertia = malloc(numElements * sizeof(int));
 
 	allCoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+	int i;
+	for(i = 0; i < numElements; i++)
+	{
+		if(i < NUM_BASE_ELEMENTS)
+		{
+			fallVel[i] = baseFallVel[i];
+			density[i] = baseDensity[i];
+			state[i] = baseState[i];
+			special[i] = baseSpecial[i];
+			inertia[i] = baseInertia[i];
+		}
+		else
+		{
+			//Gotta load the thing from the array, allocate the memory for it, and store the pointer here
+		}
+	}
 }
