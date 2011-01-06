@@ -10,92 +10,95 @@
 
 void UpdateView(void)
 {
+	//Clear
 	if (shouldClear)
 	{
+		//Clear and unset the flag
 		setup();
 		shouldClear = FALSE;
+		
+		//No need to do the rest of the update
+		return;
 	}
 	//Draw points
 	if (fingerState == FINGER_DOWN)
 	{
+		//Not sure why this if is here...
 		if (ym != 0)
 		{
-			int yc;
-			int xc;
-			for (yc = size; yc >= -size; yc--)
+			int dx, dy;
+			for (dy = size; dy >= -size; dy--)
 			{
-				for (xc = -size; xc <= size; xc++)
+				for (dx = -size; dx <= size; dx++)
 				{
-					if ((xc * xc) + (yc * yc) <= (size * size))
+					if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (size * size))
 					{
-						//Draw randomized for anything other than non-moving, Eraser, and Drag
-						if (!solid[celement] && celement != 16 && celement!= 3)
+						//Normal drawing
+						if (cElement >= 0)
 						{
-							if (rand() % 3 == 1 && xc + xm < maxx && xc + xm > 0 && yc + ym < maxy && yc + ym > 0 && allcoords[(int) (xc + xm)][(int) (yc + ym)] == -1)
+							//Draw it solid
+							if(drawSolid[cElement])
 							{
-								CreatePoint(xm + xc, ym + yc, celement);
+								if (dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allcoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								{
+									CreatePoint(xm + dx, ym + dy, celement);
+								}
 							}
-						}
-						//Draw fully for anything non-moving
-						else if (solid[celement])
-						{
-							if (xc + xm < maxx && xc + xm > 0 && yc + ym < maxy && yc + ym > 0 && allcoords[(int) (xc + xm)][(int) (yc + ym)] == -1)
+							//Draw it randomized
+							else
 							{
-								CreatePoint(xm + xc, ym + yc, celement);
+								if (rand() % 3 == 1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allcoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								{
+									CreatePoint(xm + dx, ym + dy, celement);
+								}
 							}
 						}
 						//Special Drag case
-						else if (celement == 16)
+						else if (cElement == DRAG_ELEMENT)
 						{
-							if (allcoords[lmx + xc][lmy + yc] != -1 && fallvel[element[allcoords[lmx + xc][lmy + yc]]] != 0 && xc + lmx < maxx && xc + lmx > 0 && yc + lmy < maxy && yc + lmy > 0)
+							if (allcoords[lmx + dx][lmy + dy] != -1 && fallvel[element[allcoords[lmx + dx][lmy + dy]]] != 0 && dx + lmx < maxx && dx + lmx > 0 && dy + lmy < maxy && dy + lmy > 0)
 							{
-								xvel[allcoords[lmx + xc][lmy + yc]] += (xm - lmx);
-								yvel[allcoords[lmx + xc][lmy + yc]] += (ym - lmy);
+								xvel[allcoords[lmx + dx][lmy + dy]] += (xm - lmx);
+								yvel[allcoords[lmx + dx][lmy + dy]] += (ym - lmy);
 							}
 						}
 						//Special Eraser case
-						else
+						else if (cElement == ERASER_ELEMENT
 						{
-							if (allcoords[(int) (xc + xm)][(int) (yc + ym)] != -1 && xc + xm < maxx && xc + xm > 0 && yc + ym < maxy && yc + ym > 0)
+							if (allcoords[(int) (dx + xm)][(int) (dy + ym)] != -1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0)
 							{
-								DeletePoint(allcoords[xm + xc][ym + yc]);
+								DeletePoint(allcoords[xm + dx][ym + dy]);
 							}
 						}
 					}
 				}
 			}
 		}
-
 	}
 
-	if (play == TRUE)
+	//Particles update
+	if (play)
 	{
 		int counter;
 		int rtop; //used to prevent bugs when fire reaches the top
 
-		int tempx, tempy, ox, oy; //For speed we're going to create temp variables to store stuff
-		int oelement; //these are also used to check to see if the element has changed to do stuff about freezing particles
+		int tempX, tempT, tempOldX, tempOldY; //For speed we're going to create temp variables to store stuff
+		int oldElement; //these are also used to check to see if the element has changed to do stuff about freezing particles
 
-		// Move the particles and do collisions
-		for (counter = 0; counter < TPoints; counter++)
+		//Physics update
+		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
 			//If the particle is set and unfrozen
 			if (set[counter] && frozen[counter] < 4)
 			{
-				//Random delete of fire
-				int random = rand();
-				if (element[counter] == 5 && ((random % 7) == 0))
-				{
-					DeletePoint(counter);
-					continue;
-				}
+				//TODO: Life property cycle
 
 				//Set the temp and old variables
-				oy = (int) y[counter];
-				ox = (int) x[counter];
-				oldy[counter] = oy;
-				oldx[counter] = ox;
-				oelement = element[counter];
+				tempOldX = (int) x[counter];
+				tempOldY = (int) y[counter];
+				oldX[counter] = tempOldX;
+				oldY[counter] = tempOldY;
+				oldElement = element[counter];
 
 				//If accel control, do yvel based on that
 				if ((int) gravy != 0 && accelcon)

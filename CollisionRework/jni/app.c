@@ -52,11 +52,11 @@ int workHeight;
 float x[MAX_POINTS];
 float y[MAX_POINTS];
 //Old coordinates (for collision resolving)
-short int oldx[MAX_POINTS];
-short int oldy[MAX_POINTS];
+short int oldX[MAX_POINTS];
+short int oldY[MAX_POINTS];
 //Velocities
-short int xvel[MAX_POINTS];
-short int yvel[MAX_POINTS];
+short int xVel[MAX_POINTS];
+short int yVel[MAX_POINTS];
 
 //Element type
 char element[MAX_POINTS];
@@ -75,6 +75,9 @@ int *density;
 int *state;
 //Special property - indexed special effects occurring every frame (a variable-size array)
 int *special;
+//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
+int *drawSolid;
+
 //Special value - a number used in special effects (if any)
 int specialVal[MAX_POINTS];
 //Heat value - 1 - 10
