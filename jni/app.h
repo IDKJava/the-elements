@@ -125,7 +125,7 @@ extern char shouldUpdateMouse;
 extern int fingerState;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern int *allcoords;
+extern int *allCoords;
 
 //Mouse positions
 extern int mouseX;

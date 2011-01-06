@@ -12,6 +12,7 @@ static unsigned int textureID;
 // Called from the app framework. is onSurfaceCreated
 void appInit()
 {
+	arraySetup();
 	glShadeModel(GL_FLAT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 	//glClearDepthf(1.0f);
