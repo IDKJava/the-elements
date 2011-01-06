@@ -63,7 +63,7 @@ void UpdateView(void)
 							}
 						}
 						//Special Eraser case
-						else if (cElement == ERASER_ELEMENT
+						else if (cElement == ERASER_ELEMENT)
 						{
 							if (allcoords[(int) (dx + xm)][(int) (dy + ym)] != -1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0)
 							{

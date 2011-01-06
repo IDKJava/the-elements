@@ -116,7 +116,7 @@ char shouldUpdateMouse = FALSE;
 int fingerState = FINGER_UP;
 
 //A map of all the points (a two-dimensional variable-size array)
-int *allcoords;
+int *allCoords;
 
 //Mouse positions
 int mouseX;

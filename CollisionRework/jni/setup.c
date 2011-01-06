@@ -54,6 +54,18 @@ void arraySetup()
 	//Calculate numElements
 	numElements = NUM_BASE_ELEMENTS; //Changed later
 
+	//Make sure everything is deallocated
+	free(colors);
+	free(red);
+	free(green);
+	free(blue);
+	free(fallVel);
+	free(density);
+	free(state);
+	free(special);
+	free(drawSolid);
+	free(allCoords);
+
 	//Allocate memory
 	colors = malloc(3 * points * sizeof(char));
 	red = malloc(points * sizeof(char));
@@ -66,5 +78,5 @@ void arraySetup()
 	special = malloc(numElements * sizeof(int));
 	drawSolid = malloc(numElements * sizeof(int));
 
-	allcoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+	allCoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 }
