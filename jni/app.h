@@ -56,11 +56,11 @@ extern int workHeight;
 extern float x[];
 extern float y[];
 //Old coordinates (for collision resolving)
-extern short int oldx[];
-extern short int oldy[];
+extern short int oldX[];
+extern short int oldY[];
 //Velocities
-extern short int xvel[];
-extern short int yvel[];
+extern short int xVel[];
+extern short int yVel[];
 
 //Element type
 extern char element[];
@@ -79,6 +79,9 @@ extern int *density;
 extern int *state;
 //Special property - indexed special effects occurring every frame (a variable-size array)
 extern int *special;
+//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
+extern int *drawSolid;
+
 //Special value - a number used in special effects (if any)
 extern int specialVal[];
 //Heat value - 1 - 10

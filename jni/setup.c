@@ -64,6 +64,7 @@ void arraySetup()
 	density = malloc(numElements * sizeof(int));
 	state = malloc(numElements * sizeof(int));
 	special = malloc(numElements * sizeof(int));
+	drawSolid = malloc(numElements * sizeof(int));
 
 	allcoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 }

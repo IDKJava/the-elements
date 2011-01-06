@@ -35,6 +35,9 @@
 #define FINGER_DOWN 1
 #define FINGER_UP 0
 
+#define ERASER_ELEMENT -1
+#define DRAG_ELEMENT -2
+
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
 
