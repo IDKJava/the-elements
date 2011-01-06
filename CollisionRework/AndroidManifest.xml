@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-sdk android:minSdkVersion="4" />
+    <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
     
     
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
