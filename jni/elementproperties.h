@@ -1,7 +1,7 @@
 /*
  * elementproperties.h
  * ----------------------------------------
- * Contains all the arrays that define the element properties.
+ * Declares all the arrays that define the element properties.
  * When adding a new element, you need to add it to all of
  * these arrays as well.
  *
@@ -9,261 +9,74 @@
  * 		-red
  * 		-green
  * 		-blue
+ *		-fallVel
+ *		-density
+ *		-state
+ *		-special
+ *		-specialVal
+ *		-inertia
  *
- *
+ * Elements list:
+ * ----Special----
+ *		0 = Spawn
+ *		1 = Drag
+ *		2 = Eraser
+ * ----Normal----
+ *		3 = Sand
+ *		4 = Water
+ *		5 = Steam
+ *		6 = Ice
+ *		7 = Wall
+ *		8 = Destructible Wall
+ *		9 = Plant
+ *		10 = Fire
+ *		11 = Magma
+ *		12 = Stone
+ *		13 = Oil
+ *		14 = C4
+ *		15 = C4++
+ *		16 = Fuse
+ *		17 = Acid
+ *		18 = Salt
+ *		19 = Salt-Water
+ *		20 = Glass
+ *		21 = Mud
+ *		22 = Generator
+ *		23 = Coal
+ * ----Add Elements Above----
  */
 
 //Include the global macros
 #include "macros.h"
 
 //Define the color of the element
-unsigned char red[] =   {255, 0,   157,   0,   0, 255, 200, 255, 255, 143, 204, 100, 255, 255, 135, 176,   0, 150, 220, 255,  50, 200,   0,  49, 255};
-unsigned char green[] = {213, 0,   157,   0, 255,   0, 200, 255, 255,  80,  51, 100, 255, 211,  25, 176,   0, 255, 220, 255, 100, 255, 213,  35, 213};
-unsigned char blue[] =  {85,  255, 157,   0,   0,   0, 255, 255, 255,  80,   0, 100, 143, 115,  30, 164,   0,  50, 255, 230, 200, 255,  85,   7,  85};
+extern unsigned char baseRed[];
+extern unsigned char baseGreen[];
+extern unsigned char baseBlue[];
 
-//Define each element's fall velocity
-int	fallvel[] =	{1, 1, 0, 0, 0, -1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, -1, 1, -1, 1, 1, 0, 1, 1, 1};
+//Define each base element's fall velocity
+extern int	fallVel[] =	{0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1};
 
-//collision data (LOAD FROM A FILE MAYBE?)
-//-1 -eraser stuff, shouldn't happen
-// 0 -solid solid
-// 1 -solid liquid
-// 2 -liquid solid -- DNE ANYMORE
-// 3 -liquid liquid
-// 4 -water plant
-// 5 -nonflammable fire
-// 6 -flammable fire
-// 7 -fire fire
-// 8 -ice water
-// 9 -fire ice
-//10 -hot ice
-//11 -oil hot
-//12 -magma water
-//13 -stone hot
-//14 -stone stone
-//15 -hot C4
-//16 -hot C4++
-//17 -magma destructable wall
-//18 -acid meltable
-//19 -acid water
-//20 -steam ice/water
-//21 -steam steam
-//22 -steam other
-//23 -water fire
-//24 -salt water
-//25 -salt ice
-//26 -salt-water plant
-//27 -sand-hot
+//Defines the density of each base element
+extern int baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10};
 
-//Array defining what element custom element 1 acts as in a collision with each element
-int colliseelement1[TCollision] =
-{
-		0, //Sand 0
-		0, //Water 1
-		0, //Wall 2
-		0, //Eraser 3
-		0, //Plant 4
-		0, //Fire 5
-		0, //Ice 6
-		0, //Generator 7
-		0, //Spawn 8
-		0, //Oil 9
-		0, //Magma 10
-		0, //Stone 11
-		0, //C4 12
-		0, //C++ 13
-		0, //Fuse 14
-		0, //Destructable Wall 15
-		0, //Wind 16
-		0, //Acid 17
-		0, //Steam 18
-		0, //Salt 19
-		0, //Salt-water 20
-		0, //Glass 21
-		0, //Custom 1 22
-		0, //Custom 2 23
-		0, //Custom 3 24
-};
+//Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
+extern int baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0};
 
-//Defines the density of each element
-int density[] =
-{
-		16, //Sand:
-		10, //Water:
-		30,	//Wall:
-		-1,	//Eraser:
-		15,	//Plant:
-		-1,	//Fire:
-		9,	//Ice:
-		30,	//Generator:
-		30,	//Spawn:
-		5,	//Oil:
-		15,	//Magma:
-		30,	//Stone:
-		30,	//C4:
-		30,	//C4++:
-		15,	//Fuse:
-		30,	//Wall, Destructible:
-		-1,	//Wind:
-		8,	//Acid:
-		1,	//Steam:
-		30,	//Salt:
-		11,	//Salt-Water:
-		30,	//Glass:
-		1,	//Custom 1:
-		16,	//Mud:
-		1,	//Custom 3:
-};
-//Is it solid (i.e. fallvel == 0)
-//As far as I can tell, it's not used yet, should be though
-int solid[] =
-{
-		0,	//Sand:
-		0,	//Water:
-		1,	//Wall:
-		0,	//Eraser:
-		1,	//Plant:
-		0,	//Fire:
-		0,	//Ice:
-		0,	//Generator:
-		0,	//Spawn:
-		0,	//Oil:
-		0,	//Magma:
-		0,	//Stone:
-		0,	//C4:
-		0,	//C4++:
-		1,	//Fuse:
-		1,	//Wall, Destructible:
-		0,	//Wind:
-		0,	//Acid:
-		0,	//Steam:
-		0,	//Salt:
-		0,	//Salt-Water:
-		0,	//Glass:
-		0,	//Custom 1:
-		0,	//Custom 2:
-		0,	//Custom 3:
-};
-//Does it grow
-//Might be used?  I can't remember
-int growing[] =
-{
-		0, //Sand:
-		0, //Water:
-		0, //Wall:
-		0, //Eraser:
-		0, //Plant: (0, because it has it's own special stuff)
-		0, //Fire:
-		1, //Ice:
-		0, //Generator:
-		0, //Spawn:
-		0, //Oil:
-		0, //Magma:
-		0, //Stone:
-		0, //C4:
-		0, //C4++:
-		0, //Fuse:
-		0, //Wall, Destructible:
-		0, //Wind:
-		0, //Acid:
-		0, //Steam:
-		0, //Salt:
-		0, //Salt-Water:
-		0, //Glass:
-		0, //Custom 1:
-		0, //Custom 2:
-		0, //Custom 3:
-};
+/*
+ * Specials list:
+ *	   -1 = None;
+ *		0 = Spawn particles; Element
+ *		1 = Break; Threshold velocity
+ *		2 = Grow; Food element
+ *		3 = Burn; Threshold
+ *		4 = Explode; Explosiveness
+ */
+//Defines the special for each base element
+extern int baseSpecial[] = {{0}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {1}, {2,3}, {-1}, {-1}, {-1}, {3,4}, {3,4}, {3,4}, {3}, {-1}, {-1}, {-1}, {1}, {-1}, {1}, {3}};
 
-//Does it condense
-//not implemented yet
-int condensing[] =
-{
-		-1, //Sand:
-		-1,	//Water:
-		-1,	//Wall:
-		-1,	//Eraser:
-		-1,	//Plant:
-		-1,	//Fire:
-		-1,	//Ice:
-		-1,	//Generator:
-		-1,	//Spawn:
-		-1,	//Oil:
-		-1,	//Magma:
-		-1,	//Stone:
-		-1,	//C4:
-		-1,	//C4++:
-		-1,	//Fuse:
-		-1,	//Wall, Destructible:
-		-1,	//Wind:
-		-1,	//Acid:
-		1,	//Steam:
-		-1,	//Salt:
-		-1,	//Salt-Water:
-		-1,	//Glass:
-		-1,	//Custom 1
-		-1,	//Custom 2
-		-1,	//Custom 3
-};
+//Defines the special value for each base element
+extern int baseSpecialValue[] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5}, {0}, {0}, {0}, {7,3}, {5,5}, {5,10}, {2}, {0}, {0}, {0}, {3}, {0}, {0}, {5}};
 
-//Does it burn things?
-//Used in update to check to see if it burns similar to fire
-int fireburn[] =
-{
-		0, //Sand:
-		0, //Water:
-		0, //Wall:
-		0, //Eraser:
-		0, //Plant:
-		1, //Fire:
-		0, //Ice:
-		0, //Generator:
-		0, //Spawn:
-		0, //Oil:
-		0, //Magma:
-		0, //Stone:
-		0, //C4:
-		0, //C4++:
-		0, //Fuse:
-		0, //Wall, Destructible:
-		0, //Wind:
-		0, //Acid:
-		0, //Steam:
-		0, //Salt:
-		0, //Salt-Water:
-		0, //Glass:
-		0, //Custom 1
-		0, //Custom 2
-		0, //Custom 3
-};
-
-//How explosive is it?
-//used in collide function within collision of C4 and C4++
-int exploness[] =
-{
-		0, //Sand:
-		0, //Water:
-		0, //Wall:
-		0, //Eraser:
-		0, //Plant:
-		0, //Fire:
-		0, //Ice:
-		0, //Generator:
-		0, //Spawn:
-		0, //Oil:
-		0, //Magma:
-		0, //Stone:
-		10,//C4:
-		20,//C4++:
-		0, //Fuse:
-		0, //Wall, Destructible:
-		0, //Wind:
-		0, //Acid:
-		0, //Steam:
-		0, //Salt:
-		0, //Salt-Water:
-		0, //Glass:
-		0, //Custom 1
-		0, //Custom 2
-		0, //Custom 3
-};
+//Defines the inertia of each element
+extern int baseInertia[] = {-1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, 1, -1};

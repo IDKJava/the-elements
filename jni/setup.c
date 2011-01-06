@@ -64,6 +64,7 @@ void arraySetup()
 	free(state);
 	free(special);
 	free(drawSolid);
+	free(inertia);
 	free(allCoords);
 
 	//Allocate memory
@@ -77,6 +78,7 @@ void arraySetup()
 	state = malloc(numElements * sizeof(int));
 	special = malloc(numElements * sizeof(int));
 	drawSolid = malloc(numElements * sizeof(int));
+	inertia = malloc(numElements * sizeof(int));
 
 	allCoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 }
