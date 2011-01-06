@@ -69,18 +69,19 @@ unsigned char *green;
 unsigned char *blue;
 //Fall velocity property (a variable-size array)
 int *fallVel;
-//Density property - 1 - 10 (a variable-size array)
+//Density property - 1-10 (a variable-size array)
 int *density;
 //State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
 int *state;
 //Special property - indexed special effects occurring every frame (a variable-size array)
 int *special;
-//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
-int *drawSolid;
+//Inertia property - 0-10 - use this for giving velocities in explosions,
+//also we will use for drag because I feel like it; -1 means unmovable (a variable-size array)
+int *inertia;
 
 //Special value - a number used in special effects (if any)
 int specialVal[MAX_POINTS];
-//Heat value - 1 - 10
+//Heat value - 1-10
 int heat[MAX_POINTS];
 
 //Collision matrix (a two-dimensional variable-size array)

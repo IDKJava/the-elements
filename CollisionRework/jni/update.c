@@ -23,8 +23,7 @@ void UpdateView(void)
 	//Draw points
 	if (fingerState == FINGER_DOWN)
 	{
-		//Not sure why this if is here...
-		if (ym != 0)
+		if (mouseY != 0) //Not sure why this is here...
 		{
 			int dx, dy;
 			for (dy = size; dy >= -size; dy--)
@@ -37,9 +36,9 @@ void UpdateView(void)
 						if (cElement >= 0)
 						{
 							//Draw it solid
-							if(drawSolid[cElement])
+							if(inertia[cElement] == INERTIA_UNMOVABLE)
 							{
-								if (dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allcoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								if (dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allCoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
 								{
 									CreatePoint(xm + dx, ym + dy, celement);
 								}
@@ -47,7 +46,7 @@ void UpdateView(void)
 							//Draw it randomized
 							else
 							{
-								if (rand() % 3 == 1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allcoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								if (rand() % 3 == 1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allCoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
 								{
 									CreatePoint(xm + dx, ym + dy, celement);
 								}
@@ -56,18 +55,18 @@ void UpdateView(void)
 						//Special Drag case
 						else if (cElement == DRAG_ELEMENT)
 						{
-							if (allcoords[lmx + dx][lmy + dy] != -1 && fallvel[element[allcoords[lmx + dx][lmy + dy]]] != 0 && dx + lmx < maxx && dx + lmx > 0 && dy + lmy < maxy && dy + lmy > 0)
+							if (allCoords[lmx + dx][lmy + dy] != -1 && fallvel[element[allCoords[lmx + dx][lmy + dy]]] != 0 && dx + lmx < maxx && dx + lmx > 0 && dy + lmy < maxy && dy + lmy > 0)
 							{
-								xvel[allcoords[lmx + dx][lmy + dy]] += (xm - lmx);
-								yvel[allcoords[lmx + dx][lmy + dy]] += (ym - lmy);
+								xvel[allCoords[lmx + dx][lmy + dy]] += (xm - lmx);
+								yvel[allCoords[lmx + dx][lmy + dy]] += (ym - lmy);
 							}
 						}
 						//Special Eraser case
 						else if (cElement == ERASER_ELEMENT)
 						{
-							if (allcoords[(int) (dx + xm)][(int) (dy + ym)] != -1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0)
+							if (allCoords[(int) (dx + xm)][(int) (dy + ym)] != -1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0)
 							{
-								DeletePoint(allcoords[xm + dx][ym + dy]);
+								DeletePoint(allCoords[xm + dx][ym + dy]);
 							}
 						}
 					}
@@ -82,8 +81,7 @@ void UpdateView(void)
 		int counter;
 		int rtop; //used to prevent bugs when fire reaches the top
 
-		int tempX, tempT, tempOldX, tempOldY; //For speed we're going to create temp variables to store stuff
-		int oldElement; //these are also used to check to see if the element has changed to do stuff about freezing particles
+		int tempX, tempT, tempOldX, tempOldY, tempInertia, tempallCoords, tempElement, tempElement2; //For speed we're going to create temp variables to store stuff
 
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
@@ -98,8 +96,63 @@ void UpdateView(void)
 				tempOldY = (int) y[counter];
 				oldX[counter] = tempOldX;
 				oldY[counter] = tempOldY;
-				oldElement = element[counter];
+				tempElement = element[counter];
+				tempInertia = inertia[tempElement];
 
+				//Update coords
+				if(tempInertia != INERTIA_UNMOVABLE)
+				{
+					x[counter] += xVel[counter];
+					y[counter] += fallVel[tempElement] + yVel[counter];
+				}
+
+				//Reduce velocities
+				if(xVel < 0)
+				{
+					if(tempInertia >= -xVel)
+					{
+						xVel = 0;
+					}
+					else
+					{
+						xVel += tempInertia;
+					}
+				}
+				else if(xVel > 0)
+				{
+					if(tempInertia >= xVel)
+					{
+						xVel = 0;
+					}
+					else
+					{
+						xVel -= tempInertia;
+					}
+				}
+				if(yVel < 0)
+				{
+					if(tempInertia >= -yVel)
+					{
+						yVel = 0;
+					}
+					else
+					{
+						yVel += tempInertia;
+					}
+				}
+				else if(yVel > 0)
+				{
+					if(tempInertia >= yVel)
+					{
+						yVel = 0;
+					}
+					else
+					{
+						yVel -= tempInertia;
+					}
+				}
+
+				/* Acclerometer stuff taken out for now
 				//If accel control, do yvel based on that
 				if ((int) gravy != 0 && accelcon)
 				{
@@ -126,177 +179,81 @@ void UpdateView(void)
 				{
 					x[counter] += xvel[counter];
 				}
+				*/
 
 
-				if (xvel[counter] > 0)
-				{
-					//Check for breaking
-					if ((oelement == 15 || oelement == 21) && xvel[counter] > 5)
-					{
-						element[counter] = 0; //change particle to sand if the velocity on the wall is great enough
-						setBitmapColor((int) x[counter], (int) y[counter], 0); //Set the color also
-					}
-					else if (oelement == 15 || oelement == 21)
-					{
-						x[counter] = ox;
-						y[counter] = oy;
-						xvel[counter] = 0;
-					}
-					else
-					{
-						//Default case: reduce velocity
-						xvel[counter] -= 1;
-					}
-				}
-				else if (xvel[counter] < 0)
-				{
-					//Check for breaking
-					if ((oelement == 15 || oelement == 21) && xvel[counter] < -5)
-					{
-						element[counter] = 0; //change particle to sand if the velocity on the wall is great enough
-						setBitmapColor((int) x[counter], (int) y[counter] ,0); //Set the color also
-					}
-					else if (oelement == 15 || oelement == 21)
-					{
-						x[counter] = ox;
-						y[counter] = oy;
-						xvel[counter] = 0;
-					}
-					else
-					{
-						//Default case: decrease speed by one
-						xvel[counter] += 1;
-					}
-				}
-
-				if (yvel[counter] > 0)
-				{
-					//Check for breaking
-					if ((oelement == 15 || oelement  == 21) && yvel[counter] > 5)
-					{
-						element[counter] = 0; //change particle to sand if the velocity on the wall is great enough
-						setBitmapColor((int) x[counter], (int) y[counter], 0); //Set the color also
-					}
-					else if (oelement == 15 || oelement == 21)
-					{
-						x[counter] = ox;
-						y[counter] = oy;
-						yvel[counter] = 0;
-					}
-					else
-					{
-						//Default case: decrease speed by 1
-						yvel[counter] -= 1;
-					}
-				}
-				else if (yvel[counter] < 0)
-				{
-					//Check for breaking
-					if ((oelement == 15 || oelement == 21) && yvel[counter] < -5)
-					{
-						element[counter] = 0; //change particle to sand if the velocity on the wall is great enough
-						setBitmapColor((int) x[counter], (int) y[counter], 0); //Set the color also
-					}
-					else if (oelement == 15 || oelement == 21)
-					{
-						x[counter] = ox;
-						y[counter] = oy;
-						yvel[counter] = 0;
-					}
-					else
-					{
-						//Default case: decrease speed by 1
-						yvel[counter] += 1;
-					}
-				}
 
 				//Boundary checking
-				if ((int) y[counter] >= maxy)
+				if ((int) x[counter] >= workWidth || (int) x[counter] <= 0)
 				{
-					y[counter] = oy;
-					yvel[counter] = 0;
+					x[counter] = oldX;
 					xvel[counter] = 0;
 				}
-				if ((int) x[counter] >= maxx || (int) x[counter] <= 0)
+				if ((int) y[counter] >= workHeight || (int) y[counter] <= 0)
 				{
-					x[counter] = ox;
-					xvel[counter] = 0;
+					y[counter] = oldY;
 					yvel[counter] = 0;
 				}
-				if ((int) y[counter] <= 0) //If the particle is above the top of the screen
+
+				//Set other temp variables
+				tempX = (int) x[counter];
+				tempY = (int) y[counter];
+
+				//Special cycle
+				if(special[tempElement] != SPECIAL_NOT_SET)
 				{
-					if (element[counter] == 5) //If it's fire
+					switch(special[tempElement])
 					{
-						//Move it back
-						y[counter] = oy;
-						x[counter] = ox;
-						//Delete it
-						DeletePoint(counter);
-						continue;
-					}
-					else //Not fire
-					{
-						//Just bounce it back and kill velocity
-						y[counter] = oy;
-						yvel[counter] = 0;
-						xvel[counter] = 0;
-						if (element[counter] == 18) //If it's steam
-						{
-							xvel[counter] = rand() % 3 - 1; //Add a random velocity
-						}
+						//Stuff to come
 					}
 				}
 
-				//Set other temp variables for next section
-				tempx = (int) x[counter];
-				tempy = (int) y[counter];
-
-				//Special cycles
+				/*
 				if (fireburn[element[counter]] == 1) //Fire cycle
 				{
 					frozen[counter] = 0;
 					random = rand();
-					if (collision[element[allcoords[tempx + 1][tempy]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX + 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx + 1][tempy], 5);
+						setElement(allCoords[tempX + 1][tempY], 5);
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx][tempy - 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx][tempy - 1], 5);
+						setElement(allCoords[tempX][tempY - 1], 5);
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx - 1][tempy]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX - 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx - 1][tempy], 5);
+						setElement(allCoords[tempX - 1][tempY], 5);
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx][tempy + 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx][tempy + 1], 5);
-						yvel[allcoords[tempx][tempy + 1]] = 2;
+						setElement(allCoords[tempX][tempY + 1], 5);
+						yvel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx + 1][tempy + 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX + 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx + 1][tempy + 1], 5);
-						yvel[allcoords[tempx][tempy + 1]] = 2;
+						setElement(allCoords[tempX + 1][tempY + 1], 5);
+						yvel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx - 1][tempy + 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX - 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx - 1][tempy + 1], 5);
-						yvel[allcoords[tempx][tempy + 1]] = 2;
+						setElement(allCoords[tempX - 1][tempY + 1], 5);
+						yvel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx + 1][tempy - 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX + 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx + 1][tempy - 1], 5);
+						setElement(allCoords[tempX + 1][tempY - 1], 5);
 					}
 					random = rand();
-					if (collision[element[allcoords[tempx - 1][tempy - 1]]][element[counter]] == 6 && random % 3 != 0)
+					if (collision[element[allCoords[tempX - 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
-						setElement(allcoords[tempx - 1][tempy - 1], 5);
+						setElement(allCoords[tempX - 1][tempY - 1], 5);
 					}
 				}
 				if (element[counter] == 8) //Spawn cycle
@@ -307,9 +264,9 @@ void UpdateView(void)
 					{
 						for (check2 = -2; check2 <= 2; check2++)
 						{
-							if (tempx + check1 > 1 && tempx + check1 < maxx && tempy + check2 >= 0 && tempy + check2 < maxy)
+							if (tempX + check1 > 1 && tempX + check1 < maxx && tempY + check2 >= 0 && tempY + check2 < maxy)
 							{
-								temp = allcoords[tempx + check1][tempy + check2];
+								temp = allCoords[tempX + check1][tempY + check2];
 								if (temp != -1 && element[temp] == 7) //There's a generator adjacent
 								{
 									element[temp] = 8; //Change the generator to a spawn
@@ -317,7 +274,7 @@ void UpdateView(void)
 								}
 								else if (temp == -1 && rand() % 200 == 0 && loq < TPoints - 1) //There's an empty spot
 								{
-									CreatePoint(tempx + check1, tempy + check2, spawn[counter]); //1/200 chance of spawning
+									CreatePoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
 								}
 							}
 						}
@@ -331,7 +288,7 @@ void UpdateView(void)
 					{
 						for (check2 = -1; check2 <= 1; check2++)
 						{
-							temp = allcoords[tempx + check1][tempy + check2];
+							temp = allCoords[tempX + check1][tempY + check2];
 							if (temp != -1 && element[temp] == 1 && rand() % 10 == 0)
 							{
 								//Change the water to ice
@@ -349,24 +306,23 @@ void UpdateView(void)
 						setElement(counter, condensing[element[counter]]); //"Condense" the steam
 					}
 				}
+				*/
 
-				//Updating allcoords and collision resolution
-				int atemporary = allcoords[tempx][tempy];
+				//Updating allCoords and collision resolution
+				tempallCoords = allCoords[getIndex(tempX, tempY)];
 
-				//If the space the particle is trying to move to is taken
-				if (atemporary != -1 && atemporary != counter)
+				//If the space the particle is trying to move to is taken and isn't itself
+				if (tempallCoords != EMPTY && tempallCoords != counter)
 				{
-					int secondElementTemp = element[atemporary];
+					tempElement2 = element[tempallCoords];
 
-					collide(counter, atemporary); //Call collision() on the two particles
+					//Resolve (tempallCoords != counter) the collision
+					collide(counter, tempallCoords);
 
 					//If nothing has changed
-					if (x[counter] == ox
-							&& y[counter] == oy
-							&& element[counter] == oelement
-							&& x[atemporary] == tempx
-							&& y[atemporary] == tempy
-							&& element[atemporary] == secondElementTemp
+					if (x[counter] == oldX
+							&& y[counter] == oldY
+							&& element[counter] == tempElement
 							&& xvel[counter] == 0
 							&& yvel[counter] == 0)
 					{
@@ -374,34 +330,24 @@ void UpdateView(void)
 					}
 					else
 					{
-						if (x[counter] != ox || y[counter] != oy || element[counter] != oelement)
-						{
-							//unFreeze stuff around the primary particle because stuff has changed with it
-							unFreezeParticles(ox, oy);
-						}
-						if (x[atemporary] != tempx || y[atemporary] != tempy || element[atemporary] != secondElementTemp)
-						{
-							//unFreeze stuff around the secondary particle because stuff has changed with it
-							unFreezeParticles(tempx, tempy);
-						}
+						//Unfreeze stuff around the primary particle because stuff has changed with it
+						unFreezeParticles(oldX, oldY);
 					}
 				}
-				else //Space particle is trying to move to is free or is itself
+				else if (tempallCoords != counter)//Space particle is trying to move to is free
 				{
-					//Space particle is trying to move to is free
-					if (atemporary != counter)
-					{
-						//Clear the old spot
-						allcoords[ox][oy] = -1;
-						setBitmapColor(ox, oy, 3);
+					//Clear the old spot
+					allCoords[oldX][oldY] = EMPTY;
+					setBitmapColor(oldX, oldY, ERASER_ELEMENT);
 
-						//Unfreeze particles around old spot
-						unFreezeParticles(ox, oy);
+					//Unfreeze particles around old spot
+					unFreezeParticles(oldX, oldY);
+					//Possibly unfreeze particles around new spot?
+					//unFreezeParticles(tempX, tempY);
 
-						//Set new spot
-						allcoords[tempx][tempy] = counter;
-						setBitmapColor(tempx, tempy, element[counter]);
-					}
+					//Set new spot
+					allCoords[tempX][tempY] = counter;
+					setBitmapColor(tempX, tempY, element[counter]);
 				}
 			}
 		}
