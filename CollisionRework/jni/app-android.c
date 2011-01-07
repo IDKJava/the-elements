@@ -38,13 +38,13 @@ void Java_sand_falling_opengl_SandViewRenderer_nativeResize(JNIEnv* env, jobject
 {
 	if (zoom == ZOOMED_IN)
 	{
-		maxx = w / 2;
-		maxy = h / 2;
+		workWidth = screenWidth / 2;
+		workHeight = screenHeight / 2;
 	}
 	else
 	{
-		maxx = w;
-		maxy = h;
+		workWidth = screenWidth;
+		workHeight = screenHeight;
 	}
 	appInit();
 }
@@ -98,7 +98,7 @@ int Java_sand_falling_opengl_MainActivity_getPlayState(JNIEnv* env, jobject thiz
 
 void Java_sand_falling_opengl_MainActivity_setDimensions(JNIEnv* env, jobject thiz, jint width, jint height)
 {
-	//Decrease by 1 pixel if not divisible by two
+	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
 	screenWidth = width - width%2;
 	screenHeight = height - height%2;
 }
@@ -106,9 +106,9 @@ void Java_sand_falling_opengl_MainActivity_setDimensions(JNIEnv* env, jobject th
 void Java_sand_falling_opengl_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint redValue, jint greenValue, jint blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
-	red[3] = redValue;
-	green[3] = greenValue;
-	blue[3] = blueValue;
+	elements[ERASER_ELEMENT].red = redValue;
+	elements[ERASER_ELEMENT].green = greenValue;
+	elements[ERASER_ELEMENT].blue = blueValue;
 	
 	//Call setup again
 	setup();
@@ -222,7 +222,7 @@ void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject t
 	removeQuicksave();
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
+void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar jelement)
 {
 	cElement = jelement;
 	return;
@@ -231,7 +231,7 @@ int Java_sand_falling_opengl_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
 	return cElement;
 }
-void Java_sand_falling_opengl_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jint jbrushSize)
+void Java_sand_falling_opengl_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar jbrushSize)
 {
 	brushSize = jbrushSize;
 	return;
