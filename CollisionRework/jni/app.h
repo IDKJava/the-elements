@@ -25,115 +25,125 @@ extern "C" {
 int getIndex(int x, int y);
 
 /*
+ * STRUCTS
+ */
+ 
+struct Element;
+struct Particle;
+
+/*
  * VARIABLES
  */
 
 //extern int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-extern int cElement;
+extern Element cElement;
 //Current point during processing
-extern int cPoint;
+extern Particle cPoint;
 //Play state
-extern int play;
+extern char play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-extern int brushSize;
+extern char brushSize;
 
 //The number of elements available
-extern int numElements;
+extern char numElements;
 
 //Array for bitmap drawing
-extern unsigned char colors[];
+extern unsigned char* colors[];
 
 //Screen dimensions
-extern int screenWidth;
-extern int screenHeight;
+extern short screenWidth;
+extern short screenHeight;
 //Workspace dimensions
-extern int workWidth;
-extern int workHeight;
+extern short workWidth;
+extern short workHeight;
 
 //Coordinates
-extern float x[];
-extern float y[];
+//extern float x[];
+//extern float y[];
 //Old coordinates (for collision resolving)
-extern short int oldX[];
-extern short int oldY[];
+//extern short int oldX[];
+//extern short int oldY[];
 //Velocities
-extern short int xVel[];
-extern short int yVel[];
+//extern short int xVel[];
+//extern short int yVel[];
 
 //Element type
-extern char element[];
+//extern char element[];
 //Frozen state
-extern char frozen[];
+//extern char frozen[];
 
 //RGB properties (variable arrays)
 extern unsigned char *red;
 extern unsigned char *green;
 extern unsigned char *blue;
 //Fall velocity property (a variable-size array)
-extern int *fallVel;
+//extern int *fallVel;
 //Density property - 1-10 (a variable-size array)
-extern int *density;
+//extern int *density;
 //State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
-extern int *state;
+//extern int *state;
 //Special property - indexed special effects occurring every frame (a variable-size array)
-extern int *special;
+//extern int *special;
+//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
+//extern int *drawSolid;
 //Inertia property - 0-10 - use this for giving velocities in explosions,
 //also we will use for drag because I feel like it; -1 means unmovable (a variable-size array)
 extern int *inertia;
 
 //Special value - a number used in special effects (if any)
-extern int specialVal[];
+//extern int specialVal[];
 //Heat value - 1-10
-extern int heat[];
+//extern int heat[];
 
 //Collision matrix
-extern int collision[][];
+extern char* collision;
 
 //Index set state
-extern int set[];
+//extern int set[];
 //Index available state
-extern int avail[];
+extern Particle avail[];
 
 //Points to the index AFTER the top of the stack
-extern int loq;
+extern short loq;
 //Zoom value
-extern int zoom;
+extern char zoom;
 
 /* Accelerometer stuff being taken out for now
 //Gravity values
-float gravX;
-float gravY;
+extern float gravX;
+extern float gravY;
 
 //Accelerometer control state
-int accelcon;
+//extern int accelcon;
 //Flipped state
-int flipped;
+extern char flipped;
 */
+
 //Screen dimensions
-int screenWidth;
-int screenHeight;
+extern char screenWidth;
+extern char screenHeight;
 //Workspace dimensions
-int workWidth;
-int workHeight;
+extern char workWidth;
+extern char workHeight;
 //Set when a clear is requested, unset when cleared
 extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
 
 //Finger state
-extern int fingerState;
+extern char fingerState;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern int *allCoords;
+extern Particle* allCoords;
 
 //Mouse positions
-extern int mouseX;
-extern int mouseY;
+extern short mouseX;
+extern short mouseY;
 //Old mouse positions
-extern int lastMouseX;
-extern int lastMouseY;
+extern short lastMouseX;
+extern short lastMouseY;
 
 /*Network stuff taken out for now
 //Buffer building variables

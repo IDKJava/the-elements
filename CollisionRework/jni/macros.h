@@ -11,7 +11,7 @@
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
-#define MAX_POINTS 500000
+#define MAX_POINTS 100000
 #define NUM_BASE_ELEMENTS 25
 
 #define PLAY 1
