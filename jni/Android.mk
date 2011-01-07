@@ -11,6 +11,7 @@ LOCAL_SRC_FILES := \
     app-android.c \
 	app.c \
 	collide.c \
+	elementproperties.c \
     importgl.c \
     gl.c \
     points.c \

@@ -35,6 +35,11 @@ struct Particle;
  * VARIABLES
  */
 
+//An array of all the elements
+extern Element* elements;
+//The number of elements available
+extern unsigned char numElements;
+
 //extern int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
@@ -45,9 +50,6 @@ extern Particle cPoint;
 extern char play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
 extern char brushSize;
-
-//The number of elements available
-extern char numElements;
 
 //Array for bitmap drawing
 extern unsigned char* colors[];
@@ -75,9 +77,9 @@ extern short workHeight;
 //extern char frozen[];
 
 //RGB properties (variable arrays)
-extern unsigned char *red;
-extern unsigned char *green;
-extern unsigned char *blue;
+//extern unsigned char *red;
+//extern unsigned char *green;
+//extern unsigned char *blue;
 //Fall velocity property (a variable-size array)
 //extern int *fallVel;
 //Density property - 1-10 (a variable-size array)
@@ -90,7 +92,7 @@ extern unsigned char *blue;
 //extern int *drawSolid;
 //Inertia property - 0-10 - use this for giving velocities in explosions,
 //also we will use for drag because I feel like it; -1 means unmovable (a variable-size array)
-extern int *inertia;
+extern char *inertia;
 
 //Special value - a number used in special effects (if any)
 //extern int specialVal[];
