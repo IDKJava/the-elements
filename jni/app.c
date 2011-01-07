@@ -21,81 +21,117 @@ int getIndex(int x, int y)
 }
 
 /*
+ * STRUCTS
+ */
+ 
+struct Element
+{
+	//Dealing with states
+	char state;
+	char lowestTemp, highestTemp;
+	Element* lowerElement;
+	Element* higherElement;
+	
+	//Dealing with drawing
+	char red, green, blue;
+	
+	//Properties
+	char* specials;
+	char* specialVals;
+	char density;
+	char fallVel;
+	char inertia;
+};
+
+struct Particle
+{
+	float x, y;
+	short xVel, yVel;
+	char heat;
+	char set;
+	char* specialVals;
+	Element* element;
+	char frozen;
+};
+
+/*
  * VARIABLES
  */
 
 //int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-int cElement = 0;
+Element cElement = 0;
 //Current point during processing
-int cPoint = 0;
+Particle cPoint = 0;
 //Play state
-int play = PLAY;
+unsigned char play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-int brushSize = DEFAULT_BRUSH_SIZE;
+unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 
 //The number of elements available
-int numElements;
+unsigned char numElements;
 
 //Array for bitmap drawing (a variable-size array)
-unsigned char *colors;
+unsigned char* colors;
 
 //Screen dimensions
-int screenWidth;
-int screenHeight;
+short screenWidth;
+short screenHeight;
 //Workspace dimensions
-int workWidth;
-int workHeight;
+short workWidth;
+short workHeight;
 
 //Coordinates
-float x[MAX_POINTS];
-float y[MAX_POINTS];
+//float x[MAX_POINTS];
+//float y[MAX_POINTS];
 //Old coordinates (for collision resolving)
-short int oldX[MAX_POINTS];
-short int oldY[MAX_POINTS];
+//short int oldX[MAX_POINTS];
+//short int oldY[MAX_POINTS];
 //Velocities
-short int xVel[MAX_POINTS];
-short int yVel[MAX_POINTS];
+//short int xVel[MAX_POINTS];
+//short int yVel[MAX_POINTS];
 
 //Element type
-char element[MAX_POINTS];
+//char element[MAX_POINTS];
 //Frozen state
-char frozen[MAX_POINTS];
+//char frozen[MAX_POINTS];
 
 //RGB properties (variable arrays)
 unsigned char *red;
 unsigned char *green;
 unsigned char *blue;
 //Fall velocity property (a variable-size array)
-int *fallVel;
+//int *fallVel;
 //Density property - 1-10 (a variable-size array)
-int *density;
+//int *density;
 //State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
-int *state;
+//int *state;
 //Special property - indexed special effects occurring every frame (a variable-size array)
-int *special;
+//int *special;
+//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
+//int *drawSolid;
 //Inertia property - 0-10 - use this for giving velocities in explosions,
 //also we will use for drag because I feel like it; -1 means unmovable (a variable-size array)
 int *inertia;
 
 //Special value - a number used in special effects (if any)
-int specialVal[MAX_POINTS];
+//int specialVal[MAX_POINTS];
 //Heat value - 1-10
-int heat[MAX_POINTS];
+//int heat[MAX_POINTS];
 
 //Collision matrix (a two-dimensional variable-size array)
-int *collision;
+char* collision;
 
 //Index set state
-int set[MAX_POINTS];
+//int set[MAX_POINTS];
 //Index available state
-int avail[MAX_POINTS];
+Particle avail[MAX_POINTS];
 
 //Points to the index AFTER the top of the stack
-int loq;
+short loq;
 //Zoom value
-int zoom;
+char zoom;
 
 /* Accelerometer stuff being taken out for now
 //Gravity values
@@ -114,17 +150,17 @@ char shouldClear = FALSE;
 char shouldUpdateMouse = FALSE;
 
 //Finger state
-int fingerState = FINGER_UP;
+char fingerState = FINGER_UP;
 
 //A map of all the points (a two-dimensional variable-size array)
-int *allCoords;
+Particle* allCoords;
 
 //Mouse positions
-int mouseX;
-int mouseY;
+short mouseX;
+short mouseY;
 //Old mouse positions
-int lastMouseX;
-int lastMouseY;
+short lastMouseX;
+short lastMouseY;
 
 /*Network stuff taken out for now
 //Buffer building variables
