@@ -70,8 +70,8 @@ extern int baseState[];
  *		4 = Explode; Explosiveness
  */
 //Defines the special for each base element
-extern int baseSpecial[][];
+extern int baseSpecial;
 //Defines the special value for each base element
-extern int baseSpecialValue[][];
+extern int baseSpecialValue;
 //Defines the inertia of each element
 extern int baseInertia[];

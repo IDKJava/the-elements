@@ -198,7 +198,7 @@ void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject
 		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
 
 
-		if (distance > 0 && cElement != 16) //if it's not the same place and not wind
+		if (distance > 0 && cElement != ELEMENT_DRAG) //if it's not the same place and not wind
 		{
 			float dx = (float)changeX / (float)distance; // change divided by distance
 			float dy = (float)changeY / (float)distance;
