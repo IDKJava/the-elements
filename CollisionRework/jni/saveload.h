@@ -35,9 +35,9 @@ char save(int type);
 char load(int type);
 void removeQuicksave(void);
 char loadDemoFile(void);
-void saveCustomElement(CustomElement createdCustomElement);
+void saveCustomElement(struct CustomElement createdCustomElement);
 void loadCustomElements(void);
-void saveAtmosphere(Atmosphere createAtmosphere);
+void saveAtmosphere(struct Atmosphere createAtmosphere);
 void loadAtmosphere(void);
 int getCustomElementsNumber(void);
 

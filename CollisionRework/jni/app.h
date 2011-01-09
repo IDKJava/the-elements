@@ -149,16 +149,11 @@ extern float gravY;
 
 //Accelerometer control state
 //extern int accelcon;
+ *
+ */
 //Flipped state
 extern char flipped;
-*/
 
-//Screen dimensions
-extern char screenWidth;
-extern char screenHeight;
-//Workspace dimensions
-extern char workWidth;
-extern char workHeight;
 //Set when a clear is requested, unset when cleared
 extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
