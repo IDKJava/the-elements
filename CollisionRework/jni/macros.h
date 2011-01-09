@@ -12,7 +12,7 @@
 #define MACROS_H_INCLUDED
 
 #define MAX_POINTS 100000
-#define NUM_BASE_ELEMENTS 25
+#define NUM_BASE_ELEMENTS 24
 
 #define PLAY 1
 #define PAUSE 0

@@ -205,7 +205,7 @@ void collide(Particle firstParticle, Particle secondParticle)
 
 			break;
 		}
-		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt
+		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
 		{
 			//Delete firstParticle
 			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
@@ -217,17 +217,14 @@ void collide(Particle firstParticle, Particle secondParticle)
 
 			break;
 		}
-		case 9: //Salt-water - Plant
+		case 9: //Salt-water - Plant or Plant - Salt-water
 		{
 			//Delete firstParticle
 			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
 			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 			free(firstParticle);
 
-			//Change the ele			//Delete firstParticle
-			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-			free(firstParticle);ment of secondParticle to Sand
+			//Change the element or secondParticle to Sand
 			setElement(secondParticle, 3);
 		}
 		case 10: //Water - Sand or Sand - Water
