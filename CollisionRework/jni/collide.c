@@ -9,13 +9,13 @@
 
 #include "collide.h"
 
-void collide(int fp, int sp)//first particle and second particle
+void collide(Particle firstParticle, Particle secondParticle)
 {
 	int olyf = oldy[fp];
 	int olxf = oldx[fp];
 	int olxs = oldx[sp];
 	int olys = oldy[sp];
-	int type = collision[element[fp]][element[sp]];
+	int type = collision[firstParticle.element.index][secondParticle.element.index];
 
 	//Solid - Solid generic collision
 	if (type == 0)
