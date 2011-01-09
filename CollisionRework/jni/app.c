@@ -48,7 +48,6 @@ struct Particle
 	float x, y;
 	short xVel, yVel;
 	char heat;
-	char set;
 	char* specialVals;
 	Element* element;
 	char frozen;
@@ -70,10 +69,7 @@ Element cElement = 0;
 //Current point during processing
 Particle cPoint = 0;
 //Play state
-unsigned char pla//An array of all the elements
-extern Element* elements;
-//The number of elements available
-extern char numElements;y = PLAY;
+unsigned char play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 

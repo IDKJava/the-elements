@@ -14,10 +14,10 @@
 //Include macros
 #include "macros.h"
 
-void CreatePoint(int xCoord, int yCoord, int elementVal);
-void DeletePoint(int index);
-void setElement(int particle, int newelement);
-void setBitmapColor(int xCoord, int yCoord, int newelement);
+void CreatePoint(int xCoord, int yCoord, Element element);
+void DeletePoint(Particle particle);
+void setElement(Particle particle, Element newElement);
+void setBitmapColor(int xCoord, int yCoord, Element element);
 void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
 
