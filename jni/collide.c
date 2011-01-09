@@ -60,59 +60,42 @@ void collide(Particle firstParticle, Particle secondParticle)
 		}
 		case 2: //Anything - Generator collision
 		{
-			if (firstParticle.element != 7)
-			{
-				//Change the generator to secondParticleawner
-				secondParticle.element = 8;
-				secondParticleawn[secondParticle] = firstParticle.element; //Set the secondParticleawn element
+			//Change the generator to spawner
+			setElement(secondParticle, SPAWN_ELEMENT);
+			secondParticle.specialVals[0] = firstParticle.element.index;
 
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
+			//Delete firstParticle
+			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+			free(firstParticle);
 
-				//Delete firstParticle
-				firstParticle.x = 0;
-				firstParticle.y = 0;
-				firstParticle.element = 0;
-				xvel[firstParticle] = 0;
-				yvel[firstParticle] = 0;
-				set[firstParticle] = 0;
-				avail[loq] = firstParticle;
-				loq++;
-
-				break;
-			}
-			else
-			{
-				//Change the generator to secondParticleawner
-				firstParticle.element = 8;
-				secondParticleawn[firstParticle] = secondParticle.element; //Set the secondParticleawn element
-
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
-				//Delete secondParticle
-				secondParticle.x = 0;
-				secondParticle.y = 0;
-				secondParticle.element = 0;
-				xvel[secondParticle] = 0;
-				yvel[secondParticle] = 0;
-				set[secondParticle] = 0;
-				avail[loq] = secondParticle;
-				loq++;
-
-				break;
-			}
+			break;
 		}
-		case 3: //Acid - Meltable
+		case 3: //Generator - Anything collision (should not be needed, but just in case we have moving generators in the future)
+		{
+			//Change the generator to spawner
+			setElement(firstParticle, SPAWN_ELEMENT);
+			firstParticle.specialVals[0] = secondParticle.element.index;
+
+			//Move firstParticle back
+			firstParticle.x = oldXFirst;
+			firstParticle.y = oldYFirst;
+
+			//Delete secondParticle
+			allCoords[getIndex(secondParticle.x, secondParticle.y)] = NULL;
+			setBitmapColor(secondParticle.x, secondParticle.y, ERASER_ELEMENT);
+			free(secondParticle);
+
+			break;
+		}
+		case 4: //Acid - Meltable
 		{
 			//Define some temporary variables
 			int tempX = firstParticle.x, tempY = firstParticle.y;
 
 			if (rand() % 3 != 0) //2/3 chance
 			{
-				//Acid burns away secondParticle
+				//Acid burns away the Meltable
 				//Delete the old point
 				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
 				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
@@ -128,7 +111,6 @@ void collide(Particle firstParticle, Particle secondParticle)
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
-
 				//Delete fingerParticle
 				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
 				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
@@ -143,351 +125,119 @@ void collide(Particle firstParticle, Particle secondParticle)
 
 			break;
 		}
-		case 4: //Meltable-Acid
+		case 5: //Meltable - Acid
 		{
 			if (rand() % 3 != 0) //2/3 chance
 			{
-				//Acid burns away firstParticle
+				//Meltable is destroyed
 
 				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
+				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 
 				//Delete firstParticle
-				firstParticle.x = 0;
-				firstParticle.y = 0;
-				firstParticle.element = 0;
-				xvel[firstParticle] = 0;
-				yvel[firstParticle] = 0;
-				set[firstParticle] = 0;
-				avail[loq] = firstParticle;
-				loq++;
+				free(firstParticle);
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
 
 				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
+				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 
 				//Set the new point
-				allCoords[xfirstParticle][yfirstParticle] = firstParticle;
-				setBitmapColor(xfirstParticle, yfirstParticle, firstParticle.element);
+				allCoords[firstParticle.x][firstParticle.y] = firstParticle;
+				setBitmapColor(firstParticle.x, firstParticle.y, firstParticle.element);
 
 				//Delete secondParticle
-				secondParticle.x = 0;
-				secondParticle.y = 0;
-				secondParticle.element = 0;
-				xvel[secondParticle] = 0;
-				yvel[secondParticle] = 0;
-				set[secondParticle] = 0;
-				avail[loq] = secondParticle;
-				loq++;
+				free(secondParticle);
 			}
 			else //Otherwise, 1/6 total
 			{
-				//Other particle bounces bounces
+				//Meltable bounces
 
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
+				firstParticle.x = oldXFirst;
+				firstParticle.y = oldYFirst;
 			}
 			break;
 		}
-		case 4: //Acid - Water
+		case 6: //Acid - Neutralizer
 		{
-			int xfirstParticle = firstParticle.x, yfirstParticle = firstParticle.y;
-			//Acid goes away 1/3 of the time, otherwise bounce back
-			if (firstParticle.element == 17 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 17) || (secondParticle.element == 22
-					&& colliseelement1[firstParticle.element] != 17)) //firstParticle is acid
+			int tempX = firstParticle.x, tempY = firstParticle.y;
+			if (rand() % 3 == 0) //1/3 Chance
 			{
-				if (rand() % 3 == 0)
-				{
-					//Delete the old point
-					allCoords[olxf][olyf] = -1;
-					setBitmapColor(olxf, olyf, 3);
-
-					//Delete firstParticle
-					firstParticle.x = 0;
-					firstParticle.y = 0;
-					firstParticle.element = 0;
-					xvel[firstParticle] = 0;
-					yvel[firstParticle] = 0;
-					set[firstParticle] = 0;
-					avail[loq] = firstParticle;
-					loq++;
-				}
-				else
-				{
-					//Move the point back
-					firstParticle.x = olxf;
-					firstParticle.y = olyf;
-				}
-			}
-			else //secondParticle is acid
-			{
-				if (rand() % 3 == 0)
-				{
-					//Delete the old point
-					allCoords[olxf][olyf] = -1;
-					setBitmapColor(olxf, olyf, 3);
-
-					//Set the new point
-					allCoords[xfirstParticle][yfirstParticle] = firstParticle;
-					setBitmapColor(xfirstParticle, yfirstParticle, firstParticle.element);
-
-					//Delete secondParticle
-					secondParticle.x = 0;
-					secondParticle.y = 0;
-					secondParticle.element = 0;
-					xvel[secondParticle] = 0;
-					yvel[secondParticle] = 0;
-					set[secondParticle] = 0;
-					avail[loq] = secondParticle;
-					loq++;
-				}
-				else
-				{
-					//Move the water back
-					firstParticle.x = olxf;
-					firstParticle.y = olyf;
-				}
-			}
-
-			break;
-		}
-		case 5: //Steam - Steam
-		{
-			if (rand() % 1000 == 0)//1/5 chance
-			{
-				//Make the two steams "condense" into water
-
-				int xsecondParticle = secondParticle.x, ysecondParticle = secondParticle.y; //Some temp variables
-
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
-
-				//Change the elements
-				firstParticle.element = 1;
-				secondParticle.element = 1;
-
-				//Set the bitmap and allCoords
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, 1);
-
-				allCoords[xsecondParticle][ysecondParticle] = secondParticle;
-				setBitmapColor(xsecondParticle, ysecondParticle, 1);
-
-				break;
-			}
-			else //Make firstParticle bounce off
-			{
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
-
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, 18);
-
-				//Add a random x velocity
-				xvel[firstParticle] += rand() % 7 - 3; //-3 to 3
-				//Add a random y velocity
-				yvel[firstParticle] += rand() % 5 - 2; //-2 to 2
-
-				break;
-			}
-		}
-		case 6: //Water - Fire
-		{
-			if (firstParticle.element == 5 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 5) || (secondParticle.element == 22
-					&& colliseelement1[firstParticle.element] != 5)) //firstParticle is fire
-			{
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
-				//Delete the fire
-				firstParticle.x = 0;
-				firstParticle.y = 0;
-				firstParticle.element = 0;
-				xvel[firstParticle] = 0;
-				yvel[firstParticle] = 0;
-				set[firstParticle] = 0;
-				avail[loq] = firstParticle;
-				loq++;
-
-				//Change the water to steam
-				secondParticle.element = 18;
-
-				//Change the bitmap color
-				setBitmapColor(secondParticle.x, secondParticle.y, 18);
-
-				break;
-			}
-			else //secondParticle is fire
-			{
-				int xfirstParticle = firstParticle.x, yfirstParticle = firstParticle.y; //Set temp variables
-
-				//Delete secondParticle(fire)
-				DeletePoint(secondParticle);
-
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
-				//Change the water to steam
-				firstParticle.element = 18;
-
-				//Set the new location of water
-				allCoords[xfirstParticle][yfirstParticle] = firstParticle;
-				setBitmapColor(xfirstParticle, yfirstParticle, 18);
-			}
-		}
-		case 7: //Salt - Water
-		{
-			if (firstParticle.element == 19 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 19)) //firstParticle is salt
-			{
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
 				//Delete firstParticle
-				firstParticle.x = 0;
-				firstParticle.y = 0;
-				firstParticle.element = 0;
-				xvel[firstParticle] = 0;
-				yvel[firstParticle] = 0;
-				set[firstParticle] = 0;
-				avail[loq] = firstParticle;
-				loq++;
-
-				//Change the element of secondParticle to Salt-water
-				secondParticle.element = 20;
-				setBitmapColor(secondParticle.x, secondParticle.y, 20);
+				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+				free(firstParticle);
 			}
-			else //secondParticle is salt
+			else //2/3 Change of bouncing
+			{
+				//Move the point back
+				firstParticle.x = olxf;
+				firstParticle.y = olyf;
+			}
+
+			break;
+		}
+		case 7: //Neutralizer - Acid
+		{
+			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
+				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 
-				DeletePoint(secondParticle); //Delete the salt
+				//Set the new point
+				allCoords[firstParticle.x][firstParticle.y] = firstParticle;
+				setBitmapColor(firstParticle.x, firstParticle.y, firstParticle.element);
 
-				int xfirstParticle = firstParticle.x, yfirstParticle = firstParticle.y; //Some temp variables
-				//Set the new coordinates
-				allCoords[xfirstParticle][yfirstParticle] = firstParticle;
-				setBitmapColor(xfirstParticle, yfirstParticle, firstParticle.element);
+				//Delete secondParticle
+				free(secondParticle);
 			}
+			else //2/3 Chance
+			{
+				//Move the water back
+				firstParticle.x = oldXFirst;
+				firstParticle.y = oldYFirst;
+			}
+
+			break;
 		}
-		case 8: //Salt - Ice
+		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt
 		{
-			if (firstParticle.element == 6 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 6) || (secondParticle.element == 22
-					&& colliseelement1[firstParticle.element] != 6)) //firstParticle is ice
-			{
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
+			//Delete firstParticle
+			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+			free(firstParticle);
 
-				//Change the element to water
-				firstParticle.element = 1;
+			//Change the element of secondParticle to Salt-water
+			setElement(secondParticle, 19);
 
-				//Set the bitmap stuff
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, 1);
-			}
-			else //secondParticle is ice
-			{
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
-
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, firstParticle.element);
-
-				//Change the element to water
-				secondParticle.element = 1;
-
-				//Set the bitmap stuff
-				setBitmapColor(secondParticle.x, secondParticle.y, 1);
-			}
+			break;
 		}
 		case 9: //Salt-water - Plant
 		{
-			if (firstParticle.element == 4 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 4) || (secondParticle.element == 22
-					&& colliseelement1[firstParticle.element] != 4)) //firstParticle is plant
-			{
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
+			//Delete firstParticle
+			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+			free(firstParticle);
 
-				//Change the element to sand
-				firstParticle.element = 0;
-
-				//Set the bitmap stuff
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, 0);
-			}
-			else //secondParticle is plant
-			{
-				//Move firstParticle back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
-
-				allCoords[olxf][olyf] = firstParticle;
-				setBitmapColor(olxf, olyf, firstParticle.element);
-
-				//Change the element to sand
-				secondParticle.element = 0;
-
-				//Set the bitmap stuff
-				setBitmapColor(secondParticle.x, secondParticle.y, 0);
-			}
+			//Change the ele			//Delete firstParticle
+			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+			free(firstParticle);ment of secondParticle to Sand
+			setElement(secondParticle, 3);
 		}
-		case 10: //Water - Sand
+		case 10: //Water - Sand or Sand - Water
 		{
-			if (firstParticle.element == 1 || (firstParticle.element == 22
-					&& colliseelement1[secondParticle.element] == 1) || (secondParticle.element == 22
-					&& colliseelement1[firstParticle.element] != 1)) //firstParticle is water
-			{
+			//Delete firstParticle
+			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
+			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
+			free(firstParticle);
 
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
-				//Delete the water
-				firstParticle.x = 0;
-				firstParticle.y = 0;
-				firstParticle.element = 0;
-				xvel[firstParticle] = 0;
-				yvel[firstParticle] = 0;
-				set[firstParticle] = 0;
-				avail[loq] = firstParticle;
-				loq++;
-
-				secondParticle.element = 23; // set the sand to be mud
-				setBitmapColor(secondParticle.x, secondParticle.y, secondParticle.element); // change the color of the sand particle location to be mud
-			}
-			else //secondParticle is water
-			{
-
-				//Delete the old point
-				allCoords[olxf][olyf] = -1;
-				setBitmapColor(olxf, olyf, 3);
-
-				DeletePoint(secondParticle); //delete the water
-				firstParticle.element = 23; //set the sand to be mud
-
-				int xfirstParticle = firstParticle.x, yfirstParticle = firstParticle.y; //Some temp variables
-				//Set the new coordinates
-				allCoords[xfirstParticle][yfirstParticle] = firstParticle;
-				setBitmapColor(xfirstParticle, yfirstParticle, firstParticle.element);
-
-			}
+			//Change the element of secondParticle to Mud
+			setElement(secondParticle, 21);
 		}
 }
