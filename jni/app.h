@@ -30,21 +30,52 @@ int getIndex(int x, int y);
 struct Element;
 struct Particle;
 
+struct Element
+{
+	//Index
+	unsigned char index;
+
+	//Dealing with states
+	char state;
+	char lowestTemp, highestTemp;
+	struct Element* lowerElement;
+	struct Element* higherElement;
+
+	//Dealing with drawing
+	char red, green, blue;
+
+	//Properties
+	char* specials;
+	char* specialVals;
+	char density;
+	char fallVel;
+	char inertia;
+};
+
+struct Particle
+{
+	float x, y;
+	short xVel, yVel;
+	char heat;
+	char* specialVals;
+	struct Element* element;
+	char frozen;
+};
 /*
  * VARIABLES
  */
 
 //An array of all the elements
-extern Element* elements;
+extern struct Element* elements;
 //The number of elements available
 extern unsigned char numElements;
 
 //extern int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-extern Element cElement;
+extern struct Element cElement;
 //Current point during processing
-extern Particle cPoint;
+extern struct Particle cPoint;
 //Play state
 extern char play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
@@ -104,7 +135,7 @@ extern char* collision;
 //Index set state
 //extern int set[];
 //Index available state
-extern Particle avail[];
+extern struct Particle avail[];
 
 //Points to the index AFTER the top of the stack
 extern short loq;
@@ -137,7 +168,7 @@ extern char shouldUpdateMouse;
 extern char fingerState;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern Particle* allCoords;
+extern struct Particle* allCoords;
 
 //Mouse positions
 extern short mouseX;
