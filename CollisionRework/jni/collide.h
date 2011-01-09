@@ -21,6 +21,6 @@
 //Include logging
 //#include <android/log.h>
 
-void collide (int fp, int sp);
+void collide (Particle firstParticle, Particle secondParticle);
 
 #endif
