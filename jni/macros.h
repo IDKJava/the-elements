@@ -30,8 +30,6 @@
 #define NORMAL_LOAD 0
 #define QUICK_LOAD 1
 
-#define EMPTY -1
-
 #define FINGER_DOWN 1
 #define FINGER_UP 0
 

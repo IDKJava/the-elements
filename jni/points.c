@@ -8,73 +8,70 @@
 
 #include "points.h"
 
-void CreatePoint(int xCoord, int yCoord, int elementVal)
+void CreatePoint(int xCoord, int yCoord, Element element)
 {
 	//Stores the index of the new point
-	int i;
-	if (loq > 0)
+	Particle* i;
+	if (usedPoints < MAX_POINTS)
 	{
-		//Get the next available index off the stack
-		loq--;
-		i = avail[loq];
-		avail[loq] = -1;
-
 		//Set x and y
-		x[i] = xCoord;
-		y[i] = yCoord;
+		i.x = xCoord;
+		i.y = yCoord;
 
 		//Put it in the allcoords array
 		allcoords[xCoord][yCoord] = i;
 
 		// Set the element of the point
-		element[i] = e;
+		i.element = element;
 
 		//Set the velocities
-		xvel[i] = 0;
-		yvel[i] = 0;
+		i.xVel = 0;
+		i.yVel = 0;
 
 		//Set the frozen state
-		frozen[i] = FALSE;
+		i.frozen = FALSE;
 
 		//Set the point in the pixels array
-		setBitmapColor(xCoord, yCoord, elementVal);
-
-		//Indicate that the index is in use
-		set[i] = TRUE;
+		setBitmapColor(xCoord, yCoord, element);
 
 		//Unfreeze particles around it
 		unFreezeParticles(xCoord, yCoord);
+
+		//Incrememnt usedPoints
+		usedPoints++;
 	}
 }
-void DeletePoint(int index)
+void DeletePoint(Particle particle)
 {
 	//Store x and y in temporary variables for faster use
-	int tempX = x[index];
-	int tempY = y[index];
+	int tempX = particle.x;
+	int tempY = particle.y;
 
 	//Unfreeze the particles around it
 	unFreezeParticles(tempX, tempY);
 	//Clear it in the pixels array
 	setBitmapColor((int) tempX, (int) tempY, 3);
 	//Clear it in the points array
-	allcoords[(int) tempX]][(int) tempY] = -1;
-	//Unset it and add the index on the stack
-	set[index] = FALSE;
-	avail[loq] = index;
-	loq++;
+	allcoords[(int) tempX]][(int) tempY] = NULL;
+
+	//Unallocate the memory
+	free(part);
+
+	//Decrement usedPoints
+	usedPoints--;
 }
 
-void setElement(int particle, int newElement)
+void setElement(Particle particle, Element newElement)
 {
-	element[particle] = newElement;
-	setBitmapColor(x[particle], y[particle], newElement);
+	particle.element = newElement;
+	setBitmapColor(particle.x, particle.y, newElement);
 }
 
-void setBitmapColor(int xCoord, int yCoord, int newElement)
+void setBitmapColor(int xCoord, int yCoord, Element element)
 {
-	colors[3 * (yCoord * workHeight + xCoord)] = red[newElement];
-	colors[3 * (yCoord * workHeight + xCoord) + 1] = green[newElement];
-	colors[3 * (yCoord * workHeight + xCoord) + 2] = blue[newElement];
+	colors[3 * (yCoord * workHeight + xCoord)] = element.red;
+	colors[3 * (yCoord * workHeight + xCoord) + 1] = element.green;
+	colors[3 * (yCoord * workHeight + xCoord) + 2] = element.blue;
 }
 void createBitmapFromPoints(void)
 {
@@ -92,12 +89,12 @@ void unFreezeParticles(int xCoord, int yCoord)
 			int tempY = yCoord + dy;
 			if (tempX < workWidth && tempX > 0 && tempY < workHeight && tempY > 0)
 			{
-				int tempIndex = allcoords[tempX][tempY];
+				Particle* tempParticle = allcoords[tempX][tempY];
 
-				if (tempIndex != EMPTY)
+				if (tempParticle != NULL)
 				{
 					//Unfreeze the particle
-					frozen[atemp] = 0;
+					tempParticle.frozen = FALSE;
 				}
 			}
 		}

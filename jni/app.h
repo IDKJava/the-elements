@@ -48,7 +48,7 @@ extern Particle cPoint;
 //Play state
 extern char play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-extern char brushSize;
+extern unsigned char brushSize;
 
 //Array for bitmap drawing
 extern unsigned char* colors[];
