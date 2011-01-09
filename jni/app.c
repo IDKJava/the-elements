@@ -26,6 +26,9 @@ int getIndex(int x, int y)
  
 struct Element
 {
+	//Index
+	unsigned char index;
+
 	//Dealing with states
 	char state;
 	char lowestTemp, highestTemp;
