@@ -10,6 +10,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 //#include <android/log.h>
 
 //Include the global variables
@@ -198,7 +199,7 @@ void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject
 		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
 
 
-		if (distance > 0 && cElement != ELEMENT_DRAG) //if it's not the same place and not wind
+		if (distance > 0 && cElement.index != DRAG_ELEMENT) //if it's not the same place and not wind
 		{
 			float dx = (float)changeX / (float)distance; // change divided by distance
 			float dy = (float)changeY / (float)distance;
