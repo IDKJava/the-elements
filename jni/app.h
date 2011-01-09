@@ -27,9 +27,6 @@ int getIndex(int x, int y);
  * STRUCTS
  */
  
-struct Element;
-struct Particle;
-
 struct Element
 {
 	//Index
@@ -38,12 +35,12 @@ struct Element
 	//Dealing with states
 	char state;
 	char lowestTemp, highestTemp;
-	struct Element* lowerElement;
-	struct Element* higherElement;
-
+	Element* lowerElement;
+	Element* higherElement;
+	
 	//Dealing with drawing
 	char red, green, blue;
-
+	
 	//Properties
 	char* specials;
 	char* specialVals;
@@ -54,13 +51,23 @@ struct Element
 
 struct Particle
 {
-	float x, y;
+	float x, y, oldX, oldY;
 	short xVel, yVel;
 	char heat;
 	char* specialVals;
-	struct Element* element;
+	Element* element;
 	char frozen;
 };
+
+struct Atmosphere
+{
+	char heat;
+	char gravity;
+	char walled;
+	char* name;
+	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
+};
+
 /*
  * VARIABLES
  */
@@ -73,9 +80,9 @@ extern unsigned char numElements;
 //extern int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-extern struct Element cElement;
+extern struct Element* cElement;
 //Current point during processing
-extern struct Particle cPoint;
+extern struct Particle* cPoint;
 //Play state
 extern char play;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size

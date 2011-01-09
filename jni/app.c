@@ -56,6 +56,15 @@ struct Particle
 	char frozen;
 };
 
+struct Atmosphere
+{
+	char heat;
+	char gravity;
+	char walled;
+	char* name;
+	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
+};
+
 /*
  * VARIABLES
  */
@@ -68,9 +77,9 @@ unsigned char numElements;
 //int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-Element cElement = 0;
+Element* cElement;
 //Current point during processing
-Particle cPoint = 0;
+Particle* cPoint;
 //Play state
 unsigned char play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size

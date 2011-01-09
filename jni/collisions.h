@@ -13,7 +13,7 @@
 //Include the global macros
 #include "macros.h"
 
-int collision[TElements][TElements] =
+int collision[][] =
 {
 		//Sand 0
 		{0, 28, 0, -1, 0, 27, 0, 10, 0, 1, 27, 0, 0, 0, 0, 0, -1, 18, 22, 0, 1, 0, 0, 0, 0},

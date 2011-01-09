@@ -102,7 +102,7 @@ char loadDemoFile()
 }
 
 //TODO:
-void saveCustomElement(CustomElement createdCustomElement) {}
+void saveCustomElement(Element createdCustomElement) {}
 void loadCustomElements(void) {}
 void saveAtmosphere(Atmosphere createAtmosphere) {}
 void loadAtmosphere(void) {}

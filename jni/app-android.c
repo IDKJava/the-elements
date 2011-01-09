@@ -199,7 +199,7 @@ void Java_sand_falling_opengl_MainActivity_setMouseLocation(JNIEnv* env, jobject
 		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
 
 
-		if (distance > 0 && cElement.index != DRAG_ELEMENT) //if it's not the same place and not wind
+		if (distance > 0 && cElement->index != DRAG_ELEMENT) //if it's not the same place and not wind
 		{
 			float dx = (float)changeX / (float)distance; // change divided by distance
 			float dy = (float)changeY / (float)distance;
@@ -223,14 +223,14 @@ void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject t
 	removeQuicksave();
 	return;
 }
-void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar jelement)
+void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
 {
-	cElement = jelement;
+	cElement = &elements[jelement];
 	return;
 }
 int Java_sand_falling_opengl_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
-	return cElement;
+	return (int) cElement.index;
 }
 void Java_sand_falling_opengl_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar jbrushSize)
 {
