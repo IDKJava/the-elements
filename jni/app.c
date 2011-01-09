@@ -48,7 +48,7 @@ struct Element
 
 struct Particle
 {
-	float x, y;
+	float x, y, oldX, oldY;
 	short xVel, yVel;
 	char heat;
 	char* specialVals;
