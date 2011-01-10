@@ -28,4 +28,4 @@ void adduserpass(void);
 void buildbuffer(int type);
 int sendbuffer(void);
 
-#endif
+#endif //!SERVER_H_INCLUDED

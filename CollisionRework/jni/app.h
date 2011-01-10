@@ -16,6 +16,8 @@ extern "C" {
 
 //Include the global macros
 #include "macros.h"
+//Include the server functions
+#include "server.h"
 
 /*
  * FUNCTIONS

@@ -112,4 +112,4 @@ int collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
 	{0, 0, 0, 0, 10, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0}
 };
 
-#endif
+#endif //!COLLISIONS_H_INCLUDED

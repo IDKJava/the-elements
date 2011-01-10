@@ -46,6 +46,9 @@
  * ----Add Elements Above----
  */
 
+#ifndef ELEMENTPROPERTIES_H_INCLUDED
+#define ELEMENTPROPERTIES_H_INCLUDED
+
 //Include the global macros
 #include "macros.h"
 
@@ -75,3 +78,5 @@ extern int baseSpecial;
 extern int baseSpecialValue;
 //Defines the inertia of each element
 extern int baseInertia[];
+
+#endif //!ELEMENTPROPERTIES_H_INCLUDED

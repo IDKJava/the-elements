@@ -41,4 +41,4 @@ void saveAtmosphere(struct Atmosphere createAtmosphere);
 void loadAtmosphere(void);
 int getCustomElementsNumber(void);
 
-#endif
+#endif //!SAVELOAD_H_INCLUDED

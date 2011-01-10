@@ -19,4 +19,4 @@ void appInit(void);
 void appDeinit(void);
 void appRender(void);
 
-#endif
+#endif //!GL_H_INCLUDED

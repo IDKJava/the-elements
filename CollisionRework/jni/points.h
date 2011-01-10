@@ -21,4 +21,4 @@ void setBitmapColor(int xCoord, int yCoord, struct Element element);
 void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
 
-#endif
+#endif //!POINTS_H_INCLUDED
