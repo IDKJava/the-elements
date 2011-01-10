@@ -60,6 +60,7 @@ struct Particle
 	char* specialVals;
 	Element* element;
 	char frozen;
+	char hasMoved;
 };
 
 struct Atmosphere
