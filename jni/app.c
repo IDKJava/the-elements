@@ -21,82 +21,38 @@ int getIndex(int x, int y)
  * VARIABLES
  */
 
-//An array of all the elements
-Element* elements;
-//The number of elements available
+struct Element* elements;
 unsigned char numElements;
-
-//int gAppAlive; //I don't think this is needed, commenting...
-
-//Current element selected
+struct Particle* particles[];
+struct Particle* avail[];
+short loq;
 struct Element* cElement;
-//Current point during processing
-struct Particle* cPoint;
-//Play state
-unsigned char play = PLAY;
-//Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
-unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 
-//Array for bitmap drawing (a variable-size array)
+char play;
+char zoom;
+unsigned char brushSize;
+char flipped;
+char fingerState;
+
+struct Particle* allCoords;
+
+short mouseX;
+short mouseY;
+short lastMouseX;
+short lastMouseY;
+
 unsigned char* colors;
 
-//Screen dimensions
 short screenWidth;
 short screenHeight;
-//Workspace dimensions
 short workWidth;
 short workHeight;
 
-//Coordinates
-//float x[MAX_POINTS];
-//float y[MAX_POINTS];
-//Old coordinates (for collision resolving)
-//short int oldX[MAX_POINTS];
-//short int oldY[MAX_POINTS];
-//Velocities
-//short int xVel[MAX_POINTS];
-//short int yVel[MAX_POINTS];
-
-//Element type
-//char element[MAX_POINTS];
-//Frozen state
-//char frozen[MAX_POINTS];
-
-//RGB properties (variable arrays)
-//unsigned char *red;
-//unsigned char *green;
-//unsigned char *blue;
-//Fall velocity property (a variable-size array)
-//int *fallVel;
-//Density property - 1-10 (a variable-size array)
-//int *density;
-//State property - solid = 0, liquid = 1, gaseous = 2 (a variable-size array)
-//int *state;
-//Special property - indexed special effects occurring every frame (a variable-size array)
-//int *special;
-//Draw solid property - if set to TRUE, will draw solid, if set to FALSE will draw randomized
-//int *drawSolid;
-//Inertia property - 0-10 - use this for giving velocities in explosions,
-//also we will use for drag because I feel like it; -1 means unmovable (a variable-size array)
-char *inertia;
-
-//Special value - a number used in special effects (if any)
-//int specialVal[MAX_POINTS];
-//Heat value - 1-10
-//int heat[MAX_POINTS];
-
-//Collision matrix (a two-dimensional variable-size array)
 char* collision;
 
-//Index set state
-//int set[MAX_POINTS];
-//Index available state
-struct Particle avail[MAX_POINTS];
+char shouldClear;
+char shouldUpdateMouse;
 
-//Points to the index AFTER the top of the stack
-short loq;
-//Zoom value
-char zoom;
 
 /* Accelerometer stuff being taken out for now
 //Gravity values
@@ -104,28 +60,8 @@ float gravX;
 float gravY;
 
 //Accelerometer control state
-int accelcon;
-//Flipped state
-int flipped;
-*/
-
-//Set when a clear is requested, unset when cleared
-char shouldClear = FALSE;
-//Set when a mouse update is requested, unset when udpated
-char shouldUpdateMouse = FALSE;
-
-//Finger state
-char fingerState = FINGER_UP;
-
-//A map of all the points (a two-dimensional variable-size array)
-struct Particle* allCoords;
-
-//Mouse positions
-short mouseX;
-short mouseY;
-//Old mouse positions
-short lastMouseX;
-short lastMouseY;
+//int accelcon;
+ */
 
 /*Network stuff taken out for now
 //Buffer building variables
