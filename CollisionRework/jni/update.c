@@ -57,8 +57,8 @@ void UpdateView(void)
 						{
 							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != NULL && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
 							{
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->tempXVel += (mouseX - lastMouseX);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->tempYVel += (mouseY - lastMouseY);
 							}
 						}
 						//Special Eraser case
@@ -81,123 +81,134 @@ void UpdateView(void)
 		//Used in for loops
 		int counter;
 		//For speed we're going to create temp variables to store stuff
-		int tempX, tempT, tempOldX, tempOldY, tempInertia, tempallCoords, tempElement, tempElement2;
-
+		int tempX, tempT, tempOldX, tempOldY, temptempXVel, temptempYVel;
+		char tempInertia;
+		Particle* tempParticle;
+		Particle* tempAllCoords;
+		Element* tempElement;
+		Element* tempElement2;
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
+			tempParticle = particles[counter];
+			
 			//If the particle is set and unfrozen
-			if (set[counter] && frozen[counter] < 4)
+			if (tempParticle->set == TRUE && tempParticle->frozen < 4)
 			{
 				//TODO: Life property cycle
 
 				//Set the temp and old variables
-				tempOldX = (int) x[counter];
-				tempOldY = (int) y[counter];
-				oldX[counter] = tempOldX;
-				oldY[counter] = tempOldY;
-				tempElement = element[counter];
-				tempInertia = inertia[tempElement];
+				tempOldX = (int) tempParticle->x;
+				tempOldY = (int) tempParticle->y;
+				tempParticle->oldX = tempOldX;
+				tempParticle->oldY = tempOldY;
+				tempElement = tempParticle->element;
+				tempInertia = tempElement->inertia;
+				temptempXVel = tempParticle->tempXVel;
+				temptempYVel = tempParticle->tempYVel;
 
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
-					x[counter] += xVel[counter];
-					y[counter] += fallVel[tempElement] + yVel[counter];
+					tempParticle->x += temptempXVel;
+					tempParticle->y += tempElement->fallVel + temptempYVel;
 				}
 
 				//Reduce velocities
-				if(xVel < 0)
+				if(temptempXVel < 0)
 				{
-					if(tempInertia >= -xVel)
+					if(tempInertia >= -temptempXVel)
 					{
-						xVel = 0;
+						tempXVel = 0;
 					}
 					else
 					{
-						xVel += tempInertia;
+						tempXVel += tempInertia;
 					}
 				}
-				else if(xVel > 0)
+				else if(tempXVel > 0)
 				{
-					if(tempInertia >= xVel)
+					if(tempInertia >= tempXVel)
 					{
-						xVel = 0;
+						tempXVel = 0;
 					}
 					else
 					{
-						xVel -= tempInertia;
+						tempXVel -= tempInertia;
 					}
 				}
-				if(yVel < 0)
+				if(tempYVel < 0)
 				{
-					if(tempInertia >= -yVel)
+					if(tempInertia >= -tempYVel)
 					{
-						yVel = 0;
+						tempYVel = 0;
 					}
 					else
 					{
-						yVel += tempInertia;
+						tempYVel += tempInertia;
 					}
 				}
-				else if(yVel > 0)
+				else if(tempYVel > 0)
 				{
-					if(tempInertia >= yVel)
+					if(tempInertia >= tempYVel)
 					{
-						yVel = 0;
+						tempYVel = 0;
 					}
 					else
 					{
-						yVel -= tempInertia;
+						tempYVel -= tempInertia;
 					}
 				}
 
 				/* Acclerometer stuff taken out for now
-				//If accel control, do yvel based on that
+				//If accel control, do tempYVel based on that
 				if ((int) gravy != 0 && accelcon)
 				{
-					y[counter] += ((gravy / 9.8) * fallvel[oelement] + yvel[counter]);
+					y[counter] += ((gravy / 9.8) * fallvel[oelement] + tempYVel[counter]);
 				}
 				//Otherwise, just do the fallvelocity
 				else if (accelcon == 0)
 				{
-					y[counter] += fallvel[oelement] + yvel[counter];
+					y[counter] += fallvel[oelement] + tempYVel[counter];
 				}
 				//Accelerometer control, but no gravity (held horizontal)
 				else
 				{
-					y[counter] += yvel[counter];
+					y[counter] += tempYVel[counter];
 				}
 
 				//If accel control is on, calculate new x using the gravity set
 				if ((int) gravx != 0 && accelcon == 1)
 				{
-					x[counter] += ((gravx / 9.8) * fallvel[oelement] + xvel[counter]);
+					x[counter] += ((gravx / 9.8) * fallvel[oelement] + tempXVel[counter]);
 				}
-				//Otherwise, just add xvel
+				//Otherwise, just add tempXVel
 				else
 				{
-					x[counter] += xvel[counter];
+					x[counter] += tempXVel[counter];
 				}
 				*/
 
 
 
-				//Boundary checking
-				if ((int) x[counter] >= workWidth || (int) x[counter] <= 0)
+				//Boundary checking to finalize new coords
+				if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0)
 				{
-					x[counter] = oldX;
-					xvel[counter] = 0;
+					tempParticle->x = tempOldX;
+					tempParticle->xVel = 0;
 				}
-				if ((int) y[counter] >= workHeight || (int) y[counter] <= 0)
+				if ((int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
 				{
-					y[counter] = oldY;
-					yvel[counter] = 0;
+					tempParticle->y = tempOldY;
+					tempParticle->yVel = 0;
 				}
+				
+				//Indicate that the particle has moved
+				tempParticle->hasMoved = TRUE;
 
 				//Set other temp variables
-				tempX = (int) x[counter];
-				tempY = (int) y[counter];
+				tempX = (int) tempParticle->x;
+				tempY = (int) tempParticle->y;
 
 				//Special cycle
 				if(special[tempElement] != SPECIAL_NOT_SET)
@@ -231,19 +242,19 @@ void UpdateView(void)
 					if (collision[element[allCoords[tempX][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
 						setElement(allCoords[tempX][tempY + 1], 5);
-						yvel[allCoords[tempX][tempY + 1]] = 2;
+						tempYVel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
 					if (collision[element[allCoords[tempX + 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
 						setElement(allCoords[tempX + 1][tempY + 1], 5);
-						yvel[allCoords[tempX][tempY + 1]] = 2;
+						tempYVel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
 					if (collision[element[allCoords[tempX - 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
 					{
 						setElement(allCoords[tempX - 1][tempY + 1], 5);
-						yvel[allCoords[tempX][tempY + 1]] = 2;
+						tempYVel[allCoords[tempX][tempY + 1]] = 2;
 					}
 					random = rand();
 					if (collision[element[allCoords[tempX + 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
@@ -309,45 +320,85 @@ void UpdateView(void)
 				*/
 
 				//Updating allCoords and collision resolution
-				tempallCoords = allCoords[getIndex(tempX, tempY)];
+				tempAllCoords = allCoords[getIndex(tempX, tempY)];
 
 				//If the space the particle is trying to move to is taken and isn't itself
-				if (tempallCoords != EMPTY && tempallCoords != counter)
+				if (tempAllCoords != NULL && tempAllCoords != tempParticle)
 				{
-					tempElement2 = element[tempallCoords];
-
-					//Resolve (tempallCoords != counter) the collision
-					collide(counter, tempallCoords);
-
-					//If nothing has changed
-					if (x[counter] == oldX
-							&& y[counter] == oldY
-							&& element[counter] == tempElement
-							&& xvel[counter] == 0
-							&& yvel[counter] == 0)
+					tempElement2 = tempAllCoords->element;
+					
+					//Update heat
+					unsigned char heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
+					tempParticle->heat = heatAvg;
+					tempAllCoords->heat = heatAvg;
+					
+					//Resolve heat changes
+					if(heatAvg < tempParticle->element->lowestTemp)
 					{
-						frozen[counter]++; //Increment the frozen count
+						tempParticle->element = tempParticle->element->lowerElement;
+					}
+					else if(heatAvg > tempParticle->element->highestTemp)
+					{
+						tempParticle->element = tempParticle->element->higherElement;
+					}
+					if(heatAvg < tempAllCoords->element->lowestTemp)
+					{
+						tempAllCoords->element = tempParticle->element->lowerElement;
+					}
+					else if(heatAvg > tempAllCoords->element->highestTemp)
+					{
+						tempAllCoords->element = tempAllCoords->element->higherElement;
+					}
+
+					//Resolve the collision (this updates the state of the particle, but lets this function resolve later)
+					collide(tempParticle, tempAllCoords);
+					
+					//Update allCoords and the bitmap colors if the hasMoved flag is set
+					if(tempParticle->hasMoved)
+					{
+						tempX = tempParticle->x;
+						tempY = tempParticle->y;
+						
+						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						allCoords[getIndex(tempX, tempY)] = tempParticle;
+						setBitmapColor(tempX, tempY, tempParticle->element);
+						
+						unFreezeParticle(tempOldX, tempOldY);
+						tempParticle->hasMoved = FALSE;
 					}
 					else
 					{
-						//Unfreeze stuff around the primary particle because stuff has changed with it
-						unFreezeParticles(oldX, oldY);
+						tempParticle->frozen++;
+					}
+					if(tempAllCoords->hasMoved)
+					{
+						tempX = tempAllCoords->x;
+						tempY = tempAllCoords->y;
+						
+						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
+						setBitmapColor(tempX, tempY, tempAllCoords->element);
+						
+						unFreezeParticle(tempOldX, tempOldY);
+						tempAllCoords->hasMoved = FALSE;
+					}
+					else
+					{
+						tempAllCoords->frozen++;
 					}
 				}
-				else if (tempallCoords != counter)//Space particle is trying to move to is free
+				//Space particle is trying to move to is free
+				else if (tempAllCoords != tempParticle)
 				{
-					//Clear the old spot
-					allCoords[oldX][oldY] = EMPTY;
-					setBitmapColor(oldX, oldY, ERASER_ELEMENT);
-
-					//Unfreeze particles around old spot
-					unFreezeParticles(oldX, oldY);
-					//Possibly unfreeze particles around new spot?
-					//unFreezeParticles(tempX, tempY);
-
-					//Set new spot
-					allCoords[tempX][tempY] = counter;
-					setBitmapColor(tempX, tempY, element[counter]);
+						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
+						setBitmapColor(tempX, tempY, tempAllCoords->element);
+						
+						unFreezeParticle(tempOldX, tempOldY);
+						tempAllCoords->hasMoved = FALSE;
 				}
 			}
 		}
