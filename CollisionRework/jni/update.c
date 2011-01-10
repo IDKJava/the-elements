@@ -26,47 +26,47 @@ void UpdateView(void)
 		if (mouseY != 0) //Not sure why this is here...
 		{
 			int dx, dy;
-			for (dy = size; dy >= -size; dy--)
+			for (dy = brushSize; dy >= -brushSize; dy--)
 			{
-				for (dx = -size; dx <= size; dx++)
+				for (dx = -brushSize; dx <= brushSize; dx++)
 				{
-					if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (size * size))
+					if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
 					{
 						//Normal drawing
-						if (cElement >= 0)
+						if (cElement->index >= 0)
 						{
 							//Draw it solid
-							if(inertia[cElement] == INERTIA_UNMOVABLE)
+							if(cElement->inertia == INERTIA_UNMOVABLE)
 							{
-								if (dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allCoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								if (dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 								{
-									CreatePoint(xm + dx, ym + dy, celement);
+									CreatePoint(mouseX + dx, mouseY + dy, cElement);
 								}
 							}
 							//Draw it randomized
 							else
 							{
-								if (rand() % 3 == 1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0 && allCoords[(int) (dx + xm)][(int) (dy + ym)] == -1)
+								if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 								{
-									CreatePoint(xm + dx, ym + dy, celement);
+									CreatePoint(mouseX + dx, mouseY + dy, cElement);
 								}
 							}
 						}
 						//Special Drag case
-						else if (cElement == DRAG_ELEMENT)
+						else if (cElement->index == DRAG_ELEMENT)
 						{
-							if (allCoords[lmx + dx][lmy + dy] != -1 && fallvel[element[allCoords[lmx + dx][lmy + dy]]] != 0 && dx + lmx < maxx && dx + lmx > 0 && dy + lmy < maxy && dy + lmy > 0)
+							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != NULL && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
 							{
-								xvel[allCoords[lmx + dx][lmy + dy]] += (xm - lmx);
-								yvel[allCoords[lmx + dx][lmy + dy]] += (ym - lmy);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
 							}
 						}
 						//Special Eraser case
-						else if (cElement == ERASER_ELEMENT)
+						else if (cElement->index == ERASER_ELEMENT)
 						{
-							if (allCoords[(int) (dx + xm)][(int) (dy + ym)] != -1 && dx + xm < maxx && dx + xm > 0 && dy + ym < maxy && dy + ym > 0)
+							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] != NULL && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
 							{
-								DeletePoint(allCoords[xm + dx][ym + dy]);
+								DeletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
 							}
 						}
 					}
@@ -78,10 +78,10 @@ void UpdateView(void)
 	//Particles update
 	if (play)
 	{
+		//Used in for loops
 		int counter;
-		int rtop; //used to prevent bugs when fire reaches the top
-
-		int tempX, tempT, tempOldX, tempOldY, tempInertia, tempallCoords, tempElement, tempElement2; //For speed we're going to create temp variables to store stuff
+		//For speed we're going to create temp variables to store stuff
+		int tempX, tempT, tempOldX, tempOldY, tempInertia, tempallCoords, tempElement, tempElement2;
 
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
@@ -264,7 +264,7 @@ void UpdateView(void)
 					{
 						for (check2 = -2; check2 <= 2; check2++)
 						{
-							if (tempX + check1 > 1 && tempX + check1 < maxx && tempY + check2 >= 0 && tempY + check2 < maxy)
+							if (tempX + check1 > 1 && tempX + check1 < workWidth && tempY + check2 >= 0 && tempY + check2 < workHeight)
 							{
 								temp = allCoords[tempX + check1][tempY + check2];
 								if (temp != -1 && element[temp] == 7) //There's a generator adjacent
