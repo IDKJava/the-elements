@@ -44,4 +44,4 @@
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
 
-#endif
+#endif //!MACROS_H_INCLUDED

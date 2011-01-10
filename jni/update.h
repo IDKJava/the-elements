@@ -23,4 +23,4 @@
 
 void UpdateView(void);
 
-#endif
+#endif //!UPDATE_H_INCLUDED

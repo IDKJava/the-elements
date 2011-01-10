@@ -19,4 +19,4 @@ void setup(void);
 //Set up the variable sized arrays
 void arraySetup(void);
 
-#endif
+#endif //!SETUP_H_INCLUDED

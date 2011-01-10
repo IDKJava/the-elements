@@ -7,8 +7,8 @@
  * long, thus the need for a separate file.
  */
 
-#ifndef COLLIDE_H_INCLUDE
-#define COLLIDE_H_INCLUDE
+#ifndef COLLIDE_H_INCLUDED
+#define COLLIDE_H_INCLUDED
 
 //Include stdlib for random
 #include <stdlib.h>
@@ -23,4 +23,4 @@
 
 void collide (Particle firstParticle, Particle secondParticle);
 
-#endif
+#endif //!COLLIDE_H_INCLUDED

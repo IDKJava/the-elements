@@ -5,10 +5,7 @@
  * variables used in the JNI part of the code.
  */
 
-//Include the global macros
-#include "macros.h"
-//Include the server functions
-#include "server.h"
+#include "app.h"
 
 /*
  * FUNCTIONS
@@ -19,51 +16,6 @@ int getIndex(int x, int y)
 {
 	return x*workWidth + y;
 }
-
-/*
- * STRUCTS
- */
- 
-struct Element
-{
-	//Index
-	unsigned char index;
-
-	//Dealing with states
-	char state;
-	char lowestTemp, highestTemp;
-	Element* lowerElement;
-	Element* higherElement;
-	
-	//Dealing with drawing
-	char red, green, blue;
-	
-	//Properties
-	char* specials;
-	char* specialVals;
-	char density;
-	char fallVel;
-	char inertia;
-};
-
-struct Particle
-{
-	float x, y, oldX, oldY;
-	short xVel, yVel;
-	char heat;
-	char* specialVals;
-	Element* element;
-	char frozen;
-};
-
-struct Atmosphere
-{
-	char heat;
-	char gravity;
-	char walled;
-	char* name;
-	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
-};
 
 /*
  * VARIABLES
@@ -77,9 +29,9 @@ unsigned char numElements;
 //int gAppAlive; //I don't think this is needed, commenting...
 
 //Current element selected
-Element* cElement;
+struct Element* cElement;
 //Current point during processing
-Particle* cPoint;
+struct Particle* cPoint;
 //Play state
 unsigned char play = PLAY;
 //Size variable initialize it here so we don't have to do it in resetup and we can keep our brush size
@@ -139,7 +91,7 @@ char* collision;
 //Index set state
 //int set[MAX_POINTS];
 //Index available state
-Particle avail[MAX_POINTS];
+struct Particle avail[MAX_POINTS];
 
 //Points to the index AFTER the top of the stack
 short loq;
@@ -166,7 +118,7 @@ char shouldUpdateMouse = FALSE;
 char fingerState = FINGER_UP;
 
 //A map of all the points (a two-dimensional variable-size array)
-Particle* allCoords;
+struct Particle* allCoords;
 
 //Mouse positions
 short mouseX;
