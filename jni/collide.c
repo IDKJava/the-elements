@@ -1,20 +1,20 @@
 /*
- * collide.c
+ * collide->c
  * ----------------------------
  * Defines the collide function, which is the
- * heart of our app. It processes all the collisions by
- * type number. It alone is several hundred lines
- * long, thus the need for a separate file.
+ * heart of our app-> It processes all the collisions by
+ * type number-> It alone is several hundred lines
+ * long, thus the need for a separate file->
  */
 
-#include "collide.h"
+#include "collide->h"
 
-void collide(Particle firstParticle, Particle secondParticle)
+void collide(Particle* firstParticle, Particle* secondParticle)
 {
 	//Temporary variables
-	int oldXFirst = firstParticle.oldX, oldYFirst = firstParticle.oldY, oldXSecond = secondParticle.oldX, oldYSecond = secondParticle.oldY;
+	int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY, oldXSecond = secondParticle->oldX, oldYSecond = secondParticle->oldY;
 	//The type of the collision (retrieved from a static array)
-	int type = collision[firstParticle.element.index][secondParticle.element.index];
+	int type = collision[firstParticle->element->index][secondParticle->element->index];
 
 	switch(type)
 	{
@@ -22,38 +22,39 @@ void collide(Particle firstParticle, Particle secondParticle)
 		case 0:
 		{
 			//First particle goes back to where it was before
-			firstParticle.x = oldXFirst;
-			firstParticle.y = oldYFirst;
+			firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			firstParticle->hasMoved = FALSE;
 
-			firstParticle.xVel += (rand() % 3) - 1;
+			firstParticle->xVel += (rand() % 3) - 1;
 			break;
 		}
 		//Density Based
 		case 1:
 		{
 			//The denser element replaces the less dense element
-			if (firstParticle.element.density > secondParticle.element.density)
+			if (firstParticle->element->density > secondParticle->element->density)
 			{
-				secondParticle.x = oldXFirst;
-				secondParticle.y = oldYFirst;
-
-				allCoords[(int) firstParticle.x][(int) firstParticle.y] = firstParticle;
-				setBitmapColor((int) firstParticle.x, (int) firstParticle.y, firstParticle.element);
-				allCoords[(int) secondParticle.x][(int) secondParticle.y] = secondParticle;
-				setBitmapColor((int) secondParticle.x, (int) secondParticle.y, secondParticle.element);
+				secondParticle->x = oldXFirst;
+				secondParticle->y = oldYFirst;
+				secondParticle->hasMoved = TRUE;
 
 				break;
 			}
 			//The less dense element bounces back and adds some velocities
 			else
 			{
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
+				firstParticle->hasMoved = FALSE;
+			
 				//-1 to 1
 				int random = rand() % 3 - 1;
-				firstPartivle.yVel = random;
+				firstParticle->yVel = random;
 
 				//-3 to 3
 				random = rand() % 7 - 3;
-				firstParticle.xVel = random;
+				firstParticle->xVel = random;
 
 				break;
 			}
@@ -62,12 +63,12 @@ void collide(Particle firstParticle, Particle secondParticle)
 		{
 			//Change the generator to spawner
 			setElement(secondParticle, SPAWN_ELEMENT);
-			secondParticle.specialVals[0] = firstParticle.element.index;
+			secondParticle->specialVals[0] = firstParticle->element->index;
+			secondParticle->hasMoved = TRUE;
 
 			//Delete firstParticle
-			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-			free(firstParticle);
+			DeletePoint(firstParticle);
+			firstParticle->hasMoved= TRUE:
 
 			break;
 		}
@@ -75,38 +76,29 @@ void collide(Particle firstParticle, Particle secondParticle)
 		{
 			//Change the generator to spawner
 			setElement(firstParticle, SPAWN_ELEMENT);
-			firstParticle.specialVals[0] = secondParticle.element.index;
+			firstParticle->specialVals[0] = secondParticle->element->index;
 
 			//Move firstParticle back
-			firstParticle.x = oldXFirst;
-			firstParticle.y = oldYFirst;
+			firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			firstParticle->hasMoved = FALSE;
 
 			//Delete secondParticle
-			allCoords[getIndex(secondParticle.x, secondParticle.y)] = NULL;
-			setBitmapColor(secondParticle.x, secondParticle.y, ERASER_ELEMENT);
-			free(secondParticle);
+			DeletePoint(secondParticle);
+			secondParticle->hasMoved = TRUE;
 
 			break;
 		}
 		case 4: //Acid - Meltable
 		{
 			//Define some temporary variables
-			int tempX = firstParticle.x, tempY = firstParticle.y;
+			int tempX = firstParticle->x, tempY = firstParticle->y;
 
 			if (rand() % 3 != 0) //2/3 chance
 			{
-				//Acid burns away the Meltable
-				//Delete the old point
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-				//Set the new point
-				allCoords[getIndex(tempX, tempY)] = firstParticle;
-				setBitmapColor(tempX, tempY, firstParticle.element);
-
-				//Delete secondParticle
-				allCoords[getIndex(oldXSecond, oldYSecond)] = NULL;
-				setBitmapColor(oldXSecond, oldYSecond, ERASER_ELEMENT);
-				free(secondParticle);
+				//Acid burns away Meltable
+				DeletePoint(secondParticle);
+				secondParticle->hasMoved = TRUE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
@@ -119,8 +111,8 @@ void collide(Particle firstParticle, Particle secondParticle)
 			else //Otherwise, 1/6 total
 			{
 				//Acid bounces
-				firstParticle.x = oldXFirst;
-				firstParticle.y = oldYFirst;
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
 			}
 
 			break;
@@ -147,8 +139,8 @@ void collide(Particle firstParticle, Particle secondParticle)
 				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 
 				//Set the new point
-				allCoords[firstParticle.x][firstParticle.y] = firstParticle;
-				setBitmapColor(firstParticle.x, firstParticle.y, firstParticle.element);
+				allCoords[firstParticle->x][firstParticle->y] = firstParticle;
+				setBitmapColor(firstParticle->x, firstParticle->y, firstParticle->element);
 
 				//Delete secondParticle
 				free(secondParticle);
@@ -157,14 +149,14 @@ void collide(Particle firstParticle, Particle secondParticle)
 			{
 				//Meltable bounces
 
-				firstParticle.x = oldXFirst;
-				firstParticle.y = oldYFirst;
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
 			}
 			break;
 		}
 		case 6: //Acid - Neutralizer
 		{
-			int tempX = firstParticle.x, tempY = firstParticle.y;
+			int tempX = firstParticle->x, tempY = firstParticle->y;
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete firstParticle
@@ -175,8 +167,8 @@ void collide(Particle firstParticle, Particle secondParticle)
 			else //2/3 Change of bouncing
 			{
 				//Move the point back
-				firstParticle.x = olxf;
-				firstParticle.y = olyf;
+				firstParticle->x = olxf;
+				firstParticle->y = olyf;
 			}
 
 			break;
@@ -190,8 +182,8 @@ void collide(Particle firstParticle, Particle secondParticle)
 				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
 
 				//Set the new point
-				allCoords[firstParticle.x][firstParticle.y] = firstParticle;
-				setBitmapColor(firstParticle.x, firstParticle.y, firstParticle.element);
+				allCoords[firstParticle->x][firstParticle->y] = firstParticle;
+				setBitmapColor(firstParticle->x, firstParticle->y, firstParticle->element);
 
 				//Delete secondParticle
 				free(secondParticle);
@@ -199,8 +191,8 @@ void collide(Particle firstParticle, Particle secondParticle)
 			else //2/3 Chance
 			{
 				//Move the water back
-				firstParticle.x = oldXFirst;
-				firstParticle.y = oldYFirst;
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
 			}
 
 			break;
