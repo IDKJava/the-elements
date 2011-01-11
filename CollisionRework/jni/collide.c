@@ -67,7 +67,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			secondParticle->hasMoved = TRUE;
 
 			//Delete firstParticle
-			DeletePoint(firstParticle);
+			unSetPoint(firstParticle);
 			firstParticle->hasMoved= TRUE:
 
 			break;
@@ -84,7 +84,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			firstParticle->hasMoved = FALSE;
 
 			//Delete secondParticle
-			DeletePoint(secondParticle);
+			unSetPoint(secondParticle);
 			secondParticle->hasMoved = TRUE;
 
 			break;
@@ -97,14 +97,14 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			if (rand() % 3 != 0) //2/3 chance
 			{
 				//Acid burns away Meltable
-				DeletePoint(secondParticle);
+				unSetPoint(secondParticle);
 				secondParticle->hasMoved = TRUE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
 				//Delete firstParticle
-				DeletePoint(firstParticle);
+				unSetPoint(firstParticle);
 				firstParticle->hasMoved = TRUE;
 			}
 			else //Otherwise, 1/6 total
@@ -124,7 +124,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 				//Meltable is destroyed
 
 				//Delete firstParticle
-				DeletePoint(firstParticle);
+				unSetPoint(firstParticle);
 				firstParticle->hasMoved = TRUE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
@@ -132,7 +132,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 				//Acid is neutralized
 
 				//Delete secondParticle
-				DeletePoint(secondParticle);
+				unSetPoint(secondParticle);
 				secondParticle->hasMoved = TRUE;
 			}
 			else //Otherwise, 1/6 total
@@ -150,7 +150,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete firstParticle
-				DeletePoint(firstParticle);
+				unSetPoint(firstParticle);
 				firstParticle->hasMoved = TRUE;
 			}
 			else //2/3 Change of bouncing
@@ -168,7 +168,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete secondParticle
-				DeletePoint(secondParticle);
+				unSetPoint(secondParticle);
 				secondParticle->hasMoved = TRUE;
 			}
 			else //2/3 Chance
@@ -184,7 +184,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
 		{
 			//Delete firstParticle
-			DeletePoint(firstParticle);
+			unSetPoint(firstParticle);
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Salt-water
@@ -196,7 +196,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 		case 9: //Salt-water - Plant or Plant - Salt-water
 		{
 			//Delete firstParticle
-			DeletePoint(firstParticle);
+			unSetPoint(firstParticle);
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element or secondParticle to Sand
@@ -206,7 +206,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 		case 10: //Water - Sand or Sand - Water
 		{
 			//Delete firstParticle
-			DeletePoint(firstParticle);
+			unSetPoint(firstParticle);
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Mud
