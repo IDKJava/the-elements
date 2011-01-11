@@ -103,16 +103,16 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
-				//Delete fingerParticle
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-				free(firstParticle);
+				//Delete firstParticle
+				DeletePoint(firstParticle);
+				firstParticle->hasMoved = TRUE;
 			}
 			else //Otherwise, 1/6 total
 			{
 				//Acid bounces
 				firstParticle->x = oldXFirst;
 				firstParticle->y = oldYFirst;
+				firstParticle->hasMoved = FALSE;
 			}
 
 			break;
@@ -123,34 +123,24 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			{
 				//Meltable is destroyed
 
-				//Delete the old point
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-
 				//Delete firstParticle
-				free(firstParticle);
+				DeletePoint(firstParticle);
+				firstParticle->hasMoved = TRUE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
 
-				//Delete the old point
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-
-				//Set the new point
-				allCoords[firstParticle->x][firstParticle->y] = firstParticle;
-				setBitmapColor(firstParticle->x, firstParticle->y, firstParticle->element);
-
 				//Delete secondParticle
-				free(secondParticle);
+				DeletePoint(secondParticle);
+				secondParticle->hasMoved = TRUE;
 			}
 			else //Otherwise, 1/6 total
 			{
 				//Meltable bounces
-
 				firstParticle->x = oldXFirst;
 				firstParticle->y = oldYFirst;
+				firstParticle->hasMoved = FALSE;
 			}
 			break;
 		}
@@ -160,15 +150,15 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete firstParticle
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-				free(firstParticle);
+				DeletePoint(firstParticle);
+				firstParticle->hasMoved = TRUE;
 			}
 			else //2/3 Change of bouncing
 			{
 				//Move the point back
-				firstParticle->x = olxf;
-				firstParticle->y = olyf;
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
+				firstParticle->hasMoved = FALSE;
 			}
 
 			break;
@@ -177,22 +167,16 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 		{
 			if (rand() % 3 == 0) //1/3 Chance
 			{
-				//Delete the old point
-				allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-				setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-
-				//Set the new point
-				allCoords[firstParticle->x][firstParticle->y] = firstParticle;
-				setBitmapColor(firstParticle->x, firstParticle->y, firstParticle->element);
-
 				//Delete secondParticle
-				free(secondParticle);
+				DeletePoint(secondParticle);
+				secondParticle->hasMoved = TRUE;
 			}
 			else //2/3 Chance
 			{
 				//Move the water back
 				firstParticle->x = oldXFirst;
 				firstParticle->y = oldYFirst;
+				firstParticle->hasMoved = FALSE;
 			}
 
 			break;
@@ -200,33 +184,33 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
 		{
 			//Delete firstParticle
-			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-			free(firstParticle);
+			DeletePoint(firstParticle);
+			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Salt-water
 			setElement(secondParticle, 19);
+			secondParticle->hasMoved = TRUE;
 
 			break;
 		}
 		case 9: //Salt-water - Plant or Plant - Salt-water
 		{
 			//Delete firstParticle
-			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-			free(firstParticle);
+			DeletePoint(firstParticle);
+			firstParticle->hasMoved = TRUE;
 
 			//Change the element or secondParticle to Sand
 			setElement(secondParticle, 3);
+			secondParticle->hasMoved = TRUE;
 		}
 		case 10: //Water - Sand or Sand - Water
 		{
 			//Delete firstParticle
-			allCoords[getIndex(oldXFirst, oldYFirst)] = NULL;
-			setBitmapColor(oldXFirst, oldYFirst, ERASER_ELEMENT);
-			free(firstParticle);
+			DeletePoint(firstParticle);
+			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Mud
 			setElement(secondParticle, 21);
+			secondParticle->hasMoved = TRUE;
 		}
 }
