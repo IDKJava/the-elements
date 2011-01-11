@@ -1,13 +1,13 @@
 /*
- * collide->c
+ * collide.c
  * ----------------------------
  * Defines the collide function, which is the
- * heart of our app-> It processes all the collisions by
- * type number-> It alone is several hundred lines
- * long, thus the need for a separate file->
+ * heart of our app. It processes all the collisions by
+ * type number. It alone is several hundred lines
+ * long, thus the need for a separate file.
  */
 
-#include "collide->h"
+#include "collide.h"
 
 void collide(Particle* firstParticle, Particle* secondParticle)
 {
