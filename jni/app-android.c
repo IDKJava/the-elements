@@ -225,7 +225,7 @@ void Java_sand_falling_opengl_MainActivity_clearQuickSave(JNIEnv* env, jobject t
 }
 void Java_sand_falling_opengl_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
 {
-	cElement = &elements[jelement];
+	cElement = elements[jelement];
 	return;
 }
 int Java_sand_falling_opengl_MainActivity_getElement(JNIEnv* env, jobject thiz)
