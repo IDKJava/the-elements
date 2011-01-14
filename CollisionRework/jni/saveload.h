@@ -15,6 +15,8 @@
 #define SAVES_FOLDER "/sdcard/thelements/saves/"
 #define CUSTOM_ELEMENTS_FOLDER "/sdcard/thelements/elements/"
 #define ATMOSPHERES_FOLDER "/sdcard/thelements/atmospheres/"
+#define TEMP_SAVE_FILE "temp"
+#define DEMO_SAVE_FILE "demo"
 //File extensions
 #define SAVE_EXTENSION ".sav"
 #define ELEMENT_EXTENSION ".ele"
@@ -22,6 +24,8 @@
 
 //Include the FILE type
 #include <stdio.h>
+//Include the date and time functions
+#include <time.h>
 //Include the global variables
 #include "app.h"
 //Include the global macros
@@ -31,13 +35,12 @@
 //Include the initializer function
 #include "setup.h"
 
-char save(int type);
-char load(int type);
-void removeQuicksave(void);
-char loadDemoFile(void);
-void saveCustomElement(struct Element createdCustomElement);
+char saveState(int type);
+char loadState(int type);
+void removeTempSave(void);
+void saveCustomElement(struct Element* createdCustomElement);
 void loadCustomElements(void);
-void saveAtmosphere(struct Atmosphere createAtmosphere);
+void saveAtmosphere(struct Atmosphere* createAtmosphere);
 void loadAtmosphere(void);
 int getCustomElementsNumber(void);
 

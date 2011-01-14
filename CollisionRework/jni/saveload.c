@@ -1,87 +1,118 @@
 /*
  * saveload.c
  * --------------------------
- * Defines the function definitions for saver
- * and loader, the two functions which save and
- * load an element setup.
+ * Defines functions relating to saving
+ * and loading from files.
  */
 
 #include "saveload.h"
 
-char save(int type)
+char saveState(int type)
 {
+	//Strings for file location
+	char timestamp[64], saveLoc[256];
+
 	FILE *fp;
 	if (type == NORMAL_SAVE)
 	{
-		fp = fopen(SAVE_FILE, "w");
+		//Generate the filename based on date and time
+		strftime(timestamp, 255, "%Y-%m-%d-%H:%M", localtime(time(NULL)));
+		strcpy(saveLoc, SAVES_FOLDER);
+		strcat(saveLoc, timestamp);
+		strcat(saveLoc, SAVE_EXTENSION);
 	}
-	else if (type == QUICK_SAVE)
+	else if (type == TEMP_SAVE)
 	{
-		fp = fopen(QUICK_SAVE_FILE, "w");
+		//Generate the temp save filename
+		strcpy(saveLoc, SAVES_FOLDER);
+		strcat(saveLoc, TEMP_SAVE_FILE);
+		strcat(saveLoc, SAVE_EXTENSION);
 	}
+	fp = fopen(saveLoc, "w");
 
 	if (fp != NULL)
 	{
-		int counter, addedToFile = FALSE;
-		for (counter = 0; counter < maxPoints; counter++)
+		int counter;
+		Particle* tempParticle;
+		Element* needsToBeSaved[numElements - NUM_BASE_ELEMENTS];
+		
+		//Save the particles
+		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
-			if (set[counter] == TRUE)
+			tempParticle = partices[counter];
+			if (tempParticle->set)
 			{
-				fprintf(fp, "%d %d %d %d ", spawn[counter], (int) x[counter],
-						(int) y[counter], element[counter]); //Save the spawn, x y, and element of each current point
-				addedToFile = TRUE;
+				//Save x, y, and element of each set particle
+				fprintf(fp, "%d %d %d\n",
+					tempParticle->x,
+					tempParticle->y,
+					tempParticle->element->index);
+				
+				if(tempParticle->element->index >= NUM_BASE_ELEMENTS)
+				{
+					needsToBeSaved[tempParticle->element->index - NUM_BASE_ELEMENTS] = TRUE;
+				}
+			}
+		}
+		
+		//Save any custom elements that need to be saved, so that this is portable
+		for(counter = 0; counter < numElements - NUM_BASE_ELEMENTS, counter++)
+		{
+			if(needsToBeSaved[counter])
+			{
+				//TODO: Save the custom element at the bottom section with an index
 			}
 		}
 		fclose(fp);
-		if (addedToFile == FALSE)
-		{
-			if (type == NORMAL_SAVE)
-			{
-				remove(SAVE_FILE);
-			}
-			else if (type == QUICK_SAVE)
-			{
-				remove(QUICK_SAVE_FILE);
-			}
-		}
-		return TRUE; //success
+
+		return TRUE;
 	}
 	else
 	{
-		return FALSE; //error: didn't open file, prolly sdcard not there
+		//An error occurred, most likely lack of an SDCard
+		return FALSE;
 	}
 }
 
-char load(int type)
+char loadState(int type)
 {
 	FILE *fp;
+	char loadLoc[256];
+	//Set up the filename
 	if (type == NORMAL_LOAD)
 	{
-		fp = fopen(SAVE_FILE, "r");
+		//TODO: A filename is probably needed here -> deals with UI
 	}
 	else if (type == QUICK_LOAD)
 	{
-		fp = fopen(QUICK_SAVE_FILE, "r");
+		strcpy(loadLoc, SAVES_FOLDER);
+		strcat(loadLoc, TEMP_SAVE_FILE);
+		strcat(loadLoc, SAVE_EXTENSION);
 	}
 	else if (type == DEMO_LOAD)
 	{
-		fp = fopen(DEMO_SAVE_FILE, "r");
+		strcpy(loadLoc, SAVES_FOLDER);
+		strcat(loadLoc, DEMO_SAVE_FILE);
+		strcat(loadLoc, SAVE_EXTENSION);
 	}
+	//Load the file for reading
+	fp = fopen(loadLoc, "r");
 
+	//Clear the screen and set up some temp variables
 	setup();
-	int xCoordinate;
-	int yCoordinate;
-	int loadElement;
-	int spawnV;
+	int xCoord;
+	int yCoord;
+	int element;
 
 	if(fp != NULL)
 	{
 		while (!feof(fp))
 		{
-			fscanf(fp, "%d%d%d%d", &spawnV, &xCoordinate, &yCoordinate,
-					&loadElement);
-			spawn[avail[loq - 1]] = spawnV;
-			CreatePoint(xCoordinate, yCoordinate, loadElement);
+			fscanf(fp, "%d%d%d\n",
+				&xCoord,
+				&yCoord,
+				&element);
+			CreatePoint(xCoord, yCoord, element);
 		}
 
 		fclose(fp);
@@ -91,19 +122,20 @@ char load(int type)
 	return FALSE;
 }
 
-void removeQuicksave(void)
+void removeTempSave(void)
 {
-	remove(QUICK_SAVE_FILE);
-}
-
-char loadDemoFile()
-{
-	return load(DEMO_LOAD);
+	char saveLoc[256];
+	//Generate the temp save filename
+	strcpy(saveLoc, SAVES_FOLDER);
+	strcat(saveLoc, TEMP_SAVE_FILE);
+	strcat(saveLoc, SAVE_EXTENSION);
+	//Remove the file at that location
+	remove(saveLoc);
 }
 
 //TODO:
-void saveCustomElement(Element createdCustomElement) {}
+void saveCustomElement(struct Element* createdCustomElement) {}
 void loadCustomElements(void) {}
-void saveAtmosphere(Atmosphere createAtmosphere) {}
+void saveAtmosphere(struct Atmosphere* createAtmosphere) {}
 void loadAtmosphere(void) {}
 int getCustomElementsNumber(void) {}

@@ -26,9 +26,9 @@
 #define FALSE 0
 
 #define NORMAL_SAVE 0
-#define QUICK_SAVE 1
+#define TEMP_SAVE 1
 #define NORMAL_LOAD 0
-#define QUICK_LOAD 1
+#define TEMP_LOAD 1
 
 #define FINGER_DOWN 1
 #define FINGER_UP 0
