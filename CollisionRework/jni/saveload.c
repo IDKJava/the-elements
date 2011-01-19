@@ -74,14 +74,19 @@ char saveState(int type)
 	}
 }
 
-char loadState(int type)
+char loadState(int type, char* filename)
 {
 	FILE *fp;
 	char loadLoc[256];
 	//Set up the filename
 	if (type == NORMAL_LOAD)
 	{
-		//TODO: A filename is probably needed here -> deals with UI
+		if(sizeof(filename)/sizeof(char) > 256)
+		{
+			return FALSE;
+		}
+		
+		strcpy(loadLoc, filename);
 	}
 	else if (type == QUICK_LOAD)
 	{
