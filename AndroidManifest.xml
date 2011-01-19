@@ -9,7 +9,6 @@
     		<intent-filter>
     			<action android:name="android.intent.action.MAIN" /> 
     			<category android:name="android.intent.category.LAUNCHER" />
-    	        
     		</intent-filter>
     	</activity>
     	
@@ -22,7 +21,7 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
     		<intent-filter>
     			<action android:name="android.intent.action.MAIN" />
-    			<category android:name="android.intent.category.SAMPLE_APP" />
+    			<category android:name="android.intent.category.DEFAULT" />
     		</intent-filter>
     	</activity>
         <activity android:name=".MainActivity"
@@ -31,7 +30,15 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_APP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+            	<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="http" android:host="*" android:pathPattern=".*\\.sav"/>
+				<data android:scheme="https" android:host="*" android:pathPattern=".*\\.sav"/>
+				<data android:scheme="content" android:host="*" android:pathPattern=".*\\.sav"/>
+				<data android:scheme="file" android:host="*" android:pathPattern=".*\\.sav"/>
             </intent-filter>
         </activity>
         <activity android:name=".preferences.PreferencesFromCode"
@@ -39,7 +46,7 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_APP" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
          <activity android:name=".custom.CustomMaker"
@@ -47,7 +54,15 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_APP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+            	<action android:name="android.intent.action.VIEW" />
+            	<category android:name="android.intent.category.DEFAULT" />
+				<data android:scheme="http" android:host="*" android:pathPattern=".*\\.ele"/>
+				<data android:scheme="https" android:host="*" android:pathPattern=".*\\.ele"/>
+				<data android:scheme="content" android:host="*" android:pathPattern=".*\\.ele"/>
+				<data android:scheme="file" android:host="*" android:pathPattern=".*\\.ele"/>
             </intent-filter>
         </activity>
         <activity android:name=".network.networklogin"
@@ -55,7 +70,7 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_APP" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity android:name=".network.networkengage"
@@ -65,7 +80,7 @@
     			  android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_APP" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
