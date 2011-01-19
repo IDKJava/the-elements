@@ -1,4 +1,5 @@
-package sand.falling.opengl.custom;
+package idkjava.thelements;
+
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -8,7 +9,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import sand.falling.opengl.MainActivity;
 import sand.falling.opengl.R;
 import android.app.Activity;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class CustomMaker extends Activity
+public class CustomElementEditorActivity extends Activity
 {
 	private static final int TSpinner = 20;
 	private static final int TSeekBar = 5;

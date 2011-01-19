@@ -1,5 +1,6 @@
-package sand.falling.opengl;
+package idkjava.thelements;
 
+import sand.falling.opengl.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

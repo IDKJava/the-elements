@@ -1,4 +1,6 @@
-package sand.falling.opengl;
+package idkjava.thelements.game;
+
+import idkjava.thelements.MainActivity;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
