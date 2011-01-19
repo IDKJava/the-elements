@@ -36,7 +36,7 @@
 #include "setup.h"
 
 char saveState(int type);
-char loadState(int type);
+char loadState(int type, char* filename);
 void removeTempSave(void);
 void saveCustomElement(struct Element* createdCustomElement);
 void loadCustomElements(void);
