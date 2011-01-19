@@ -1,10 +1,3 @@
-/*
- * Element Works: Copyright (C) 2010 IDKJava
- * ----------------------------------------------------------
- * A sandbox type game in which you can play with different elements
- * which interact with each other in unique ways.
- */
-
 package idkjava.thelements;
 
 import idkjava.thelements.game.Control;
@@ -57,7 +50,6 @@ public class MainActivity extends Activity
 	static CharSequence[] elementslist;
 
 	public static boolean play = true;
-	public static int speed = 1;
 	public static int size = ZOOMED_IN; //Zoomed in or not
 
 	private SensorManager mSensorManager;
@@ -119,7 +111,7 @@ public class MainActivity extends Activity
 		elementslist = res.getTextArray(R.array.elements_list);
 		
 		//Load the custom elements
-		CustomElementEditorActivity.loadCustom();
+		CustomElementActivity.loadCustom();
 		
 		//Add custom elements to the elements list
 	}
