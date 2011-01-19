@@ -136,7 +136,7 @@ public class MenuActivity extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					 startActivity(new Intent(MenuActivity.this, CustomElementEditorActivity.class));
+					 startActivity(new Intent(MenuActivity.this, CustomElementActivity.class));
 				}
 			}
 		);
