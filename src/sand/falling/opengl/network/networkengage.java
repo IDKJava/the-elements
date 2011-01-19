@@ -1,6 +1,6 @@
 package sand.falling.opengl.network;
 
-import sand.falling.opengl.MenuActivity;
+import idkjava.thelements.MenuActivity;
 import sand.falling.opengl.R;
 import android.app.Activity;
 import android.content.Intent;

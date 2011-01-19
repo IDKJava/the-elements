@@ -1,5 +1,7 @@
-package sand.falling.opengl;
+package idkjava.thelements.game;
 
+import idkjava.thelements.MainActivity;
+import sand.falling.opengl.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -23,7 +25,7 @@ public class MenuBar extends LinearLayout
 	private ImageButton exit_button;
 	
 	//Used for eraser
-	static boolean eraser_on = false;
+	public static boolean eraser_on = false;
 	private static int temp_element = 0;
 	
 	//Used for play/pause

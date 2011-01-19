@@ -5,7 +5,11 @@
  * which interact with each other in unique ways.
  */
 
-package sand.falling.opengl;
+package idkjava.thelements;
+
+import idkjava.thelements.game.Control;
+import idkjava.thelements.game.MenuBar;
+import idkjava.thelements.game.SandView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,8 +19,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
+import sand.falling.opengl.R;
 import sand.falling.opengl.preferences.PreferencesFromCode;
-import sand.falling.opengl.custom.CustomMaker;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -115,7 +119,7 @@ public class MainActivity extends Activity
 		elementslist = res.getTextArray(R.array.elements_list);
 		
 		//Load the custom elements
-		CustomMaker.loadCustom();
+		CustomElementEditorActivity.loadCustom();
 		
 		//Add custom elements to the elements list
 	}

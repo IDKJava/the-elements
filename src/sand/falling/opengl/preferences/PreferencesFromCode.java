@@ -1,7 +1,7 @@
 package sand.falling.opengl.preferences;
 
 
-import sand.falling.opengl.MainActivity;
+import idkjava.thelements.MainActivity;
 import sand.falling.opengl.R;
 import android.content.Context;
 import android.content.SharedPreferences;

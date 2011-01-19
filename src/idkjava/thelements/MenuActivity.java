@@ -1,13 +1,14 @@
-package sand.falling.opengl;
+package idkjava.thelements;
+
+import idkjava.thelements.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import sand.falling.opengl.custom.CustomMaker;
 import sand.falling.opengl.network.networklogin;
-import sand.falling.opengl.MainActivity;
+import sand.falling.opengl.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -135,7 +136,7 @@ public class MenuActivity extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					 startActivity(new Intent(MenuActivity.this, CustomMaker.class));
+					 startActivity(new Intent(MenuActivity.this, CustomElementEditorActivity.class));
 				}
 			}
 		);
