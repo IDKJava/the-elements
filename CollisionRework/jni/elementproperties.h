@@ -79,4 +79,6 @@ extern int baseSpecialValue;
 //Defines the inertia of each element
 extern int baseInertia[];
 
+//TODO: Match to elementproperties.c
+
 #endif //!ELEMENTPROPERTIES_H_INCLUDED

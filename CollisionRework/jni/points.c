@@ -55,7 +55,7 @@ void deletePoint(struct Particle* particle)
 	//Clear it in the pixels array
 	setBitmapColor((int) tempX, (int) tempY, ERASER_ELEMENT);
 	//Clear it in the points array
-	allcoords[(int) tempX]][(int) tempY] = NULL;
+	allcoords[getIndex((int) tempX, (int) tempY)] = NULL;
 
 	//Unset the particle
 	particle->set = FALSE;

@@ -80,3 +80,5 @@ int baseSpecialValue[][2] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5},
 
 //Defines the inertia of each element
 int baseInertia[] = {-1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, 1, -1};
+
+//TODO: Add the base highestTemp, lowestTemp, higherElement, and lowerElements
