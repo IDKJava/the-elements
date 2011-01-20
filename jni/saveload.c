@@ -56,7 +56,7 @@ char saveState(int type)
 		}
 		
 		//Save any custom elements that need to be saved, so that this is portable
-		for(counter = 0; counter < numElements - NUM_BASE_ELEMENTS, counter++)
+		for(counter = 0; counter < numElements - NUM_BASE_ELEMENTS; counter++)
 		{
 			if(needsToBeSaved[counter])
 			{

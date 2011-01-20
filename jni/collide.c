@@ -68,7 +68,7 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 
 			//Delete firstParticle
 			unSetPoint(firstParticle);
-			firstParticle->hasMoved= TRUE:
+			firstParticle->hasMoved = TRUE;
 
 			break;
 		}
