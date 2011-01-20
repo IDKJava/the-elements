@@ -111,7 +111,7 @@ public class MainActivity extends Activity
 		elementslist = res.getTextArray(R.array.elements_list);
 		
 		//Load the custom elements
-		CustomElementActivity.loadCustom();
+		CustomElementManagerActivity.loadCustom();
 		
 		//Add custom elements to the elements list
 	}
