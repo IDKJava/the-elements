@@ -265,10 +265,18 @@ char Java_idkjava_thelements_MainActivity_save(JNIEnv* env, jobject thiz)
 {
 	return save(NORMAL_SAVE);
 }
-
 char Java_idkjava_thelements_MainActivity_load(JNIEnv* env, jobject thiz)
 {
 	return load(NORMAL_LOAD);
+}
+char Java_idkjava_thelements_CustomElementActivity_saveCustomElement(JNIEnv* env, jobject thiz, char[] filename)
+{
+	return saveCustomElement(filename);
+}
+char Java_idkjava_thelements_CustomElementActivity_loadCustomElement(JNIEnv* env, jobject thiz, char[] filename)
+{
+	//TODO: Needs tweaking
+	return loadCustomElement(filename);
 }
 
 char Java_idkjava_thelements_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
