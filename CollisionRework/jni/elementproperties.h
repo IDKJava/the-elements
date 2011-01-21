@@ -78,7 +78,11 @@ extern int baseSpecial;
 extern int baseSpecialValue;
 //Defines the inertia of each element
 extern int baseInertia[];
-
-//TODO: Match to elementproperties.c
+//Defines the highest and lowest temps that the element exists at
+extern int baseHighestTemp[];
+extern int baseLowestTemp[];
+//Defines the higher and lower elements to change to outside of the correct temp range
+extern int baseHigherElement[];
+extern int baseLowerElement[];
 
 #endif //!ELEMENTPROPERTIES_H_INCLUDED

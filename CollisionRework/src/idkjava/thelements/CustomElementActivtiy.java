@@ -11,6 +11,7 @@ public class CustomElementActivtiy extends Activity
 	//either default or loaded data, and allow the user to edit and save
 	private Intent callingIntent;
 	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -21,9 +22,10 @@ public class CustomElementActivtiy extends Activity
 		{
 			Uri intentData = callingIntent.getData();
 			String filename = intentData.getPath();
-			if(loadCustomElement(filename.toCharArray()) == 1)
+			int customElementIndex = loadCustomElement(filename.toCharArray());
+			if(customElementIndex != -1)
 			{
-				
+				//Call getters to fetch the info for the specific element index
 			}
 		}
 		else
