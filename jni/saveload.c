@@ -140,7 +140,7 @@ void removeTempSave(void)
 
 //TODO:
 void saveCustomElement(struct Element* createdCustomElement) {}
-void loadCustomElements(void) {}
+int loadCustomElements(void) {}
 void saveAtmosphere(struct Atmosphere* createAtmosphere) {}
 void loadAtmosphere(void) {}
 int getCustomElementsNumber(void) {}

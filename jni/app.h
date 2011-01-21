@@ -33,6 +33,8 @@ struct Element
 {
 	//Index
 	unsigned char index;
+	//Name
+	char* name;
 
 	//Dealing with states
 	char state;

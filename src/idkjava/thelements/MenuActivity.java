@@ -8,7 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import sand.falling.opengl.network.networklogin;
-import sand.falling.opengl.R;
+import idkjava.thelements.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

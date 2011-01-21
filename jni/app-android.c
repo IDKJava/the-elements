@@ -54,7 +54,7 @@ void Java_idkjava_thelements_SandViewRenderer_nativeDone(JNIEnv* env)
 	appDeinit();
 	importGLDeinit();
 }
-void Java_idkjava_thelements_DemoRenderer_nativeRender(JNIEnv* env)
+void Java_idkjava_thelements_SandViewRenderer_nativeRender(JNIEnv* env)
 {
 	appRender();
 }
@@ -269,14 +269,13 @@ char Java_idkjava_thelements_MainActivity_load(JNIEnv* env, jobject thiz)
 {
 	return load(NORMAL_LOAD);
 }
-char Java_idkjava_thelements_CustomElementActivity_saveCustomElement(JNIEnv* env, jobject thiz, jchar[] filename)
+char[] Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
 {
-	return saveCustomElement(filename);
+	return elements[index]->name;
 }
-char Java_idkjava_thelements_CustomElementActivity_loadCustomElement(JNIEnv* env, jobject thiz, jchar[] filename)
+int Java_idkjava_thelements_CustomElementManager_loadCustomElements(JNIEnv* env, jobject thiz)
 {
-	//TODO: Needs tweaking
-	return loadCustomElement(filename);
+	return loadCustomElements();
 }
 
 char Java_idkjava_thelements_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
