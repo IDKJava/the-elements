@@ -1,7 +1,7 @@
 package idkjava.thelements.game;
 
 import idkjava.thelements.MainActivity;
-import sand.falling.opengl.R;
+import idkjava.thelements.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;

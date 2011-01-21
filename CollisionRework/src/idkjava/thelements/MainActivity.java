@@ -1,6 +1,7 @@
 package idkjava.thelements;
 
 import idkjava.thelements.game.Control;
+import idkjava.thelements.game.CustomElementManager;
 import idkjava.thelements.game.MenuBar;
 import idkjava.thelements.game.SandView;
 
@@ -12,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import sand.falling.opengl.R;
 import sand.falling.opengl.preferences.PreferencesFromCode;
 
 import android.app.Activity;
@@ -111,7 +111,7 @@ public class MainActivity extends Activity
 		elementslist = res.getTextArray(R.array.elements_list);
 		
 		//Load the custom elements
-		CustomElementManagerActivity.loadCustom();
+		CustomElementManager.reloadCustomElements();
 		
 		//Add custom elements to the elements list
 	}
