@@ -72,7 +72,7 @@ int baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0
  *		3 = Burn; Threshold
  *		4 = Explode; Explosiveness
  */
-//Defines the special for each base element
+//Defines the special for ea ch base element
 int baseSpecial[][2] = {{0}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {1}, {2,3}, {-1}, {-1}, {-1}, {3,4}, {3,4}, {3,4}, {3}, {-1}, {-1}, {-1}, {1}, {-1}, {1}, {3}};
 
 //Defines the special value for each base element
@@ -81,4 +81,11 @@ int baseSpecialValue[][2] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5},
 //Defines the inertia of each element
 int baseInertia[] = {-1, -1, -1, 1, 1, 1, -1, -1, -1, -1, 0, 1, 1, 1, -1, -1, -1, 1, 1, 1, -1, 1, -1};
 
-//TODO: Add the base highestTemp, lowestTemp, higherElement, and lowerElements
+//TODO: Fill this in
+//Defines the highest and lowest temps that the element exists at
+int baseHighestTemp[] = {};
+int baseLowestTemp[] = {};
+
+//Defines the higher and lower elements to change to outside of the correct temp range
+int baseHigherElement[] = {};
+int baseLowerElement[] = {};
