@@ -1,5 +1,6 @@
 package idkjava.thelements;
 
+import idkjava.thelements.game.CustomElementManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,11 +19,12 @@ public class CustomElementActivtiy extends Activity
 		super.onCreate(savedInstanceState);
 		
 		callingIntent = getIntent();
-		if(callingIntent.getAction() == Intent.ACTION_EDIT)
+		if(callingIntent.getAction() == Intent.ACTION_VIEW)
 		{
+			//Get the filename that should be stored in the intent data
 			Uri intentData = callingIntent.getData();
 			String filename = intentData.getPath();
-			int customElementIndex = loadCustomElement(filename.toCharArray());
+			int customElementIndex = CustomElementManager.loadAndGetIndex(filename.toCharArray());
 			if(customElementIndex != -1)
 			{
 				//Call getters to fetch the info for the specific element index
@@ -38,12 +40,4 @@ public class CustomElementActivtiy extends Activity
 	//indices because if you want to point to an element not yet created there will be problems
 	//When loading elements, these indices will temporarily be stored, and then once finished
 	//will be resolved to pointers
-	
-	public native static char loadCustomElement(char[] filename);
-	public native static char saveCustomElement(char[] filename);
-	
-	static
-	{
-		System.loadLibrary("thelements");
-	}
 }
