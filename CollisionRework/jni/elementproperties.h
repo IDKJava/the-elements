@@ -58,11 +58,11 @@ extern unsigned char baseGreen[];
 extern unsigned char baseBlue[];
 
 //Define each base element's fall velocity
-extern int	fallVel[];
+extern char baseFallVel[];
 //Defines the density of each base element
-extern int baseDensity[];
+extern char baseDensity[];
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
-extern int baseState[];
+extern char baseState[];
 /*
  * Specials list:
  *	   -1 = None;
@@ -73,16 +73,16 @@ extern int baseState[];
  *		4 = Explode; Explosiveness
  */
 //Defines the special for each base element
-extern int baseSpecial;
+extern char baseSpecial[][2];
 //Defines the special value for each base element
-extern int baseSpecialValue;
+extern char baseSpecialValue[][2];
 //Defines the inertia of each element
-extern int baseInertia[];
+extern char baseInertia[];
 //Defines the highest and lowest temps that the element exists at
-extern int baseHighestTemp[];
-extern int baseLowestTemp[];
+extern char baseHighestTemp[];
+extern char baseLowestTemp[];
 //Defines the higher and lower elements to change to outside of the correct temp range
-extern int baseHigherElement[];
-extern int baseLowerElement[];
+extern char baseHigherElement[];
+extern char baseLowerElement[];
 
 #endif //!ELEMENTPROPERTIES_H_INCLUDED

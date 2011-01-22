@@ -14,9 +14,9 @@
 //Include macros
 #include "macros.h"
 
-void CreatePoint(int xCoord, int yCoord, struct Element element);
+void CreatePoint(int xCoord, int yCoord, struct Element* element);
 void DeletePoint(struct Particle* particle);
-void unSetPoint(Particle* particle);
+void unSetPoint(struct Particle* particle);
 void setElement(struct Particle* particle, struct Element* newElement);
 void setBitmapColor(int xCoord, int yCoord, struct Element* element);
 void createBitmapFromPoints(void);

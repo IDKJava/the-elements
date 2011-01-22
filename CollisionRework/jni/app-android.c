@@ -70,13 +70,13 @@ void Java_idkjava_thelements_MainActivity_setXGrav(JNIEnv* env, jobject thiz, jf
 	gravx = -xgrav;
 }
 */
-void Java_idkjava_thelements_MainActivity_quickLoad(JNIEnv* env)
+void Java_idkjava_thelements_MainActivity_tempLoad(JNIEnv* env)
 {
-	load(QUICK_LOAD);
+	load(TEMP_SAVE);
 }
-void Java_idkjava_thelements_MainActivity_quickSave(JNIEnv* env)
+void Java_idkjava_thelements_MainActivity_tempSave(JNIEnv* env)
 {
-	save(QUICK_SAVE);
+	save(TEMP_SAVE);
 }
 
 void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
@@ -107,15 +107,15 @@ void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject thi
 void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint redValue, jint greenValue, jint blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
-	elements[ERASER_ELEMENT].red = redValue;
-	elements[ERASER_ELEMENT].green = greenValue;
-	elements[ERASER_ELEMENT].blue = blueValue;
+	elements[ERASER_ELEMENT]->red = redValue;
+	elements[ERASER_ELEMENT]->green = greenValue;
+	elements[ERASER_ELEMENT]->blue = blueValue;
 	
 	//Call setup again
 	setup();
 
 	//Reload
-	load(QUICK_LOAD);
+	load(TEMP_SAVE);
 }
 /* Custom element stuff that will be changed
 void Java_idkjava_thelements_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
@@ -230,7 +230,7 @@ void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, 
 }
 int Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
-	return (int) cElement.index;
+	return (int) cElement->index;
 }
 void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar jbrushSize)
 {
@@ -269,7 +269,7 @@ char Java_idkjava_thelements_MainActivity_load(JNIEnv* env, jobject thiz)
 {
 	return load(NORMAL_LOAD);
 }
-char[] Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
+char* Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
 {
 	return elements[index]->name;
 }

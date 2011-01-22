@@ -78,27 +78,34 @@ void arraySetup()
 	green = malloc(points * sizeof(char));
 	blue = malloc(points * sizeof(char));
 
-	fallVel = malloc(numElements * sizeof(int));
-	density = malloc(numElements * sizeof(int));
-	state = malloc(numElements * sizeof(int));
-	special = malloc(numElements * sizeof(int));
-	inertia = malloc(numElements * sizeof(int));
+	elements = malloc(numElements * sizeof(struct Element*));
+	particles = malloc(points * sizeof(struct Particle*));
+	avail = malloc(points * sizeof(struct Particle*));
 
-	allCoords = malloc(workWidth * workHeight * zoom * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+	allCoords = malloc(workWidth * workHeight * zoom * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 	int i;
 	for(i = 0; i < numElements; i++)
 	{
 		if(i < NUM_BASE_ELEMENTS)
 		{
-			fallVel[i] = baseFallVel[i];
-			density[i] = baseDensity[i];
-			state[i] = baseState[i];
-			special[i] = baseSpecial[i];
-			inertia[i] = baseInertia[i];
+			elements[i] = (struct Element*) malloc(sizeof(struct Element));
+			elements[i]->red = baseRed[i];
+			elements[i]->green = baseGreen[i];
+			elements[i]->blue = baseBlue[i];
+			elements[i]->fallVel = baseFallVel[i];
+			elements[i]->density = baseDensity[i];
+			elements[i]->state = baseState[i];
+			elements[i]->specials = baseSpecial[i];
+			elements[i]->specialVals = (char*) malloc(2 * sizeof(char));
+				elements[i]->specialVals[0] = baseSpecialValue[i][0];
+				elements[i]->specialVals[1] = baseSpecialValue[i][1];
+			elements[i]->inertia = baseInertia[i];
+
+			//TODO: temps/higher, lower elements
 		}
 		else
 		{
-			//Gotta load the thing from the array, allocate the memory for it, and store the pointer here
+			//TODO: Gotta load the thing from the array, allocate the memory for it, and store the pointer here
 		}
 	}
 }

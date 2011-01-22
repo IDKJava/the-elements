@@ -133,7 +133,7 @@ public class MainActivity extends Activity
 	protected void onPause()
 	{
 		//QuickSave
-		quickSave();
+		tempSave();
 		//Set the preferences to indicate paused
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		SharedPreferences.Editor editor = settings.edit();
@@ -159,7 +159,7 @@ public class MainActivity extends Activity
 		if (settings.getBoolean("paused", true))
 		{
 			//Load the save
-			quickLoad();
+			tempLoad();
 			//Set the preferencWhen a tes to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
@@ -488,8 +488,8 @@ public class MainActivity extends Activity
 	public native static void pause(); // Jni pause
 	public native static int  getPlayState(); //Get the play state
 	public native static void toggleSize(); // Jni toggle size
-	public native static void quickSave();
-	public native static void quickLoad();
+	public native static void tempSave();
+	public native static void tempLoad();
 	public native static void setBackgroundColor(int colorcode);
 	public native static void setFlip(int flipped);
 	public native static void setElement(int element);

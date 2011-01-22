@@ -39,8 +39,8 @@ struct Element
 	//Dealing with states
 	char state;
 	char lowestTemp, highestTemp;
-	Element* lowerElement;
-	Element* higherElement;
+	struct Element* lowerElement;
+	struct Element* higherElement;
 	
 	//Dealing with drawing
 	char red, green, blue;
@@ -60,7 +60,7 @@ struct Particle
 	short xVel, yVel;
 	char heat;
 	char* specialVals;
-	Element* element;
+	struct Element* element;
 	char frozen;
 	char hasMoved;
 };
@@ -79,13 +79,13 @@ struct Atmosphere
  */
 
 //An array of all the elements
-extern struct Element* elements;
+extern struct Element** elements;
 //The number of elements available
 extern unsigned char numElements;
 //An array of all the particles
-extern struct Particle* particles[];
+extern struct Particle** particles;
 //A stack of available particles
-extern struct Particle* avail[];
+extern struct Particle** avail;
 //Points to the index AFTER the top of the stack
 extern short loq;
 //Current element selected
@@ -103,7 +103,7 @@ extern char flipped;
 extern char fingerState;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern struct Particle* allCoords;
+extern struct Particle** allCoords;
 
 //Mouse positions
 extern short mouseX;
@@ -123,7 +123,7 @@ extern short workWidth;
 extern short workHeight;
 
 //Collision matrix
-extern char* collision;
+extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 
 //Set when a clear is requested, unset when cleared
 extern char shouldClear;

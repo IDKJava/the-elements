@@ -60,7 +60,7 @@
  *		* = Should not happen, something messed up
  */
 
-int collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
+char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
 {
 	//Spawn 0
 	{0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0},

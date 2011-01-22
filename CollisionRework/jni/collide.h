@@ -21,6 +21,6 @@
 //Include logging
 //#include <android/log.h>
 
-void collide (Particle firstParticle, Particle secondParticle);
+void collide (struct Particle* firstParticle, struct Particle* secondParticle);
 
 #endif //!COLLIDE_H_INCLUDED
