@@ -79,7 +79,7 @@ char loadState(int type, char* filename)
 	FILE *fp;
 	char loadLoc[256];
 	//Set up the filename
-	if (type == NORMAL_LOAD)
+	if (type == NORMAL_SAVE)
 	{
 		if(sizeof(filename)/sizeof(char) > 256)
 		{
@@ -88,13 +88,13 @@ char loadState(int type, char* filename)
 		
 		strcpy(loadLoc, filename);
 	}
-	else if (type == QUICK_LOAD)
+	else if (type == TEMP_SAVE)
 	{
 		strcpy(loadLoc, SAVES_FOLDER);
 		strcat(loadLoc, TEMP_SAVE_FILE);
 		strcat(loadLoc, SAVE_EXTENSION);
 	}
-	else if (type == DEMO_LOAD)
+	else if (type == DEMO_SAVE)
 	{
 		strcpy(loadLoc, SAVES_FOLDER);
 		strcat(loadLoc, DEMO_SAVE_FILE);

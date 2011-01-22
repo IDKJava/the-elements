@@ -21,6 +21,10 @@
 #define SAVE_EXTENSION ".sav"
 #define ELEMENT_EXTENSION ".ele"
 #define ATMOSPHERE_EXTENSION ".atm"
+//Save/load types
+#define NORMAL_SAVE 0
+#define TEMP_SAVE 1
+#define DEMO_SAVE 2
 
 //Include the FILE type
 #include <stdio.h>

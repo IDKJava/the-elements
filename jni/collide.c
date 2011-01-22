@@ -9,7 +9,7 @@
 
 #include "collide.h"
 
-void collide(Particle* firstParticle, Particle* secondParticle)
+void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 {
 	//Temporary variables
 	int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY, oldXSecond = secondParticle->oldX, oldYSecond = secondParticle->oldY;
@@ -188,20 +188,21 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Salt-water
-			setElement(secondParticle, 19);
+			setElement(secondParticle, elements[19]);
 			secondParticle->hasMoved = TRUE;
 
 			break;
 		}
 		case 9: //Salt-water - Plant or Plant - Salt-water
-		{
+		{;
 			//Delete firstParticle
 			unSetPoint(firstParticle);
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element or secondParticle to Sand
-			setElement(secondParticle, 3);
+			setElement(secondParticle, elements[3]);
 			secondParticle->hasMoved = TRUE;
+			break;
 		}
 		case 10: //Water - Sand or Sand - Water
 		{
@@ -210,7 +211,9 @@ void collide(Particle* firstParticle, Particle* secondParticle)
 			firstParticle->hasMoved = TRUE;
 
 			//Change the element of secondParticle to Mud
-			setElement(secondParticle, 21);
+			setElement(secondParticle, elements[21]);
 			secondParticle->hasMoved = TRUE;
+			break;
 		}
+	}
 }

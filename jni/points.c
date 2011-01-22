@@ -8,7 +8,7 @@
 
 #include "points.h"
 
-void CreatePoint(int xCoord, int yCoord, struct Element element)
+void CreatePoint(int xCoord, int yCoord, struct Element* element)
 {
 	//If there are point available
 	if (loq > 0)
@@ -25,7 +25,7 @@ void CreatePoint(int xCoord, int yCoord, struct Element element)
 		i->y = yCoord;
 
 		//Put it in the allcoords array
-		allcoords[xCoord][yCoord] = i;
+		allCoords[getIndex(xCoord, yCoord)] = i;
 
 		// Set the element of the point
 		i->element = element;
@@ -53,9 +53,9 @@ void deletePoint(struct Particle* particle)
 	//Unfreeze the particles around it
 	unFreezeParticles(tempX, tempY);
 	//Clear it in the pixels array
-	setBitmapColor((int) tempX, (int) tempY, ERASER_ELEMENT);
+	setBitmapColor((int) tempX, (int) tempY, elements[ERASER_ELEMENT]);
 	//Clear it in the points array
-	allcoords[getIndex((int) tempX, (int) tempY)] = NULL;
+	allCoords[getIndex((int) tempX, (int) tempY)] = NULL;
 
 	//Unset the particle
 	particle->set = FALSE;
@@ -100,7 +100,7 @@ void unFreezeParticles(int xCoord, int yCoord)
 			int tempY = yCoord + dy;
 			if (tempX < workWidth && tempX > 0 && tempY < workHeight && tempY > 0)
 			{
-				struct Particle* tempParticle = allcoords[tempX][tempY];
+				struct Particle* tempParticle = allCoords[getIndex(tempX, tempY)];
 
 				if (tempParticle != NULL)
 				{

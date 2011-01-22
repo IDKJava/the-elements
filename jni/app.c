@@ -21,10 +21,10 @@ int getIndex(int x, int y)
  * VARIABLES
  */
 
-struct Element* elements;
+struct Element** elements;
 unsigned char numElements;
-struct Particle* particles[];
-struct Particle* avail[];
+struct Particle** particles;
+struct Particle** avail;
 short loq;
 struct Element* cElement;
 
@@ -34,7 +34,7 @@ unsigned char brushSize;
 char flipped;
 char fingerState;
 
-struct Particle* allCoords;
+struct Particle** allCoords;
 
 short mouseX;
 short mouseY;
@@ -48,7 +48,7 @@ short screenHeight;
 short workWidth;
 short workHeight;
 
-char* collision;
+char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 
 char shouldClear;
 char shouldUpdateMouse;
