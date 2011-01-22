@@ -100,12 +100,14 @@ void arraySetup()
 				elements[i]->specialVals[0] = baseSpecialValue[i][0];
 				elements[i]->specialVals[1] = baseSpecialValue[i][1];
 			elements[i]->inertia = baseInertia[i];
-
-			//TODO: temps/higher, lower elements
+			elements[i]->highestTemp = baseHighestTemp[i];
+			elements[i]->lowestTemp = baseLowestTemp[i];
 		}
 		else
 		{
 			//TODO: Gotta load the thing from the array, allocate the memory for it, and store the pointer here
 		}
 	}
+
+	//TODO: Higher/lower element pointers
 }
