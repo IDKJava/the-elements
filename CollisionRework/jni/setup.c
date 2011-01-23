@@ -11,6 +11,28 @@ void setup()
 {
 	int i, j;
 	loq = MAX_POINTS;
+	unsigned char blankRed = red[3];
+	unsigned char blankGreen = green[3];
+	unsigned char blankBlue = blue[3];
+
+	//Unset all the particles
+	for(i = 0; i < MAX_POINTS; i++)
+	{
+		avail[i] = particles[i];
+		particles[i]->set = FALSE;
+	}
+
+	//Clear allCoords and our pixels array
+	for(i = 0; i < workWidth; i++)
+	{
+		for(j = 0; j < workHeight; j++)
+		{
+			allCoords[getIndex(j, i)] = NULL;
+			colors[3 * (j * workHeight + i)] =blankRed;
+			colors[3 * (j * workHeight + i) + 1] = blankGreen;
+			colors[3 * (j * workHeight + i) + 2] = blankBlue;
+		}
+	}
 	/* Network stuff not needed
 	for (j = 0; j < 8; j++)
 	{
@@ -39,6 +61,9 @@ void arraySetup()
 	//Make sure everything is deallocated
 	free(colors);
 	free(allCoords);
+	free(elements);
+	free(particles);
+	free(avail);
 
 	//Allocate memory
 	colors = malloc(3 * points * sizeof(char));
