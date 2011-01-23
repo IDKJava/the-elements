@@ -72,11 +72,11 @@ void Java_idkjava_thelements_MainActivity_setXGrav(JNIEnv* env, jobject thiz, jf
 */
 void Java_idkjava_thelements_MainActivity_tempLoad(JNIEnv* env)
 {
-	load(TEMP_SAVE);
+	loadState(TEMP_SAVE, NULL);
 }
 void Java_idkjava_thelements_MainActivity_tempSave(JNIEnv* env)
 {
-	save(TEMP_SAVE);
+	saveState(TEMP_SAVE);
 }
 
 void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
@@ -115,7 +115,7 @@ void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobjec
 	setup();
 
 	//Reload
-	load(TEMP_SAVE);
+	loadState(TEMP_SAVE, NULL);
 }
 /* Custom element stuff that will be changed
 void Java_idkjava_thelements_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
@@ -220,7 +220,7 @@ void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject 
 }
 void Java_idkjava_thelements_MainActivity_clearQuickSave(JNIEnv* env, jobject thiz)
 {
-	removeQuicksave();
+	removeTempSave();
 	return;
 }
 void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
@@ -263,11 +263,12 @@ void Java_idkjava_thelements_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 }
 char Java_idkjava_thelements_MainActivity_save(JNIEnv* env, jobject thiz)
 {
-	return save(NORMAL_SAVE);
+	return saveState(NORMAL_SAVE);
 }
 char Java_idkjava_thelements_MainActivity_load(JNIEnv* env, jobject thiz)
 {
-	return load(NORMAL_LOAD);
+	//TODO: Figure this loading stuff out
+	return loadState(NORMAL_SAVE, NULL);
 }
 char* Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
 {
@@ -280,7 +281,7 @@ int Java_idkjava_thelements_CustomElementManager_loadCustomElements(JNIEnv* env,
 
 char Java_idkjava_thelements_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
 {
-	return loadDemoFile();
+	return loadState(DEMO_SAVE, NULL);
 }
 
 /* Network stuff not included for now
