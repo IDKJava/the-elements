@@ -11,9 +11,9 @@ void setup()
 {
 	int i, j;
 	loq = MAX_POINTS;
-	unsigned char blankRed = red[3];
-	unsigned char blankGreen = green[3];
-	unsigned char blankBlue = blue[3];
+	unsigned char blankRed = elements[ERASER_ELEMENT]->red;
+	unsigned char blankGreen = elements[ERASER_ELEMENT]->green;
+	unsigned char blankBlue = elements[ERASER_ELEMENT]->blue;
 
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)

@@ -78,6 +78,7 @@ char saveState(int type)
 	}
 }
 
+//TODO: Change this to char loadState(char* filename), int type is unneeded
 char loadState(int type, char* filename)
 {
 	FILE *fp;

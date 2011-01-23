@@ -57,8 +57,8 @@ void UpdateView(void)
 						{
 							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != NULL && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
 							{
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->tempXVel += (mouseX - lastMouseX);
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->tempYVel += (mouseY - lastMouseY);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
 							}
 						}
 						//Special Eraser case
@@ -81,12 +81,12 @@ void UpdateView(void)
 		//Used in for loops
 		int counter;
 		//For speed we're going to create temp variables to store stuff
-		int tempX, tempT, tempOldX, tempOldY, temptempXVel, temptempYVel;
+		int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
 		char tempInertia;
-		Particle* tempParticle;
-		Particle* tempAllCoords;
-		Element* tempElement;
-		Element* tempElement2;
+		struct Particle* tempParticle;
+		struct Particle* tempAllCoords;
+		struct Element* tempElement;
+		struct Element* tempElement2;
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
@@ -104,20 +104,20 @@ void UpdateView(void)
 				tempParticle->oldY = tempOldY;
 				tempElement = tempParticle->element;
 				tempInertia = tempElement->inertia;
-				temptempXVel = tempParticle->tempXVel;
-				temptempYVel = tempParticle->tempYVel;
+				tempXVel = tempParticle->xVel;
+				tempYVel = tempParticle->yVel;
 
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
-					tempParticle->x += temptempXVel;
-					tempParticle->y += tempElement->fallVel + temptempYVel;
+					tempParticle->x += tempXVel;
+					tempParticle->y += tempElement->fallVel + tempYVel;
 				}
 
 				//Reduce velocities
-				if(temptempXVel < 0)
+				if(tempXVel < 0)
 				{
-					if(tempInertia >= -temptempXVel)
+					if(tempInertia >= -tempXVel)
 					{
 						tempXVel = 0;
 					}
@@ -211,6 +211,7 @@ void UpdateView(void)
 				tempY = (int) tempParticle->y;
 
 				//Special cycle
+				/* TODO: --- This had errors, will fix after getting it to build ---
 				if(special[tempElement] != SPECIAL_NOT_SET)
 				{
 					switch(special[tempElement])
@@ -218,6 +219,7 @@ void UpdateView(void)
 						//Stuff to come
 					}
 				}
+				*/
 
 				/*
 				if (fireburn[element[counter]] == 1) //Fire cycle
@@ -360,11 +362,11 @@ void UpdateView(void)
 						tempY = tempParticle->y;
 						
 						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
 						allCoords[getIndex(tempX, tempY)] = tempParticle;
 						setBitmapColor(tempX, tempY, tempParticle->element);
 						
-						unFreezeParticle(tempOldX, tempOldY);
+						unFreezeParticles(tempOldX, tempOldY);
 						tempParticle->hasMoved = FALSE;
 					}
 					else
@@ -377,11 +379,11 @@ void UpdateView(void)
 						tempY = tempAllCoords->y;
 						
 						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
 						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
 						setBitmapColor(tempX, tempY, tempAllCoords->element);
 						
-						unFreezeParticle(tempOldX, tempOldY);
+						unFreezeParticles(tempOldX, tempOldY);
 						tempAllCoords->hasMoved = FALSE;
 					}
 					else
@@ -393,11 +395,11 @@ void UpdateView(void)
 				else if (tempAllCoords != tempParticle)
 				{
 						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, ERASER_ELEMENT);
+						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
 						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
 						setBitmapColor(tempX, tempY, tempAllCoords->element);
 						
-						unFreezeParticle(tempOldX, tempOldY);
+						unFreezeParticles(tempOldX, tempOldY);
 						tempAllCoords->hasMoved = FALSE;
 				}
 			}
