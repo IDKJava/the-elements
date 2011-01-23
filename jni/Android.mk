@@ -15,7 +15,6 @@ LOCAL_SRC_FILES := \
     importgl.c \
     gl.c \
     points.c \
-    server.c \
     saveload.c \
     setup.c \
     update.c \
