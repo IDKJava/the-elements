@@ -25,7 +25,7 @@ struct Element** elements;
 unsigned char numElements;
 struct Particle** particles;
 struct Particle** avail;
-short loq;
+int loq;
 struct Element* cElement;
 
 char play;

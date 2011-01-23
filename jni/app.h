@@ -87,7 +87,7 @@ extern struct Particle** particles;
 //A stack of available particles
 extern struct Particle** avail;
 //Points to the index AFTER the top of the stack
-extern short loq;
+extern int loq;
 //Current element selected
 extern struct Element* cElement;
 

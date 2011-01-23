@@ -13,6 +13,10 @@
 #include "app.h"
 //Include the global macros
 #include "macros.h"
+//Include the Element properties (yes this is obvious)
+#include "elementproperties.h"
+//Include the free function
+#include <stdlib.h>
 
 //Set up the workspace
 void setup(void);
