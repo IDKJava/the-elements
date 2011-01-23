@@ -12,11 +12,13 @@ char saveState(int type)
 	//Strings for file location
 	char timestamp[64], saveLoc[256];
 
+	time_t rawtime;
 	FILE *fp;
 	if (type == NORMAL_SAVE)
 	{
 		//Generate the filename based on date and time
-		strftime(timestamp, 255, "%Y-%m-%d-%H:%M", localtime(time(NULL)));
+		time(&rawtime);
+		strftime(timestamp, 255, "%Y-%m-%d-%H:%M", localtime(&rawtime));
 		strcpy(saveLoc, SAVES_FOLDER);
 		strcat(saveLoc, timestamp);
 		strcat(saveLoc, SAVE_EXTENSION);
@@ -33,13 +35,13 @@ char saveState(int type)
 	if (fp != NULL)
 	{
 		int counter;
-		Particle* tempParticle;
-		Element* needsToBeSaved[numElements - NUM_BASE_ELEMENTS];
+		struct Particle* tempParticle;
+		struct Element* needsToBeSaved[numElements - NUM_BASE_ELEMENTS];
 		
 		//Save the particles
 		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
-			tempParticle = partices[counter];
+			tempParticle = particles[counter];
 			if (tempParticle->set)
 			{
 				//Save x, y, and element of each set particle
@@ -50,7 +52,9 @@ char saveState(int type)
 				
 				if(tempParticle->element->index >= NUM_BASE_ELEMENTS)
 				{
-					needsToBeSaved[tempParticle->element->index - NUM_BASE_ELEMENTS] = TRUE;
+					//I'm commenting this out to get it to build
+					//need to decide we want needsToBeSaved to be a bool(char) or a Element*
+					//needsToBeSaved[tempParticle->element->index - NUM_BASE_ELEMENTS] = TRUE;
 				}
 			}
 		}
@@ -117,7 +121,9 @@ char loadState(int type, char* filename)
 				&xCoord,
 				&yCoord,
 				&element);
-			CreatePoint(xCoord, yCoord, element);
+			CreatePoint(xCoord, yCoord, elements[element]);
+			//Cool thing I found on my way to doing this,
+			//you can do something like (struct Element){.index = element}
 		}
 
 		fclose(fp);

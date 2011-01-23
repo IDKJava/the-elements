@@ -26,7 +26,7 @@
 //Include the saving and loading functions
 #include "saveload.h"
 //Include the server access functions
-#include "server.h"
+//#include "server.h"
 //Include the rendering functions
 #include "gl.h"
 

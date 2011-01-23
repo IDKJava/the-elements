@@ -24,8 +24,8 @@
 //For bcopy and bzero
 #include <strings.h>
 
-void adduserpass(void);
-void buildbuffer(int type);
-int sendbuffer(void);
+//void adduserpass(void);
+//void buildbuffer(int type);
+//int sendbuffer(void);
 
 #endif //!SERVER_H_INCLUDED

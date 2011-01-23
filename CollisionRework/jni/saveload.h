@@ -38,6 +38,8 @@
 #include "points.h"
 //Include the initializer function
 #include "setup.h"
+//Include the string functions
+#include <string.h>
 
 char saveState(int type);
 char loadState(int type, char* filename);
