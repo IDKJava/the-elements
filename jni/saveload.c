@@ -20,14 +20,16 @@ char saveState(int type)
 		//Generate the filename based on date and time
 		time(&rawtime);
 		strftime(timestamp, 255, "%Y-%m-%d-%H:%M", localtime(&rawtime));
-		strcpy(saveLoc, SAVES_FOLDER);
+		strcpy(saveLoc, ROOT_FOLDER);
+		strcat(saveLoc, SAVES_FOLDER);
 		strcat(saveLoc, timestamp);
 		strcat(saveLoc, SAVE_EXTENSION);
 	}
 	else if (type == TEMP_SAVE)
 	{
 		//Generate the temp save filename
-		strcpy(saveLoc, SAVES_FOLDER);
+		strcpy(saveLoc, ROOT_FOLDER);
+		strcat(saveLoc, SAVES_FOLDER);
 		strcat(saveLoc, TEMP_SAVE_FILE);
 		strcat(saveLoc, SAVE_EXTENSION);
 	}
@@ -97,13 +99,15 @@ char loadState(int type, char* filename)
 	}
 	else if (type == TEMP_SAVE)
 	{
-		strcpy(loadLoc, SAVES_FOLDER);
+		strcpy(loadLoc, ROOT_FOLDER);
+		strcat(loadLoc, SAVES_FOLDER);
 		strcat(loadLoc, TEMP_SAVE_FILE);
 		strcat(loadLoc, SAVE_EXTENSION);
 	}
 	else if (type == DEMO_SAVE)
 	{
-		strcpy(loadLoc, SAVES_FOLDER);
+		strcpy(loadLoc, ROOT_FOLDER);
+		strcat(loadLoc, SAVES_FOLDER);
 		strcat(loadLoc, DEMO_SAVE_FILE);
 		strcat(loadLoc, SAVE_EXTENSION);
 	}
@@ -141,7 +145,8 @@ void removeTempSave(void)
 {
 	char saveLoc[256];
 	//Generate the temp save filename
-	strcpy(saveLoc, SAVES_FOLDER);
+	strcpy(saveLoc, ROOT_FOLDER);
+	strcat(saveLoc, SAVES_FOLDER);
 	strcat(saveLoc, TEMP_SAVE_FILE);
 	strcat(saveLoc, SAVE_EXTENSION);
 	//Remove the file at that location
