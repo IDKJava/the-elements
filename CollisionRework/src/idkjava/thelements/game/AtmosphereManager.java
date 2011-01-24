@@ -15,7 +15,7 @@ public class AtmosphereManager
 		//Clear everything first
 		atmosphereList.clear();
 		
-		//Create the FilenameFilter to accept only *.ele files
+		//Create the FilenameFilter to accept only *.atm files
 		FilenameFilter filter = new FilenameFilter()
 		{
 			public boolean accept(File dir, String filename)
