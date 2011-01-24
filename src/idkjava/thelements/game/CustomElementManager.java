@@ -24,7 +24,7 @@ public class CustomElementManager
 				return filename.endsWith(FileManager.ELEMENT_EXT);
 			}
 		};
-		//TODO: not sure if this creates a small memory leak or not
+		//TODO(UNIMPORTANT): not sure if this creates a small memory leak or not
 		customElementFiles = customElementsDir.list(filter);
 		
 		for(int i = 0; i < customElementFiles.length; i++)

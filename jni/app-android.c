@@ -223,7 +223,7 @@ void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject 
 	mouseX = xpos;
 	mouseY = ypos;
 }
-void Java_idkjava_thelements_MainActivity_clearQuickSave(JNIEnv* env, jobject thiz)
+void Java_idkjava_thelements_MainActivity_clearTempSave(JNIEnv* env, jobject thiz)
 {
 	removeTempSave();
 	return;
@@ -270,10 +270,9 @@ char Java_idkjava_thelements_MainActivity_save(JNIEnv* env, jobject thiz)
 {
 	return saveState(NORMAL_SAVE);
 }
-char Java_idkjava_thelements_MainActivity_load(JNIEnv* env, jobject thiz)
+void Java_idkjava_thelements_game_SaveManager_loadSave(JNIEnv* env, jobject thiz, char* filename)
 {
-	//TODO: Figure this loading stuff out
-	return loadState(NORMAL_SAVE, NULL);
+	loadState(filename);
 }
 char* Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
 {

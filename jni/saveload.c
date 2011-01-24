@@ -82,7 +82,7 @@ char saveState(int type)
 }
 
 //TODO: Change this to char loadState(char* filename), int type is unneeded
-char loadState(int type, char* filename)
+char loadState(char* filename)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadState called");
 	FILE *fp;
