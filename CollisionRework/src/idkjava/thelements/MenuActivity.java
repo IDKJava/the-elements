@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import sand.falling.opengl.network.networklogin;
 import idkjava.thelements.R;
 
 import android.app.Activity;
@@ -33,7 +32,6 @@ public class MenuActivity extends Activity
 	public static Button how_to_play_button;
 	public static Button custom_button;
 	public static Button about_button;
-	public static Button login_button;
 	public static Button exit_button;
 	public static Button clear_button;
 	public static boolean loaded = false;
@@ -67,7 +65,6 @@ public class MenuActivity extends Activity
 		about_button = (Button) findViewById(R.id.about_button);
 		exit_button = (Button) findViewById(R.id.exit_button);
 		clear_button = (Button) findViewById(R.id.clear_button);
-		login_button = (Button) findViewById(R.id.login_button);
 		
 		try
 		{
@@ -87,7 +84,7 @@ public class MenuActivity extends Activity
 				{
 					if (System.currentTimeMillis() - stime >= 1000)
 					{
-					//Start the main app activity
+						//Start the main app activity
 						startActivity(new Intent(MenuActivity.this, SplashActivity.class));
 					}
 				}
@@ -114,18 +111,6 @@ public class MenuActivity extends Activity
 				{
 					//Show the about dialog
 					showDialog(1);
-				}
-			}
-		);
-		login_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					
-					startActivity(new Intent(MenuActivity.this, networklogin.class)); //start login activity
-					
 				}
 			}
 		);

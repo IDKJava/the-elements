@@ -1,8 +1,7 @@
-package sand.falling.opengl.preferences;
+package idkjava.thelements;
 
 
-import idkjava.thelements.MainActivity;
-import sand.falling.opengl.R;
+import idkjava.thelements.R;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -17,7 +16,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 
-public class PreferencesFromCode extends PreferenceActivity implements OnSharedPreferenceChangeListener
+public class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener
 {
 
     @Override
@@ -29,8 +28,11 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 
+
     private PreferenceScreen createPreferenceHierarchy()
     {
+    	return null;
+    	/*
         // Root
         PreferenceScreen root = getPreferenceManager().createPreferenceScreen(this);
         
@@ -110,11 +112,13 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
         }
         
         return root;
+        */
     }
     
     //When something is clicked, this finds it and calls a JNI function to change it in the c code
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
+    	/*
         // Let's do something when my counter preference value changes
         //Log.v("DemoActivity", "onpref called");
         if (key == "background_color")
@@ -159,10 +163,12 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
         		MainActivity.setAccelOnOff(0);
         	}
         }
+        */
     }
     //used to set stuff up when the app opens and retrieve the settings
     public static void setpreferences(Context context)
     {
+    	/*
         final SharedPreferences sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(context);
     	if (sharedPreferences.getString("background_color", "black").equals("black"))
@@ -194,13 +200,15 @@ public class PreferencesFromCode extends PreferenceActivity implements OnSharedP
     	
     	//Set the bool variable ui in the Activity
     	MainActivity.ui = sharedPreferences.getBoolean("ui", true);
+    	*/
     }
     public static void setScreenOnOff(Context context) //set screen on or off, needs to be seperate because sand_view is created after setPrefs is called
     {
+    	/*
     	final SharedPreferences sharedPreferences =
             PreferenceManager.getDefaultSharedPreferences(context);
     	
     	MainActivity.sand_view.setKeepScreenOn(sharedPreferences.getBoolean("screen",true)); //keep screen on or not
-    	
+    	*/
     }
 }

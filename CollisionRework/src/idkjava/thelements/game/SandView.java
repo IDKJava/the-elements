@@ -71,7 +71,7 @@ class SandViewRenderer implements GLSurfaceView.Renderer
         nativeResize(w, h);
         if (MainActivity.loaddemov == true) //loads the demo from the sdcard on first run.
         {
-        	MainActivity.loadDemo();
+        	//MainActivity.loadDemo();
         	MainActivity.loaddemov = false;
         }
     }
@@ -84,4 +84,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
     private static native void nativeInit(); //Jni init
     private static native void nativeResize(int w, int h); //Jni resize
     private static native void nativeRender(); //Jni rendering function - everything happens here
+    
+    static
+    {
+    	System.loadLibrary("thelements");
+    }
 }

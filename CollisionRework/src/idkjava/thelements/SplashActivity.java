@@ -1,6 +1,6 @@
 package idkjava.thelements;
 
-import sand.falling.opengl.R;
+import idkjava.thelements.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,8 +23,8 @@ public class SplashActivity extends Activity
 					{
 						//Create an Intent to start DemoActivity
 						Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-						SplashActivity.this.startActivity(mainIntent);
-						SplashActivity.this.finish();
+						startActivity(mainIntent);
+						finish();
 					}
 				}, 5);
 	}

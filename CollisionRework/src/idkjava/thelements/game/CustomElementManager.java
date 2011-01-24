@@ -12,11 +12,11 @@ public class CustomElementManager
 		int numLoaded = loadCustomElements();
 		for(int i = 0; i < numLoaded; i++)
 		{
-			customElementList.add(getCustomElementName(i).toString());
+			//customElementList.add(getCustomElementName(i).toString());
 		}
 	}
 	
-	public native static char[] getCustomElementName(int index);
+	//public native static char[] getCustomElementName(int index);
 	public native static int loadCustomElements();
 	
 	static

@@ -5,7 +5,7 @@
     android:layout_height="fill_parent" >
     
 	<!-- Main viewing section -->
-	<sand.falling.opengl.SandView
+	<idkjava.thelements.game.SandView
 		android:id="@+id/sand_view"
 		android:gravity="center"
 		android:layout_width="fill_parent"
