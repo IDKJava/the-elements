@@ -5,7 +5,7 @@
     android:layout_height="fill_parent" >
     
     <!-- Top Menu Bar (Basically moves all menu items here)-->
-	<sand.falling.opengl.MenuBar
+	<idkjava.thelements.game.MenuBar
 		android:id="@+id/menu_bar"
 		android:layout_width="fill_parent"
 		android:layout_height="45dip"
@@ -65,10 +65,10 @@
     		android:layout_width="78dip"
     		android:background="@drawable/btn_mb"/>
     	
-	</sand.falling.opengl.MenuBar>
+	</idkjava.thelements.game.MenuBar>
     
 	<!-- Main viewing section -->
-	<sand.falling.opengl.SandView
+	<idkjava.thelements.game.SandView
 		android:id="@+id/sand_view"
 		android:gravity="center"
 		android:layout_weight="1"
@@ -76,7 +76,7 @@
 		android:layout_height="fill_parent" />
 
 	<!-- Control area (on the bottom) with a slider for brush size and button for element picker -->
-	<sand.falling.opengl.Control
+	<idkjava.thelements.game.Control
 		android:id="@+id/control"
 		android:background="@drawable/bg_ui_control"
 		android:layout_width="fill_parent"
@@ -102,6 +102,6 @@
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
 			
-	</sand.falling.opengl.Control>
+	</idkjava.thelements.game.Control>
 	
 </LinearLayout>

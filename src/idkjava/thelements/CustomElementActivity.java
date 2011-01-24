@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-public class CustomElementActivtiy extends Activity
+public class CustomElementActivity extends Activity
 {
 	//TODO: Depending on the Intent, ACTION_EDIT or ACTION_NEW, set up the UI with
 	//either default or loaded data, and allow the user to edit and save
@@ -24,11 +24,11 @@ public class CustomElementActivtiy extends Activity
 			//Get the filename that should be stored in the intent data
 			Uri intentData = callingIntent.getData();
 			String filename = intentData.getPath();
-			int customElementIndex = CustomElementManager.loadAndGetIndex(filename.toCharArray());
-			if(customElementIndex != -1)
-			{
+			//int customElementIndex = CustomElementManager.loadAndGetIndex(filename.toCharArray());
+			//if(customElementIndex != -1)
+			//{
 				//Call getters to fetch the info for the specific element index
-			}
+			//}
 		}
 		else
 		{

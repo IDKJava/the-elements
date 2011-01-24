@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 
-import sand.falling.opengl.preferences.PreferencesFromCode;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -75,7 +74,7 @@ public class MainActivity extends Activity
 
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
 
-		PreferencesFromCode.setpreferences(this);
+		PreferencesActivity.setpreferences(this);
 
 		//Set Sensor + Manager
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -104,18 +103,19 @@ public class MainActivity extends Activity
 		sand_view = (SandView) findViewById(R.id.sand_view);
 		control = (Control) findViewById(R.id.control);
 
-		PreferencesFromCode.setScreenOnOff(this); //Finds out to keep screen on or off
+		PreferencesActivity.setScreenOnOff(this); //Finds out to keep screen on or off
 		
 		//Set up the elements list
 		Resources res = getResources();
 		elementslist = res.getTextArray(R.array.elements_list);
 		
 		//Load the custom elements
-		CustomElementManager.reloadCustomElements();
+		//CustomElementManager.reloadCustomElements();
 		
 		//Add custom elements to the elements list
 	}
 
+	/*
 	private final SensorEventListener mySensorListener = new SensorEventListener()
 	{
 		public void onSensorChanged(SensorEvent event)
@@ -128,7 +128,7 @@ public class MainActivity extends Activity
 		{
 		}
 	};
-
+	*/
 	@Override
 	protected void onPause()
 	{
@@ -153,13 +153,13 @@ public class MainActivity extends Activity
 			System.exit(0);
 		}
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+		//myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
 
 		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", true))
 		{
 			//Load the save
-			tempLoad();
+			//tempLoad();
 			//Set the preferencWhen a tes to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
@@ -167,24 +167,16 @@ public class MainActivity extends Activity
 		}
 		
 		//Input the correct save file (based on screen width)
-		InputStream in;
-		if (sand_view.getWidth() < 300)
-		{
-			in = getResources().openRawResource(R.raw.save);
-		}
-		else
-		{
-			in = getResources().openRawResource(R.raw.droiddemo);
-		}
+		InputStream in = getResources().openRawResource(R.raw.demo);
 
 		try
 		{
 			//Try to create the folder
-			(new File("/sdcard/elementworks/")).mkdir();
+			(new File("/sdcard/thelements/")).mkdir();
 
 			//Try to copy the demo file to the save file
-			OutputStream out = new FileOutputStream("/sdcard/elementworks/save2.txt");
-			byte[] buf = new byte[100024];
+			OutputStream out = new FileOutputStream("/sdcard/thelements/demo.sav");
+			byte[] buf = new byte[4];
 			int len;
 			while ((len = in.read(buf)) != -1)
 			{
@@ -462,7 +454,7 @@ public class MainActivity extends Activity
 				return true;
 			case R.id.preferences:
 	
-				startActivity(new Intent(MainActivity.this, PreferencesFromCode.class));
+				startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
 				return true;
 			case R.id.exit:
 	

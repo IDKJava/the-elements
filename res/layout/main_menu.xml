@@ -44,13 +44,6 @@
     	android:layout_width="200sp" 
     	android:background="@drawable/btn_mm" 
     	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
-    <!-- Login button -->	
-    <Button 
-    	android:layout_width="200sp" 
-    	android:text="Login" 
-    	android:id="@+id/login_button" 
-    	android:background="@drawable/btn_mm" 
-    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
      <!-- clear save button -->
     <Button
     	android:id="@+id/clear_button"

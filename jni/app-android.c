@@ -30,13 +30,17 @@
 //Include the rendering functions
 #include "gl.h"
 
-void Java_idkjava_thelements_SandViewRenderer_nativeInit(JNIEnv* env) //Initialize graphics
+#include <android/log.h>
+
+void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env) //Initialize graphics
 {
 	importGLInit();
-	appInit();
+	//appInit();
 }
-void Java_idkjava_thelements_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
 {
+	screenWidth = w - w%2;
+	screenHeight = h - h%2;
 	if (zoom == ZOOMED_IN)
 	{
 		workWidth = screenWidth / 2;
@@ -47,14 +51,15 @@ void Java_idkjava_thelements_SandViewRenderer_nativeResize(JNIEnv* env, jobject 
 		workWidth = screenWidth;
 		workHeight = screenHeight;
 	}
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeresize bro");
 	appInit();
 }
-void Java_idkjava_thelements_SandViewRenderer_nativeDone(JNIEnv* env)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeDone(JNIEnv* env)
 {
 	appDeinit();
 	importGLDeinit();
 }
-void Java_idkjava_thelements_SandViewRenderer_nativeRender(JNIEnv* env)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env)
 {
 	appRender();
 }
