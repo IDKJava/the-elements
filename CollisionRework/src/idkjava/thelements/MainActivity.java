@@ -2,6 +2,7 @@ package idkjava.thelements;
 
 import idkjava.thelements.game.Control;
 import idkjava.thelements.game.CustomElementManager;
+import idkjava.thelements.game.FileManager;
 import idkjava.thelements.game.MenuBar;
 import idkjava.thelements.game.SandView;
 
@@ -166,35 +167,7 @@ public class MainActivity extends Activity
 			editor.commit();
 		}
 		
-		//Input the correct save file (based on screen width)
-		InputStream in = getResources().openRawResource(R.raw.demo);
-
-		try
-		{
-			//Try to create the folder
-			(new File("/sdcard/thelements/")).mkdir();
-
-			//Try to copy the demo file to the save file
-			OutputStream out = new FileOutputStream("/sdcard/thelements/demo.sav");
-			byte[] buf = new byte[4];
-			int len;
-			while ((len = in.read(buf)) != -1)
-			{
-				out.write(buf, 0, len);
-			}
-			in.close();
-			out.close();
-		}
-		catch (FileNotFoundException e)
-		{
-			//FileNotFoundException is normal, ignore it
-			e.printStackTrace();
-		}
-		catch (IOException e)
-		{
-			//IOException is also fine, ignore
-			e.printStackTrace();
-		}
+		FileManager.intialize(this);
 		
 		//If it's the first run, tell it to load the demo and unset firstrun
 		if (settings.getBoolean("firstrun", true))

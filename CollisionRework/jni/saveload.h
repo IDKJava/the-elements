@@ -12,9 +12,9 @@
 
 //File/folder locations
 #define ROOT_FOLDER "/sdcard/thelements/"
-#define SAVES_FOLDER "/sdcard/thelements/saves/"
-#define CUSTOM_ELEMENTS_FOLDER "/sdcard/thelements/elements/"
-#define ATMOSPHERES_FOLDER "/sdcard/thelements/atmospheres/"
+#define SAVES_FOLDER "saves/"
+#define CUSTOM_ELEMENTS_FOLDER "elements/"
+#define ATMOSPHERES_FOLDER "atmospheres/"
 #define TEMP_SAVE_FILE "temp"
 #define DEMO_SAVE_FILE "demo"
 //File extensions
