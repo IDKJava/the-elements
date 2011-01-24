@@ -27,7 +27,7 @@ public class SaveManager
 				return filename.endsWith(FileManager.SAVE_EXT);
 			}
 		};
-		//TODO: not sure if this creates a small memory leak or not
+		//TODO(UNIMPORTANT): not sure if this creates a small memory leak or not
 		saveFiles = saveDir.list(filter);
 		
 		for(int i = 0; i < saveFiles.length; i++)

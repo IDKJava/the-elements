@@ -23,7 +23,7 @@ public class AtmosphereManager
 				return filename.endsWith(FileManager.ATMOSPHERE_EXT);
 			}
 		};
-		//TODO: not sure if this creates a small memory leak or not
+		//TODO(UNIMPORTANT): not sure if this creates a small memory leak or not
 		atmosphereFiles = atmosphereDir.list(filter);
 		
 		for(int i = 0; i < atmosphereFiles.length; i++)
