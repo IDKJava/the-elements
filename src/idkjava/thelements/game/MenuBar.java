@@ -25,18 +25,15 @@ public class MenuBar extends LinearLayout
 	private ImageButton exit_button;
 	
 	//Used for eraser
-	public static boolean eraser_on = false;
-	private static int temp_element = 0;
-	
-	//Used for play/pause
-	static boolean play = true;
+	public static boolean eraserOn = false;
+	private static char tempElement = 0;
 
 	//Constructor
 	public MenuBar(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		this.context = context;
-		this.setGravity(Gravity.CENTER_HORIZONTAL);
+		setGravity(Gravity.CENTER_HORIZONTAL);
 	}
 	
 	//Used to get specific instance of activity
@@ -48,10 +45,10 @@ public class MenuBar extends LinearLayout
 	//Set the eraser to the off position
 	public static void setEraserOff()
 	{
-		eraser_on = false;
+		eraserOn = false;
 		eraser_button.setImageResource(R.drawable.eraser);
 			
-		MainActivity.setElement(temp_element);
+		MainActivity.setElement(tempElement);
 	}
 
 	//Called when it's finished inflating the XML layout
@@ -75,9 +72,9 @@ public class MenuBar extends LinearLayout
 				public void onClick(View v)
 				{
 					//If it was on eraser, swap back to regular element
-					if(eraser_on)
+					if(eraserOn)
 					{
-						MainActivity.setElement(temp_element);
+						MainActivity.setElement(tempElement);
 						
 						//Change the button to look unclicked
 						eraser_button.setImageResource(R.drawable.eraser);
@@ -85,13 +82,13 @@ public class MenuBar extends LinearLayout
 					//If it is on a normal element, go to eraser and store that element for later
 					else
 					{
-						temp_element = MainActivity.getElement();
+						tempElement = MainActivity.getElement();
 						MainActivity.setElement(MainActivity.ERASER_ELEMENT);
 						
 						//Change the button to look clicked
 						eraser_button.setImageResource(R.drawable.eraser_on);
 					}
-					eraser_on = !eraser_on;
+					eraserOn = !eraserOn;
 				}
 			}
 		);
@@ -115,23 +112,22 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-					if(play)
+					MainActivity.play = !MainActivity.play;
+					MainActivity.setPlayState(MainActivity.play);
+					
+					if(MainActivity.play)
 					{
-						play = false;
-						play_pause_button.setImageResource(R.drawable.play);
-						MainActivity.pause();
+						play_pause_button.setImageResource(R.drawable.pause);
 					}
 					else
 					{
-						play = true;
-						play_pause_button.setImageResource(R.drawable.pause);
-						MainActivity.play();
+						play_pause_button.setImageResource(R.drawable.play);
 					}
 				}
 				
 			}
 		);
-		if(MainActivity.getPlayState() == 1)
+		if(MainActivity.play)
 		{
 			play_pause_button.setImageResource(R.drawable.pause);
 		}
@@ -148,8 +144,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			  
-		    		  if (MainActivity.save() == 1)
+		    		  if (((MainActivity) context).saveState())
 		    		  {
 		    			  Toast.makeText(context, "File Saved", Toast.LENGTH_SHORT).show();    			  
 		    		  }
@@ -172,7 +167,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			    	  if (MainActivity.load() == 1)
+			    	  if (((MainActivity) context).loadState())
 			    	  {
 			    		  Toast.makeText(context, "File Loaded", Toast.LENGTH_SHORT).show();
 			    	  }
@@ -192,7 +187,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			    	  if (MainActivity.loadDemo() == 1)
+			    	  if (MainActivity.loadDemoState() == 1)
 			    	  {
 			    		  Toast.makeText(context, "Demo Loaded", Toast.LENGTH_SHORT).show();
 			    	  }

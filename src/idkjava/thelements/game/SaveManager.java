@@ -38,10 +38,11 @@ public class SaveManager
 	
 	public static void selectSave(int index)
 	{
-		loadSave(saveFiles[index].toCharArray());
+		loadState(saveFiles[index].toCharArray());
 	}
 	
-	public native static void loadSave(char[] filename);
+	public native static char saveState(char[] saveLoc);
+	public native static char loadState(char[] loadLoc);
 	
 	static
 	{

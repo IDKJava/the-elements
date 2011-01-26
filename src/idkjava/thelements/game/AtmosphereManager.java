@@ -37,7 +37,7 @@ public class AtmosphereManager
 		loadAtmosphere(atmosphereFiles[index].toCharArray());
 	}
 	
-	public native static void loadAtmosphere(char[] filename);
+	public native static char loadAtmosphere(char[] loadLoc);
 	
 	static
 	{

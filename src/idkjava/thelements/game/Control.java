@@ -63,7 +63,7 @@ public class Control extends LinearLayout
 						{
 							//When it is dragged, set the brush size to 32 * the fraction of the bar dragged
 							int p = 32 * progress/seekbar.getMax();
-							MainActivity.setBrushSize(p);
+							MainActivity.setBrushSize((char) p);
 						}
 						//These aren't needed for now
 						public void onStartTrackingTouch(SeekBar seekbar) {}
