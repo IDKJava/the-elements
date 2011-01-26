@@ -8,13 +8,14 @@
 #include "saveload.h"
 #include <android/log.h>
 
-char saveState(int type)
+char saveState(char* saveLoc)
 {
+	FILE *fp;
+	/*
 	//Strings for file location
 	char timestamp[64], saveLoc[256];
 
 	time_t rawtime;
-	FILE *fp;
 	if (type == NORMAL_SAVE)
 	{
 		//Generate the filename based on date and time
@@ -33,6 +34,7 @@ char saveState(int type)
 		strcat(saveLoc, TEMP_SAVE_FILE);
 		strcat(saveLoc, SAVE_EXTENSION);
 	}
+	*/
 	fp = fopen(saveLoc, "w");
 
 	if (fp != NULL)
@@ -81,11 +83,10 @@ char saveState(int type)
 	}
 }
 
-//TODO: Change this to char loadState(char* filename), int type is unneeded
-char loadState(char* filename)
+char loadState(char* loadLoc)
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadState called");
 	FILE *fp;
+	/*
 	char loadLoc[256];
 	//Set up the filename
 	if (type == NORMAL_SAVE)
@@ -111,6 +112,7 @@ char loadState(char* filename)
 		strcat(loadLoc, DEMO_SAVE_FILE);
 		strcat(loadLoc, SAVE_EXTENSION);
 	}
+	*/
 	//Load the file for reading
 	fp = fopen(loadLoc, "r");
 
@@ -141,21 +143,57 @@ char loadState(char* filename)
 	return FALSE;
 }
 
-void removeTempSave(void)
+char removeTempSave(void)
 {
 	char saveLoc[256];
 	//Generate the temp save filename
 	strcpy(saveLoc, ROOT_FOLDER);
 	strcat(saveLoc, SAVES_FOLDER);
-	strcat(saveLoc, TEMP_SAVE_FILE);
+	strcat(saveLoc, TEMP_SAVE);
 	strcat(saveLoc, SAVE_EXTENSION);
+
 	//Remove the file at that location
-	remove(saveLoc);
+	if(remove(saveLoc) == 0)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 //TODO:
-void saveCustomElement(struct Element* createdCustomElement) {}
-int loadCustomElements(void) {}
-void saveAtmosphere(struct Atmosphere* createAtmosphere) {}
-void loadAtmosphere(void) {}
-int getCustomElementsNumber(void) {}
+char saveCustomElement(struct Element* createdCustomElement)
+{
+	char saveLoc[256];
+	strcpy(saveLoc, ROOT_FOLDER);
+	strcat(saveLoc, ELEMENTS_FOLDER);
+	strcat(saveLoc, createdCustomElement->name);
+	strcat(saveLoc, ELEMENT_EXTENSION);
+
+	//TODO: Save to saveLoc
+
+	return FALSE;
+}
+char loadCustomElement(char* loadLoc)
+{
+	//TODO: Load from loadLoc (figure out saving of an element first)
+
+	return FALSE;
+}
+char saveAtmosphere(struct Atmosphere* createdAtmosphere)
+{
+	char saveLoc[256];
+	strcpy(saveLoc, ROOT_FOLDER);
+	strcat(saveLoc, ATMOSPHERES_FOLDER);
+	strcat(saveLoc, createdAtmosphere->name);
+
+	//TODO: Save to saveLoc
+
+	return FALSE;
+}
+char loadAtmosphere(char* loadLoc)
+{
+	//TODO: Load from loadLoc (figure out saving of an atmosphere first)
+
+	return FALSE;
+}

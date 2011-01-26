@@ -13,18 +13,14 @@
 //File/folder locations
 #define ROOT_FOLDER "/sdcard/thelements/"
 #define SAVES_FOLDER "saves/"
-#define CUSTOM_ELEMENTS_FOLDER "elements/"
+#define ELEMENTS_FOLDER "elements/"
 #define ATMOSPHERES_FOLDER "atmospheres/"
-#define TEMP_SAVE_FILE "temp"
-#define DEMO_SAVE_FILE "demo"
+#define TEMP_SAVE "temp"
+#define DEMO_SAVE "demo"
 //File extensions
 #define SAVE_EXTENSION ".sav"
 #define ELEMENT_EXTENSION ".ele"
 #define ATMOSPHERE_EXTENSION ".atm"
-//Save/load types
-#define NORMAL_SAVE 0
-#define TEMP_SAVE 1
-#define DEMO_SAVE 2
 
 //Include the FILE type
 #include <stdio.h>
@@ -41,13 +37,12 @@
 //Include the string functions
 #include <string.h>
 
-char saveState(int type);
-char loadState(int type, char* filename);
-void removeTempSave(void);
-void saveCustomElement(struct Element* createdCustomElement);
-int loadCustomElements(void);
-void saveAtmosphere(struct Atmosphere* createAtmosphere);
-void loadAtmosphere(void);
-int getCustomElementsNumber(void);
+char saveState(char* saveLoc);
+char loadState(char* loadLoc);
+char removeTempSave(void);
+char saveCustomElement(struct Element* createdCustomElement);
+char loadCustomElement(char* loadLoc);
+char saveAtmosphere(struct Atmosphere* createAtmosphere);
+char loadAtmosphere(char* loadLoc);
 
 #endif //!SAVELOAD_H_INCLUDED
