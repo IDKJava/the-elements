@@ -75,13 +75,23 @@ void Java_idkjava_thelements_MainActivity_setXGrav(JNIEnv* env, jobject thiz, jf
 	gravx = -xgrav;
 }
 */
-void Java_idkjava_thelements_MainActivity_tempLoad(JNIEnv* env)
+char Java_idkjava_thelements_MainActivity_tempLoad(JNIEnv* env)
 {
-	loadState(TEMP_SAVE, NULL);
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, TEMP_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	loadState(loadLoc);
 }
-void Java_idkjava_thelements_MainActivity_tempSave(JNIEnv* env)
+char Java_idkjava_thelements_MainActivity_tempSave(JNIEnv* env)
 {
-	saveState(TEMP_SAVE);
+	char saveLoc[256];
+	strcpy(saveLoc, ROOT_FOLDER);
+	strcat(saveLoc, SAVES_FOLDER);
+	strcat(saveLoc, TEMP_SAVE);
+	strcat(saveLoc, SAVE_EXTENSION);
+	saveState(saveLoc);
 }
 
 void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
@@ -120,7 +130,12 @@ void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobjec
 	setup();
 
 	//Reload
-	loadState(TEMP_SAVE, NULL);
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, TEMP_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	loadState(loadLoc);
 }
 /* Custom element stuff that will be changed
 void Java_idkjava_thelements_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
@@ -223,10 +238,9 @@ void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject 
 	mouseX = xpos;
 	mouseY = ypos;
 }
-void Java_idkjava_thelements_MainActivity_clearTempSave(JNIEnv* env, jobject thiz)
+char Java_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject thiz)
 {
-	removeTempSave();
-	return;
+	return removeTempSave();
 }
 void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
 {
@@ -266,26 +280,27 @@ void Java_idkjava_thelements_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
 		workHeight = workHeight / 2;
 	}
 }
-char Java_idkjava_thelements_MainActivity_save(JNIEnv* env, jobject thiz)
+char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz, char* saveLoc)
 {
-	return saveState(NORMAL_SAVE);
+	return saveState(saveLoc);
 }
-void Java_idkjava_thelements_game_SaveManager_loadSave(JNIEnv* env, jobject thiz, char* filename)
+char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz, char* saveLoc)
 {
-	loadState(filename);
+	return loadState(saveLoc);
 }
-char* Java_idkjava_thelements_CustomElementManager_getCustomElementName(JNIEnv* env, jobject thiz, jint index)
+char Java_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject thiz, char* loadLoc)
 {
-	return elements[index]->name;
-}
-int Java_idkjava_thelements_CustomElementManager_loadCustomElements(JNIEnv* env, jobject thiz)
-{
-	return loadCustomElements();
+	return loadCustomElement(loadLoc);
 }
 
 char Java_idkjava_thelements_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
 {
-	return loadState(DEMO_SAVE, NULL);
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, DEMO_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	return loadState(loadLoc);
 }
 
 /* Network stuff not included for now

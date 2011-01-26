@@ -132,7 +132,7 @@ public class MenuActivity extends Activity
 				public void onClick(View v)
 				{
 					//Show the about dialog
-					MainActivity.clearQuickSave();
+					MainActivity.removeTempSave();
 					Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}

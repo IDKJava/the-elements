@@ -460,7 +460,7 @@ public class MainActivity extends Activity
 	public native static void setElement(int element);
 	public native static void setBrushSize(int jsize);
 	public native static int  getElement();
-	public native static void clearQuickSave();
+	public native static char removeTempSave();
 	public native static void sendYGrav(float ygrav);
 	public native static void sendXGrav(float xgrav);
 	public native static void setDimensions(int width, int height);
