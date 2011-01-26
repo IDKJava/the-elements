@@ -361,6 +361,7 @@ public class MainActivity extends Activity
 	//General utility functions
 	public static native void clearScreen();
 	public static native void setBackgroundColor(char red, char green, char blue);
+	public static native void setDimensions(int width, int height);
 	
 	//Setters
 	public static native void setPlayState(boolean playState);
@@ -368,7 +369,6 @@ public class MainActivity extends Activity
 	public static native void setZoomState(boolean zoomState);
 	public static native void setElement(char element);
 	public static native void setBrushSize(char brushSize);
-	public static native void setDimensions(int width, int height);
 	
 	//Getters
 	public static native char getElement();

@@ -13,8 +13,8 @@ import android.view.MotionEvent;
 
 public class SandView extends GLSurfaceView
 {
-	private static final int FINGER_DOWN = 1;
-	private static final int FINGER_UP = 0;
+	private static final char FINGER_DOWN = 1;
+	private static final char FINGER_UP = 0;
 
     private SandViewRenderer mRenderer; //Declare the renderer
 	
@@ -55,8 +55,13 @@ public class SandView extends GLSurfaceView
     	return true;
     }
     
-    private static native void setFingerState(int state);
-    private static native void setMouseLocation(int xpos, int ypos);
+    private static native void setFingerState(char state);
+    private static native void setMouseLocation(int x, int y);
+    
+    static
+    {
+    	System.loadLibrary("thelements");
+    }
 }
 
 class SandViewRenderer implements GLSurfaceView.Renderer

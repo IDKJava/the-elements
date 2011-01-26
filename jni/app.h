@@ -91,16 +91,14 @@ extern int loq;
 //Current element selected
 extern struct Element* cElement;
 
-//Play state
+//State variables
 extern char play;
-//Zoom value
 extern char zoom;
-//Size variable
-extern unsigned char brushSize;
-//Flipped state
 extern char flipped;
-//Finger state
-extern char fingerState;
+extern char fingerDown;
+extern char accelOn;
+
+extern unsigned char brushSize;
 
 //A map of all the points (a two-dimensional variable-size array)
 extern struct Particle** allCoords;

@@ -15,8 +15,7 @@
 //Include the update function
 #include "update.h"
 
-void appInit(void);
-void appDeinit(void);
-void appRender(void);
+void glInit(void);
+void glRender(void);
 
 #endif //!GL_H_INCLUDED

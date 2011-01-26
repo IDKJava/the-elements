@@ -30,9 +30,11 @@ struct Element* cElement;
 
 char play;
 char zoom;
-unsigned char brushSize;
 char flipped;
-char fingerState;
+char fingerDown;
+char accelOn;
+
+unsigned char brushSize;
 
 struct Particle** allCoords;
 

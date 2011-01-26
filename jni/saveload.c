@@ -118,7 +118,7 @@ char loadState(char* loadLoc)
 
 	//Clear the screen and set up some temp variables
 	arraySetup();
-	setup();
+	gameSetup();
 	int xCoord;
 	int yCoord;
 	int element;
