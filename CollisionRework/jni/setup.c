@@ -8,7 +8,7 @@
 #include "setup.h"
 #include <android/log.h>
 
-void setup()
+void gameSetup()
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup start------------------------------------------------------------------------------------------------------");
 	int i, j;

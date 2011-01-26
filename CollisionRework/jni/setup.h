@@ -19,7 +19,7 @@
 #include <stdlib.h>
 
 //Set up the workspace
-void setup(void);
+void gameSetup(void);
 //Set up the variable sized arrays
 void arraySetup(void);
 

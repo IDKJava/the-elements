@@ -15,14 +15,14 @@ void UpdateView(void)
 	if (shouldClear)
 	{
 		//Clear and unset the flag
-		setup();
+		gameSetup();
 		shouldClear = FALSE;
 		
 		//No need to do the rest of the update
 		return;
 	}
 	//Draw points
-	if (fingerState == FINGER_DOWN)
+	if (fingerDown == TRUE)
 	{
 		if (mouseY != 0) //Not sure why this is here...
 		{

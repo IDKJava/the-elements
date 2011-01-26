@@ -14,13 +14,10 @@
 #define MAX_POINTS 100000
 #define NUM_BASE_ELEMENTS 24
 
-#define PLAY 1
-#define PAUSE 0
-
 #define DEFAULT_BRUSH_SIZE 4
 
 #define ZOOMED_IN 1
-#define ZOOMED_OUT 2
+#define ZOOMED_OUT 0
 
 #define TRUE 1
 #define FALSE 0

@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#include <android/log.h>
+#include <android/log.h>
 
 //Include the global variables
 #include "app.h"
@@ -30,17 +30,18 @@
 //Include the rendering functions
 #include "gl.h"
 
-#include <android/log.h>
 
-void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env) //Initialize graphics
+
+//Called from SandViewRenderer
+void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env)
 {
 	importGLInit();
-	//appInit();
+	glInit();
 }
-void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint w, jint h)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
-	screenWidth = w - w%2;
-	screenHeight = h - h%2;
+	screenWidth = width - width%2;
+	screenHeight = height - height%2;
 	if (zoom == ZOOMED_IN)
 	{
 		workWidth = screenWidth / 2;
@@ -52,82 +53,69 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 		workHeight = screenHeight;
 	}
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeresize bro");
-	appInit();
-}
-void Java_idkjava_thelements_game_SandViewRenderer_nativeDone(JNIEnv* env)
-{
-	appDeinit();
-	importGLDeinit();
+	arraySetup();
+	gameSetup();
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env)
 {
-	appRender();
+	glRender();
 }
 
-/* Accelerometer stuff taken out for now
-//these two get the gravity from the java code
-void Java_idkjava_thelements_MainActivity_setYGrav(JNIEnv* env, jobject thiz, jfloat ygrav)
+//Save/load functions
+char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, char* saveLoc)
 {
-	gravy = ygrav;
+	return saveState(saveLoc);
 }
-void Java_idkjava_thelements_MainActivity_setXGrav(JNIEnv* env, jobject thiz, jfloat xgrav)
+char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, char* loadLoc)
 {
-	gravx = -xgrav;
+	return loadState(loadLoc);
 }
-*/
-char Java_idkjava_thelements_MainActivity_tempLoad(JNIEnv* env)
-{
-	char loadLoc[256];
-	strcpy(loadLoc, ROOT_FOLDER);
-	strcat(loadLoc, SAVES_FOLDER);
-	strcat(loadLoc, TEMP_SAVE);
-	strcat(loadLoc, SAVE_EXTENSION);
-	loadState(loadLoc);
-}
-char Java_idkjava_thelements_MainActivity_tempSave(JNIEnv* env)
+char Java_idkjava_thelements_MainActivity_tempSaveState(JNIEnv* env)
 {
 	char saveLoc[256];
 	strcpy(saveLoc, ROOT_FOLDER);
 	strcat(saveLoc, SAVES_FOLDER);
 	strcat(saveLoc, TEMP_SAVE);
 	strcat(saveLoc, SAVE_EXTENSION);
-	saveState(saveLoc);
+	return saveState(saveLoc);
+}
+char Java_idkjava_thelements_MainActivity_tempLoadState(JNIEnv* env)
+{
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, TEMP_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	return loadState(loadLoc);
+}
+char Java_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
+{
+	return removeTempSave();
+}
+char Java_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject this)
+{
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, DEMO_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	return loadState(loadLoc);
 }
 
-void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
+//General utility functions
+void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
 	shouldClear = TRUE;
 }
-
-void Java_idkjava_thelements_MainActivity_pause(JNIEnv* env, jobject thiz)
-{
-	play = FALSE;
-}
-void Java_idkjava_thelements_MainActivity_play(JNIEnv* env, jobject thiz)
-{
-	play = TRUE;
-}
-int Java_idkjava_thelements_MainActivity_getPlayState(JNIEnv* env, jobject thiz)
-{
-	return play;
-}
-
-void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject thiz, jint width, jint height)
-{
-	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
-	screenWidth = width - width%2;
-	screenHeight = height - height%2;
-}
-
-void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobject thiz, jint redValue, jint greenValue, jint blueValue)
+void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobject this, jint redValue, jint greenValue, jint blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
 	elements[ERASER_ELEMENT]->red = redValue;
 	elements[ERASER_ELEMENT]->green = greenValue;
 	elements[ERASER_ELEMENT]->blue = blueValue;
-	
+
 	//Call setup again
-	setup();
+	gameSetup();
 
 	//Reload
 	char loadLoc[256];
@@ -137,74 +125,57 @@ void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobjec
 	strcat(loadLoc, SAVE_EXTENSION);
 	loadState(loadLoc);
 }
-/* Custom element stuff that will be changed
-void Java_idkjava_thelements_MainActivity_setExplosiveness(JNIEnv* env, jobject thiz, jint explosiveness)
+void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject this, jint width, jint height)
 {
-	exploness[22] = explosiveness;
+	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
+	screenWidth = width - width%2;
+	screenHeight = height - height%2;
 }
-void Java_idkjava_thelements_MainActivity_setRed(JNIEnv* env, jobject thiz, jint redness)
-{
-	red[22] = redness;
-}
-void Java_idkjava_thelements_MainActivity_setGreen(JNIEnv* env, jobject thiz, jint greenness)
-{
-	green[22] = greenness;
-}
-void Java_idkjava_thelements_MainActivity_setBlue(JNIEnv* env, jobject thiz, jint blueness)
-{
-	blue[22] = blueness;
-}
-void Java_idkjava_thelements_MainActivity_setDensity(JNIEnv* env, jobject thiz, jint jdensity)
-{
-	density[22] = jdensity;
-}
-*/
-void Java_idkjava_thelements_MainActivity_setFlip(JNIEnv* env, jobject thiz, jint jflipped)
-{
-	flipped = jflipped;
-}
-/* Custom element stuff that will be changed
-void Java_idkjava_thelements_MainActivity_setCollision(JNIEnv* env, jobject thiz, jint custnum, jint elementnumb, jint colspot, jint colnum)
-{
-	if (custnum == 1)
-	{
-		collision[22][colspot] = colnum;
-		colliseelement1[colspot] = elementnumb;
-		collision[colspot][22] = colnum;
-	}
-	else
-	{
-		collision[22][colspot] = colnum;
-		colliseelement1[colspot] = elementnumb;
-		collision[colspot][22] = colnum;
-	}
-	int counter124;
-	char foundfire = 0;
-	for (counter124 = 0; counter124 < TElements; counter124++)
-	{
-		if (collision[22][counter124] == 6)
-		{
-			foundfire = 1;
-		}
-	}
-	if (foundfire == 0)
-	{
-		fireburn[22] = 0;
-	}
-	else
-	{
-		fireburn[22] = 1;
-	}
-}
-*/
 
-void Java_idkjava_thelements_MainActivity_setFingerState(JNIEnv* env, jobject thiz, jint state)
+//Setter functions
+void Java_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
 {
-	fingerState = state;
+	play = (char) playState;
+}
+void Java_idkjava_thelements_MainActivity_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
+{
+	accelOn = (char) accelState;
+}
+void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
+{
+	zoom = (char) zoomState;
+	if (zoom == ZOOMED_IN)
+	{
+		//Divide by two to zoom in
+		workWidth = workWidth / 2;
+		workHeight = workHeight / 2;
+	}
+	else
+	{
+		//Multiply by two to zoom out
+		workWidth = workWidth * 2;
+		workHeight = workWidth * 2;
+	}
+}
+void Java_idkjava_thelements_MainActivity_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
+{
+	flipped = (char) flippedState;
+}
+void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
+{
+	cElement = elements[element];
+}
+void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this, jchar brushSizeValue)
+{
+	brushSize = brushSizeValue;
+}
+void Java_idkjava_thelements_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
+{
+	fingerDown = state;
 	//To prevent drawing from the previous point, invalidate the mouse pointer
 	mouseX = -1;
 }
-void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject thiz, jint xpos, jint ypos)
+void Java_idkjava_thelements_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
 {
 	//Set the mouse position and draw lines if needed
 	if (mouseX != -1)
@@ -212,8 +183,8 @@ void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject 
 		lastMouseX = mouseX;
 		lastMouseY = mouseY;
 
-		int changeX = xpos - lastMouseX; //change in x (delta x)
-		int changeY = ypos - lastMouseY; //change in y (delta y)
+		int changeX = x - lastMouseX; //change in x (delta x)
+		int changeY = y - lastMouseY; //change in y (delta y)
 
 
 		int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
@@ -235,76 +206,28 @@ void Java_idkjava_thelements_MainActivity_setMouseLocation(JNIEnv* env, jobject 
 			play = oldplay;
 		}
 	}
-	mouseX = xpos;
-	mouseY = ypos;
-}
-char Java_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject thiz)
-{
-	return removeTempSave();
-}
-void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jint jelement)
-{
-	cElement = elements[jelement];
-	return;
-}
-int Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject thiz)
-{
-	return (int) cElement->index;
-}
-void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar jbrushSize)
-{
-	brushSize = jbrushSize;
-	return;
-}
-/* Acclerometer stuff going back in later
-void Java_idkjava_thelements_MainActivity_setAccelOnOff(JNIEnv* env, jobject thiz, jint state)
-{
-	accelcon = state;
-	return;
-}
-*/
-void Java_idkjava_thelements_MainActivity_toggleSize(JNIEnv* env, jobject thiz)
-{
-	if (zoom == ZOOMED_IN)
-	{
-		//Multiply by two to zoom out
-		zoom = ZOOMED_OUT;
-		workWidth = workWidth * 2;
-		workHeight = workWidth * 2;
-	}
-	else
-	{
-		//Divide by two to zoom in
-		zoom = ZOOMED_IN;
-		workWidth = workWidth / 2;
-		workHeight = workHeight / 2;
-	}
-}
-char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz, char* saveLoc)
-{
-	return saveState(saveLoc);
-}
-char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz, char* saveLoc)
-{
-	return loadState(saveLoc);
-}
-char Java_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject thiz, char* loadLoc)
-{
-	return loadCustomElement(loadLoc);
+	mouseX = x;
+	mouseY = y;
 }
 
-char Java_idkjava_thelements_MainActivity_loadDemo(JNIEnv* env, jobject thiz)
+//Getter functions
+char Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 {
-	char loadLoc[256];
-	strcpy(loadLoc, ROOT_FOLDER);
-	strcat(loadLoc, SAVES_FOLDER);
-	strcat(loadLoc, DEMO_SAVE);
-	strcat(loadLoc, SAVE_EXTENSION);
-	return loadState(loadLoc);
+	return cElement->index;
 }
 
-/* Network stuff not included for now
-void Java_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject thiz, jbyteArray minut)
+//TODO: Accelerometer related
+void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravity)
+{
+	//Stuff
+}
+void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravity)
+{
+	//Stuff
+}
+
+/* TODO: Network related
+void Java_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject this, jbyteArray minut)
 {
 	int i; //Counter variable
 
@@ -329,7 +252,7 @@ void Java_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject thiz,
 	//Free the created byte array
 	free(minut1);
 }
-void Java_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject thiz, jbyteArray minut)
+void Java_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject this, jbyteArray minut)
 {
 	int i; //Counter variable
 
@@ -354,7 +277,7 @@ void Java_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject thiz,
 	//Free the created byte array
 	free(minut1);
 }
-int Java_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject thiz)
+int Java_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject this)
 {
 	buildbuffer(3);
 	if(!sendbuffer())
@@ -364,7 +287,7 @@ int Java_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject thiz)
 
 	return 0;
 }
-int Java_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject thiz)
+int Java_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject this)
 {
 	buildbuffer(2);
 	if(!sendbuffer())
@@ -375,8 +298,23 @@ int Java_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject thiz)
 
 	return 0;
 }
-char* Java_idkjava_thelements_MainActivity_viewErr (JNIEnv *env, jobject thiz)
+char* Java_idkjava_thelements_MainActivity_viewErr (JNIEnv *env, jobject this)
 {
 	return error;
 }
 */
+
+//Atmosphere related
+char Java_idkjava_thelements_game_AtmosphereManager_loadAtmosphere(char* loadLoc)
+{
+	return loadAtmosphere(loadLoc);
+}
+
+//Custom elements related
+char Java_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject this, char* loadLoc)
+{
+	return loadCustomElement(loadLoc);
+}
+
+
+

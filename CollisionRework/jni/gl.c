@@ -11,13 +11,8 @@
 static unsigned int textureID;
 
 // Called from the app framework. is onSurfaceCreated
-void appInit()
+void glInit()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "start of appInit()");
-	arraySetup();
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup() completed");
-	setup();
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup() completed");
 	glShadeModel(GL_FLAT);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 	//glClearDepthf(1.0f);
@@ -30,6 +25,7 @@ void appInit()
 	//Bind the texture
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
+	//Enable 2D texturing
 	glEnable(GL_TEXTURE_2D);
 
 	//Set tex params
@@ -39,22 +35,10 @@ void appInit()
 	//Different possible texture parameters, e.g
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	//Generate the tex image
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screenWidth, screenHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, colors);
-
-	//Disable tex (clean up)
-	glDisable(GL_TEXTURE_2D);
 }
 
 // Called from the app framework.
-void appDeinit()
-{
-
-}
-
-// Called from the app framework.
-void appRender()
+void glRender()
 {
 	float vertices[] =
 	{0.0f, 0.0f, (float)screenWidth, 0.0f, 0.0f, (float)screenHeight, (float)screenWidth, (float)screenHeight};
