@@ -22,7 +22,7 @@ void UpdateView(void)
 		return;
 	}
 	//Draw points
-	if (fingerDown == TRUE)
+	if (fingerDown)
 	{
 		if (mouseY != 0) //Not sure why this is here...
 		{
@@ -34,7 +34,7 @@ void UpdateView(void)
 					if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
 					{
 						//Normal drawing
-						if (cElement->index >= 0)
+						if (cElement->index >= NORMAL_ELEMENT)
 						{
 							//Draw it solid
 							if(cElement->inertia == INERTIA_UNMOVABLE)
@@ -67,7 +67,7 @@ void UpdateView(void)
 						{
 							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] != NULL && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
 							{
-								DeletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
+								deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
 							}
 						}
 					}
