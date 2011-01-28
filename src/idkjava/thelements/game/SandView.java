@@ -74,9 +74,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
     public void onSurfaceChanged(GL10 gl, int w, int h)
     {
         nativeResize(w, h);
-        if (MainActivity.shouldLoadDemo == true) //loads the demo from the sdcard on first run.
+        //After first run, no need to load demo
+        if (MainActivity.shouldLoadDemo)
         {
-        	//MainActivity.loadDemo();
         	MainActivity.shouldLoadDemo = false;
         }
     }
