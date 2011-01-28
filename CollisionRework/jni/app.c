@@ -28,13 +28,13 @@ struct Particle* avail[MAX_POINTS];
 int loq;
 struct Element* cElement;
 
-char play;
-char zoom;
-char flipped;
-char fingerDown;
-char accelOn;
+char play = TRUE;
+char zoom = ZOOMED_IN;
+char flipped = FALSE;
+char fingerDown = FALSE;
+char accelOn = FALSE;
 
-unsigned char brushSize;
+unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 
 struct Particle** allCoords;
 
@@ -52,8 +52,8 @@ short workHeight;
 
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 
-char shouldClear;
-char shouldUpdateMouse;
+char shouldClear = FALSE;
+char shouldUpdateMouse = FALSE;
 
 
 /* Accelerometer stuff being taken out for now

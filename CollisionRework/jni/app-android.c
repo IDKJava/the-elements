@@ -33,7 +33,7 @@
 
 
 //Called from SandViewRenderer
-void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env, jobject this)
 {
 	importGLInit();
 	glInit();
@@ -59,7 +59,9 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
 	glRender();
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
 }
 
 //Save/load functions
@@ -170,13 +172,13 @@ void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this
 {
 	brushSize = brushSizeValue;
 }
-void Java_idkjava_thelements_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
+void Java_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
 {
 	fingerDown = state;
 	//To prevent drawing from the previous point, invalidate the mouse pointer
 	mouseX = -1;
 }
-void Java_idkjava_thelements_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
+void Java_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
 {
 	//Set the mouse position and draw lines if needed
 	if (mouseX != -1)
