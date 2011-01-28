@@ -83,9 +83,9 @@ extern struct Element** elements;
 //The number of elements available
 extern unsigned char numElements;
 //An array of all the particles
-extern struct Particle** particles;
+extern struct Particle* particles[];
 //A stack of available particles
-extern struct Particle** avail;
+extern struct Particle* avail[];
 //Points to the index AFTER the top of the stack
 extern int loq;
 //Current element selected

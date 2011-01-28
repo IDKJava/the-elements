@@ -23,8 +23,8 @@ int getIndex(int x, int y)
 
 struct Element** elements;
 unsigned char numElements;
-struct Particle** particles;
-struct Particle** avail;
+struct Particle* particles[MAX_POINTS];
+struct Particle* avail[MAX_POINTS];
 int loq;
 struct Element* cElement;
 
