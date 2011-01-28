@@ -28,6 +28,7 @@
 #define SPAWN_ELEMENT 0
 #define DRAG_ELEMENT 1
 #define ERASER_ELEMENT 2
+#define NORMAL_ELEMENT 3
 
 #define INERTIA_UNMOVABLE -1
 

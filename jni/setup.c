@@ -103,6 +103,8 @@ void arraySetup()
 		{
 			//TODO: Gotta load the thing from the array, allocate the memory for it, and store the pointer here
 		}
+
+		cElement = elements[NORMAL_ELEMENT];
 	}
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
