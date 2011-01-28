@@ -77,7 +77,6 @@ void UpdateView(void)
 	}
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
-	sleep(20);
 	//Particles update
 	if (play)
 	{
@@ -96,8 +95,9 @@ void UpdateView(void)
 			tempParticle = particles[counter];
 			
 			//If the particle is set and unfrozen
-			if (tempParticle->set == TRUE && tempParticle->frozen < 4)
+			if (tempParticle->set && tempParticle->frozen < 4)
 			{
+				__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
 				//TODO: Life property cycle
 
 				//Set the temp and old variables
@@ -327,8 +327,6 @@ void UpdateView(void)
 				//Updating allCoords and collision resolution
 				tempAllCoords = allCoords[getIndex(tempX, tempY)];
 
-				__android_log_write(ANDROID_LOG_INFO, "TheElements", "updated the coords of a point");
-
 				//If the space the particle is trying to move to is taken and isn't itself
 				if (tempAllCoords != NULL && tempAllCoords != tempParticle)
 				{
@@ -409,5 +407,10 @@ void UpdateView(void)
 				}
 			}
 		}
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
+	}
+	else
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "Not playing");
 	}
 }
