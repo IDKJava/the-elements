@@ -31,10 +31,10 @@ void gameSetup()
 	{
 		for(j = 0; j < workHeight; j++)
 		{
-			allCoords[getIndex(j, i)] = NULL;
-			colors[3 * (j * workHeight + i)] = blankRed;
-			colors[3 * (j * workHeight + i) + 1] = blankGreen;
-			colors[3 * (j * workHeight + i) + 2] = blankBlue;
+			allCoords[getIndex(i, j)] = NULL;
+			colors[3 * (j * workWidth + i)] = blankRed;
+			colors[3 * (j * workWidth + i) + 1] = blankGreen;
+			colors[3 * (j * workWidth + i) + 2] = blankBlue;
 		}
 	}
 	/* Network stuff not needed
