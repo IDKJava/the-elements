@@ -69,8 +69,6 @@ void arraySetup()
 	free(colors);
 	free(allCoords);
 	free(elements);
-	free(particles);
-	free(avail);
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "frees finished");
 
@@ -78,14 +76,6 @@ void arraySetup()
 	colors = malloc(3 * points * sizeof(char));
 
 	elements = malloc(numElements * sizeof(struct Element*));
-	particles = malloc(points * sizeof(struct Particle*));
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "right before particles malloc");
-	for(i = 0; i < MAX_POINTS; i++)
-	{
-		particles[i] = (struct Particle*) malloc(sizeof(struct Particle));
-	}
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "right after particle malloc");
-	avail = malloc(points * sizeof(struct Particle*));
 
 	allCoords = malloc(workWidth * workHeight * zoom * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 	for(i = 0; i < numElements; i++)
@@ -118,4 +108,13 @@ void arraySetup()
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
 
 	//TODO: Higher/lower element pointers
+}
+
+void particleSetup()
+{
+	int i;
+	for(i = 0; i < MAX_POINTS; i++)
+	{
+		particles[i] = (struct Particle*) malloc(sizeof(struct Particle));
+	}
 }
