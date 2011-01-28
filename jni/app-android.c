@@ -57,7 +57,7 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 	arraySetup();
 	gameSetup();
 }
-void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env)
+void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
 	glRender();
 }
