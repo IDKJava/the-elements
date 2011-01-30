@@ -135,6 +135,7 @@ void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject thi
 	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
 	screenWidth = width - width%2;
 	screenHeight = height - height%2;
+	dimensionsChanged = TRUE;
 }
 
 //Setter functions
@@ -148,18 +149,25 @@ void Java_idkjava_thelements_MainActivity_setAccelState(JNIEnv* env, jobject thi
 }
 void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
 {
-	zoom = (char) zoomState;
-	if (zoom == ZOOMED_IN)
+	if(zoomState != zoom)
 	{
-		//Divide by two to zoom in
-		workWidth = workWidth / 2;
-		workHeight = workHeight / 2;
-	}
-	else
-	{
-		//Multiply by two to zoom out
-		workWidth = workWidth * 2;
-		workHeight = workWidth * 2;
+		zoom = !zoom;
+		zoomChanged = TRUE;
+		if (zoom == ZOOMED_IN)
+		{
+			//Divide by two to zoom in
+			workWidth = workWidth / 2;
+			workHeight = workHeight / 2;
+		}
+		else
+		{
+			//Multiply by two to zoom out
+			workWidth = workWidth * 2;
+			workHeight = workWidth * 2;
+		}
+
+		arraySetup();
+		gameSetup();
 	}
 }
 void Java_idkjava_thelements_MainActivity_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)

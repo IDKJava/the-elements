@@ -33,6 +33,8 @@ char zoom = ZOOMED_IN;
 char flipped = FALSE;
 char fingerDown = FALSE;
 char accelOn = FALSE;
+char dimensionsChanged = TRUE;
+char zoomChanged = TRUE;
 
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 
