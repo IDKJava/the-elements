@@ -97,6 +97,8 @@ extern char zoom;
 extern char flipped;
 extern char fingerDown;
 extern char accelOn;
+extern char dimensionsChanged;
+extern char zoomChanged;
 
 extern unsigned char brushSize;
 
