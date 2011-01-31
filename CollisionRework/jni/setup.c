@@ -21,8 +21,12 @@ void gameSetup()
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)
 	{
-		avail[i] = particles[i];
-		particles[i]->set = FALSE;
+		if ( particles[i])
+		{
+			avail[i] = particles[i];
+			particles[i]->set = FALSE;
+		}
+
 	}
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup clear allcoords--------------------------------------------------------------------------------------------");
@@ -31,7 +35,10 @@ void gameSetup()
 	{
 		for(j = 0; j < workHeight; j++)
 		{
-			allCoords[getIndex(i, j)] = NULL;
+			if ( allCoords[getIndex(i,j)])
+			{
+				allCoords[getIndex(i, j)] = NULL;
+			}
 			colors[3 * (j * workWidth + i)] = blankRed;
 			colors[3 * (j * workWidth + i) + 1] = blankGreen;
 			colors[3 * (j * workWidth + i) + 2] = blankBlue;
