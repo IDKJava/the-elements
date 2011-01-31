@@ -14,7 +14,7 @@
 //Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
 int getIndex(int x, int y)
 {
-	return x*workWidth + y;
+	return y*workWidth + x;
 }
 
 /*
