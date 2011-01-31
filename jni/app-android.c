@@ -37,9 +37,9 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env, jobje
 {
 	importGLInit();
 	arraySetup();
+	particleSetup();
 	gameSetup();
 	glInit();
-	particleSetup();
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
