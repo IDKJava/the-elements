@@ -8,7 +8,7 @@
 #include "gl.h"
 #include <android/log.h>
 
-static unsigned int textureID;
+unsigned int textureID;
 
 float vertices[] =
 {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
@@ -18,14 +18,11 @@ unsigned char indices[] =
 {0, 1, 3, 0, 3, 2};
 int texWidth = 1, texHeight = 1;
 
-// Called from the app framework. is onSurfaceCreated
+
 void glInit()
 {
+	//Set some properties
 	glShadeModel(GL_FLAT);
-	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
-	//glClearDepthf(1.0f);
-	//glEnable(GL_DEPTH_TEST);
-	//glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 
 	//Generate the new texture
@@ -35,6 +32,8 @@ void glInit()
 
 	//Enable 2D texturing
 	glEnable(GL_TEXTURE_2D);
+	//Disable depth testing
+	glDisable(GL_DEPTH_TEST);
 
 	//Enable the vertex and coord arrays
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -43,20 +42,16 @@ void glInit()
 
 	//Set tex params
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	//Different possible texture parameters, e.g
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
-	//Create a dummy array
-	while((texWidth << 1) < screenWidth) {}
-	while((texHeight << 1) < screenHeight) {}
-	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
+	//Set up texWidth and texHeight
+	while((texWidth << 1) < screenWidth);
+	while((texHeight << 1) < screenHeight);
 
+	//Allocate the dummy array
+	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
 	//Generate the tex image
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
-
 	//Free the dummy array
 	free(emptyPixels);
 
@@ -65,9 +60,9 @@ void glInit()
 	glTexCoordPointer(2, GL_FLOAT, 0, texture);
 }
 
-// Called from the app framework.
 void glRender()
 {
+	//Check for changes in screen dimensions or work dimensions and handle them
 	if(dimensionsChanged)
 	{
 		vertices[2] = (float) screenWidth;
@@ -80,19 +75,19 @@ void glRender()
 		texture[6] = (float) workWidth/texWidth;
 		texture[7] = (float) workHeight/texHeight;
 
-		dimensionsChanged = FALSE;
-		zoomChanged = FALSE;
-
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		if (!flipped)
 		{
-			glOrthof(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, 1.0f, -1.0f); //--Device
+			glOrtho(0, screenWidth, screenHeight, 0, -1, 1); //--Device
 		}
 		else
 		{
-			glOrthof(0.0f, (float)screenWidth, 0.0f, (float)-screenHeight, 1.0f, -1.0f); //--Emulator
+			glOrtho(0, screenWidth, 0, -screenHeight, -1, 1); //--Emulator
 		}
+
+		dimensionsChanged = FALSE;
+		zoomChanged = FALSE;
 	}
 	else if(zoomChanged)
 	{
@@ -107,18 +102,11 @@ void glRender()
 	UpdateView();
 
 	//Clear the screen
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	//Sub the work portion of the tex
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Actually draw the rectangle with the text on it
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-
-	//Disable the vertex and coord arrays (clean up)
-	//glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	//Disable tex (clean up)
-	//glDisable(GL_TEXTURE_2D);
 }
