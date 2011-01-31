@@ -79,11 +79,11 @@ void glRender()
 		glLoadIdentity();
 		if (!flipped)
 		{
-			glOrtho(0, screenWidth, screenHeight, 0, -1, 1); //--Device
+			glOrthof(0, screenWidth, screenHeight, 0, -1, 1); //--Device
 		}
 		else
 		{
-			glOrtho(0, screenWidth, 0, -screenHeight, -1, 1); //--Emulator
+			glOrthof(0, screenWidth, 0, -screenHeight, -1, 1); //--Emulator
 		}
 
 		dimensionsChanged = FALSE;
