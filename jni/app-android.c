@@ -61,9 +61,9 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
 	glRender();
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
 }
 
 //Save/load functions
