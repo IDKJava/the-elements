@@ -76,9 +76,9 @@ void UpdateView(void)
 		}
 	}
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
 	//Particles update
-	if (play)
+	if (/*play*/ 1)
 	{
 		//Used in for loops
 		int counter;
@@ -97,7 +97,7 @@ void UpdateView(void)
 			//If the particle is set and unfrozen
 			if (tempParticle->set && tempParticle->frozen < 4)
 			{
-				__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
+				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
 				//TODO: Life property cycle
 
 				//Set the temp and old variables
@@ -407,7 +407,7 @@ void UpdateView(void)
 				}
 			}
 		}
-		__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
+		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
 	}
 	else
 	{
