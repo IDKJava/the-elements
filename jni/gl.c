@@ -45,21 +45,12 @@ void glInit()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
 	//Set up texWidth and texHeight
-	while((texWidth << 1) < screenWidth);
-	while((texHeight << 1) < screenHeight);
-
-	if(texWidth == 1 && texHeight == 1)
-	{
-		__android_log_write(ANDROID_LOG_ERROR, "TheElements", "YOU SCREWED UP!");
-	}
+	while((texWidth = texWidth << 1) < screenWidth);
+	while((texHeight = texHeight << 1) < screenHeight);
 
 	//Allocate the dummy array
 	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
-	int i;
-	for(i = 0; i < 1; i++)
-	{
-		emptyPixels[i] = 255;
-	}
+
 	//Generate the tex image
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
 	//Free the dummy array
@@ -108,14 +99,14 @@ void glRender()
 
 		zoomChanged = FALSE;
 	}
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Right before updateview");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Right before updateview");
 	UpdateView();
 
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//Sub the work portion of the tex
-	//glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Actually draw the rectangle with the text on it
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
