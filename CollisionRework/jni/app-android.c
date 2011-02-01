@@ -135,6 +135,16 @@ void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject thi
 	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
 	screenWidth = width - width%2;
 	screenHeight = height - height%2;
+	if(zoom == ZOOMED_IN)
+	{
+		workWidth = screenWidth/2;
+		workHeight = screenHeight/2;
+	}
+	else
+	{
+		workWidth = screenWidth;
+		workHeight = screenHeight;
+	}
 	dimensionsChanged = TRUE;
 }
 
