@@ -101,6 +101,8 @@ void glRender()
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Right before updateview");
 	UpdateView();
 
+	//TEST:
+	glClearColor(1.0f, 1.0f, 0.0f, 0.0f);
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
