@@ -91,7 +91,7 @@ void arraySetup()
 
 	elements = malloc(numElements * sizeof(struct Element*));
 
-	allCoords = malloc(workWidth * workHeight * zoom * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 	for(i = 0; i < numElements; i++)
 	{
 		if(i < NUM_BASE_ELEMENTS)
