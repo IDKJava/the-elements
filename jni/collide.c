@@ -12,7 +12,7 @@
 void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 {
 	//Temporary variables
-	int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY, oldXSecond = secondParticle->oldX, oldYSecond = secondParticle->oldY;
+	int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY;
 	//The type of the collision (retrieved from a static array)
 	int type = collision[firstParticle->element->index][secondParticle->element->index];
 
