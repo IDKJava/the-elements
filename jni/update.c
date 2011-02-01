@@ -56,7 +56,7 @@ void UpdateView(void)
 						//Special Drag case
 						else if (cElement->index == DRAG_ELEMENT)
 						{
-							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != NULL && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
+							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
 							{
 								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
 								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
@@ -65,7 +65,7 @@ void UpdateView(void)
 						//Special Eraser case
 						else if (cElement->index == ERASER_ELEMENT)
 						{
-							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] != NULL && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
+							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
 							{
 								deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
 							}

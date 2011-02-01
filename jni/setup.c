@@ -21,16 +21,15 @@ void gameSetup()
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)
 	{
-		if ( particles[i])
+		if (particles[i])
 		{
 			avail[i] = particles[i];
 			particles[i]->set = FALSE;
 		}
-      else
-      {
-         __android_log_write(ANDROID_LOG_ERROR, "TheElements", "pointer in gamesetup had a NULL pointer in the array.");
-      }
-
+		else
+		{
+			__android_log_write(ANDROID_LOG_ERROR, "TheElements", "pointer in gamesetup had a NULL pointer in the array.");
+		}
 	}
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup clear allcoords--------------------------------------------------------------------------------------------");
@@ -39,17 +38,17 @@ void gameSetup()
 	{
 		for(j = 0; j < workHeight; j++)
 		{
-			if ( allCoords[getIndex(i,j)])
+			if (allCoords[getIndex(i,j)])
 			{
 				allCoords[getIndex(i, j)] = NULL;
 			}
-         else
-         {
-            __android_log_write(ANDROID_LOG_ERROR, "TheElements", "allCoords in gamesetup had a NULL pointer in the array.");
-         }
-			colors[3 * (j * workWidth + i)] = blankRed;
-			colors[3 * (j * workWidth + i) + 1] = blankGreen;
-			colors[3 * (j * workWidth + i) + 2] = blankBlue;
+			else
+			{
+				__android_log_write(ANDROID_LOG_ERROR, "TheElements", "allCoords in gamesetup had a NULL pointer in the array.");
+			}
+			colors[3 * getIndex(i, j)] = blankRed;
+			colors[3 * getIndex(i, j) + 1] = blankGreen;
+			colors[3 * getIndex(i, j) + 2] = blankBlue;
 		}
 	}
 	/* Network stuff not needed

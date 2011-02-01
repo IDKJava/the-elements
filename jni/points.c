@@ -80,9 +80,9 @@ void setElement(struct Particle* particle, struct Element* newElement)
 
 void setBitmapColor(int xCoord, int yCoord, struct Element* element)
 {
-	colors[3 * (yCoord * workHeight + xCoord)] = element->red;
-	colors[3 * (yCoord * workHeight + xCoord) + 1] = element->green;
-	colors[3 * (yCoord * workHeight + xCoord) + 2] = element->blue;
+	colors[3 * getIndex(xCoord, yCoord)] = element->red;
+	colors[3 * getIndex(xCoord, yCoord) + 1] = element->green;
+	colors[3 * getIndex(xCoord, yCoord) + 2] = element->blue;
 }
 void createBitmapFromPoints(void)
 {
@@ -102,7 +102,7 @@ void unFreezeParticles(int xCoord, int yCoord)
 			{
 				struct Particle* tempParticle = allCoords[getIndex(tempX, tempY)];
 
-				if (tempParticle != NULL)
+				if (tempParticle)
 				{
 					//Unfreeze the particle
 					tempParticle->frozen = FALSE;
