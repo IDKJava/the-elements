@@ -26,6 +26,10 @@ void gameSetup()
 			avail[i] = particles[i];
 			particles[i]->set = FALSE;
 		}
+      else
+      {
+         __android_log_write(ANDROID_LOG_ERROR, "TheElements", "pointer in gamesetup had a NULL pointer in the array.");
+      }
 
 	}
 
@@ -39,6 +43,10 @@ void gameSetup()
 			{
 				allCoords[getIndex(i, j)] = NULL;
 			}
+         else
+         {
+            __android_log_write(ANDROID_LOG_ERROR, "TheElements", "allCoords in gamesetup had a NULL pointer in the array.");
+         }
 			colors[3 * (j * workWidth + i)] = blankRed;
 			colors[3 * (j * workWidth + i) + 1] = blankGreen;
 			colors[3 * (j * workWidth + i) + 2] = blankBlue;
