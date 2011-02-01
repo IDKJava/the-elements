@@ -36,10 +36,6 @@
 void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env, jobject this)
 {
 	importGLInit();
-	arraySetup();
-	particleSetup();
-	gameSetup();
-	glInit();
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
@@ -55,9 +51,13 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 		workWidth = screenWidth;
 		workHeight = screenHeight;
 	}
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeresize bro");
+
+	dimensionsChanged = TRUE;
+
 	arraySetup();
+	particleSetup();
 	gameSetup();
+	glInit();
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {

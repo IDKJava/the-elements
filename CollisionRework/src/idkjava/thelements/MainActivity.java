@@ -361,7 +361,6 @@ public class MainActivity extends Activity
 	//General utility functions
 	public static native void clearScreen();
 	public static native void setBackgroundColor(char red, char green, char blue);
-	public static native void setDimensions(int width, int height);
 	
 	//Setters
 	public static native void setPlayState(boolean playState);

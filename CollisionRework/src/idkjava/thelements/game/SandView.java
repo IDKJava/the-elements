@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 //import android.util.Log;
 import android.view.MotionEvent;
 
@@ -22,7 +23,6 @@ public class SandView extends GLSurfaceView
     public SandView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-        MainActivity.setDimensions(getWidth(), getHeight());
     	mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
         setRenderer(mRenderer); //Associate it with this view
     }
