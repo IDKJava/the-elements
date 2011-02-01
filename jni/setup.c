@@ -10,42 +10,26 @@
 
 void gameSetup()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup start------------------------------------------------------------------------------------------------------");
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "gameSetup");
 	int i, j;
 	loq = MAX_POINTS;
 	unsigned char blankRed = elements[ERASER_ELEMENT]->red;
 	unsigned char blankGreen = elements[ERASER_ELEMENT]->green;
 	unsigned char blankBlue = elements[ERASER_ELEMENT]->blue;
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup unset------------------------------------------------------------------------------------------------------");
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)
 	{
-		if (particles[i])
-		{
-			avail[i] = particles[i];
-			particles[i]->set = FALSE;
-		}
-		else
-		{
-			__android_log_write(ANDROID_LOG_ERROR, "TheElements", "pointer in gamesetup had a NULL pointer in the array.");
-		}
+		avail[i] = particles[i];
+		particles[i]->set = FALSE;
 	}
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup clear allcoords--------------------------------------------------------------------------------------------");
 	//Clear allCoords and our pixels array
 	for(i = 0; i < workWidth; i++)
 	{
 		for(j = 0; j < workHeight; j++)
 		{
-			if (allCoords[getIndex(i,j)])
-			{
-				allCoords[getIndex(i, j)] = NULL;
-			}
-			else
-			{
-				__android_log_write(ANDROID_LOG_ERROR, "TheElements", "allCoords in gamesetup had a NULL pointer in the array.");
-			}
+			allCoords[getIndex(i, j)] = NULL;
 			colors[3 * getIndex(i, j)] = blankRed;
 			colors[3 * getIndex(i, j) + 1] = blankGreen;
 			colors[3 * getIndex(i, j) + 2] = blankBlue;
@@ -60,20 +44,20 @@ void gameSetup()
 	userlength = 0;
 	passlength = 0;
 	*/
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "setup end---------------------------------------------------------------------------------------------------");
 }
 
 //Set up all the variable sized arrays
 void arraySetup()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup start");
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
 	int i;
 	//Variables for special size and special value size, because these are variable-sized multidimensional arrays
 	
 	//Calculate the number of pixels
 	int points = workWidth * workHeight;
 
-	//TODO: Load custom elements
+	//TODO: Load custom elements	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
+
 	//Calculate numElements
 	//Calculate special size
 	//Calculate special value size
@@ -83,8 +67,6 @@ void arraySetup()
 	free(colors);
 	free(allCoords);
 	free(elements);
-
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "frees finished");
 
 	//Allocate memory
 	colors = malloc(3 * points * sizeof(char));
@@ -96,7 +78,6 @@ void arraySetup()
 	{
 		if(i < NUM_BASE_ELEMENTS)
 		{
-			__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup elements section start");
 			elements[i] = (struct Element*) malloc(sizeof(struct Element));
 			elements[i]->red = baseRed[i];
 			elements[i]->green = baseGreen[i];
@@ -111,7 +92,6 @@ void arraySetup()
 			elements[i]->inertia = baseInertia[i];
 			elements[i]->highestTemp = baseHighestTemp[i];
 			elements[i]->lowestTemp = baseLowestTemp[i];
-			__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup elements section end");
 		}
 		else
 		{
@@ -121,13 +101,13 @@ void arraySetup()
 		cElement = elements[NORMAL_ELEMENT];
 	}
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
 
 	//TODO: Higher/lower element pointers
 }
 
 void particleSetup()
 {
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "particleSetup");
 	int i;
 	for(i = 0; i < MAX_POINTS; i++)
 	{
