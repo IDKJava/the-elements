@@ -238,7 +238,14 @@ public class MainActivity extends Activity
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
-					setBrushSize((char) java.lang.Math.pow(2, item));
+					if(item == 0)
+					{
+						setBrushSize((char) 0);
+					}
+					else
+					{
+						setBrushSize((char) java.lang.Math.pow(2, item-1));
+					}
 				}
 			});
 			AlertDialog alert = builder.create(); // Create object
