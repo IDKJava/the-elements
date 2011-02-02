@@ -58,11 +58,6 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 	particleSetup();
 	gameSetup();
 	glInit();
-
-	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "before create point");
-	//TEST:
-	CreatePoint(50, 50, elements[3]);
-	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "after create point");
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
