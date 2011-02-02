@@ -9,6 +9,19 @@
 #include "update.h"
 #include <android/log.h>
 
+static int dx, dy;
+//Used in for loops
+static int counter;
+//For speed we're going to create temp variables to store stuff
+static int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
+static char tempInertia;
+static struct Particle* tempParticle;
+static struct Particle* tempAllCoords;
+static struct Element* tempElement;
+static struct Element* tempElement2;
+//Used for heat
+static unsigned char heatAvg;
+
 void UpdateView(void)
 {
 	//Clear
@@ -26,7 +39,6 @@ void UpdateView(void)
 	{
 		if (mouseY != 0) //Not sure why this is here...
 		{
-			int dx, dy;
 			for (dy = brushSize; dy >= -brushSize; dy--)
 			{
 				for (dx = -brushSize; dx <= brushSize; dx++)
@@ -78,17 +90,8 @@ void UpdateView(void)
 
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
 	//Particles update
-	if (/*play*/ 1)
+	if (play)
 	{
-		//Used in for loops
-		int counter;
-		//For speed we're going to create temp variables to store stuff
-		int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
-		char tempInertia;
-		struct Particle* tempParticle;
-		struct Particle* tempAllCoords;
-		struct Element* tempElement;
-		struct Element* tempElement2;
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
@@ -333,7 +336,7 @@ void UpdateView(void)
 					tempElement2 = tempAllCoords->element;
 					
 					//Update heat
-					unsigned char heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
+					heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
 					tempParticle->heat = heatAvg;
 					tempAllCoords->heat = heatAvg;
 					
