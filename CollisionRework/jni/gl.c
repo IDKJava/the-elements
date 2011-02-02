@@ -99,8 +99,9 @@ void glRender()
 
 		zoomChanged = FALSE;
 	}
-	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Right before updateview");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
 	UpdateView();
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
 
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);

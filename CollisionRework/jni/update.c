@@ -118,6 +118,108 @@ void UpdateView(void)
 				{
 					tempParticle->x += tempXVel;
 					tempParticle->y += tempElement->fallVel + tempYVel;
+
+					//Boundary checking to finalize new coords
+					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0)
+					{
+						tempParticle->x = tempOldX;
+						tempParticle->xVel = 0;
+					}
+					if ((int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
+					{
+						tempParticle->y = tempOldY;
+						tempParticle->yVel = 0;
+					}
+
+					//Indicate that the particle has moved
+					tempParticle->hasMoved = TRUE;
+
+					//Set other temp variables
+					tempX = (int) tempParticle->x;
+					tempY = (int) tempParticle->y;
+
+					//Updating allCoords and collision resolution
+					tempAllCoords = allCoords[getIndex(tempX, tempY)];
+					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got here");
+
+					//If the space the particle is trying to move to is taken and isn't itself
+					if (tempAllCoords != NULL && tempAllCoords != tempParticle)
+					{
+						tempElement2 = tempAllCoords->element;
+
+						//Update heat
+						heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
+						tempParticle->heat = heatAvg;
+						tempAllCoords->heat = heatAvg;
+
+						//Resolve heat changes
+						if(heatAvg < tempParticle->element->lowestTemp)
+						{
+							tempParticle->element = tempParticle->element->lowerElement;
+						}
+						else if(heatAvg > tempParticle->element->highestTemp)
+						{
+							tempParticle->element = tempParticle->element->higherElement;
+						}
+						if(heatAvg < tempAllCoords->element->lowestTemp)
+						{
+							tempAllCoords->element = tempParticle->element->lowerElement;
+						}
+						else if(heatAvg > tempAllCoords->element->highestTemp)
+						{
+							tempAllCoords->element = tempAllCoords->element->higherElement;
+						}
+
+						//Resolve the collision (this updates the state of the particle, but lets this function resolve later)
+						collide(tempParticle, tempAllCoords);
+
+						//Update allCoords and the bitmap colors if the hasMoved flag is set
+						if(tempParticle->hasMoved)
+						{
+							tempX = tempParticle->x;
+							tempY = tempParticle->y;
+
+							allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+							setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+							allCoords[getIndex(tempX, tempY)] = tempParticle;
+							setBitmapColor(tempX, tempY, tempParticle->element);
+
+							unFreezeParticles(tempOldX, tempOldY);
+							tempParticle->hasMoved = FALSE;
+						}
+						else
+						{
+							tempParticle->frozen++;
+						}
+						if(tempAllCoords->hasMoved)
+						{
+							tempX = tempAllCoords->x;
+							tempY = tempAllCoords->y;
+
+							allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+							setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+							allCoords[getIndex(tempX, tempY)] = tempAllCoords;
+							setBitmapColor(tempX, tempY, tempAllCoords->element);
+
+							unFreezeParticles(tempOldX, tempOldY);
+							tempAllCoords->hasMoved = FALSE;
+						}
+						else
+						{
+							tempAllCoords->frozen++;
+						}
+					}
+					//Space particle is trying to move to is free
+					else if (tempAllCoords != tempParticle)
+					{
+						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+						allCoords[getIndex(tempX, tempY)] = tempParticle;
+						setBitmapColor(tempX, tempY, tempParticle->element);
+
+						unFreezeParticles(tempOldX, tempOldY);
+						tempParticle->hasMoved = FALSE;
+					}
 				}
 
 				//Reduce velocities
@@ -166,6 +268,9 @@ void UpdateView(void)
 					}
 				}
 
+				tempParticle->xVel = tempXVel;
+				tempParticle->yVel = tempYVel;
+
 				/* Acclerometer stuff taken out for now
 				//If accel control, do tempYVel based on that
 				if ((int) gravy != 0 && accelcon)
@@ -194,27 +299,6 @@ void UpdateView(void)
 					x[counter] += tempXVel[counter];
 				}
 				*/
-
-
-
-				//Boundary checking to finalize new coords
-				if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0)
-				{
-					tempParticle->x = tempOldX;
-					tempParticle->xVel = 0;
-				}
-				if ((int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
-				{
-					tempParticle->y = tempOldY;
-					tempParticle->yVel = 0;
-				}
-				
-				//Indicate that the particle has moved
-				tempParticle->hasMoved = TRUE;
-
-				//Set other temp variables
-				tempX = (int) tempParticle->x;
-				tempY = (int) tempParticle->y;
 
 				//Special cycle
 				/* TODO: --- This had errors, will fix after getting it to build ---
@@ -336,87 +420,7 @@ void UpdateView(void)
 				}
 				*/
 
-				//Updating allCoords and collision resolution
-				tempAllCoords = allCoords[getIndex(tempX, tempY)];
 
-				//If the space the particle is trying to move to is taken and isn't itself
-				if (tempAllCoords != NULL && tempAllCoords != tempParticle)
-				{
-					tempElement2 = tempAllCoords->element;
-					
-					//Update heat
-					heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
-					tempParticle->heat = heatAvg;
-					tempAllCoords->heat = heatAvg;
-					
-					//Resolve heat changes
-					if(heatAvg < tempParticle->element->lowestTemp)
-					{
-						tempParticle->element = tempParticle->element->lowerElement;
-					}
-					else if(heatAvg > tempParticle->element->highestTemp)
-					{
-						tempParticle->element = tempParticle->element->higherElement;
-					}
-					if(heatAvg < tempAllCoords->element->lowestTemp)
-					{
-						tempAllCoords->element = tempParticle->element->lowerElement;
-					}
-					else if(heatAvg > tempAllCoords->element->highestTemp)
-					{
-						tempAllCoords->element = tempAllCoords->element->higherElement;
-					}
-
-					//Resolve the collision (this updates the state of the particle, but lets this function resolve later)
-					collide(tempParticle, tempAllCoords);
-					
-					//Update allCoords and the bitmap colors if the hasMoved flag is set
-					if(tempParticle->hasMoved)
-					{
-						tempX = tempParticle->x;
-						tempY = tempParticle->y;
-						
-						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
-						allCoords[getIndex(tempX, tempY)] = tempParticle;
-						setBitmapColor(tempX, tempY, tempParticle->element);
-						
-						unFreezeParticles(tempOldX, tempOldY);
-						tempParticle->hasMoved = FALSE;
-					}
-					else
-					{
-						tempParticle->frozen++;
-					}
-					if(tempAllCoords->hasMoved)
-					{
-						tempX = tempAllCoords->x;
-						tempY = tempAllCoords->y;
-						
-						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
-						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
-						setBitmapColor(tempX, tempY, tempAllCoords->element);
-						
-						unFreezeParticles(tempOldX, tempOldY);
-						tempAllCoords->hasMoved = FALSE;
-					}
-					else
-					{
-						tempAllCoords->frozen++;
-					}
-				}
-				//Space particle is trying to move to is free
-				else if (tempAllCoords != tempParticle)
-				{
-						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
-						allCoords[getIndex(tempX, tempY)] = tempAllCoords;
-						setBitmapColor(tempX, tempY, tempAllCoords->element);
-						
-						unFreezeParticles(tempOldX, tempOldY);
-						tempAllCoords->hasMoved = FALSE;
-				}
 			}
 		}
 		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
