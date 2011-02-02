@@ -9,6 +9,9 @@
 #include "points.h"
 #include <android/log.h>
 
+static int dx;
+static int dy;
+
 void CreatePoint(int xCoord, int yCoord, struct Element* element)
 {
 	//If there are point available
@@ -91,8 +94,6 @@ void createBitmapFromPoints(void)
 }
 void unFreezeParticles(int xCoord, int yCoord)
 {
-	int dx;
-	int dy;
 	for (dx = -1; dx <= 1; dx++)
 	{
 		for (dy = -1; dy <= 1; dy++)
@@ -103,7 +104,7 @@ void unFreezeParticles(int xCoord, int yCoord)
 			{
 				struct Particle* tempParticle = allCoords[getIndex(tempX, tempY)];
 
-				if (tempParticle)
+				if (tempParticle != NULL)
 				{
 					//Unfreeze the particle
 					tempParticle->frozen = FALSE;
