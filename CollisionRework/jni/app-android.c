@@ -195,6 +195,14 @@ void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this
 void Java_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
 {
 	fingerDown = state;
+	if(fingerDown)
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "fingerDown");
+	}
+	else
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "finger up");
+	}
 	//To prevent drawing from the previous point, invalidate the mouse pointer
 	mouseX = -1;
 }
