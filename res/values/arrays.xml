@@ -75,9 +75,6 @@
     </string-array>
     
 	<string-array name="elements_list">
-		<item>Spawn</item>
-		<item>Drag</item>
-		<item>Eraser</item>
 		<item>Sand</item>
 		<item>Water</item>
 		<item>Steam</item>

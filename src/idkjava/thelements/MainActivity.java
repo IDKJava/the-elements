@@ -36,7 +36,8 @@ public class MainActivity extends Activity
 	private static final int BRUSH_SIZE_PICKER = 3;
 	
 	//Constant for the eraser element
-	public static final char ERASER_ELEMENT = 3;
+	public static final char ERASER_ELEMENT = 2;
+	public static final char NORMAL_ELEMENT = 3;
 	
 	//Request code constants
 	public static final int REQUEST_CODE_SELECT_SAVE = 0;
@@ -222,7 +223,7 @@ public class MainActivity extends Activity
 					{
 						MenuBar.setEraserOff();
 					}
-					setElement((char) item);
+					setElement((char) (item + NORMAL_ELEMENT));
 				}
 			});
 			AlertDialog alert = builder.create(); // Create the dialog
