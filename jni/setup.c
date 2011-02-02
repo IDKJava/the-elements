@@ -17,6 +17,8 @@ void gameSetup()
 	unsigned char blankGreen = elements[ERASER_ELEMENT]->green;
 	unsigned char blankBlue = elements[ERASER_ELEMENT]->blue;
 
+	cElement = elements[NORMAL_ELEMENT];
+
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)
 	{
@@ -79,6 +81,7 @@ void arraySetup()
 		if(i < NUM_BASE_ELEMENTS)
 		{
 			elements[i] = (struct Element*) malloc(sizeof(struct Element));
+			elements[i]->index = i;
 			elements[i]->red = baseRed[i];
 			elements[i]->green = baseGreen[i];
 			elements[i]->blue = baseBlue[i];
