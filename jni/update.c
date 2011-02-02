@@ -281,7 +281,16 @@ void UpdateView(void)
 					int check1, check2, temp;
 					for (check1 = -2; check1 <= 2; check1++)
 					{
-						for (check2 = -2; check2 <= 2; check2++)
+						for (check2 = -
+	int i;
+	for(i = 0; i < workWidth*workHeight; i++)
+	{
+		if(colors[i] != 0)
+		{
+			__android_log_write(ANDROID_LOG_INFO, "TheElements", "Found a non-zero in colors");
+			break;
+		}
+	}2; check2 <= 2; check2++)
 						{
 							if (tempX + check1 > 1 && tempX + check1 < workWidth && tempY + check2 >= 0 && tempY + check2 < workHeight)
 							{
@@ -411,9 +420,5 @@ void UpdateView(void)
 			}
 		}
 		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
-	}
-	else
-	{
-		__android_log_write(ANDROID_LOG_INFO, "TheElements", "Not playing");
 	}
 }

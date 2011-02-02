@@ -105,16 +105,6 @@ void glRender()
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	int i;
-	for(i = 0; i < workWidth*workHeight; i++)
-	{
-		if(colors[i] != 0)
-		{
-			__android_log_write(ANDROID_LOG_INFO, "TheElements", "Found a non-zero in colors");
-			break;
-		}
-	}
-
 	//Sub the work portion of the tex
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 

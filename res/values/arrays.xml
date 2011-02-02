@@ -75,27 +75,30 @@
     </string-array>
     
 	<string-array name="elements_list">
+		<item>Spawn</item>
+		<item>Drag</item>
+		<item>Eraser</item>
 		<item>Sand</item>
 		<item>Water</item>
-		<item>Plant</item>
-		<item>Wall</item>
-		<item>Fire</item>
+		<item>Steam</item>
 		<item>Ice</item>
-		<item>Generator</item>
-		<item>Oil</item>
+		<item>Wall</item>
+		<item>Destructible Wall</item>
+		<item>Plant</item>
+		<item>Fire</item>
 		<item>Magma</item>
 		<item>Stone</item>
+		<item>Oil</item>
 		<item>C4</item>
 		<item>C4++</item>
 		<item>Fuse</item>
-		<item>Destructible Wall</item>
-		<item>Drag</item>
 		<item>Acid</item>
-		<item>Steam</item>
 		<item>Salt</item>
-		<item>Salt Water</item>
+		<item>Salt-Water</item>
 		<item>Glass</item>
 		<item>Mud</item>
+		<item>Generator</item>
+		<item>Coal</item>
 	</string-array>
 
 	<string-array name="brush_size_list">
