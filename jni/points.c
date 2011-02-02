@@ -7,6 +7,7 @@
  */
 
 #include "points.h"
+#include <android/log.h>
 
 void CreatePoint(int xCoord, int yCoord, struct Element* element)
 {
