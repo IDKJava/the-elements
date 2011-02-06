@@ -36,6 +36,11 @@ char accelOn = FALSE;
 char dimensionsChanged = TRUE;
 char zoomChanged = TRUE;
 
+char borderTop = TRUE;
+char borderBottom = TRUE;
+char borderLeft = TRUE;
+char borderRight = TRUE;
+
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 
 struct Particle** allCoords;
