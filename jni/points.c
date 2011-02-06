@@ -57,9 +57,9 @@ void deletePoint(struct Particle* particle)
 	//Unfreeze the particles around it
 	unFreezeParticles(tempX, tempY);
 	//Clear it in the pixels array
-	setBitmapColor((int) tempX, (int) tempY, elements[ERASER_ELEMENT]);
+	setBitmapColor(tempX, tempY, elements[ERASER_ELEMENT]);
 	//Clear it in the points array
-	allCoords[getIndex((int) tempX, (int) tempY)] = NULL;
+	allCoords[getIndex(tempX, tempY)] = NULL;
 
 	//Unset the particle
 	particle->set = FALSE;
