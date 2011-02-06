@@ -173,6 +173,10 @@ void UpdateView(void)
 						//Resolve the collision (this updates the state of the particle, but lets this function resolve later)
 						collide(tempParticle, tempAllCoords);
 
+						//Reset tempXVel and tempYVel
+						tempXVel = tempParticle->xVel;
+						tempYVel = tempParticle->yVel;
+
 						//Update allCoords and the bitmap colors if the hasMoved flag is set
 						if(tempParticle->hasMoved)
 						{
@@ -204,10 +208,6 @@ void UpdateView(void)
 							unFreezeParticles(tempOldX, tempOldY);
 							tempAllCoords->hasMoved = FALSE;
 						}
-						else
-						{
-							tempAllCoords->frozen++;
-						}
 					}
 					//Space particle is trying to move to is free
 					else if (tempAllCoords != tempParticle)
@@ -225,6 +225,7 @@ void UpdateView(void)
 				//Reduce velocities
 				if(tempXVel < 0)
 				{
+					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
 					if(tempInertia >= -tempXVel)
 					{
 						tempXVel = 0;
@@ -269,6 +270,10 @@ void UpdateView(void)
 				}
 
 				tempParticle->xVel = tempXVel;
+				if(tempXVel > 0)
+				{
+					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "X velocity greater than zero!");
+				}
 				tempParticle->yVel = tempYVel;
 
 				/* Acclerometer stuff taken out for now
