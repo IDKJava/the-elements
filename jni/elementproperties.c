@@ -79,7 +79,7 @@ char baseSpecial[][2] = {{0}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {1}, {2,
 char baseSpecialValue[][2] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5}, {0}, {0}, {0}, {7,3}, {5,5}, {5,10}, {2}, {0}, {0}, {0}, {3}, {0}, {0}, {5}};
 
 //Defines the inertia of each element
-char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 0, 1, 1, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255};
+char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 0, 1, 1, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1};
 
 //TODO: Fill this in
 //Defines the highest and lowest temps that the element exists at
