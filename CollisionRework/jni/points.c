@@ -94,13 +94,14 @@ void createBitmapFromPoints(void)
 }
 void unFreezeParticles(int xCoord, int yCoord)
 {
+	int tempX, tempY;
 	for (dx = -1; dx <= 1; dx++)
 	{
 		for (dy = -1; dy <= 1; dy++)
 		{
-			int tempX = xCoord + dx;
-			int tempY = yCoord + dy;
-			if (tempX < workWidth && tempX > 0 && tempY < workHeight && tempY > 0)
+			tempX = xCoord + dx;
+			tempY = yCoord + dy;
+			if (tempX < workWidth && tempX >= 0 && tempY < workHeight && tempY >= 0)
 			{
 				struct Particle* tempParticle = allCoords[getIndex(tempX, tempY)];
 
