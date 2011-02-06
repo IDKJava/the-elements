@@ -10,7 +10,7 @@
 
 void gameSetup()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "gameSetup");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "gameSetup");
 	int i, j;
 	loq = MAX_POINTS;
 	unsigned char blankRed = elements[ERASER_ELEMENT]->red;
@@ -51,7 +51,7 @@ void gameSetup()
 //Set up all the variable sized arrays
 void arraySetup()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
 	int i;
 	//Variables for special size and special value size, because these are variable-sized multidimensional arrays
 	
@@ -110,7 +110,7 @@ void arraySetup()
 
 void particleSetup()
 {
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "particleSetup");
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "particleSetup");
 	int i;
 	for(i = 0; i < MAX_POINTS; i++)
 	{
