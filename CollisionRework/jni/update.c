@@ -49,7 +49,7 @@ void UpdateView(void)
 						//Draw it solid
 						if(cElement->inertia == INERTIA_UNMOVABLE)
 						{
-							if (dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+							if (dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
 								CreatePoint(mouseX + dx, mouseY + dy, cElement);
 							}
@@ -57,7 +57,7 @@ void UpdateView(void)
 						//Draw it randomized
 						else
 						{
-							if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+							if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
 								CreatePoint(mouseX + dx, mouseY + dy, cElement);
 							}
@@ -117,12 +117,13 @@ void UpdateView(void)
 					tempParticle->y += tempElement->fallVel + tempYVel;
 
 					//Boundary checking
-					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0 || (int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
+					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x < 0 || (int) tempParticle->y >= workHeight || (int) tempParticle->y < 0)
 					{
 						//Move it back and delete it
 						tempParticle->x = tempOldX;
 						tempParticle->y = tempOldY;
 						deletePoint(tempParticle);
+						continue;
 					}
 
 					//Reduce velocities

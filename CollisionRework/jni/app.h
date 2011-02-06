@@ -99,6 +99,11 @@ extern char fingerDown;
 extern char accelOn;
 extern char dimensionsChanged;
 extern char zoomChanged;
+//Border states
+extern char borderTop;
+extern char borderBottom;
+extern char borderLeft;
+extern char borderRight;
 
 extern unsigned char brushSize;
 
