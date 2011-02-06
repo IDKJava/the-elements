@@ -37,50 +37,47 @@ void UpdateView(void)
 	//Draw points
 	if (fingerDown)
 	{
-		if (mouseY != 0) //Not sure why this is here...
+		for (dy = brushSize; dy >= -brushSize; dy--)
 		{
-			for (dy = brushSize; dy >= -brushSize; dy--)
+			for (dx = -brushSize; dx <= brushSize; dx++)
 			{
-				for (dx = -brushSize; dx <= brushSize; dx++)
+				if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
 				{
-					if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
+					//Normal drawing
+					if (cElement->index >= NORMAL_ELEMENT)
 					{
-						//Normal drawing
-						if (cElement->index >= NORMAL_ELEMENT)
+						//Draw it solid
+						if(cElement->inertia == INERTIA_UNMOVABLE)
 						{
-							//Draw it solid
-							if(cElement->inertia == INERTIA_UNMOVABLE)
+							if (dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
-								if (dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
-								{
-									CreatePoint(mouseX + dx, mouseY + dy, cElement);
-								}
-							}
-							//Draw it randomized
-							else
-							{
-								if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
-								{
-									CreatePoint(mouseX + dx, mouseY + dy, cElement);
-								}
+								CreatePoint(mouseX + dx, mouseY + dy, cElement);
 							}
 						}
-						//Special Drag case
-						else if (cElement->index == DRAG_ELEMENT)
+						//Draw it randomized
+						else
 						{
-							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
+							if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
-								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
+								CreatePoint(mouseX + dx, mouseY + dy, cElement);
 							}
 						}
-						//Special Eraser case
-						else if (cElement->index == ERASER_ELEMENT)
+					}
+					//Special Drag case
+					else if (cElement->index == DRAG_ELEMENT)
+					{
+						if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
 						{
-							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
-							{
-								deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
-							}
+							allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
+							allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
+						}
+					}
+					//Special Eraser case
+					else if (cElement->index == ERASER_ELEMENT)
+					{
+						if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
+						{
+							deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
 						}
 					}
 				}
@@ -98,7 +95,7 @@ void UpdateView(void)
 			tempParticle = particles[counter];
 			
 			//If the particle is set and unfrozen
-			if (tempParticle->set && tempParticle->frozen < 4)
+			if (tempParticle->set)// && tempParticle->frozen < 4)
 			{
 				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
 				//TODO: Life property cycle
@@ -119,17 +116,63 @@ void UpdateView(void)
 					tempParticle->x += tempXVel;
 					tempParticle->y += tempElement->fallVel + tempYVel;
 
-					//Boundary checking to finalize new coords
-					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0)
+					//Boundary checking
+					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x <= 0 || (int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
 					{
+						//Move it back and delete it
 						tempParticle->x = tempOldX;
-						tempParticle->xVel = 0;
-					}
-					if ((int) tempParticle->y >= workHeight || (int) tempParticle->y <= 0)
-					{
 						tempParticle->y = tempOldY;
-						tempParticle->yVel = 0;
+						deletePoint(tempParticle);
 					}
+
+					//Reduce velocities
+					if(tempXVel < 0)
+					{
+						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
+						if(tempInertia >= -tempXVel)
+						{
+							tempXVel = 0;
+						}
+						else
+						{
+							tempXVel += tempInertia;
+						}
+					}
+					else if(tempXVel > 0)
+					{
+						if(tempInertia >= tempXVel)
+						{
+							tempXVel = 0;
+						}
+						else
+						{
+							tempXVel -= tempInertia;
+						}
+					}
+					if(tempYVel < 0)
+					{
+						if(tempInertia >= -tempYVel)
+						{
+							tempYVel = 0;
+						}
+						else
+						{
+							tempYVel += tempInertia;
+						}
+					}
+					else if(tempYVel > 0)
+					{
+						if(tempInertia >= tempYVel)
+						{
+							tempYVel = 0;
+						}
+						else
+						{
+							tempYVel -= tempInertia;
+						}
+					}
+					tempParticle->xVel = tempXVel;
+					tempParticle->yVel = tempYVel;
 
 					//Indicate that the particle has moved
 					tempParticle->hasMoved = TRUE;
@@ -221,60 +264,65 @@ void UpdateView(void)
 						tempParticle->hasMoved = FALSE;
 					}
 				}
+				//Inertia unmovable object still need to deal with velocities
+				else
+				{
+					//Reduce velocities
+					if(tempXVel < 0)
+					{
+						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
+						if(tempInertia >= -tempXVel)
+						{
+							tempXVel = 0;
+						}
+						else
+						{
+							tempXVel += tempInertia;
+						}
+					}
+					else if(tempXVel > 0)
+					{
+						if(tempInertia >= tempXVel)
+						{
+							tempXVel = 0;
+						}
+						else
+						{
+							tempXVel -= tempInertia;
+						}
+					}
+					if(tempYVel < 0)
+					{
+						if(tempInertia >= -tempYVel)
+						{
+							tempYVel = 0;
+						}
+						else
+						{
+							tempYVel += tempInertia;
+						}
+					}
+					else if(tempYVel > 0)
+					{
+						if(tempInertia >= tempYVel)
+						{
+							tempYVel = 0;
+						}
+						else
+						{
+							tempYVel -= tempInertia;
+						}
+					}
 
-				//Reduce velocities
-				if(tempXVel < 0)
-				{
-					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
-					if(tempInertia >= -tempXVel)
+					tempParticle->xVel = tempXVel;
+					if(tempXVel > 0)
 					{
-						tempXVel = 0;
+						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "X velocity greater than zero!");
 					}
-					else
-					{
-						tempXVel += tempInertia;
-					}
-				}
-				else if(tempXVel > 0)
-				{
-					if(tempInertia >= tempXVel)
-					{
-						tempXVel = 0;
-					}
-					else
-					{
-						tempXVel -= tempInertia;
-					}
-				}
-				if(tempYVel < 0)
-				{
-					if(tempInertia >= -tempYVel)
-					{
-						tempYVel = 0;
-					}
-					else
-					{
-						tempYVel += tempInertia;
-					}
-				}
-				else if(tempYVel > 0)
-				{
-					if(tempInertia >= tempYVel)
-					{
-						tempYVel = 0;
-					}
-					else
-					{
-						tempYVel -= tempInertia;
-					}
+					tempParticle->yVel = tempYVel;
 				}
 
-				tempParticle->xVel = tempXVel;
-				if(tempXVel > 0)
-				{
-					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "X velocity greater than zero!");
-				}
-				tempParticle->yVel = tempYVel;
+
 
 				/* Acclerometer stuff taken out for now
 				//If accel control, do tempYVel based on that

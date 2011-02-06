@@ -50,11 +50,11 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			
 				//-1 to 1
 				int random = rand() % 3 - 1;
-				firstParticle->yVel = random;
+				firstParticle->yVel += random;
 
 				//-3 to 3
 				random = rand() % 7 - 3;
-				firstParticle->xVel = random;
+				firstParticle->xVel += random;
 
 				break;
 			}
