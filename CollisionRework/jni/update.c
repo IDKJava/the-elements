@@ -51,7 +51,7 @@ void UpdateView(void)
 						{
 							if (dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
-								CreatePoint(mouseX + dx, mouseY + dy, cElement);
+								createPoint(mouseX + dx, mouseY + dy, cElement);
 							}
 						}
 						//Draw it randomized
@@ -59,7 +59,7 @@ void UpdateView(void)
 						{
 							if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 							{
-								CreatePoint(mouseX + dx, mouseY + dy, cElement);
+								createPoint(mouseX + dx, mouseY + dy, cElement);
 							}
 						}
 					}
@@ -492,7 +492,7 @@ void UpdateView(void)
 								}
 								else if (temp == -1 && rand() % 200 == 0 && loq < TPoints - 1) //There's an empty spot
 								{
-									CreatePoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
+									createPoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
 								}
 							}
 						}

@@ -12,7 +12,7 @@
 static int dx;
 static int dy;
 
-void CreatePoint(int xCoord, int yCoord, struct Element* element)
+void createPoint(int xCoord, int yCoord, struct Element* element)
 {
 	//If there are point available
 	if (loq > 0)
