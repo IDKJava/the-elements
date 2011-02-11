@@ -117,19 +117,74 @@ void UpdateView(void)
 					tempParticle->y += tempElement->fallVel + tempYVel;
 
 					//Boundary checking
-					if ((int) tempParticle->x >= workWidth || (int) tempParticle->x < 0 || (int) tempParticle->y >= workHeight || (int) tempParticle->y < 0)
+					if ((int) tempParticle->x >= workWidth)
 					{
-						//Move it back and delete it
-						tempParticle->x = tempOldX;
-						tempParticle->y = tempOldY;
-						deletePoint(tempParticle);
-						continue;
+						if(borderRight)
+						{
+							//Bounce the particle
+							tempParticle->x = tempOldX;
+						}
+						else
+						{
+							//Move it back and delete it
+							tempParticle->x = tempOldX;
+							tempParticle->y = tempOldY;
+							deletePoint(tempParticle);
+							continue;
+						}
+					}
+					else if((int) tempParticle->x < 0)
+					{
+						if(borderLeft)
+						{
+							//Bounce the particle
+							tempParticle->x = tempOldX;
+						}
+						else
+						{
+							//Move it back and delete it
+							tempParticle->x = tempOldX;
+							tempParticle->y = tempOldY;
+							deletePoint(tempParticle);
+							continue;
+						}
+					}
+					if((int) tempParticle->y >= workHeight)
+					{
+						if(borderBottom)
+						{
+							//Bounce the particle
+							tempParticle->y = tempOldY;
+						}
+						else
+						{
+							//Move it back and delete it
+							tempParticle->x = tempOldX;
+							tempParticle->y = tempOldY;
+							deletePoint(tempParticle);
+							continue;
+						}
+					}
+					else if((int) tempParticle->y < 0)
+					{
+						if(borderTop)
+						{
+							//Bounce the particle
+							tempParticle->y = tempOldY;
+						}
+						else
+						{
+							//Move it back and delete it
+							tempParticle->x = tempOldX;
+							tempParticle->y = tempOldY;
+							deletePoint(tempParticle);
+							continue;
+						}
 					}
 
 					//Reduce velocities
 					if(tempXVel < 0)
 					{
-						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
 						if(tempInertia >= -tempXVel)
 						{
 							tempXVel = 0;
@@ -263,6 +318,12 @@ void UpdateView(void)
 
 						unFreezeParticles(tempOldX, tempOldY);
 						tempParticle->hasMoved = FALSE;
+					}
+					//Space particle is trying to move to is itself
+					else
+					{
+						tempParticle->hasMoved = FALSE;
+						tempParticle->frozen++;
 					}
 				}
 				//Inertia unmovable object still need to deal with velocities
