@@ -100,7 +100,7 @@ void glRender()
 		zoomChanged = FALSE;
 	}
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
-	UpdateView();
+	//UpdateView();
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
 
 	//Clear the screen
