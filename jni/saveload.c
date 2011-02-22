@@ -131,7 +131,7 @@ char loadState(char* loadLoc)
 				&xCoord,
 				&yCoord,
 				&element);
-			CreatePoint(xCoord, yCoord, elements[element]);
+			createPoint(xCoord, yCoord, elements[element]);
 			//Cool thing I found on my way to doing this,
 			//you can do something like (struct Element){.index = element}
 		}
