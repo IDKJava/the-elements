@@ -75,7 +75,7 @@ char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thi
 {
 	return loadState(loadLoc);
 }
-char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env)
+char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
 {
 	char saveLoc[256];
 	strcpy(saveLoc, ROOT_FOLDER);
@@ -84,7 +84,7 @@ char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env)
 	strcat(saveLoc, SAVE_EXTENSION);
 	return saveState(saveLoc);
 }
-char Java_idkjava_thelements_MainActivity_loadTempState(JNIEnv* env)
+char Java_idkjava_thelements_MainActivity_loadTempState(JNIEnv* env, jobject this)
 {
 	char loadLoc[256];
 	strcpy(loadLoc, ROOT_FOLDER);
