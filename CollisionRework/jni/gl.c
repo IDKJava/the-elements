@@ -106,9 +106,9 @@ void glRender()
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//Sub the work portion of the tex(~.025s)
+	//Sub the work portion of the tex(~.025s -- Droid)
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
-	//Actually draw the rectangle with the text on it (~.015s)
+	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 }
