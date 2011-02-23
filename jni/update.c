@@ -377,10 +377,6 @@ void UpdateView(void)
 					}
 
 					tempParticle->xVel = tempXVel;
-					if(tempXVel > 0)
-					{
-						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "X velocity greater than zero!");
-					}
 					tempParticle->yVel = tempYVel;
 				}
 
