@@ -155,7 +155,7 @@ public class MainActivity extends Activity
 		if (settings.getBoolean("paused", true))
 		{
 			//Load the save
-			loadTempState();
+			//loadTempState();
 			//Set the preferences to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
