@@ -26,7 +26,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			firstParticle->y = oldYFirst;
 			firstParticle->hasMoved = FALSE;
 
-			firstParticle->xVel += (rand() % 3) - 1;
+			firstParticle->xVel = (rand() % 3) - 1;
 			break;
 		}
 		//Density Based
@@ -49,12 +49,12 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 				firstParticle->hasMoved = FALSE;
 			
 				//-1 to 1
-				int random = rand() % 3 - 1;
-				firstParticle->yVel += random;
+				int random = rand() % 2 - 1;
+				firstParticle->yVel = random;
 
 				//-3 to 3
 				random = rand() % 7 - 3;
-				firstParticle->xVel += random;
+				firstParticle->xVel = random;
 
 				break;
 			}
