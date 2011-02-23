@@ -100,15 +100,15 @@ void glRender()
 		zoomChanged = FALSE;
 	}
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
-	//UpdateView();
+	UpdateView();
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
 
 	//Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//Sub the work portion of the tex
+	//Sub the work portion of the tex(~.025s)
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
-	//Actually draw the rectangle with the text on it
+	//Actually draw the rectangle with the text on it (~.015s)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
 }
