@@ -24,6 +24,7 @@ public class SandView extends GLSurfaceView
     {
         super(context, attrs);
     	mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
+    	setEGLConfigChooser(false); //Set the EGLConfigChooser
         setRenderer(mRenderer); //Associate it with this view
     }
 
