@@ -251,26 +251,16 @@ void UpdateView(void)
 						tempParticle->heat -= heatChange;
 						tempAllCoords->heat += heatChange;
 
-						//Resolve heat changes
-						if(tempParticle->heat < tempParticle->element->lowestTemp)
-						{
-							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
-							tempParticle->element = tempParticle->element->lowerElement;
-						}
-						else if(tempParticle->heat > tempParticle->element->highestTemp)
-						{
-							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
-							tempParticle->element = tempParticle->element->higherElement;
-						}
+						//Resolve second particle heat changes
 						if(tempAllCoords->heat < tempAllCoords->element->lowestTemp)
 						{
 							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
-							tempAllCoords->element = tempParticle->element->lowerElement;
+							setElement(tempAllCoords, tempAllCoords->element->lowerElement);
 						}
 						else if(tempAllCoords->heat > tempAllCoords->element->highestTemp)
 						{
 							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
-							tempAllCoords->element = tempAllCoords->element->higherElement;
+							setElement(tempAllCoords, tempAllCoords->element->higherElement);
 						}
 
 						//Resolve the collision (this updates the state of the particle, but lets this function resolve later)
@@ -382,6 +372,44 @@ void UpdateView(void)
 
 					tempParticle->xVel = tempXVel;
 					tempParticle->yVel = tempYVel;
+				}
+
+				//Update heat
+				if(tempParticle->heat > ATMOSPHERE_TEMP)
+				{
+					if(rand() % 50 != 0)
+					{
+						heatChange = 0;
+					}
+					else
+					{
+						heatChange = 1;
+					}
+					tempParticle->heat -= heatChange;
+				}
+				else if(tempParticle->heat < ATMOSPHERE_TEMP)
+				{
+					if(rand() % 50 != 0)
+					{
+						heatChange = 0;
+					}
+					else
+					{
+						heatChange = 1;
+					}
+					tempParticle->heat += heatChange;
+				}
+
+				//Resolve heat changes
+				if(tempParticle->heat < tempParticle->element->lowestTemp)
+				{
+					//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
+					setElement(tempParticle, tempParticle->element->lowerElement);
+				}
+				else if(tempParticle->heat > tempParticle->element->highestTemp)
+				{
+					//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
+					setElement(tempParticle, tempParticle->element->higherElement);
 				}
 
 
