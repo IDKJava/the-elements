@@ -98,14 +98,15 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			{
 				//Acid burns away Meltable
 				unSetPoint(secondParticle);
-				secondParticle->hasMoved = TRUE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
 				//Acid is neutralized
-				//Delete firstParticle
-				unSetPoint(firstParticle);
-				firstParticle->hasMoved = TRUE;
+				//Move firstParticle back and delete it
+				firstParticle->x = firstParticle->oldX;
+				firstParticle->y = firstParticle->oldY;
+				deletePoint(firstParticle);
+				firstParticle->hasMoved = FALSE;
 			}
 			else //Otherwise, 1/6 total
 			{
