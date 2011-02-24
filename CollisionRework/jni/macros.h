@@ -34,6 +34,8 @@
 
 #define SPECIAL_NOT_SET -1
 
+#define ATMOSPHERE_TEMP 100
+
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
 

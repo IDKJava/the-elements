@@ -57,7 +57,7 @@ unsigned char baseBlue[] =  {255,   0,   0,  85, 255, 225, 255, 157, 164,   0,  
 //Define each base element's fall velocity
 char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1};
 
-//Defines the density of each	 base element
+//Defines the density of each base element
 char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10};
 
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
@@ -81,11 +81,13 @@ char baseSpecialValue[][2] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5}
 //Defines the inertia of each element
 char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 0, 1, 1, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1};
 
-//TODO: Fill this in
+//Defines the initial temp of anything of that element that is spawned (-1 = atmosphere)
+char baseStartingTemp[] = {0, 0, 0, 0, 0, 200, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
 //Defines the highest and lowest temps that the element exists at
-char baseHighestTemp[] = {};
-char baseLowestTemp[] = {};
+char baseHighestTemp[] = {255, 255, 255, 200, 150, 255, 75, 255, 200, 125, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 125};
+char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 76, 126, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
-char baseHigherElement[] = {};
-char baseLowerElement[] = {};
+char baseHigherElement[] = {0, 0, 0, 20, 5, 0, 4, 0, 11, 10, 0, 0, 11, 10, 10, 10, 10, 5, 0, 5, 0, 3, 0, 10};
+char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 6, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0};

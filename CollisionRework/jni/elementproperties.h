@@ -78,6 +78,8 @@ extern char baseSpecial[][2];
 extern char baseSpecialValue[][2];
 //Defines the inertia of each element
 extern char baseInertia[];
+//Defines the starting temp of the element (-1 = atmosphere)
+extern char baseStartingTemp[];
 //Defines the highest and lowest temps that the element exists at
 extern char baseHighestTemp[];
 extern char baseLowestTemp[];
