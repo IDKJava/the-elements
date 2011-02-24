@@ -58,7 +58,7 @@ extern unsigned char baseGreen[];
 extern unsigned char baseBlue[];
 
 //Define each base element's fall velocity
-extern char baseFallVel[];
+extern signed char baseFallVel[];
 //Defines the density of each base element
 extern char baseDensity[];
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)

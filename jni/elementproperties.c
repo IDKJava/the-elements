@@ -55,7 +55,7 @@ unsigned char baseGreen[] = {255,   0,   0, 213,   0, 220, 200, 157, 176, 255,  
 unsigned char baseBlue[] =  {255,   0,   0,  85, 255, 225, 255, 157, 164,   0,   0,   0, 100,  80, 143, 115,  30,  50, 230, 200, 255,   0, 255,  50};
 
 //Define each base element's fall velocity
-char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1};
+signed char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1};
 
 //Defines the density of each base element
 char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10};

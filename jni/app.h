@@ -49,7 +49,7 @@ struct Element
 	char* specials;
 	char* specialVals;
 	char density;
-	char fallVel;
+	signed char fallVel;
 	char inertia;
 };
 
