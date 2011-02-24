@@ -20,7 +20,7 @@ static struct Particle* tempAllCoords;
 static struct Element* tempElement;
 static struct Element* tempElement2;
 //Used for heat
-static unsigned char heatAvg;
+static signed char heatChange;
 
 void UpdateView(void)
 {
@@ -247,25 +247,29 @@ void UpdateView(void)
 						tempElement2 = tempAllCoords->element;
 
 						//Update heat
-						heatAvg = (tempParticle->heat + tempAllCoords->heat)/2;
-						tempParticle->heat = heatAvg;
-						tempAllCoords->heat = heatAvg;
+						heatChange = (tempParticle->heat - tempAllCoords->heat)/5;
+						tempParticle->heat -= heatChange;
+						tempAllCoords->heat += heatChange;
 
 						//Resolve heat changes
-						if(heatAvg < tempParticle->element->lowestTemp)
+						if(tempParticle->heat < tempParticle->element->lowestTemp)
 						{
+							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
 							tempParticle->element = tempParticle->element->lowerElement;
 						}
-						else if(heatAvg > tempParticle->element->highestTemp)
+						else if(tempParticle->heat > tempParticle->element->highestTemp)
 						{
+							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
 							tempParticle->element = tempParticle->element->higherElement;
 						}
-						if(heatAvg < tempAllCoords->element->lowestTemp)
+						if(tempAllCoords->heat < tempAllCoords->element->lowestTemp)
 						{
+							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
 							tempAllCoords->element = tempParticle->element->lowerElement;
 						}
-						else if(heatAvg > tempAllCoords->element->highestTemp)
+						else if(tempAllCoords->heat > tempAllCoords->element->highestTemp)
 						{
+							//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
 							tempAllCoords->element = tempAllCoords->element->higherElement;
 						}
 

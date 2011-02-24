@@ -8,8 +8,6 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
-import android.util.Log;
-//import android.util.Log;
 import android.view.MotionEvent;
 
 public class SandView extends GLSurfaceView

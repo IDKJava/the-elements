@@ -72,29 +72,31 @@ void arraySetup()
 
 	//Allocate memory
 	colors = malloc(3 * points * sizeof(char));
-
 	elements = malloc(numElements * sizeof(struct Element*));
-
 	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+
+	struct Element* tempElement;
 	for(i = 0; i < numElements; i++)
 	{
 		if(i < NUM_BASE_ELEMENTS)
 		{
-			elements[i] = (struct Element*) malloc(sizeof(struct Element));
-			elements[i]->index = i;
-			elements[i]->red = baseRed[i];
-			elements[i]->green = baseGreen[i];
-			elements[i]->blue = baseBlue[i];
-			elements[i]->fallVel = baseFallVel[i];
-			elements[i]->density = baseDensity[i];
-			elements[i]->state = baseState[i];
-			elements[i]->specials = baseSpecial[i];
-			elements[i]->specialVals = (char*) malloc(2 * sizeof(char));
-				elements[i]->specialVals[0] = baseSpecialValue[i][0];
-				elements[i]->specialVals[1] = baseSpecialValue[i][1];
-			elements[i]->inertia = baseInertia[i];
-			elements[i]->highestTemp = baseHighestTemp[i];
-			elements[i]->lowestTemp = baseLowestTemp[i];
+			tempElement = (struct Element*) malloc(sizeof(struct Element));
+			elements[i] = tempElement;
+			tempElement->index = i;
+			tempElement->red = baseRed[i];
+			tempElement->green = baseGreen[i];
+			tempElement->blue = baseBlue[i];
+			tempElement->fallVel = baseFallVel[i];
+			tempElement->density = baseDensity[i];
+			tempElement->state = baseState[i];
+			tempElement->specials = baseSpecial[i];
+			tempElement->specialVals = (char*) malloc(2 * sizeof(char));
+				tempElement->specialVals[0] = baseSpecialValue[i][0];
+				tempElement->specialVals[1] = baseSpecialValue[i][1];
+			tempElement->inertia = baseInertia[i];
+			tempElement->startingTemp = baseStartingTemp[i];
+			tempElement->highestTemp = baseHighestTemp[i];
+			tempElement->lowestTemp = baseLowestTemp[i];
 		}
 		else
 		{
@@ -104,8 +106,19 @@ void arraySetup()
 		cElement = elements[NORMAL_ELEMENT];
 	}
 
-
-	//TODO: Higher/lower element pointers
+	//Resolve heat pointers
+	for(i = 0; i < numElements; i++)
+	{
+		if(i < NUM_BASE_ELEMENTS)
+		{
+			elements[i]->lowerElement = elements[baseLowerElement[i]];
+			elements[i]->higherElement = elements[baseHigherElement[i]];
+		}
+		else
+		{
+			//TODO: Load the higher/lower elements and assign them
+		}
+	}
 }
 
 void particleSetup()

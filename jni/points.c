@@ -8,6 +8,7 @@
 
 #include "points.h"
 #include <android/log.h>
+#include <stdio.h>
 
 static int dx;
 static int dy;
@@ -40,6 +41,18 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 
 		//Set the frozen state
 		i->frozen = FALSE;
+
+		//Set the initial heat
+		if(element->startingTemp == 0)
+		{
+			//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Atmosphere temp");
+			i->heat = ATMOSPHERE_TEMP; //To be a variable later on
+		}
+		else
+		{
+			//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Element temp");
+			i->heat = element->startingTemp;
+		}
 
 		//Set the point in the pixels array
 		setBitmapColor(xCoord, yCoord, element);

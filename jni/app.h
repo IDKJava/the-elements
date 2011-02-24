@@ -38,7 +38,7 @@ struct Element
 
 	//Dealing with states
 	char state;
-	char lowestTemp, highestTemp;
+	char startingTemp, lowestTemp, highestTemp;
 	struct Element* lowerElement;
 	struct Element* higherElement;
 	
