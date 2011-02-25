@@ -34,4 +34,5 @@
 <string name="element_picker">Palette</string>
 <string name="proceed">Proceed</string>
 <string name="exit">Exit</string>
+<string name="restart_app">Please restart app for your changes to go into effect.</string>
 </resources>

@@ -4,6 +4,7 @@ import idkjava.thelements.game.Control;
 import idkjava.thelements.game.FileManager;
 import idkjava.thelements.game.MenuBar;
 import idkjava.thelements.game.SandView;
+import idkjava.thelements.preferences.PreferencesActivity;
 
 import java.util.List;
 
@@ -18,7 +19,8 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
-import android.os.Bundle; //import android.util.Log;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +55,6 @@ public class MainActivity extends Activity
 	public static boolean shouldLoadDemo = false;
 
 	public static boolean ui;
-	public static boolean layout_ui;
 
 	public static MenuBar menu_bar;
 	public static Control control;
@@ -66,41 +67,24 @@ public class MainActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(savedInstanceState); //Uses onCreate from the general Activity
+		//Uses onCreate from the general Activity
+		super.onCreate(savedInstanceState);
 
-		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
-
-		PreferencesActivity.setpreferences(this);
+		//Get rid of title bar
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		
+		//Initialize most of the arrays in JNI
+		nativeInit();
+		
+		//Set the preferences
+		PreferencesActivity.setPreferences(this);
 
 		//Set Sensor + Manager
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
-		//Set the layout based on the settings
-		if (ui)
-		{
-			setContentView(R.layout.ui);
-		}
-		else
-		{
-			setContentView(R.layout.non_ui);
-		}
-
-		//Sync on startup (layout_ui is not changed on preference changed for smoothness)
-		layout_ui = ui;
-
-		//Need to do this otherwise it gives a nullpointerexception
-		menu_bar = new MenuBar(this, null);
-		sand_view = new SandView(this, null);
-		control = new Control(this, null);
-
-		//Set the new view and control box and menu bar to the stuff defined in layout
-		menu_bar = (MenuBar) findViewById(R.id.menu_bar);
-		sand_view = (SandView) findViewById(R.id.sand_view);
-		control = (Control) findViewById(R.id.control);
-
-		PreferencesActivity.setScreenOnOff(this); //Finds out to keep screen on or off
 		
+		setUpViews();
+
 		//Set up the elements list
 		Resources res = getResources();
 		elementslist = res.getTextArray(R.array.elements_list);
@@ -143,19 +127,22 @@ public class MainActivity extends Activity
 	@Override
 	protected void onResume()
 	{
-		//If our target ui state is not our current one, restart the app
-		if (layout_ui != ui)
+		boolean oldui = ui;
+		PreferencesActivity.setPreferences(this);
+		if(ui != oldui)
 		{
-			System.exit(0);
+			Log.v("TheElements", "UI was changed");
+			setUpViews();
 		}
+		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		//TODO: myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
 
 		//If we're resuming from a pause (not when it starts)
-		if (settings.getBoolean("paused", true))
+		if (settings.getBoolean("paused", false))
 		{
 			//Load the save
-			//loadTempState();
+			//TODO: loadTempState();
 			//Set the preferences to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
@@ -176,15 +163,15 @@ public class MainActivity extends Activity
 			showDialog(INTRO_MESSAGE); //Pop up intro message
 		}
 
-		if (layout_ui)
+		if (ui)
 		{
 			//This is where I set the activity for Control so that I can call showDialog() from it
 			control.setActivity(this);
 			//Set instance of activity for MenuBar also
 			menu_bar.setActivity(this);
 		}
-		
-		//Use the super onResume as well
+
+		//Use the super onResume
 		super.onResume();
 		//Call onResume() for view too
 		sand_view.onResume();
@@ -260,7 +247,7 @@ public class MainActivity extends Activity
 		// Create an inflater to inflate the menu already defined in res/menu/options_menu.xml
 		// This seems to be a bit faster at loading the menu, and easier to modify
 		MenuInflater inflater = getMenuInflater();
-		if (layout_ui)
+		if (ui)
 		{
 			menu.clear();
 			inflater.inflate(R.menu.options_menu_small, menu);
@@ -339,6 +326,30 @@ public class MainActivity extends Activity
 		return false;
 	}
 	
+	//Set up the views based on the state of ui
+	private void setUpViews()
+	{
+		//Set the content view based on this variable
+		if(ui)
+		{
+			Log.v("TheElements", "setcontentview - ui");
+			setContentView(R.layout.ui);
+		}
+		else
+		{
+			Log.v("TheElements", "setcontentview - non_ui");
+			setContentView(R.layout.non_ui);
+		}
+
+		//Set the new view and control box and menu bar to the stuff defined in layout
+		menu_bar = (MenuBar) findViewById(R.id.menu_bar);
+		sand_view = (SandView) findViewById(R.id.sand_view);
+		control = (Control) findViewById(R.id.control);
+		
+		//Set the screen state for sand_view now that it's defined
+		PreferencesActivity.setScreenState(this);
+	}
+	
 	//Save the current state
 	public boolean saveState()
 	{
@@ -367,12 +378,11 @@ public class MainActivity extends Activity
 	public static native char removeTempSave();
 	
 	//General utility functions
+    public static native void nativeInit();
 	public static native void clearScreen();
-	public static native void setBackgroundColor(char red, char green, char blue);
 	
 	//Setters
 	public static native void setPlayState(boolean playState);
-	public static native void setAccelState(boolean accelState);
 	public static native void setZoomState(boolean zoomState);
 	public static native void setElement(char element);
 	public static native void setBrushSize(char brushSize);

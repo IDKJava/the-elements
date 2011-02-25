@@ -58,6 +58,18 @@ void arraySetup()
 	//Calculate the number of pixels
 	int points = workWidth * workHeight;
 
+	//Make sure everything is deallocated
+	free(colors);
+	free(allCoords);
+
+	//Allocate memory
+	colors = malloc(3 * points * sizeof(char));
+	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+
+}
+
+void elementSetup()
+{
 	//TODO: Load custom elements	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
 
 	//Calculate numElements
@@ -65,17 +77,13 @@ void arraySetup()
 	//Calculate special value size
 	numElements = NUM_BASE_ELEMENTS; //Changed later
 
-	//Make sure everything is deallocated
-	free(colors);
-	free(allCoords);
+	//Free and reallocate the elements array
 	free(elements);
-
-	//Allocate memory
-	colors = malloc(3 * points * sizeof(char));
 	elements = malloc(numElements * sizeof(struct Element*));
-	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 
+	//Allocate and initialize all the elements
 	struct Element* tempElement;
+	int i;
 	for(i = 0; i < numElements; i++)
 	{
 		if(i < NUM_BASE_ELEMENTS)
