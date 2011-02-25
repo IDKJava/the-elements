@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class SandView extends GLSurfaceView
@@ -21,9 +22,11 @@ public class SandView extends GLSurfaceView
     public SandView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
+    	Log.v("TheElements", "SandView constructor begin");
     	mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
     	setEGLConfigChooser(false); //Set the EGLConfigChooser
         setRenderer(mRenderer); //Associate it with this view
+        Log.v("TheElements", "SandView constructor end");
     }
 
     //When a touch screen event occurs
@@ -67,7 +70,7 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 {
     public void onSurfaceCreated(GL10 gl, EGLConfig config)
     {
-        nativeInit();
+    	Log.v("TheElements", "onSurfaceCreated()");
     }
 
     public void onSurfaceChanged(GL10 gl, int w, int h)
@@ -85,7 +88,6 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 		nativeRender(); //Actual rendering - everything happens here
     }
 
-    private static native void nativeInit(); //Jni init
     private static native void nativeResize(int width, int height); //Jni resize
     private static native void nativeRender(); //Jni rendering function - everything happens here
     

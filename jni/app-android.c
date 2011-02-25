@@ -33,12 +33,9 @@
 
 
 //Called from SandViewRenderer
-void Java_idkjava_thelements_game_SandViewRenderer_nativeInit(JNIEnv* env, jobject this)
-{
-	importGLInit();
-}
 void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
 	screenWidth = width - width%2;
 	screenHeight = height - height%2;
 	if (zoom == ZOOMED_IN)
@@ -55,7 +52,6 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 	dimensionsChanged = TRUE;
 
 	arraySetup();
-	particleSetup();
 	gameSetup();
 	glInit();
 }
@@ -108,27 +104,16 @@ char Java_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thi
 }
 
 //General utility functions
+void Java_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
+{
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
+	importGLInit();
+	elementSetup();
+	particleSetup();
+}
 void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
 	shouldClear = TRUE;
-}
-void Java_idkjava_thelements_MainActivity_setBackgroundColor(JNIEnv* env, jobject this, jint redValue, jint greenValue, jint blueValue)
-{
-	//Set the eraser color to the background color, used as the reference whenever background color is needed
-	elements[ERASER_ELEMENT]->red = redValue;
-	elements[ERASER_ELEMENT]->green = greenValue;
-	elements[ERASER_ELEMENT]->blue = blueValue;
-
-	//Call setup again
-	gameSetup();
-
-	//Reload
-	char loadLoc[256];
-	strcpy(loadLoc, ROOT_FOLDER);
-	strcat(loadLoc, SAVES_FOLDER);
-	strcat(loadLoc, TEMP_SAVE);
-	strcat(loadLoc, SAVE_EXTENSION);
-	loadState(loadLoc);
 }
 void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject this, jint width, jint height)
 {
@@ -149,13 +134,44 @@ void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject thi
 }
 
 //Setter functions
+void Java_idkjava_thelements_preferences_PreferencesActivity_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
+{
+	borderLeft = leftBorderState;
+	borderTop = topBorderState;
+	borderRight = rightBorderState;
+	borderBottom = bottomBorderState;
+}
+void Java_idkjava_thelements_preferences_PreferencesActivity_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
+{
+	accelOn = (char) accelState;
+}
+void Java_idkjava_thelements_preferences_PreferencesActivity_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
+{
+	flipped = (char) flippedState;
+}
+void Java_idkjava_thelements_preferences_PreferencesActivity_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
+{
+	//Set the eraser color to the background color, used as the reference whenever background color is needed
+	elements[ERASER_ELEMENT]->red = redValue;
+	elements[ERASER_ELEMENT]->green = greenValue;
+	elements[ERASER_ELEMENT]->blue = blueValue;
+
+	//Call setup again
+	//gameSetup();
+
+	//TODO: Reload
+	/*
+	char loadLoc[256];
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	strcat(loadLoc, TEMP_SAVE);
+	strcat(loadLoc, SAVE_EXTENSION);
+	loadState(loadLoc);
+	*/
+}
 void Java_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
 {
 	play = (char) playState;
-}
-void Java_idkjava_thelements_MainActivity_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
-{
-	accelOn = (char) accelState;
 }
 void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
 {
@@ -179,10 +195,6 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 		arraySetup();
 		gameSetup();
 	}
-}
-void Java_idkjava_thelements_MainActivity_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
-{
-	flipped = (char) flippedState;
 }
 void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
 {

@@ -22,6 +22,8 @@
 void gameSetup(void);
 //Set up the variable sized arrays
 void arraySetup(void);
+//Create all the elements
+void elementSetup(void);
 //Create all the particle structs
 void particleSetup(void);
 

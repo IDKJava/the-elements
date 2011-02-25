@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<PreferenceCategory android:title="@string/look_and_feel_options">
+		<PreferenceScreen android:title="@string/background_color">
+			<idkjava.thelements.preferences.SeekBarPreference
+				android:key="background_red"
+				android:defaultValue="0"
+				android:title="@string/background_red" />
+			<idkjava.thelements.preferences.SeekBarPreference
+				android:key="background_green"
+				android:defaultValue="0"
+				android:title="@string/background_green" />
+			<idkjava.thelements.preferences.SeekBarPreference
+				android:key="background_blue"
+				android:defaultValue="0"
+				android:title="@string/background_blue" />
+		</PreferenceScreen>
+			
+		<CheckBoxPreference
+			android:key="ui_state"
+			android:title="@string/ui_state"
+			android:defaultValue="true"
+			android:summary="@string/ui_state_summary" />
+		<CheckBoxPreference
+			android:key="screen_sleep_state"
+			android:title="@string/screen_sleep_state"
+			android:defaultValue="true"
+			android:summary="@string/screen_sleep_state_summary" />
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/game_options">
+		<PreferenceScreen android:title="@string/border_options">
+			<CheckBoxPreference
+				android:key="border_left"
+				android:title="@string/border_left"
+				android:defaultValue="true"
+				android:summary="@string/border_left_summary" />
+			<CheckBoxPreference
+				android:key="border_top"
+				android:title="@string/border_top"
+				android:defaultValue="true"
+				android:summary="@string/border_top_summary" />
+			<CheckBoxPreference
+				android:key="border_right"
+				android:title="@string/border_right"
+				android:defaultValue="true"
+				android:summary="@string/border_right_summary" />
+			<CheckBoxPreference
+				android:key="border_bottom"
+				android:title="@string/border_bottom"
+				android:defaultValue="true"
+				android:summary="@string/border_bottom_summary" />
+		</PreferenceScreen>
+		<CheckBoxPreference
+			android:key="accel_state"
+			android:title="@string/accel_state"
+			android:defaultValue="false"
+			android:summary="@string/accel_state_summary" />
+	</PreferenceCategory>
+	
+	<PreferenceCategory android:title="@string/other_options">
+		<CheckBoxPreference
+			android:key="flipped_state"
+			android:title="@string/flipped_state"
+			android:defaultValue="false"
+			android:summary="@string/flipped_state_summary" />
+	</PreferenceCategory>
+	
+</PreferenceScreen>
