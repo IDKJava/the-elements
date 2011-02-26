@@ -375,29 +375,17 @@ void UpdateView(void)
 				}
 
 				//Update heat
-				if(tempParticle->heat > ATMOSPHERE_TEMP)
+				if(tempParticle->heat != ATMOSPHERE_TEMP)
 				{
-					if(rand() % 50 != 0)
+					if(rand() % ((3 - tempElement->state)*10)  != 0)
 					{
 						heatChange = 0;
 					}
 					else
 					{
-						heatChange = 1;
+						heatChange = (tempParticle->heat - ATMOSPHERE_TEMP)/10 + rand()%3 - 1;
 					}
 					tempParticle->heat -= heatChange;
-				}
-				else if(tempParticle->heat < ATMOSPHERE_TEMP)
-				{
-					if(rand() % 50 != 0)
-					{
-						heatChange = 0;
-					}
-					else
-					{
-						heatChange = 1;
-					}
-					tempParticle->heat += heatChange;
 				}
 
 				//Resolve heat changes
