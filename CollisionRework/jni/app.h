@@ -25,6 +25,7 @@ extern "C" {
 
 int getIndex(int x, int y);
 int getColorIndex(int x, int y);
+
 /*
  * STRUCTS
  */
@@ -69,9 +70,10 @@ struct Atmosphere
 {
 	char heat;
 	char gravity;
-	char walled;
-	char* name;
+
 	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
+
+	char borderLeft, borderTop, borderRight, borderBottom;
 };
 
 /*
@@ -90,6 +92,8 @@ extern struct Particle* avail[];
 extern int loq;
 //Current element selected
 extern struct Element* cElement;
+//Atmosphere in use
+extern struct Atmosphere* cAtmosphere;
 
 //State variables
 extern char play;
@@ -99,11 +103,6 @@ extern char fingerDown;
 extern char accelOn;
 extern char dimensionsChanged;
 extern char zoomChanged;
-//Border states
-extern char borderTop;
-extern char borderBottom;
-extern char borderLeft;
-extern char borderRight;
 
 extern unsigned char brushSize;
 

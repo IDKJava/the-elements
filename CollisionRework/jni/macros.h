@@ -34,7 +34,17 @@
 
 #define SPECIAL_NOT_SET -1
 
-#define ATMOSPHERE_TEMP 100
+#define DEFAULT_ATMOSPHERE_TEMP 100
+#define DEFAULT_ATMOSPHERE_GRAVITY 1
+
+#define DEFAULT_RED 0
+#define DEFAULT_GREEN 0
+#define DEFAULT_BLUE 0
+
+#define DEFAULT_BORDER_LEFT 1
+#define DEFAULT_BORDER_TOP 1
+#define DEFAULT_BORDER_RIGHT 1
+#define DEFAULT_BORDER_BOTTOM 1
 
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");

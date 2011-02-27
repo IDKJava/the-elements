@@ -46,7 +46,7 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 		if(element->startingTemp == 0)
 		{
 			//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Atmosphere temp");
-			i->heat = ATMOSPHERE_TEMP; //To be a variable later on
+			i->heat = cAtmosphere->heat; //To be a variable later on
 		}
 		else
 		{
@@ -70,7 +70,7 @@ void deletePoint(struct Particle* particle)
 	//Unfreeze the particles around it
 	unFreezeParticles(tempX, tempY);
 	//Clear it in the pixels array
-	setBitmapColor(tempX, tempY, elements[ERASER_ELEMENT]);
+	clearBitmapColor(tempX, tempY);
 	//Clear it in the points array
 	allCoords[getIndex(tempX, tempY)] = NULL;
 
@@ -101,9 +101,11 @@ void setBitmapColor(int xCoord, int yCoord, struct Element* element)
 	colors[3 * getColorIndex(xCoord, yCoord) + 1] = element->green;
 	colors[3 * getColorIndex(xCoord, yCoord) + 2] = element->blue;
 }
-void createBitmapFromPoints(void)
+void clearBitmapColor(int xCoord, int yCoord)
 {
-	//Not implemented yet
+	colors[3 * getColorIndex(xCoord, yCoord)] = cAtmosphere->backgroundRed;
+	colors[3 * getColorIndex(xCoord, yCoord) + 1] = cAtmosphere->backgroundGreen;
+	colors[3 * getColorIndex(xCoord, yCoord) + 2] = cAtmosphere->backgroundBlue;
 }
 void unFreezeParticles(int xCoord, int yCoord)
 {

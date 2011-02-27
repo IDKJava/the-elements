@@ -25,13 +25,16 @@ public class PreferencesActivity extends PreferenceActivity //implements OnShare
     {
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         
-        //Log.v("TheElements", "setPreferences");
+        Log.v("TheElements", "setPreferences");
         setBackgroundColor((char) sharedPreferences.getInt("background_red", 0), (char) sharedPreferences.getInt("background_green", 0), (char) sharedPreferences.getInt("background_blue", 0));
-        //Log.v("TheElements", "setBackgroundColor()");
+        Log.v("TheElements", "setBackgroundColor()");
         setFlippedState(sharedPreferences.getBoolean("flipped_state", false));
-        //Log.v("TheElements", "setFlipState()");
+        Log.v("TheElements", "setFlipState()");
         setAccelState(sharedPreferences.getBoolean("accel_state", false));
-        //Log.v("TheElements", "setAccelState()");
+        Log.v("TheElements", "setAccelState()");
+        setAtmosphereTemp((char) sharedPreferences.getInt("atmosphere_temp", 100));
+        Log.v("TheElements", "setAtmosphereTemp()");
+        setAtmosphereGravity(sharedPreferences.getFloat("atmosphere_gravity", 1));
         MainActivity.ui = sharedPreferences.getBoolean("ui_state", true);
         Log.v("TheElements", "set MainActivity.ui: " + sharedPreferences.getBoolean("ui_state", true));
         setBorderState(sharedPreferences.getBoolean("border_left", true),
@@ -50,6 +53,8 @@ public class PreferencesActivity extends PreferenceActivity //implements OnShare
 	public static native void setFlippedState(boolean flippedState);
 	public static native void setAccelState(boolean accelState);
 	public static native void setBackgroundColor(char red, char green, char blue);
+	public static native void setAtmosphereTemp(char temp);
+	public static native void setAtmosphereGravity(float gravity);
     
     static
     {

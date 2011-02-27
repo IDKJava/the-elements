@@ -13,9 +13,9 @@ void gameSetup()
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "gameSetup");
 	int i, j;
 	loq = MAX_POINTS;
-	unsigned char blankRed = elements[ERASER_ELEMENT]->red;
-	unsigned char blankGreen = elements[ERASER_ELEMENT]->green;
-	unsigned char blankBlue = elements[ERASER_ELEMENT]->blue;
+	unsigned char backgroundRed = cAtmosphere->backgroundRed;
+	unsigned char backgroundGreen = cAtmosphere->backgroundGreen;
+	unsigned char backgroundBlue = cAtmosphere->backgroundBlue;
 
 	cElement = elements[NORMAL_ELEMENT];
 
@@ -27,14 +27,17 @@ void gameSetup()
 	}
 
 	//Clear allCoords and our pixels array
-	for(i = 0; i < workWidth; i++)
+	for(i = 0; i < stupidTegra; i++)
 	{
 		for(j = 0; j < workHeight; j++)
 		{
-			allCoords[getIndex(i, j)] = NULL;
-			colors[3 * getIndex(i, j)] = blankRed;
-			colors[3 * getIndex(i, j) + 1] = blankGreen;
-			colors[3 * getIndex(i, j) + 2] = blankBlue;
+			if(i < workWidth)
+			{
+				allCoords[getIndex(i, j)] = NULL;
+			}
+			colors[3 * getColorIndex(i, j)] = backgroundRed;
+			colors[3 * getColorIndex(i, j) + 1] = backgroundGreen;
+			colors[3 * getColorIndex(i, j) + 2] = backgroundBlue;
 		}
 	}
 	/* Network stuff not needed
@@ -67,6 +70,22 @@ void arraySetup()
 	colors = malloc(3 * points * sizeof(char));
 	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 
+}
+
+void atmosphereSetup()
+{
+	free(cAtmosphere);
+	cAtmosphere = (struct Atmosphere*) malloc (sizeof(struct Atmosphere));
+
+	cAtmosphere->heat = DEFAULT_ATMOSPHERE_TEMP;
+	cAtmosphere->gravity = DEFAULT_ATMOSPHERE_GRAVITY;
+	cAtmosphere->backgroundRed = DEFAULT_RED;
+	cAtmosphere->backgroundGreen = DEFAULT_GREEN;
+	cAtmosphere->backgroundBlue = DEFAULT_BLUE;
+	cAtmosphere->borderLeft = DEFAULT_BORDER_LEFT;
+	cAtmosphere->borderTop = DEFAULT_BORDER_TOP;
+	cAtmosphere->borderRight = DEFAULT_BORDER_RIGHT;
+	cAtmosphere->borderBottom = DEFAULT_BORDER_BOTTOM;
 }
 
 void elementSetup()

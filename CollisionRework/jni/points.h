@@ -19,6 +19,7 @@ void deletePoint(struct Particle* particle);
 void unSetPoint(struct Particle* particle);
 void setElement(struct Particle* particle, struct Element* newElement);
 void setBitmapColor(int xCoord, int yCoord, struct Element* element);
+void clearBitmapColor(int xCoord, int yCoord);
 void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
 
