@@ -48,7 +48,7 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 		workWidth = screenWidth;
 		workHeight = screenHeight;
 	}
-
+	while((stupidTegra = stupidTegra << 1) < workWidth); //Finds nearest power of 2 to work Width
 	dimensionsChanged = TRUE;
 
 	arraySetup();
@@ -114,23 +114,6 @@ void Java_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
 void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
 	shouldClear = TRUE;
-}
-void Java_idkjava_thelements_MainActivity_setDimensions(JNIEnv* env, jobject this, jint width, jint height)
-{
-	//Set the screen dimensions and decrease by 1 pixel if not divisible by two
-	screenWidth = width - width%2;
-	screenHeight = height - height%2;
-	if(zoom == ZOOMED_IN)
-	{
-		workWidth = screenWidth/2;
-		workHeight = screenHeight/2;
-	}
-	else
-	{
-		workWidth = screenWidth;
-		workHeight = screenHeight;
-	}
-	dimensionsChanged = TRUE;
 }
 
 //Setter functions
@@ -198,6 +181,8 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 			workWidth = workWidth * 2;
 			workHeight = workHeight * 2;
 		}
+		//Finds nearest power of 2 to work Width
+		while((stupidTegra = stupidTegra << 1) < workWidth);
 
 		arraySetup();
 		gameSetup();

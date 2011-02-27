@@ -24,7 +24,7 @@ extern "C" {
  */
 
 int getIndex(int x, int y);
-
+int getColorIndex(int x, int y);
 /*
  * STRUCTS
  */
@@ -121,11 +121,14 @@ extern short lastMouseY;
 extern unsigned char* colors;
 
 //Screen dimensions
-extern short screenWidth;
-extern short screenHeight;
+extern int screenWidth;
+extern int screenHeight;
 //Workspace dimensions
-extern short workWidth;
-extern short workHeight;
+extern int workWidth;
+extern int workHeight;
+
+//Nearest power of 2 to workWidth - needed due to stupid Tegra 2.
+extern int stupidTegra;
 
 //Collision matrix
 extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
@@ -134,7 +137,6 @@ extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
-
 
 /* Accelerometer stuff being taken out for now
 //Gravity values
