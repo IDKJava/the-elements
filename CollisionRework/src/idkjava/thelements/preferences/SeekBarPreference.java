@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.preference.Preference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener
 {
 	public static int MAXIMUM = 255;
-	public static int INTERVAL = 5;
 	
 	private float oldValue = 0;
 	private TextView monitorBox;
@@ -88,27 +88,26 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 	{
-	    progress = Math.round(((float)progress)/INTERVAL)*INTERVAL;
-	  
-	    if(!callChangeListener(progress))
-	    {
-	    	seekBar.setProgress((int)oldValue); 
-	    	return;
-	    }
-	    
-	    seekBar.setProgress(progress);
+		//Log.v("TheElements", "onProgressChanged(): " + progress);
 	    oldValue = progress;
 	    monitorBox.setText(progress+"");
-	    updatePreference(progress);
-	  
-	    notifyChanged();
 	}
 
 	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {}
+	public void onStartTrackingTouch(SeekBar seekBar)
+	{
+		//Log.v("TheElements", "onStartTrackingTouch()");
+	}
 
 	@Override
-	public void onStopTrackingTouch(SeekBar seekBar) {}
+	public void onStopTrackingTouch(SeekBar seekBar)
+	{
+		//Log.v("TheElements", "onStopTrackingTouch()");
+
+	    updatePreference((int) oldValue);
+	  
+	    notifyChanged();
+	}
 	 
 	 
 	@Override 
@@ -140,10 +139,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	    else if(value < 0)
 	    {
 	    	value = 0;
-	    }
-	    else if(value % INTERVAL != 0)
-	    {
-	    	value = Math.round(((float)value)/INTERVAL)*INTERVAL;  
 	    }
 		
 		return value;  
