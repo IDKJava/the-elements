@@ -16,7 +16,7 @@ float texture[] =
 {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 unsigned char indices[] =
 {0, 1, 3, 0, 3, 2};
-int texWidth = 1, texHeight = 1, stupidTegra = 1;
+int texWidth, texHeight, stupidTegra;
 
 
 void glInit()
@@ -45,12 +45,13 @@ void glInit()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	
 	//Set up texWidth and texHeight
+	texWidth = 1;
+	texHeight = 1;
 	while((texWidth = texWidth << 1) < screenWidth);
 	while((texHeight = texHeight << 1) < screenHeight);
 
 	//Allocate the dummy array
 	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
-
 	//Generate the tex image
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
 	//Free the dummy array

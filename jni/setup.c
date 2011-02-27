@@ -55,19 +55,12 @@ void gameSetup()
 void arraySetup()
 {
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
-	int i;
-	int temp = 1;
-	//Variables for special size and special value size, because these are variable-sized multidimensional arrays
-	
-	//Calculate the number of pixels
-	int points = stupidTegra * workHeight;
-
 	//Make sure everything is deallocated
 	free(colors);
 	free(allCoords);
 
 	//Allocate memory
-	colors = malloc(3 * points * sizeof(char));
+	colors = malloc(3 * stupidTegra * workHeight * sizeof(char));
 	allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 
 }

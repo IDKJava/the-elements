@@ -48,7 +48,10 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 		workWidth = screenWidth;
 		workHeight = screenHeight;
 	}
-	while((stupidTegra = stupidTegra << 1) < workWidth); //Finds nearest power of 2 to work Width
+
+	 //Finds nearest power of 2 to work Width
+	stupidTegra = 1;
+	while((stupidTegra = stupidTegra << 1) < workWidth);
 	dimensionsChanged = TRUE;
 
 	arraySetup();
