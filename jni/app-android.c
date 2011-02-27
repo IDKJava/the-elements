@@ -108,6 +108,7 @@ void Java_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
 	importGLInit();
+	atmosphereSetup();
 	elementSetup();
 	particleSetup();
 }
@@ -119,10 +120,10 @@ void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 //Setter functions
 void Java_idkjava_thelements_preferences_PreferencesActivity_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
 {
-	borderLeft = leftBorderState;
-	borderTop = topBorderState;
-	borderRight = rightBorderState;
-	borderBottom = bottomBorderState;
+	cAtmosphere->borderLeft = leftBorderState;
+	cAtmosphere->borderTop = topBorderState;
+	cAtmosphere->borderRight = rightBorderState;
+	cAtmosphere->borderBottom = bottomBorderState;
 }
 void Java_idkjava_thelements_preferences_PreferencesActivity_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
 {
@@ -135,9 +136,13 @@ void Java_idkjava_thelements_preferences_PreferencesActivity_setFlippedState(JNI
 void Java_idkjava_thelements_preferences_PreferencesActivity_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
-	elements[ERASER_ELEMENT]->red = redValue;
-	elements[ERASER_ELEMENT]->green = greenValue;
-	elements[ERASER_ELEMENT]->blue = blueValue;
+	cAtmosphere->backgroundRed = redValue;
+	cAtmosphere->backgroundGreen = greenValue;
+	cAtmosphere->backgroundBlue = blueValue;
+
+	char buffer[100];
+	sprintf(buffer, "blue: %d", blueValue);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 
 	//Call setup again
 	//gameSetup();
@@ -151,6 +156,14 @@ void Java_idkjava_thelements_preferences_PreferencesActivity_setBackgroundColor(
 	strcat(loadLoc, SAVE_EXTENSION);
 	loadState(loadLoc);
 	*/
+}
+void Java_idkjava_thelements_preferences_PreferencesActivity_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
+{
+	cAtmosphere->heat = temp;
+}
+void Java_idkjava_thelements_preferences_PreferencesActivity_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
+{
+	cAtmosphere->gravity = gravity;
 }
 void Java_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
 {
@@ -330,12 +343,6 @@ char* Java_idkjava_thelements_MainActivity_viewErr (JNIEnv *env, jobject this)
 	return error;
 }
 */
-
-//Atmosphere related
-char Java_idkjava_thelements_game_AtmosphereManager_loadAtmosphere(char* loadLoc)
-{
-	return loadAtmosphere(loadLoc);
-}
 
 //Custom elements related
 char Java_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject this, char* loadLoc)

@@ -32,6 +32,7 @@ struct Particle* particles[MAX_POINTS];
 struct Particle* avail[MAX_POINTS];
 int loq;
 struct Element* cElement;
+struct Atmosphere* cAtmosphere;
 
 char play = TRUE;
 char zoom = ZOOMED_IN;

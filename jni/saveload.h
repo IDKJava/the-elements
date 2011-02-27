@@ -42,7 +42,5 @@ char loadState(char* loadLoc);
 char removeTempSave(void);
 char saveCustomElement(struct Element* createdCustomElement);
 char loadCustomElement(char* loadLoc);
-char saveAtmosphere(struct Atmosphere* createAtmosphere);
-char loadAtmosphere(char* loadLoc);
 
 #endif //!SAVELOAD_H_INCLUDED

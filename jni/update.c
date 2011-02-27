@@ -119,7 +119,7 @@ void UpdateView(void)
 					//Boundary checking
 					if ((int) tempParticle->x >= workWidth)
 					{
-						if(borderRight)
+						if(cAtmosphere->borderRight)
 						{
 							//Bounce the particle
 							tempParticle->x = tempOldX;
@@ -135,7 +135,7 @@ void UpdateView(void)
 					}
 					else if((int) tempParticle->x < 0)
 					{
-						if(borderLeft)
+						if(cAtmosphere->borderLeft)
 						{
 							//Bounce the particle
 							tempParticle->x = tempOldX;
@@ -151,7 +151,7 @@ void UpdateView(void)
 					}
 					if((int) tempParticle->y >= workHeight)
 					{
-						if(borderBottom)
+						if(cAtmosphere->borderBottom)
 						{
 							//Bounce the particle
 							tempParticle->y = tempOldY;
@@ -167,7 +167,7 @@ void UpdateView(void)
 					}
 					else if((int) tempParticle->y < 0)
 					{
-						if(borderTop)
+						if(cAtmosphere->borderTop)
 						{
 							//Bounce the particle
 							tempParticle->y = tempOldY;
@@ -277,7 +277,7 @@ void UpdateView(void)
 							tempY = tempParticle->y;
 
 							allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-							setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+							clearBitmapColor(tempOldX, tempOldY);
 							allCoords[getIndex(tempX, tempY)] = tempParticle;
 							setBitmapColor(tempX, tempY, tempParticle->element);
 
@@ -306,7 +306,7 @@ void UpdateView(void)
 					else if (tempAllCoords != tempParticle)
 					{
 						allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-						setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+						clearBitmapColor(tempOldX, tempOldY);
 						allCoords[getIndex(tempX, tempY)] = tempParticle;
 						setBitmapColor(tempX, tempY, tempParticle->element);
 
@@ -375,7 +375,7 @@ void UpdateView(void)
 				}
 
 				//Update heat
-				if(tempParticle->heat != ATMOSPHERE_TEMP)
+				if(tempParticle->heat != cAtmosphere->heat)
 				{
 					if(rand() % ((3 - tempElement->state)*10)  != 0)
 					{
@@ -383,7 +383,7 @@ void UpdateView(void)
 					}
 					else
 					{
-						heatChange = (tempParticle->heat - ATMOSPHERE_TEMP)/10 + rand()%3 - 1;
+						heatChange = (tempParticle->heat - cAtmosphere->heat)/10 + rand()%3 - 1;
 					}
 					tempParticle->heat -= heatChange;
 				}

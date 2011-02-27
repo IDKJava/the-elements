@@ -3,19 +3,27 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	
 	<PreferenceCategory android:title="@string/look_and_feel_options">
-		<PreferenceScreen android:title="@string/background_color">
-			<idkjava.thelements.preferences.SeekBarPreference
-				android:key="background_red"
-				android:defaultValue="0"
-				android:title="@string/background_red" />
-			<idkjava.thelements.preferences.SeekBarPreference
-				android:key="background_green"
-				android:defaultValue="0"
-				android:title="@string/background_green" />
-			<idkjava.thelements.preferences.SeekBarPreference
-				android:key="background_blue"
-				android:defaultValue="0"
-				android:title="@string/background_blue" />
+		<PreferenceScreen android:title="@string/atmosphere_options">
+			<PreferenceCategory android:title="@string/background_color">
+				<idkjava.thelements.preferences.SeekBarPreference
+					android:key="background_red"
+					android:defaultValue="0"
+					android:title="@string/background_red" />
+				<idkjava.thelements.preferences.SeekBarPreference
+					android:key="background_green"
+					android:defaultValue="0"
+					android:title="@string/background_green" />
+				<idkjava.thelements.preferences.SeekBarPreference
+					android:key="background_blue"
+					android:defaultValue="0"
+					android:title="@string/background_blue" />
+			</PreferenceCategory>
+			<PreferenceCategory android:title="@string/physical_properties">
+				<idkjava.thelements.preferences.SeekBarPreference
+					android:key="atmosphere_temp"
+					android:defaultValue="100"
+					android:title="@string/atmosphere_temp" />
+			</PreferenceCategory>
 		</PreferenceScreen>
 			
 		<CheckBoxPreference

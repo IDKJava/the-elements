@@ -180,20 +180,3 @@ char loadCustomElement(char* loadLoc)
 
 	return FALSE;
 }
-char saveAtmosphere(struct Atmosphere* createdAtmosphere)
-{
-	char saveLoc[256];
-	strcpy(saveLoc, ROOT_FOLDER);
-	strcat(saveLoc, ATMOSPHERES_FOLDER);
-	strcat(saveLoc, createdAtmosphere->name);
-
-	//TODO: Save to saveLoc
-
-	return FALSE;
-}
-char loadAtmosphere(char* loadLoc)
-{
-	//TODO: Load from loadLoc (figure out saving of an atmosphere first)
-
-	return FALSE;
-}
