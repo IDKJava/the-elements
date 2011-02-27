@@ -177,7 +177,14 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 {
 	if(zoomState != zoom)
 	{
-		zoom = !zoom;
+		if(zoom == ZOOMED_IN)
+		{
+			zoom = ZOOMED_OUT;
+		}
+		else
+		{
+			zoom = ZOOMED_IN;
+		}
 		zoomChanged = TRUE;
 		if (zoom == ZOOMED_IN)
 		{
@@ -189,7 +196,7 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 		{
 			//Multiply by two to zoom out
 			workWidth = workWidth * 2;
-			workHeight = workWidth * 2;
+			workHeight = workHeight * 2;
 		}
 
 		arraySetup();
