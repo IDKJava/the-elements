@@ -53,10 +53,11 @@ void arraySetup()
 {
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
 	int i;
+	int temp = 1;
 	//Variables for special size and special value size, because these are variable-sized multidimensional arrays
 	
 	//Calculate the number of pixels
-	int points = workWidth * workHeight;
+	int points = stupidTegra * workHeight;
 
 	//Make sure everything is deallocated
 	free(colors);

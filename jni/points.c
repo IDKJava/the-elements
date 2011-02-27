@@ -97,9 +97,9 @@ void setElement(struct Particle* particle, struct Element* newElement)
 
 void setBitmapColor(int xCoord, int yCoord, struct Element* element)
 {
-	colors[3 * getIndex(xCoord, yCoord)] = element->red;
-	colors[3 * getIndex(xCoord, yCoord) + 1] = element->green;
-	colors[3 * getIndex(xCoord, yCoord) + 2] = element->blue;
+	colors[3 * getColorIndex(xCoord, yCoord)] = element->red;
+	colors[3 * getColorIndex(xCoord, yCoord) + 1] = element->green;
+	colors[3 * getColorIndex(xCoord, yCoord) + 2] = element->blue;
 }
 void createBitmapFromPoints(void)
 {

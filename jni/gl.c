@@ -16,7 +16,7 @@ float texture[] =
 {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 unsigned char indices[] =
 {0, 1, 3, 0, 3, 2};
-int texWidth = 1, texHeight = 1;
+int texWidth = 1, texHeight = 1, stupidTegra = 1;
 
 
 void glInit()
@@ -107,7 +107,7 @@ void glRender()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	//Sub the work portion of the tex(~.025s -- Droid)
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, workWidth, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
 
 	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);

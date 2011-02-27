@@ -16,6 +16,11 @@ int getIndex(int x, int y)
 {
 	return y*workWidth + x;
 }
+//Used specifically for colors
+int getColorIndex( int x, int y )
+{
+	return y*stupidTegra + x;
+}
 
 /*
  * VARIABLES
@@ -52,10 +57,12 @@ short lastMouseY;
 
 unsigned char* colors;
 
-short screenWidth;
-short screenHeight;
-short workWidth;
-short workHeight;
+int screenWidth;
+int screenHeight;
+int workWidth;
+int workHeight;
+
+int stupidTegra;
 
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 
