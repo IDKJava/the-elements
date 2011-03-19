@@ -176,32 +176,7 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 {
 	if(zoomState != zoom)
 	{
-		if(zoom == ZOOMED_IN)
-		{
-			zoom = ZOOMED_OUT;
-		}
-		else
-		{
-			zoom = ZOOMED_IN;
-		}
-		zoomChanged = TRUE;
-		if (zoom == ZOOMED_IN)
-		{
-			//Divide by two to zoom in
-			workWidth = workWidth / 2;
-			workHeight = workHeight / 2;
-		}
-		else
-		{
-			//Multiply by two to zoom out
-			workWidth = workWidth * 2;
-			workHeight = workHeight * 2;
-		}
-		//Finds nearest power of 2 to work Width
-		while((stupidTegra = stupidTegra << 1) < workWidth);
-
-		arraySetup();
-		gameSetup();
+		zoomToBeChanged = TRUE;
 	}
 }
 void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)

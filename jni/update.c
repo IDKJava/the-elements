@@ -34,6 +34,38 @@ void UpdateView(void)
 		//No need to do the rest of the update
 		return;
 	}
+	if ( zoomToBeChanged )
+	{
+		if(zoom == ZOOMED_IN)
+		{
+			zoom = ZOOMED_OUT;
+		}
+		else
+		{
+			zoom = ZOOMED_IN;
+		}
+		zoomChanged = TRUE;
+		if (zoom == ZOOMED_IN)
+		{
+			//Divide by two to zoom in
+			workWidth = workWidth / 2;
+			workHeight = workHeight / 2;
+		}
+		else
+		{
+			//Multiply by two to zoom out
+			workWidth = workWidth * 2;
+			workHeight = workHeight * 2;
+		}
+		//Finds nearest power of 2 to work Width
+		stupidTegra = 1;
+		while((stupidTegra = stupidTegra << 1) < workWidth);
+
+		arraySetup();
+		gameSetup();
+
+		zoomToBeChanged = FALSE;
+	}
 	//Draw points
 	if (fingerDown)
 	{
