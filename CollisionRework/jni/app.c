@@ -68,7 +68,7 @@ int stupidTegra;
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 
 char shouldClear = FALSE;
-char zoomToBeChanged = FALSE;
+char shouldZoom = FALSE;
 char shouldUpdateMouse = FALSE;
 
 

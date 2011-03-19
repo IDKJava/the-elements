@@ -25,7 +25,7 @@ static signed char heatChange;
 void UpdateView(void)
 {
 	//Clear
-	if (shouldClear)
+	if(shouldClear)
 	{
 		//Clear and unset the flag
 		gameSetup();
@@ -34,8 +34,11 @@ void UpdateView(void)
 		//No need to do the rest of the update
 		return;
 	}
-	if ( zoomToBeChanged )
+
+	//Zoom
+	if(shouldZoom)
 	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "zoom section of udpate");
 		if(zoom == ZOOMED_IN)
 		{
 			zoom = ZOOMED_OUT;
@@ -64,8 +67,9 @@ void UpdateView(void)
 		arraySetup();
 		gameSetup();
 
-		zoomToBeChanged = FALSE;
+		shouldZoom = FALSE;
 	}
+
 	//Draw points
 	if (fingerDown)
 	{
