@@ -103,6 +103,7 @@ extern char fingerDown;
 extern char accelOn;
 extern char dimensionsChanged;
 extern char zoomChanged;
+extern char zoomToBeChanged;
 
 extern unsigned char brushSize;
 
