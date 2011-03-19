@@ -17,7 +17,11 @@ void gameSetup()
 	unsigned char backgroundGreen = cAtmosphere->backgroundGreen;
 	unsigned char backgroundBlue = cAtmosphere->backgroundBlue;
 
-	cElement = elements[NORMAL_ELEMENT];
+
+	if ( !cElement )
+	{
+		cElement = elements[NORMAL_ELEMENT];
+	}
 
 	//Unset all the particles
 	for(i = 0; i < MAX_POINTS; i++)
