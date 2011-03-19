@@ -176,7 +176,7 @@ void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this
 {
 	if(zoomState != zoom)
 	{
-		zoomToBeChanged = TRUE;
+		shouldZoom = TRUE;
 	}
 }
 void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)

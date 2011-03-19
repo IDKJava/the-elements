@@ -103,7 +103,6 @@ extern char fingerDown;
 extern char accelOn;
 extern char dimensionsChanged;
 extern char zoomChanged;
-extern char zoomToBeChanged;
 
 extern unsigned char brushSize;
 
@@ -137,6 +136,8 @@ extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
+//Set when a zoom is requested, unset when zoom
+extern char shouldZoom;
 
 /* Accelerometer stuff being taken out for now
 //Gravity values
