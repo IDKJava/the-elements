@@ -1,4 +1,5 @@
-<resources><string name="look_and_feel_options">Look and Feel</string><string name="atmosphere_options">Atmosphere Options</string><string name="background_color">Background Color</string><string name="background_red">Red</string>
+<resources>
+<string name="look_and_feel_options">Look and Feel</string><string name="atmosphere_options">Atmosphere Options</string><string name="background_color">Background Color</string><string name="background_red">Red</string>
 <string name="background_green">Green</string>
 <string name="background_blue">Blue</string>
 <string name="physical_properties">Physical Properties</string><string name="atmosphere_temp">Atmosphere Temperature</string><string name="ui_state">UI On/Off</string>
@@ -22,7 +23,4 @@
 <string name="border_right_summary">Turn the right border on.</string>
 <string name="border_bottom">Bottom Border</string>
 <string name="border_bottom_summary">Turn the bottom border on.</string>
-
-
-
 </resources>

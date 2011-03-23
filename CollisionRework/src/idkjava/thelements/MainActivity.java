@@ -37,9 +37,12 @@ public class MainActivity extends Activity
 	private static final int ELEMENT_PICKER = 2;
 	private static final int BRUSH_SIZE_PICKER = 3;
 	
-	//Constant for the eraser element
+	//Constants for elements
 	public static final char ERASER_ELEMENT = 2;
 	public static final char NORMAL_ELEMENT = 3;
+	
+	//Constants for intents
+	public static final char SAVE_STATE_ACTIVITY = 0;
 	
 	//Request code constants
 	public static final int REQUEST_CODE_SELECT_SAVE = 0;
@@ -351,17 +354,15 @@ public class MainActivity extends Activity
 	}
 	
 	//Save the current state
-	public boolean saveState()
+	public void saveState()
 	{
-		//TODO: Call the save activity
-		return false;
+		Intent tempIntent = new Intent(this, SaveStateActivity.class);
+		startActivity(tempIntent);
 	}
-	public boolean loadState()
+	public void loadState()
 	{
-		Intent tempIntent = new Intent(this, SaveSelectionActivity.class);
-		startActivityForResult(tempIntent, REQUEST_CODE_SELECT_SAVE);
-		
-		return false;
+		Intent tempIntent = new Intent(this, LoadStateActivity.class);
+		startActivity(tempIntent);
 	}
 	
 	//Check whether or not the game is zoomed in
