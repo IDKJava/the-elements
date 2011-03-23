@@ -144,17 +144,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-		    		  if (((MainActivity) context).saveState())
-		    		  {
-		    			  Toast.makeText(context, "File Saved", Toast.LENGTH_SHORT).show();    			  
-		    		  }
-		    		  else
-		    		  {
-		    			  Toast.makeText(context, "No SDcard", Toast.LENGTH_LONG).show();    			  
-		    		  }
-		    		  
-			    		  
-			    	 
+		    		  ((MainActivity) context).saveState();
 				}
 			}
 		);
@@ -167,14 +157,7 @@ public class MenuBar extends LinearLayout
 				@Override
 				public void onClick(View v)
 				{
-			    	  if (((MainActivity) context).loadState())
-			    	  {
-			    		  Toast.makeText(context, "File Loaded", Toast.LENGTH_SHORT).show();
-			    	  }
-			    	  else
-			    	  {
-			    		  Toast.makeText(context, "No Save File or SDcard", Toast.LENGTH_LONG).show();
-			    	  }
+			    	  ((MainActivity) context).loadState();
 				}
 			}
 		);

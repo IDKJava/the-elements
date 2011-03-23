@@ -1,8 +1,14 @@
 package idkjava.thelements.game;
 
+import idkjava.thelements.MainActivity;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 
 public class SaveManager
 {
@@ -10,35 +16,20 @@ public class SaveManager
 	public static String[] saveFiles;
 	public static final File saveDir = new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR);
 	
-	public static void loadAtmospheres()
+	//Overloading these functions -- be careful
+	public static void saveState(String filename)
 	{
-		//Clear everything first
-		saveList.clear();
-		
-		//Create the FilenameFilter to accept only *.sav files
-		FilenameFilter filter = new FilenameFilter()
-		{
-			public boolean accept(File dir, String filename)
-			{
-				if(filename.matches(FileManager.DEMO_SAVE + FileManager.SAVE_EXT))
-				{
-					return false;
-				}
-				return filename.endsWith(FileManager.SAVE_EXT);
-			}
-		};
-		//TODO(UNIMPORTANT): not sure if this creates a small memory leak or not
-		saveFiles = saveDir.list(filter);
-		
-		for(int i = 0; i < saveFiles.length; i++)
-		{
-			//TODO: get the save name and story in saveList
-		}
+		saveState(filename.toCharArray());
+	}
+	public static void loadState(String filename)
+	{
+		loadState(filename.toCharArray());
 	}
 	
-	public static void selectSave(int index)
+	public static boolean fileExists(String filename)
 	{
-		loadState(saveFiles[index].toCharArray());
+		File file = new File(saveDir, filename);
+		return file.exists();
 	}
 	
 	public native static char saveState(char[] saveLoc);
