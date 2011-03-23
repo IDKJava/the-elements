@@ -1,4 +1,6 @@
-/*
+/* Recent Changes:
+ * 		Accelerometer: lines 127, 157-184
+ * 127, 155
  * update.c
  * -----------------------------------
  * Defines the function UpdateView(), which
@@ -123,6 +125,9 @@ void UpdateView(void)
 
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
 	//Particles update
+	//hack to turn acceleration on
+	//TODO: find where accelOn is turned off
+	accelOn = 1;
 	if (play)
 	{
 		//Physics update
@@ -149,8 +154,34 @@ void UpdateView(void)
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
-					tempParticle->x += tempXVel;
-					tempParticle->y += tempElement->fallVel + tempYVel;
+					/* Acclerometer stuff taken out for now
+					//If accel control, do tempYVel based on that*/
+					if (yGravity != 0 && accelOn)
+					{
+						tempParticle->y += ((yGravity / 9.8) * tempElement->fallVel + tempYVel);
+					}
+					//Otherwise, just do the fallvelocity
+					else if (accelOn == 0)
+					{
+						tempParticle->y += tempElement->fallVel + tempYVel;
+					}
+					//Accelerometer control, but no gravity (held horizontal)
+					else
+					{
+						tempParticle->y += tempYVel;
+					}
+
+					//If accel control is on, calculate new x using the gravity set
+					//X Gravity is REVERSED! (hence the "-")
+					if ((int) xGravity != 0 && accelOn == 1)
+					{
+						tempParticle->x += ((-xGravity / 9.8) * tempElement->fallVel + tempXVel);
+					}
+					//Otherwise, just add tempXVel
+					else
+					{
+						tempParticle->x += tempXVel;
+					}
 
 					//Boundary checking
 					if ((int) tempParticle->x >= workWidth)
@@ -438,34 +469,8 @@ void UpdateView(void)
 
 
 
-				/* Acclerometer stuff taken out for now
-				//If accel control, do tempYVel based on that
-				if ((int) gravy != 0 && accelcon)
-				{
-					y[counter] += ((gravy / 9.8) * fallvel[oelement] + tempYVel[counter]);
-				}
-				//Otherwise, just do the fallvelocity
-				else if (accelcon == 0)
-				{
-					y[counter] += fallvel[oelement] + tempYVel[counter];
-				}
-				//Accelerometer control, but no gravity (held horizontal)
-				else
-				{
-					y[counter] += tempYVel[counter];
-				}
 
-				//If accel control is on, calculate new x using the gravity set
-				if ((int) gravx != 0 && accelcon == 1)
-				{
-					x[counter] += ((gravx / 9.8) * fallvel[oelement] + tempXVel[counter]);
-				}
-				//Otherwise, just add tempXVel
-				else
-				{
-					x[counter] += tempXVel[counter];
-				}
-				*/
+
 
 				//Special cycle
 				/* TODO: --- This had errors, will fix after getting it to build ---

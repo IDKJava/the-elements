@@ -8,7 +8,6 @@ import idkjava.thelements.preferences.PreferencesActivity;
 
 import java.util.List;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,12 +38,9 @@ public class MainActivity extends Activity
 	private static final int ELEMENT_PICKER = 2;
 	private static final int BRUSH_SIZE_PICKER = 3;
 	
-	//Constants for elements
+	//Constant for the eraser element
 	public static final char ERASER_ELEMENT = 2;
 	public static final char NORMAL_ELEMENT = 3;
-	
-	//Constants for intents
-	public static final char SAVE_STATE_ACTIVITY = 0;
 	
 	//Request code constants
 	public static final int REQUEST_CODE_SELECT_SAVE = 0;
@@ -98,20 +96,25 @@ public class MainActivity extends Activity
 		//Add custom elements to the elements list
 	}
 
-	/*
+	
 	private final SensorEventListener mySensorListener = new SensorEventListener()
 	{
+		//accsensor registered in onResume()
 		public void onSensorChanged(SensorEvent event)
 		{
-			sendXGrav(event.values[0]);
-			sendYGrav(event.values[1]);
+			//native setGravity methods called
+			setXGravity(event.values[0]);
+			setYGravity(event.values[1]);
+			//Log.e("The Elements", "Gravity Change, X: " + new Float(event.values[0]).toString() + 
+				//	" Y: " + new Float(event.values[1]).toString());
 		}
 
 		public void onAccuracyChanged(Sensor sensor, int accuracy)
 		{
 		}
 	};
-	*/
+	
+	
 	@Override
 	protected void onPause()
 	{
@@ -140,7 +143,8 @@ public class MainActivity extends Activity
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		//TODO: myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
-
+		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+		
 		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", false))
 		{
@@ -354,15 +358,17 @@ public class MainActivity extends Activity
 	}
 	
 	//Save the current state
-	public void saveState()
+	public boolean saveState()
 	{
-		Intent tempIntent = new Intent(this, SaveStateActivity.class);
-		startActivity(tempIntent);
+		//TODO: Call the save activity
+		return false;
 	}
-	public void loadState()
+	public boolean loadState()
 	{
-		Intent tempIntent = new Intent(this, LoadStateActivity.class);
-		startActivity(tempIntent);
+		Intent tempIntent = new Intent(this, SaveSelectionActivity.class);
+		startActivityForResult(tempIntent, REQUEST_CODE_SELECT_SAVE);
+		
+		return false;
 	}
 	
 	//Check whether or not the game is zoomed in

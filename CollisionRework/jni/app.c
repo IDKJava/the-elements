@@ -72,14 +72,14 @@ char shouldZoom = FALSE;
 char shouldUpdateMouse = FALSE;
 
 
-/* Accelerometer stuff being taken out for now
+//Accelerometer stuff being taken out for now
 //Gravity values
-float gravX;
-float gravY;
+float xGravity;
+float yGravity;
 
 //Accelerometer control state
 //int accelcon;
- */
+
 
 /*Network stuff taken out for now
 //Buffer building variables

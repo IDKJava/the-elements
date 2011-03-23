@@ -235,13 +235,13 @@ char Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 }
 
 //TODO: Accelerometer related
-void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravity)
+void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, jfloat xGravityIn)
 {
-	//Stuff
+	xGravity = xGravityIn;
 }
-void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravity)
+void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, jfloat yGravityIn)
 {
-	//Stuff
+	yGravity = yGravityIn;
 }
 
 /* TODO: Network related
