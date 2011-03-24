@@ -66,14 +66,14 @@ char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 
 /*
  * Specials list:
  *	   -1 = None;
- *		0 = Spawn particles; Element
- *		1 = Break; Threshold velocity
- *		2 = Grow; Food element
- *		3 = Burn; Threshold
- *		4 = Explode; Explosiveness
+ *		1 = Spawn particles; Element
+ *		2 = Break; Threshold velocity
+ *		3 = Grow; Food element
+ *		4 = Burn; Threshold
+ *		5 = Explode; Explosiveness
  */
 //Defines the special for each base element
-char baseSpecial[][2] = {{0}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {1}, {2,3}, {-1}, {-1}, {-1}, {3,4}, {3,4}, {3,4}, {3}, {-1}, {-1}, {-1}, {1}, {-1}, {1}, {3}};
+signed char baseSpecial[][2] = {{0}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {-1}, {1}, {2,3}, {-1}, {-1}, {-1}, {3,4}, {3,4}, {3,4}, {3}, {-1}, {-1}, {-1}, {1}, {-1}, {1}, {3}};
 
 //Defines the special value for each base element
 char baseSpecialValue[][2] = {{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {5}, {4,5}, {0}, {0}, {0}, {7,3}, {5,5}, {5,10}, {2}, {0}, {0}, {0}, {3}, {0}, {0}, {5}};

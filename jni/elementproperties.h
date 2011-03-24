@@ -73,7 +73,7 @@ extern char baseState[];
  *		4 = Explode; Explosiveness
  */
 //Defines the special for each base element
-extern char baseSpecial[][2];
+extern signed char baseSpecial[][2];
 //Defines the special value for each base element
 extern char baseSpecialValue[][2];
 //Defines the inertia of each element

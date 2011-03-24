@@ -41,6 +41,7 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 
 		//Set the frozen state
 		i->frozen = FALSE;
+		i->specialVals = i->element->specialVals;
 
 		//Set the initial heat
 		if(element->startingTemp == 0)
@@ -58,7 +59,7 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 		setBitmapColor(xCoord, yCoord, element);
 
 		//Unfreeze particles around it
-		unFreezeParticles(xCoord, yCoord);
+		//unFreezeParticles(xCoord, yCoord);
 	}
 }
 void deletePoint(struct Particle* particle)
@@ -68,7 +69,7 @@ void deletePoint(struct Particle* particle)
 	int tempY = particle->y;
 
 	//Unfreeze the particles around it
-	unFreezeParticles(tempX, tempY);
+	//unFreezeParticles(tempX, tempY);
 	//Clear it in the pixels array
 	clearBitmapColor(tempX, tempY);
 	//Clear it in the points array
@@ -109,6 +110,7 @@ void clearBitmapColor(int xCoord, int yCoord)
 }
 void unFreezeParticles(int xCoord, int yCoord)
 {
+	/*
 	int tempX, tempY;
 	for (dx = -1; dx <= 1; dx++)
 	{
@@ -128,4 +130,5 @@ void unFreezeParticles(int xCoord, int yCoord)
 			}
 		}
 	}
+	*/
 }

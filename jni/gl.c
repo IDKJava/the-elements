@@ -90,6 +90,8 @@ void glRender()
 
 		dimensionsChanged = FALSE;
 		zoomChanged = FALSE;
+		__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Dimensions changed");
+
 	}
 	else if(zoomChanged)
 	{
@@ -99,6 +101,7 @@ void glRender()
 		texture[7] = (float) workHeight/texHeight;
 
 		zoomChanged = FALSE;
+		__android_log_write(ANDROID_LOG_INFO, "MainActivity", "zoom changed");
 	}
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
 	UpdateView();
@@ -112,4 +115,5 @@ void glRender()
 
 	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+	__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Drew");
 }

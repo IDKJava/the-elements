@@ -11,6 +11,7 @@
 #define UPDATE_H_INCLUDED
 
 #include <stdlib.h>
+#include <math.h>
 
 //Include the global variables
 #include "app.h"

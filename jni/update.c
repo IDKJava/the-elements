@@ -466,119 +466,202 @@ void UpdateView(void)
 					x[counter] += tempXVel[counter];
 				}
 				*/
-
-				//Special cycle
-				/* TODO: --- This had errors, will fix after getting it to build ---
-				if(special[tempElement] != SPECIAL_NOT_SET)
-				{
-					switch(special[tempElement])
+				int i;
+				for ( i = 0; i < MAX_SPECIALS; i++){
+					if(tempElement && tempElement->specials[i] != SPECIAL_NOT_SET)
 					{
-						//Stuff to come
-					}
-				}
-				*/
-
-				/*
-				if (fireburn[element[counter]] == 1) //Fire cycle
-				{
-					frozen[counter] = 0;
-					random = rand();
-					if (collision[element[allCoords[tempX + 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX + 1][tempY], 5);
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX][tempY - 1], 5);
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX - 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX - 1][tempY], 5);
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX][tempY + 1], 5);
-						tempYVel[allCoords[tempX][tempY + 1]] = 2;
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX + 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX + 1][tempY + 1], 5);
-						tempYVel[allCoords[tempX][tempY + 1]] = 2;
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX - 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX - 1][tempY + 1], 5);
-						tempYVel[allCoords[tempX][tempY + 1]] = 2;
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX + 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX + 1][tempY - 1], 5);
-					}
-					random = rand();
-					if (collision[element[allCoords[tempX - 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-					{
-						setElement(allCoords[tempX - 1][tempY - 1], 5);
-					}
-				}
-				if (element[counter] == 8) //Spawn cycle
-				{
-					frozen[counter] = 0;
-					int check1, check2, temp;
-					for (check1 = -2; check1 <= 2; check1++)
-					{
-						for (check2 = -2; check2 <= 2; check2++)
+						switch((int)tempElement->specials[i])
 						{
-							if (tempX + check1 > 1 && tempX + check1 < workWidth && tempY + check2 >= 0 && tempY + check2 < workHeight)
+						case 5:
+						{
+							if ( tempParticle->heat >= tempParticle->element->highestTemp) // if the heat is above the threshold
+							{
+								int explosiveness = tempParticle->specialVals[i];
+								int diffX,diffY;
+								int distance;
+								struct Particle* tempAllCoords;
+								for ( diffX = -explosiveness; diffX <= explosiveness; diffX++)
+								{
+									for (diffY = -explosiveness; diffY <= explosiveness; diffY++ )
+									{
+										distance = (int)sqrt( (float)(diffX*diffX + diffY*diffY)); //Might want to optimize this by removing the sqrt later if we have speed issues
+										if ( distance <= explosiveness )
+										{
+											if (!tempAllCoords && rand()%3)
+											{
+												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
+											}
+											if ( tempAllCoords )
+											{
+												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+												tempAllCoords->xVel += explosiveness/diffX;
+												tempAllCoords->yVel += explosiveness/diffY;
+											}
+										}
+									}
+								}
+							}
+
+
+							break;
+						}
+						case 1:
+						{
+								//frozen[counter] = 0;
+								int diffX, diffY;
+								struct Particle* tempAllCoords;
+								for (diffX = -2; diffX <= 2; diffX++)
+								{
+									for (diffY = -2; diffY <= 2; diffY++)
+									{
+										if (tempX + diffX > 1 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+										{
+											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+											{
+												setElement(tempAllCoords,SPAWN_ELEMENT);
+												tempAllCoords->specialVals[i] = tempParticle->specialVals[i];
+											}
+											else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
+											{
+												createPoint(tempX + diffX, tempY + diffY, tempParticle->element); //1/200 chance of spawning
+											}
+										}
+									}
+								}
+
+							break;
+						}
+						case 3: //Ice cycle
+						{
+								int diffX, diffY;
+								struct Particle* tempAllCoords;
+								for (diffX = -1; diffX <= 1; diffX++)
+								{
+									for (diffY = -1; diffY <= 1; diffY++)
+									{
+										tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+										if (tempAllCoords && tempAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
+										{
+											//Change the water to ice
+											setElement(tempParticle, elements[ICE_ELEMENT]);
+										}
+									}
+								}
+
+							break;
+						}
+						case 2:
+						{
+							if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
+							{
+								setElement(tempParticle, elements[NORMAL_ELEMENT]);
+							}
+							break;
+						}
+					}
+
+					/*
+					if (fireburn[element[counter]] == 1) //Fire cycle
+					{
+						frozen[counter] = 0;
+						random = rand();
+						if (collision[element[allCoords[tempX + 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX + 1][tempY], 5);
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX][tempY - 1], 5);
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX - 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX - 1][tempY], 5);
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX][tempY + 1], 5);
+							tempYVel[allCoords[tempX][tempY + 1]] = 2;
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX + 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX + 1][tempY + 1], 5);
+							tempYVel[allCoords[tempX][tempY + 1]] = 2;
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX - 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX - 1][tempY + 1], 5);
+							tempYVel[allCoords[tempX][tempY + 1]] = 2;
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX + 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX + 1][tempY - 1], 5);
+						}
+						random = rand();
+						if (collision[element[allCoords[tempX - 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
+						{
+							setElement(allCoords[tempX - 1][tempY - 1], 5);
+						}
+					}
+					if (element[counter] == 8) //Spawn cycle
+					{
+						frozen[counter] = 0;
+						int check1, check2, temp;
+						for (check1 = -2; check1 <= 2; check1++)
+						{
+							for (check2 = -2; check2 <= 2; check2++)
+							{
+								if (tempX + check1 > 1 && tempX + check1 < workWidth && tempY + check2 >= 0 && tempY + check2 < workHeight)
+								{
+									temp = allCoords[tempX + check1][tempY + check2];
+									if (temp != -1 && element[temp] == 7) //There's a generator adjacent
+									{
+										element[temp] = 8; //Change the generator to a spawn
+										spawn[temp] = spawn[counter]; //Make the spawn element the same as this one
+									}
+									else if (temp == -1 && rand() % 200 == 0 && loq < TPoints - 1) //There's an empty spot
+									{
+										createPoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
+									}
+								}
+							}
+						}
+					}
+					if (growing[element[counter]] == 1) //Ice cycle
+					{
+						frozen[counter] = 0;
+						int check1, check2, temp;
+						for (check1 = -1; check1 <= 1; check1++)
+						{
+							for (check2 = -1; check2 <= 1; check2++)
 							{
 								temp = allCoords[tempX + check1][tempY + check2];
-								if (temp != -1 && element[temp] == 7) //There's a generator adjacent
+								if (temp != -1 && element[temp] == 1 && rand() % 10 == 0)
 								{
-									element[temp] = 8; //Change the generator to a spawn
-									spawn[temp] = spawn[counter]; //Make the spawn element the same as this one
-								}
-								else if (temp == -1 && rand() % 200 == 0 && loq < TPoints - 1) //There's an empty spot
-								{
-									createPoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
+									//Change the water to ice
+									setElement(temp, element[counter]);
+									frozen[temp] = 0;
 								}
 							}
 						}
 					}
-				}
-				if (growing[element[counter]] == 1) //Ice cycle
-				{
-					frozen[counter] = 0;
-					int check1, check2, temp;
-					for (check1 = -1; check1 <= 1; check1++)
+					if (condensing[element[counter]] != -1) //Steam cycle
 					{
-						for (check2 = -1; check2 <= 1; check2++)
+						frozen[counter] = 0;
+						if (rand() % 200 == 0) //1/200 chance
 						{
-							temp = allCoords[tempX + check1][tempY + check2];
-							if (temp != -1 && element[temp] == 1 && rand() % 10 == 0)
-							{
-								//Change the water to ice
-								setElement(temp, element[counter]);
-								frozen[temp] = 0;
-							}
+							setElement(counter, condensing[element[counter]]); //"Condense" the steam
 						}
 					}
-				}
-				if (condensing[element[counter]] != -1) //Steam cycle
-				{
-					frozen[counter] = 0;
-					if (rand() % 200 == 0) //1/200 chance
-					{
-						setElement(counter, condensing[element[counter]]); //"Condense" the steam
+					*/
 					}
 				}
-				*/
-
-
 			}
 		}
 		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
