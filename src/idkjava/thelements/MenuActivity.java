@@ -46,7 +46,7 @@ public class MenuActivity extends Activity
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
 		stime = System.currentTimeMillis();
 		
-		setContentView(R.layout.main_menu);
+		setContentView(R.layout.menu_activity);
 		
 		try
 		{

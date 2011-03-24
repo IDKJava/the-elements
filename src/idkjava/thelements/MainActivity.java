@@ -337,12 +337,12 @@ public class MainActivity extends Activity
 		if(ui)
 		{
 			Log.v("TheElements", "setcontentview - ui");
-			setContentView(R.layout.ui);
+			setContentView(R.layout.main_activity_ui);
 		}
 		else
 		{
 			Log.v("TheElements", "setcontentview - non_ui");
-			setContentView(R.layout.non_ui);
+			setContentView(R.layout.main_activity_non_ui);
 		}
 
 		//Set the new view and control box and menu bar to the stuff defined in layout

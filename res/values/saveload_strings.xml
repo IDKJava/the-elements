@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string name="saving">Saving...</string>
+<string name="enter_save_name">Enter name for save</string>
+<string name="save">Save</string>
 </resources>

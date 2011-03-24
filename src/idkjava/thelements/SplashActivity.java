@@ -13,7 +13,7 @@ public class SplashActivity extends Activity
 	{
 		super.onCreate(savedInstanceState); //Call the super method
 		
-		setContentView(R.layout.splash);
+		setContentView(R.layout.splash_activity);
 		
 		new Handler().postDelayed(
 				new Runnable()
