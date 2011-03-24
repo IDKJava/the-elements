@@ -8,7 +8,6 @@ import idkjava.thelements.preferences.PreferencesActivity;
 
 import java.util.List;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,6 +17,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -98,20 +99,20 @@ public class MainActivity extends Activity
 		//Add custom elements to the elements list
 	}
 
-	/*
+	
 	private final SensorEventListener mySensorListener = new SensorEventListener()
 	{
 		public void onSensorChanged(SensorEvent event)
 		{
-			sendXGrav(event.values[0]);
-			sendYGrav(event.values[1]);
+			setXGravity(event.values[0]);
+			setYGravity(event.values[1]);
 		}
 
 		public void onAccuracyChanged(Sensor sensor, int accuracy)
 		{
 		}
 	};
-	*/
+	
 	@Override
 	protected void onPause()
 	{
@@ -139,7 +140,7 @@ public class MainActivity extends Activity
 		}
 		
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		//TODO: myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
 
 		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", false))
@@ -391,7 +392,7 @@ public class MainActivity extends Activity
 	//Getters
 	public static native char getElement();
 	
-	//TODO: Acclerometer related
+	//Accelerometer related
 	public static native void setXGravity(float xGravity);
 	public static native void setYGravity(float yGravity);
 	

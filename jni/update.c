@@ -149,8 +149,33 @@ void UpdateView(void)
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
-					tempParticle->x += tempXVel;
-					tempParticle->y += tempElement->fallVel + tempYVel;
+					//If accelOn, do tempYVel based on that
+					if (yGravity != 0 && accelOn)
+					{
+						tempParticle->y += ((yGravity / 9.8) * tempElement->fallVel + tempYVel);
+					}
+					//Otherwise, just do the fallvelocity
+					else if (accelOn == 0)
+					{
+						tempParticle->y += tempElement->fallVel + tempYVel;
+					}
+					//Accelerometer on, but no gravity (held horizontal)
+					else
+					{
+						tempParticle->y += tempYVel;
+					}
+
+					//If accelOn, calculate new x using the gravity set
+					//X Gravity is REVERSED! (hence the "-")
+					if ((int) xGravity != 0 && accelOn == 1)
+					{
+						tempParticle->x += ((-xGravity / 9.8) * tempElement->fallVel + tempXVel);
+					}
+					//Otherwise, just add tempXVel
+					else
+					{
+						tempParticle->x += tempXVel;
+					}
 
 					//Boundary checking
 					if ((int) tempParticle->x >= workWidth)
@@ -436,36 +461,6 @@ void UpdateView(void)
 					setElement(tempParticle, tempParticle->element->higherElement);
 				}
 
-
-
-				/* Acclerometer stuff taken out for now
-				//If accel control, do tempYVel based on that
-				if ((int) gravy != 0 && accelcon)
-				{
-					y[counter] += ((gravy / 9.8) * fallvel[oelement] + tempYVel[counter]);
-				}
-				//Otherwise, just do the fallvelocity
-				else if (accelcon == 0)
-				{
-					y[counter] += fallvel[oelement] + tempYVel[counter];
-				}
-				//Accelerometer control, but no gravity (held horizontal)
-				else
-				{
-					y[counter] += tempYVel[counter];
-				}
-
-				//If accel control is on, calculate new x using the gravity set
-				if ((int) gravx != 0 && accelcon == 1)
-				{
-					x[counter] += ((gravx / 9.8) * fallvel[oelement] + tempXVel[counter]);
-				}
-				//Otherwise, just add tempXVel
-				else
-				{
-					x[counter] += tempXVel[counter];
-				}
-				*/
 				int i;
 				for ( i = 0; i < MAX_SPECIALS; i++){
 					if(tempElement && tempElement->specials[i] != SPECIAL_NOT_SET)

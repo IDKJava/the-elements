@@ -139,14 +139,10 @@ extern char shouldUpdateMouse;
 //Set when a zoom is requested, unset when zoom
 extern char shouldZoom;
 
-/* Accelerometer stuff being taken out for now
 //Gravity values
-extern float gravX;
-extern float gravY;
+extern float xGravity;
+extern float yGravity;
 
-//Accelerometer control state
-//extern int accelcon;
- */
 
 /*Network stuff taken out for now
 //Buffer building variables

@@ -234,14 +234,14 @@ char Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 	return cElement->index;
 }
 
-//TODO: Accelerometer related
-void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravity)
+//Accelerometer related
+void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)
 {
-	//Stuff
+	xGravity = xGravityIn;
 }
-void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravity)
+void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravityIn)
 {
-	//Stuff
+	yGravity = yGravityIn;
 }
 
 /* TODO: Network related
