@@ -115,5 +115,4 @@ void glRender()
 
 	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-	__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Drew");
 }
