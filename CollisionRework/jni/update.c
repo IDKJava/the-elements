@@ -125,9 +125,6 @@ void UpdateView(void)
 
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
 	//Particles update
-	//hack to turn acceleration on
-	//TODO: find where accelOn is turned off
-	accelOn = 1;
 	if (play)
 	{
 		//Physics update
@@ -154,8 +151,7 @@ void UpdateView(void)
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
-					/* Acclerometer stuff taken out for now
-					//If accel control, do tempYVel based on that*/
+					//If accelOn, do tempYVel based on that
 					if (yGravity != 0 && accelOn)
 					{
 						tempParticle->y += ((yGravity / 9.8) * tempElement->fallVel + tempYVel);
@@ -165,13 +161,13 @@ void UpdateView(void)
 					{
 						tempParticle->y += tempElement->fallVel + tempYVel;
 					}
-					//Accelerometer control, but no gravity (held horizontal)
+					//Accelerometer on, but no gravity (held horizontal)
 					else
 					{
 						tempParticle->y += tempYVel;
 					}
 
-					//If accel control is on, calculate new x using the gravity set
+					//If accelOn, calculate new x using the gravity set
 					//X Gravity is REVERSED! (hence the "-")
 					if ((int) xGravity != 0 && accelOn == 1)
 					{

@@ -234,7 +234,7 @@ char Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 	return cElement->index;
 }
 
-//TODO: Accelerometer related
+//Accelerometer related
 void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, jfloat xGravityIn)
 {
 	xGravity = xGravityIn;

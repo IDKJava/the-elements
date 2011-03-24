@@ -398,7 +398,7 @@ public class MainActivity extends Activity
 	//Getters
 	public static native char getElement();
 	
-	//TODO: Acclerometer related
+	//Acclerometer related
 	public static native void setXGravity(float xGravity);
 	public static native void setYGravity(float yGravity);
 	
