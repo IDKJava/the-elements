@@ -482,15 +482,15 @@ void UpdateView(void)
 										distance = (int)sqrt( (float)(diffX*diffX + diffY*diffY)); //Might want to optimize this by removing the sqrt later if we have speed issues
 										if ( distance <= explosiveness )
 										{
+											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
 											if (!tempAllCoords && rand()%3)
 											{
 												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
 											}
 											if ( tempAllCoords )
 											{
-												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-												tempAllCoords->xVel += explosiveness/diffX;
-												tempAllCoords->yVel += explosiveness/diffY;
+												tempAllCoords->xVel += (int)(1*((float)explosiveness/(float)diffX));
+												tempAllCoords->yVel += (int)(1*((float)explosiveness/(float)diffY));
 											}
 										}
 									}
@@ -553,6 +553,24 @@ void UpdateView(void)
 								setElement(tempParticle, elements[NORMAL_ELEMENT]);
 							}
 							break;
+						}
+						case 4:
+						{
+							int i,j;
+							struct Particle* tempAllCoords;
+							for ( i = -1; i <= 1; i++)
+							{
+								for( j = -1; j <=1; j++ )
+								{
+									if((i!=0||j!=0) && tempX+i < workWidth && tempX+i > 0 && tempY+j < workHeight && tempY+j>1 )
+									{
+										tempAllCoords=allCoords[getIndex(tempX+i,tempY+j)];
+										if(tempAllCoords){
+											tempAllCoords->heat+=10;
+										}
+									}
+								}
+							}
 						}
 					}
 
