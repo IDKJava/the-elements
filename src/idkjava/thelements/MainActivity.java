@@ -73,9 +73,6 @@ public class MainActivity extends Activity
 	{
 		//Uses onCreate from the general Activity
 		super.onCreate(savedInstanceState);
-
-		//Get rid of title bar
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		//Initialize most of the arrays in JNI
 		nativeInit();

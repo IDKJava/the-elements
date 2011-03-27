@@ -19,7 +19,7 @@ public class SaveStateActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.save_state_activity);
 		
-		saveButton = (Button) findViewById(R.id.save_button);
+		saveButton = (Button) findViewById(R.id.save_state_button);
 		filename = (EditText) findViewById(R.id.save_state_filename);
 		
 		saveButton.setOnClickListener
@@ -29,6 +29,7 @@ public class SaveStateActivity extends Activity
 					public void onClick(View v)
 					{
 						SaveManager.saveState(filename.getText().toString());
+						finish();
 					}
 				}
 		);

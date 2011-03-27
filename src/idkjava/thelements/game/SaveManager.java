@@ -37,6 +37,6 @@ public class SaveManager
 	
 	static
 	{
-		System.loadLibrary("libthelements.so");
+		System.loadLibrary("thelements");
 	}
 }
