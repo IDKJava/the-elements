@@ -62,7 +62,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		case 2: //Anything - Generator collision
 		{
 			//Change the generator to spawner
-			setElement(secondParticle, SPAWN_ELEMENT);
+			setElement(secondParticle, elements[SPAWN_ELEMENT]);
 			secondParticle->specialVals[0] = firstParticle->element->index;
 			secondParticle->hasMoved = TRUE;
 
@@ -75,8 +75,9 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		case 3: //Generator - Anything collision (should not be needed, but just in case we have moving generators in the future)
 		{
 			//Change the generator to spawner
-			setElement(firstParticle, SPAWN_ELEMENT);
+			setElement(firstParticle, elements[SPAWN_ELEMENT]);
 			firstParticle->specialVals[0] = secondParticle->element->index;
+			firstParticle->hasMoved = TRUE;
 
 			//Move firstParticle back
 			firstParticle->x = oldXFirst;

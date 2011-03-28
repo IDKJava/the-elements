@@ -502,6 +502,7 @@ void UpdateView(void)
 						}
 						case 1:
 						{
+
 								//frozen[counter] = 0;
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
@@ -511,16 +512,19 @@ void UpdateView(void)
 									{
 										if (tempX + diffX > 1 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
 										{
+
+											//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Spawner found");
+
 											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
 											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
-												setElement(tempAllCoords,SPAWN_ELEMENT);
-												tempAllCoords->specialVals[i] = tempParticle->specialVals[i];
+												setElement(tempAllCoords,elements[SPAWN_ELEMENT]);
+												tempAllCoords->specialVals[0] = tempParticle->specialVals[0];//specialVals[0] = index of element to spawn
 											}
-											else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
+											/*else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
-												createPoint(tempX + diffX, tempY + diffY, tempParticle->element); //1/200 chance of spawning
-											}
+												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[0]]); //1/200 chance of spawning
+											}*/
 										}
 									}
 								}
