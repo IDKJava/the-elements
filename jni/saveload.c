@@ -39,29 +39,69 @@ char saveState(char* saveLoc)
 
 	if (fp != NULL)
 	{
-		int counter;
+		int i, counterX, counterY;
 		struct Particle* tempParticle;
-		struct Element* needsToBeSaved[numElements - NUM_BASE_ELEMENTS];
-		
-		//Save the particles
-		for (counter = 0; counter < MAX_POINTS; counter++)
+		char* elementSaveFilter = (char*) malloc(numElements * sizeOf(char));
+
+		for(i = 0; i < numElements; i++)
 		{
-			tempParticle = particles[counter];
-			if (tempParticle->set)
+			elementSaveFilter[i] = 0;
+		}
+
+		//Preprocessing loop
+		for (counterX = 0; counterX < workWidth; counterX++)
+		{
+			for (counterY = 0; counterY < workHeight; counterY++)
 			{
-				//Save x, y, and element of each set particle
-				fprintf(fp, "%d %d %d\n",
-					tempParticle->x,
-					tempParticle->y,
-					tempParticle->element->index);
-				
-				if(tempParticle->element->index >= NUM_BASE_ELEMENTS)
+				tempParticle = allCoords[getIndex(counterX, counterY)];
+				if(tempParticle && tempParticle->element->index >= NUM_BASE_ELEMENTS)
 				{
-					//I'm commenting this out to get it to build
-					//need to decide we want needsToBeSaved to be a bool(char) or a Element*
-					//needsToBeSaved[tempParticle->element->index - NUM_BASE_ELEMENTS] = TRUE;
+					elementSaveFilter[tempParticle->element->index] = 1;
 				}
 			}
+		}
+		
+		//Save the custom elements that need to be saved
+		for (i = 0; i < numElements; i++)
+		{
+			if(elementSaveFilter[i] == 1)
+			{
+				fprintf(fp, "%d\n", i);
+				fprintf(fp, "%s\n", elements[i]->name);
+				fprintf(fp, "%d %d %d %d\n",
+						elements[i]->state,
+						elements[i]->startingTemp,
+						elements[i]->lowestTemp,
+						elements[i]->highestTemp);
+				fprintf(fp, "%d %d\n",
+						elements[i]->lowerElement->index,
+						elements[i]->higherElement->index);
+				fprintf(fp, "%d %d %d\n",
+						elements[i]->red,
+						elements[i]->green,
+						elements[i]->blue);
+				//TODO: Had to eat dinner :)
+			}
+		}
+
+		//Save the particles
+		for (counterX = 0; counterX < workWidth; counterX++)
+		{
+			for (counterY = 0; counterY < workHeight; counterY++)
+			{
+				tempParticle = allCoords[getIndex(counterX, counterY)];
+				if(tempParticle)
+				{
+					fprintf(fp, "(%d %d %d %d %d %d) ",
+							tempParticle->x,
+							tempParticle->y,
+							tempParticle->xVel,
+							tempParticle->yVel,
+							tempParticle->heat,
+							tempParticle->element->index);
+				}
+			}
+			fprintf(fp, "\n");
 		}
 		
 		//Save any custom elements that need to be saved, so that this is portable

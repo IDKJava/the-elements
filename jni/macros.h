@@ -25,10 +25,12 @@
 #define FINGER_DOWN 1
 #define FINGER_UP 0
 
+#define NORMAL_ELEMENT 3
+
 #define SPAWN_ELEMENT 0
 #define DRAG_ELEMENT 1
 #define ERASER_ELEMENT 2
-#define NORMAL_ELEMENT 3
+#define SAND_ELEMENT 3
 #define WATER_ELEMENT 4
 #define STEAM_ELEMENT 5
 #define ICE_ELEMENT 6
