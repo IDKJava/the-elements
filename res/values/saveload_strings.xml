@@ -5,4 +5,5 @@
 <string name="enter_save_name">Enter name for save</string>
 <string name="save">Save</string>
 <string name="select_state">Select a state save to load:</string>
+<string name="no_saves">There are no saves available to be loaded.</string>
 </resources>

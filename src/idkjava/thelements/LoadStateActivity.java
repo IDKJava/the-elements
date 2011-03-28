@@ -3,6 +3,7 @@ package idkjava.thelements;
 import idkjava.thelements.game.FileManager;
 import idkjava.thelements.game.SaveManager;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -19,35 +20,47 @@ public class LoadStateActivity extends Activity
 	public static TableRow tr;
 	public static LinearLayout buttonContainer;
 	public static ImageButton actionButton;
+	private static Resources res;
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.load_state_activity);
 		
+		//Get the associated resources
+		res = getResources();
+		
 		//Refresh the files list
 		SaveManager.refresh();
 		//Go through and find all the save files and dynamically load them
 		int length = SaveManager.getNumSaves();
-		for(int i = 0; i < length; i++)
+		if(length != 0)
 		{
-			addEntity(SaveManager.getSaveName(i));
+			for(int i = 0; i < length; i++)
+			{
+				addEntity(SaveManager.getSaveName(i));
+			}
 		}
-		//Sample entries
-		addEntity("Hi there");
-		addEntity("Hi there");
-		addEntity("Hi there");
-		addEntity("Hi there");
-		addEntity("Hi there");
-		addEntity("Hi there");
-		addEntity("Hi there");
+		else
+		{
+			TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+			tr = new TableRow(this);
+			tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			tr.setGravity(Gravity.CENTER);
+			
+			TextView tv = new TextView(this);
+			tv.setText(res.getText(R.string.no_saves));
+			
+			tr.addView(tv);
+			tl.addView(tr);
+		}
 	}
 	
     public void addEntity(String entityName)
     {
     	final String entityNameFinal = entityName;
         //DIP representation math
-        final float SCALE = getBaseContext().getResources().getDisplayMetrics().density;
+        //final float SCALE = getBaseContext().getResources().getDisplayMetrics().density;
         
         //Create a TableLayout object associated with the TableLayout in the .xml file
         TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
