@@ -25,37 +25,22 @@ public class LoadStateActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.load_state_activity);
 		
-		//TODO: Go through and find all the save files and dynamically load them
-		//Some sample entries to test UI for now
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		addEntity("Hi");
-		addEntity("Another saved state");
-		
+		//Refresh the files list
+		SaveManager.refresh();
+		//Go through and find all the save files and dynamically load them
+		int length = SaveManager.getNumSaves();
+		for(int i = 0; i < length; i++)
+		{
+			addEntity(SaveManager.getSaveName(i));
+		}
+		//Sample entries
+		addEntity("Hi there");
+		addEntity("Hi there");
+		addEntity("Hi there");
+		addEntity("Hi there");
+		addEntity("Hi there");
+		addEntity("Hi there");
+		addEntity("Hi there");
 	}
 	
     public void addEntity(String entityName)
@@ -71,37 +56,43 @@ public class LoadStateActivity extends Activity
 		//Create the new TableRow that will be added
 		tr = new TableRow(this);
 		//Set some properties
-		tr.setGravity(Gravity.CENTER_VERTICAL);
-		tr.setLayoutParams(new LayoutParams(
-		                        LayoutParams.FILL_PARENT, 
-		                        LayoutParams.WRAP_CONTENT));
+		//tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		tr.setBackgroundResource(R.drawable.load_state_tr_bg);
 		tr.setLongClickable(true);
 		tr.setClickable(true);
+		tr.setPadding(25, 10, 25, 10);
 		
 		//Create a TextView to hold the filename
 		TextView filename = new TextView(this);
-		filename.setText("Helloasdfkljasdkfasdfasdfasdflajsdklfajs");
-		filename.setLayoutParams(new LayoutParams(
-		                LayoutParams.FILL_PARENT,
-		                LayoutParams.WRAP_CONTENT));
-		filename.setGravity(Gravity.CENTER_VERTICAL);
+		filename.setText(entityName);
+		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
 		//Makes use of DisplayMetrics to create an automatic dip unit :)
-		filename.setPadding((int)(16 * SCALE + 0.5f), 0, 0, 0);
+		//filename.setPadding((int)(16 * SCALE + 0.5f), 0, 0, 0);
 		//Add the TextView to the TableRow
 		tr.addView(filename);
 
 		//Set buttonContainer's gravity to right with a 16dip right padding
+		//buttonContainer.setPadding(0, 0, (int)(16 * SCALE + 0.5f), 0);
+		//buttonContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 50));
 		buttonContainer.setGravity(Gravity.RIGHT);
-		buttonContainer.setPadding(0, 0, (int)(16 * SCALE + 0.5f), 0);
-
+		
         //Create a button to be the action invoker
         ImageButton actionButton = new ImageButton(this);
         actionButton.setBackgroundResource(R.drawable.load_state_btn);
         actionButton.setLayoutParams(new LayoutParams(
                         LayoutParams.FILL_PARENT, 
                         LayoutParams.WRAP_CONTENT));
+        actionButton.setOnClickListener
+        (
+    		new OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+    				//TODO: Something
+    			}
+    		}
+        );
 
         //Add the button to the TableRow
         buttonContainer.addView(actionButton);
@@ -121,7 +112,7 @@ public class LoadStateActivity extends Activity
         );
         
         //Add the created row to our TableLayout
-        tl.addView(tr, new TableLayout.LayoutParams(
+        tl.addView(tr, new LayoutParams(
                 LayoutParams.FILL_PARENT, 
                 LayoutParams.WRAP_CONTENT));
     }

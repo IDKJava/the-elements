@@ -38,7 +38,7 @@ public class FileManager
 				//Set the input stream to the demo save resource
 				InputStream in = context.getResources().openRawResource(R.raw.demo);
 				//Set the output stream to the demo save file location
-				OutputStream out = new FileOutputStream(ROOT_DIR + SAVES_DIR + DEMO_SAVE);
+				OutputStream out = new FileOutputStream(ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT);
 				//Create a 256 byte buffer
 				byte[] buf = new byte[256];
 				//Read in 256 byte chunks from in and output to out
