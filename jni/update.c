@@ -130,6 +130,7 @@ void UpdateView(void)
 		{
 			tempParticle = particles[counter];
 			
+
 			//If the particle is set and unfrozen
 			if (tempParticle->set)// && tempParticle->frozen < 4)
 			{
@@ -433,6 +434,8 @@ void UpdateView(void)
 
 					tempParticle->xVel = tempXVel;
 					tempParticle->yVel = tempYVel;
+					tempX = (int) tempParticle->x;
+					tempY = (int) tempParticle->y;
 				}
 
 				//Update heat
@@ -467,45 +470,12 @@ void UpdateView(void)
 					{
 						switch((int)tempElement->specials[i])
 						{
-						case 5:
-						{
-							if ( tempParticle->heat >= tempParticle->element->highestTemp) // if the heat is above the threshold
-							{
-								int explosiveness = tempParticle->specialVals[i];
-								int diffX,diffY;
-								int distance;
-								struct Particle* tempAllCoords;
-								for ( diffX = -explosiveness; diffX <= explosiveness; diffX++)
-								{
-									for (diffY = -explosiveness; diffY <= explosiveness; diffY++ )
-									{
-										distance = (int)sqrt( (float)(diffX*diffX + diffY*diffY)); //Might want to optimize this by removing the sqrt later if we have speed issues
-										if ( distance <= explosiveness )
-										{
-											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-											if (!tempAllCoords && rand()%3)
-											{
-												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
-											}
-											if ( tempAllCoords )
-											{
-												tempAllCoords->xVel += (int)(1*((float)explosiveness/(float)diffX));
-												tempAllCoords->yVel += (int)(1*((float)explosiveness/(float)diffY));
-											}
-										}
-									}
-								}
-							}
 
-
-							break;
-						}
 						case 1:
 						{
-
 								//frozen[counter] = 0;
 								int diffX, diffY;
-								struct Particle* tempAllCoords;
+								struct Particle* temporAllCoords;
 								for (diffX = -2; diffX <= 2; diffX++)
 								{
 									for (diffY = -2; diffY <= 2; diffY++)
@@ -515,35 +485,16 @@ void UpdateView(void)
 
 											//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Spawner found");
 
-											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if (temporAllCoords && temporAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
 												setElement(tempAllCoords,elements[SPAWN_ELEMENT]);
-												tempAllCoords->specialVals[0] = tempParticle->specialVals[0];//specialVals[0] = index of element to spawn
+												temporAllCoords->specialVals[0] = tempParticle->specialVals[0];//specialVals[0] = index of element to spawn
 											}
 											/*else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
 												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[0]]); //1/200 chance of spawning
 											}*/
-										}
-									}
-								}
-
-							break;
-						}
-						case 3: //Ice cycle
-						{
-								int diffX, diffY;
-								struct Particle* tempAllCoords;
-								for (diffX = -1; diffX <= 1; diffX++)
-								{
-									for (diffY = -1; diffY <= 1; diffY++)
-									{
-										tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-										if (tempAllCoords && tempAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
-										{
-											//Change the water to ice
-											setElement(tempParticle, elements[ICE_ELEMENT]);
 										}
 									}
 								}
@@ -558,23 +509,79 @@ void UpdateView(void)
 							}
 							break;
 						}
-						case 4:
+						case 3: //Ice cycle
 						{
-							int i,j;
-							struct Particle* tempAllCoords;
-							for ( i = -1; i <= 1; i++)
+							int diffX, diffY;
+							struct Particle* temporAllCoords;
+							for (diffX = -1; diffX <= 1; diffX++)
 							{
-								for( j = -1; j <=1; j++ )
+								for (diffY = -1; diffY <= 1; diffY++)
 								{
-									if((i!=0||j!=0) && tempX+i < workWidth && tempX+i > 0 && tempY+j < workHeight && tempY+j>1 )
+									if ( diffY )
+									temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+									if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
 									{
-										tempAllCoords=allCoords[getIndex(tempX+i,tempY+j)];
-										if(tempAllCoords){
-											tempAllCoords->heat+=10;
-										}
+										char buffer[100];
+										sprintf(buffer, "diffX %d diffY %d tempX %d tempY %d %d %d", diffX, diffY, tempX, tempY, temporAllCoords->x, temporAllCoords->y);
+										//Change the water to ice
+										__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+										setElement(temporAllCoords, tempParticle->element);
 									}
 								}
 							}
+
+							break;
+						}
+						case 4:
+						{
+//							int i,j;
+//							struct Particle* temporAllCoords;
+//							for ( i = -1; i <= 1; i++)
+//							{
+//								for( j = -1; j <=1; j++ )
+//								{
+//									if((i!=0||j!=0) && tempX+i < workWidth && tempX+i > 0 && tempY+j < workHeight && tempY+j>1 )
+//									{
+//										temporAllCoords=allCoords[getIndex(tempX+i,tempY+j)];
+//										if(temporAllCoords){
+//											temporAllCoords->heat+=10;
+//										}
+//									}
+//								}
+//							}
+//							break;
+						}
+						case 5:
+						{
+//							if ( tempParticle->heat >= tempParticle->element->highestTemp) // if the heat is above the threshold
+//							{
+//								int explosiveness = tempParticle->specialVals[i];
+//								int diffX,diffY;
+//								int distance;
+//								struct Particle* tempAllCoords;
+//								for ( diffX = -explosiveness; diffX <= explosiveness; diffX++)
+//								{
+//									for (diffY = -explosiveness; diffY <= explosiveness; diffY++ )
+//									{
+//										distance = (int)sqrt( (float)(diffX*diffX + diffY*diffY)); //Might want to optimize this by removing the sqrt later if we have speed issues
+//										if ( distance <= explosiveness )
+//										{
+//											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+//											if (!tempAllCoords && rand()%3)
+//											{
+//												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
+//											}
+//											if ( tempAllCoords )
+//											{
+//												tempAllCoords->xVel += (int)(10*((float)explosiveness/(float)diffX));
+//												tempAllCoords->yVel += (int)(10*((float)explosiveness/(float)diffY));
+//											}
+//										}
+//									}
+//								}
+//							}
+
+							break;
 						}
 					}
 
