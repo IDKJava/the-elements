@@ -44,7 +44,7 @@ char saveState(char* saveLoc)
 		char* elementSaveFilter;
 		elementSaveFilter = (char*)malloc(numElements * sizeof(char));
 
-
+		//Initialize elementSaveFilter
 		for(i = 0; i < numElements; i++)
 		{
 			elementSaveFilter[i] = 0;
@@ -56,6 +56,7 @@ char saveState(char* saveLoc)
 			for (counterY = 0; counterY < workHeight; counterY++)
 			{
 				tempParticle = allCoords[getIndex(counterX, counterY)];
+				//If the particle is a custom element, indicate that we need to save this element
 				if(tempParticle && tempParticle->element->index >= NUM_BASE_ELEMENTS)
 				{
 					elementSaveFilter[tempParticle->element->index] = 1;
@@ -64,6 +65,15 @@ char saveState(char* saveLoc)
 		}
 		
 		//Save the custom elements that need to be saved
+		/* Save format:
+		 * index
+		 * name
+		 * state startingTemp lowestTemp highestTemp
+		 * lowerElement->index higherElement->index
+		 * red green blue
+		 * TODO: specials
+		 * density fallVel inertia
+		 */
 		for (i = 0; i < numElements; i++)
 		{
 			if(elementSaveFilter[i] == 1)
@@ -82,11 +92,24 @@ char saveState(char* saveLoc)
 						elements[i]->red,
 						elements[i]->green,
 						elements[i]->blue);
-				//TODO: Had to eat dinner :)
+				//TODO: Specials
+				fprintf(fp, "%d %d %d\n\n",
+						elements[i]->density,
+						elements[i]->fallVel,
+						elements[i]->inertia);
 			}
 		}
 
+		//Save the dimensions
+		fprintf(fp, "%d %d\n\n", workWidth, workHeight);
+
 		//Save the particles
+		/* Save format:
+		 * (x y xVel yVel heat element->index) ...
+		 *   .
+		 *   .
+		 *   .
+		 */
 		for (counterX = 0; counterX < workWidth; counterX++)
 		{
 			for (counterY = 0; counterY < workHeight; counterY++)
@@ -105,16 +128,7 @@ char saveState(char* saveLoc)
 			}
 			fprintf(fp, "\n");
 		}
-		
-		int counter;
-		//Save any custom elements that need to be saved, so that this is portable
-		for(counter = 0; counter < numElements - NUM_BASE_ELEMENTS; counter++)
-		{
-			if(1 )//needsToBeSaved[counter])
-			{
-				//TODO: Save the custom element at the bottom section with an index
-			}
-		}
+
 		fclose(fp);
 
 		return TRUE;
