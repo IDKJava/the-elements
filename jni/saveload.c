@@ -41,7 +41,9 @@ char saveState(char* saveLoc)
 	{
 		int i, counterX, counterY;
 		struct Particle* tempParticle;
-		char* elementSaveFilter = (char*) malloc(numElements * sizeOf(char));
+		char* elementSaveFilter;
+		elementSaveFilter = (char*)malloc(numElements * sizeof(char));
+
 
 		for(i = 0; i < numElements; i++)
 		{
@@ -104,10 +106,11 @@ char saveState(char* saveLoc)
 			fprintf(fp, "\n");
 		}
 		
+		int counter;
 		//Save any custom elements that need to be saved, so that this is portable
 		for(counter = 0; counter < numElements - NUM_BASE_ELEMENTS; counter++)
 		{
-			if(needsToBeSaved[counter])
+			if(1 )//needsToBeSaved[counter])
 			{
 				//TODO: Save the custom element at the bottom section with an index
 			}
