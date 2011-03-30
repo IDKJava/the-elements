@@ -7,321 +7,64 @@
     android:layout_height="wrap_content">
     <ScrollView
     android:id="@+id/scrollview"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
     <LinearLayout
     android:orientation="vertical"
     android:layout_height="wrap_content"
     android:layout_width="fill_parent"
-    >
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/sand_prompt"
-    />
-    <Spinner 
-        android:id="@+id/sandcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/water_prompt"
-    />
-    <Spinner 
-        android:id="@+id/watercol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/wall_prompt"
-    />
-    <Spinner 
-        android:id="@+id/wallcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/plant_prompt"
-    />
-    <Spinner 
-        android:id="@+id/plantcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/fire_prompt"
-    />
-    <Spinner 
-        android:id="@+id/firecol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/ice_prompt"
-    />
-    <Spinner 
-        android:id="@+id/icecol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/oil_prompt"
-    />
-    <Spinner 
-        android:id="@+id/oilcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/magma_prompt"
-    />
-    <Spinner 
-        android:id="@+id/magmacol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/stone_prompt"
-    />
-    <Spinner 
-        android:id="@+id/stonecol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/C4_prompt"
-    />
-    <Spinner 
-        android:id="@+id/C4col"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/C4plus_prompt"
-    />
-    <Spinner 
-        android:id="@+id/C4pluscol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Fuse_prompt"
-    />
-    <Spinner 
-        android:id="@+id/fusecol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/DestructableWall_prompt"
-    />
-    <Spinner 
-        android:id="@+id/destructablewallcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Acid_prompt"
-    />
-    <Spinner 
-        android:id="@+id/acidcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Steam_prompt"
-    />
-    <Spinner 
-        android:id="@+id/steamcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Salt_prompt"
-    />
-    <Spinner 
-        android:id="@+id/saltcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/SaltWater_prompt"
-    />
-    <Spinner 
-        android:id="@+id/saltwatercol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Glass_prompt"
-    />
-    <Spinner 
-        android:id="@+id/glasscol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/Mud_prompt"
-    />
-    <Spinner 
-        android:id="@+id/mudcol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-     <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/CustomEle_prompt"
-    />
-    <Spinner 
-        android:id="@+id/customelecol"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:prompt="@string/reaction_prompt"
-    />
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/explonesstext"
-    />
-    <SeekBar
-			android:id="@+id/explo_slider"
-			android:layout_gravity="center"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:padding="5px" />
-	<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/redtext"
-    />		
-    <SeekBar
-			android:id="@+id/red_1_slider"
-			android:layout_gravity="center"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:padding="5px" />
-	<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/greentext"
-    />		
-	<SeekBar
-			android:id="@+id/green_1_slider"
-			android:layout_gravity="center"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:padding="5px" />
-	<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/bluetext"
-    />		
-	<SeekBar
-			android:id="@+id/blue_1_slider"
-			android:layout_gravity="center"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:padding="5px" />
-	<TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dip"
-        android:text="@string/densitytext" 
-    />		
-	<SeekBar
-			android:id="@+id/density_slider"
-			android:layout_gravity="center"
-			android:layout_weight="1"
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent"
-			android:padding="5px" />		
-	
+    android:padding="10dip" android:scrollbars="vertical">		
+	<TextView android:id="@+id/textView1" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/sand_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/sandcol"></Spinner>
+    <TextView android:id="@+id/textView2" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/water_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/watercol"></Spinner>
+    <TextView android:id="@+id/textView3" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/wall_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/wallcol"></Spinner>
+    <TextView android:id="@+id/textView4" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/plant_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/plantcol"></Spinner>
+    <TextView android:id="@+id/textView5" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/fire_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/firecol"></Spinner>
+    <TextView android:id="@+id/textView6" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/ice_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/icecol"></Spinner>
+    <TextView android:id="@+id/textView7" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/oil_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/oilcol"></Spinner>
+    <TextView android:id="@+id/textView8" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/magma_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/magmacol"></Spinner>
+    <TextView android:id="@+id/textView9" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/stone_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/stonecol"></Spinner>
+    <TextView android:id="@+id/textView10" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/C4_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/C4col"></Spinner>
+    <TextView android:id="@+id/textView11" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/C4plus_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/C4pluscol"></Spinner>
+    <TextView android:id="@+id/textView12" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Fuse_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/fusecol"></Spinner>
+    <TextView android:id="@+id/textView13" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/DestructableWall_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/destructablewallcol"></Spinner>
+    <TextView android:id="@+id/textView14" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Acid_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/acidcol"></Spinner>
+    <TextView android:id="@+id/textView15" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Steam_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/steamcol"></Spinner>
+    <TextView android:id="@+id/textView16" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Salt_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/saltcol"></Spinner>
+    <TextView android:id="@+id/textView17" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/SaltWater_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/saltwatercol"></Spinner>
+    <TextView android:id="@+id/textView18" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Glass_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/glasscol"></Spinner>
+    <TextView android:id="@+id/textView19" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/Mud_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/mudcol"></Spinner>
+    <TextView android:id="@+id/textView20" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/CustomEle_prompt"></TextView>
+    <Spinner android:layout_height="wrap_content" android:prompt="@string/reaction_prompt" android:layout_width="fill_parent" android:id="@+id/customelecol"></Spinner>
+    <TextView android:id="@+id/textView21" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/explonesstext"></TextView>
+    <SeekBar android:layout_weight="1" android:layout_gravity="center" android:padding="5px" android:layout_height="wrap_content" android:id="@+id/explo_slider" android:layout_width="fill_parent"></SeekBar>
+    <TextView android:id="@+id/textView22" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/redtext"></TextView>
+    <SeekBar android:layout_weight="1" android:layout_gravity="center" android:padding="5px" android:layout_height="wrap_content" android:id="@+id/red_1_slider" android:layout_width="fill_parent"></SeekBar>
+    <TextView android:id="@+id/textView23" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/greentext"></TextView>
+    <SeekBar android:layout_weight="1" android:layout_gravity="center" android:padding="5px" android:layout_height="wrap_content" android:id="@+id/green_1_slider" android:layout_width="fill_parent"></SeekBar>
+    <TextView android:id="@+id/textView24" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/bluetext"></TextView>
+    <SeekBar android:layout_weight="1" android:layout_gravity="center" android:padding="5px" android:layout_height="wrap_content" android:id="@+id/blue_1_slider" android:layout_width="fill_parent"></SeekBar>
+    <TextView android:id="@+id/textView25" android:layout_width="fill_parent" android:layout_marginTop="10dip" android:layout_height="wrap_content" android:text="@string/densitytext"></TextView>
+    <SeekBar android:layout_weight="1" android:layout_gravity="center" android:padding="5px" android:layout_height="wrap_content" android:id="@+id/density_slider" android:layout_width="fill_parent"></SeekBar>
 			
     </LinearLayout>
     </ScrollView>
+    
 </LinearLayout>

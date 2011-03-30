@@ -84,6 +84,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".CustomElementManagerActivity"></activity>
     </application>
     
     <uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
