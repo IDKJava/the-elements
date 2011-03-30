@@ -35,7 +35,4 @@
 <string name="proceed">Proceed</string>
 <string name="exit">Exit</string>
 <string name="restart_app">Please restart app for your changes to go into effect.</string>
-<string name="custom_elements">Custom Elements</string>
-<string name="edit">Edit</string>
-<string name="create_element">Create Element</string>
 </resources>

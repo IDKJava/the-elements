@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="custom_elements">Custom Elements</string>
+<string name="edit">Edit</string>
+<string name="create_element">Create Element</string>
+</resources>
