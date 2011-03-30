@@ -18,7 +18,7 @@ void gameSetup()
 	unsigned char backgroundBlue = cAtmosphere->backgroundBlue;
 
 
-	if ( !cElement )
+	if (!cElement)
 	{
 		cElement = elements[NORMAL_ELEMENT];
 	}
@@ -153,5 +153,6 @@ void particleSetup()
 	for(i = 0; i < MAX_POINTS; i++)
 	{
 		particles[i] = (struct Particle*) malloc(sizeof(struct Particle));
+		particles[i]->specialVals = (char*) malloc(MAX_SPECIALS * sizeof(char));
 	}
 }

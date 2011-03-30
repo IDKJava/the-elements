@@ -39,7 +39,7 @@ char saveState(char* saveLoc)
 
 	if (fp != NULL)
 	{
-		int i, counterX, counterY;
+		int i, counterX, counterY, numElementsToBeSaved;
 		struct Particle* tempParticle;
 		char* elementSaveFilter;
 		elementSaveFilter = (char*)malloc(numElements * sizeof(char));
@@ -51,19 +51,24 @@ char saveState(char* saveLoc)
 		}
 
 		//Preprocessing loop
+		numElementsToBeSaved = 0;
 		for (counterX = 0; counterX < workWidth; counterX++)
 		{
 			for (counterY = 0; counterY < workHeight; counterY++)
 			{
 				tempParticle = allCoords[getIndex(counterX, counterY)];
 				//If the particle is a custom element, indicate that we need to save this element
-				if(tempParticle && tempParticle->element->index >= NUM_BASE_ELEMENTS)
+				if(tempParticle && tempParticle->element->index >= NUM_BASE_ELEMENTS && elementSaveFilter[tempParticle->element->index] != 1)
 				{
 					elementSaveFilter[tempParticle->element->index] = 1;
+					numElementsToBeSaved++;
 				}
 			}
 		}
 		
+		//First write how many custom elements will be saved
+		fprintf(fp, "%d\n\n", numElementsToBeSaved);
+
 		//Save the custom elements that need to be saved
 		/* Save format:
 		 * index
@@ -175,22 +180,79 @@ char loadState(char* loadLoc)
 
 	//Clear the screen and set up some temp variables
 	arraySetup();
+	elementSetup();
 	gameSetup();
-	int xCoord;
-	int yCoord;
-	int element;
+
+	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY;
+	struct Element* tempElement;
+	struct Particle* tempParticle;
 
 	if(fp != NULL)
 	{
-		while (!feof(fp))
+		if(fscanf(fp, "%d", &numElementsSaved) == EOF)
 		{
-			fscanf(fp, "%d%d%d\n",
-				&xCoord,
-				&yCoord,
-				&element);
-			createPoint(xCoord, yCoord, elements[element]);
-			//Cool thing I found on my way to doing this,
-			//you can do something like (struct Element){.index = element}
+			return FALSE;
+		}
+
+		for(i = 0; i < numElementsSaved; i++)
+		{
+			if(fscanf(fp, "%d", &elementIndex) == EOF) {return FALSE;}
+
+			tempElement = (struct Element*) malloc(sizeof(struct Element));
+			if(fscanf(fp, "%s", &tempElement->name) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->state) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->startingTemp) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->lowestTemp) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->highestTemp) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &lowerElementIndex) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &higherElementIndex) == EOF) {return FALSE;}
+			tempElement->lowerElement = elements[lowerElementIndex];
+			tempElement->higherElement = elements[higherElementIndex];
+			if(fscanf(fp, "%d", &tempElement->red) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->green) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->blue) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->density) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->fallVel) == EOF) {return FALSE;}
+			if(fscanf(fp, "%d", &tempElement->inertia) == EOF) {return FALSE;}
+		}
+
+		if(fscanf(fp, "%d %d", &sizeX, &sizeY) == EOF) {return FALSE;}
+
+		//Make sure saves are portable from different dimensions
+		if(sizeX > workWidth)
+		{
+			sizeX = workWidth;
+		}
+		if(sizeY > workHeight)
+		{
+			sizeY = workHeight;
+		}
+
+		for(i = 0; i < sizeX; i++)
+		{
+			for(j = 0; j < sizeY; j++)
+			{
+				if(loq <= 0) {return TRUE;}
+				tempParticle = avail[loq];
+
+				if(fscanf(fp, "(%d %d %d %d %d %d)", &tempParticle->x,
+													&tempParticle->y,
+													&tempParticle->xVel,
+													&tempParticle->yVel,
+													&tempParticle->heat,
+													&elementIndex) == EOF) {return FALSE;}
+
+				tempParticle->element = elements[elementIndex];
+				tempParticle->set = TRUE;
+				int k;
+				for(k = 0; k < MAX_SPECIALS; k++)
+				{
+					tempParticle->specialVals[k] = tempParticle->element->specialVals[k];
+				}
+
+				allCoords[getIndex(i, j)] = tempParticle;
+				setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+			}
 		}
 
 		fclose(fp);

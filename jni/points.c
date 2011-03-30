@@ -15,9 +15,10 @@ static int dy;
 
 void createPoint(int xCoord, int yCoord, struct Element* element)
 {
-	//If there are point available
+	//If there are points available
 	if (loq > 0)
 	{
+		int index;
 		//Decrement number of points available
 		loq--;
 		//Get the pointer to the particle
@@ -41,7 +42,12 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 
 		//Set the frozen state
 		i->frozen = FALSE;
-		i->specialVals = i->element->specialVals;
+
+		//Copy special vals from element
+		for(index = 0; index < MAX_SPECIALS; index++)
+		{
+			i->specialVals[index] = i->element->specialVals[index];
+		}
 
 		//Set the initial heat
 		if(element->startingTemp == 0)
