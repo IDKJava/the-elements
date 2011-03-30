@@ -488,13 +488,13 @@ void UpdateView(void)
 											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
 											if (temporAllCoords && temporAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
-												setElement(tempAllCoords,elements[SPAWN_ELEMENT]);
+												setElement(temporAllCoords, elements[SPAWN_ELEMENT]);
 												temporAllCoords->specialVals[0] = tempParticle->specialVals[0];//specialVals[0] = index of element to spawn
 											}
-											/*else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
+											else if (!temporAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
 												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[0]]); //1/200 chance of spawning
-											}*/
+											}
 										}
 									}
 								}
