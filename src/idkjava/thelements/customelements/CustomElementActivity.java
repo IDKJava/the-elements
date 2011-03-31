@@ -1,4 +1,4 @@
-package idkjava.thelements;
+package idkjava.thelements.customelements;
 
 import idkjava.thelements.game.CustomElementManager;
 import android.app.Activity;

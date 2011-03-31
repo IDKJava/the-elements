@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding = "utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="fill_parent" android:layout_width="fill_parent" android:background="@drawable/gradient_gray">
     <ToggleButton android:layout_alignParentLeft="true" android:layout_width="wrap_content" android:text="ToggleButton" android:layout_height="wrap_content" android:id="@+id/customToggle"></ToggleButton>
-    <TextView android:layout_toRightOf="@+id/customToggle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignTop="@+id/customToggle" android:text="Name" android:textSize="20sp" android:id="@+id/nameText"></TextView>
-    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/button1" android:layout_toRightOf="@+id/nameText" android:text="@string/edit" android:textSize="20sp"></Button>
+    <TextView android:layout_toRightOf="@+id/customToggle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignTop="@+id/customToggle" android:text="Name" android:id="@+id/nameText" android:textSize="24sp" android:textColor="@color/black"></TextView>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/edit" android:id="@+id/editButton" android:layout_alignParentRight="true" android:textSize="24sp"></Button>
 </RelativeLayout>

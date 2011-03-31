@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import idkjava.thelements.R;
+import idkjava.thelements.customelements.CustomElementManagerActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;

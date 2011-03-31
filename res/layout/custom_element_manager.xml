@@ -1,6 +1,6 @@
 
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:background="@drawable/gradient_gray">
         <TextView android:layout_alignParentTop="true" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/custom_elements" android:layout_centerHorizontal="true" android:textSize="30sp" android:textColor="@color/black"></TextView>
-        <ListView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_below="@+id/textView1" android:id="@+id/customListView"></ListView>
-        <Button android:layout_width="wrap_content" android:layout_below="@+id/customListView" android:layout_height="wrap_content" android:id="@+id/button1" android:layout_alignLeft="@+id/customListView" android:layout_alignRight="@+id/customListView" android:text="@string/create_element" android:textSize="24sp"></Button>
+        <ListView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_below="@+id/textView1" android:id="@+id/customListView" android:layout_above="@+id/createButton"></ListView>
+        <Button android:layout_height="wrap_content" android:text="@string/create_element" android:textSize="24sp" android:id="@+id/createButton" android:layout_alignParentBottom="true" android:layout_width="fill_parent"></Button>
     </RelativeLayout>
