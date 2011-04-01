@@ -5,10 +5,11 @@ import idkjava.thelements.R;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ToggleButton;
@@ -32,6 +33,7 @@ public class CustomElementArrayAdapter extends ArrayAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent)
 	{
 		final int pos = position;
+		final Context contextF = _context;
 		final List<CustomElement> _finalObjects = _objects;
 		convertView = _inflater.inflate(R.layout.custom_element, parent, false);
 	    convertView.setBackgroundResource(android.R.drawable.menuitem_background);
@@ -47,7 +49,13 @@ public class CustomElementArrayAdapter extends ArrayAdapter {
 		public void onClick(View v)
 		{
 			if(v == editButton)
+			{
 				//Start edit activity
+				Intent intent = new Intent("idkjava.thelements.customelements.ACTION_EDIT");
+				intent.putExtra("name", _finalObjects.get(position).getName());
+				contextF.startActivity(intent);
+			}
+			
 			if(v == elementToggle)
 				_finalObjects.get(pos).toggle();
 		}

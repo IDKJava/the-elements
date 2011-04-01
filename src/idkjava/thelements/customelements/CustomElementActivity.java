@@ -8,8 +8,12 @@ import android.os.Bundle;
 
 public class CustomElementActivity extends Activity
 {
-	//TODO: Depending on the Intent, ACTION_EDIT or ACTION_NEW, set up the UI with
+	//TODO: 1) Depending on the Intent, ACTION_EDIT or ACTION_NEW, set up the UI with
 	//either default or loaded data, and allow the user to edit and save
+	// 2) Make sure no duplicate names can be entered.
+	/*
+	 * All elements held in same file, accessed by name.
+	 */
 	private Intent callingIntent;
 	
 	
@@ -22,8 +26,9 @@ public class CustomElementActivity extends Activity
 		if(callingIntent.getAction() == Intent.ACTION_VIEW)
 		{
 			//Get the filename that should be stored in the intent data
-			Uri intentData = callingIntent.getData();
-			String filename = intentData.getPath();
+			Bundle bundle = getIntent().getExtras();
+			String elementName = bundle.getString("name");
+			
 			//int customElementIndex = CustomElementManager.loadAndGetIndex(filename.toCharArray());
 			//if(customElementIndex != -1)
 			//{

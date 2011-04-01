@@ -2,6 +2,7 @@ package idkjava.thelements.customelements;
 
 import idkjava.thelements.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class CustomElementManagerActivity extends Activity
 	{
 		super.onCreate(icicle);
 		setContentView(R.layout.custom_element_manager);
+		initElements();
 		Window window = getWindow();
 	    // Eliminates color banding
 	    window.setFormat(PixelFormat.RGBA_8888);
@@ -32,5 +34,19 @@ public class CustomElementManagerActivity extends Activity
 	    //TODO: Implement storage of elements, opening of elements, and use of them in the c-backend
 		elementListView.setAdapter(arrayAdapter);
 		
+	}
+	private void initElements()
+	{
+		File file = new File("/sdcard/thelements/customelements.lib");
+		if(file.exists())
+		{
+			
+			
+			
+		}
+		else
+		{
+			file.mkdirs();
+		}
 	}
 }
