@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class CustomElementArrayAdapter extends ArrayAdapter {
@@ -41,7 +42,8 @@ public class CustomElementArrayAdapter extends ArrayAdapter {
 		final ToggleButton elementToggle = (ToggleButton) convertView.findViewById(R.id.customToggle);
 		elementToggle.setChecked(_objects.get(pos).getState());
 		final Button editButton = (Button) convertView.findViewById(R.id.editButton);
-		
+		TextView nameText = (TextView) convertView.findViewById(R.id.nameText);
+		nameText.setText(_objects.get(pos).getName());
 		
 	    convertView.setOnClickListener(new OnClickListener(){
 	    
