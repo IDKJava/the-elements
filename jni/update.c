@@ -79,41 +79,44 @@ void UpdateView(void)
 			{
 				if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
 				{
+					if ( dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 )
 					//Normal drawing
-					if (cElement->index >= NORMAL_ELEMENT)
 					{
-						//Draw it solid
-						if(cElement->inertia == INERTIA_UNMOVABLE)
+						if (cElement->index >= NORMAL_ELEMENT)
 						{
-							if (dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+							//Draw it solid
+							if(cElement->inertia == INERTIA_UNMOVABLE)
 							{
-								createPoint(mouseX + dx, mouseY + dy, cElement);
+								if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+								{
+									createPoint(mouseX + dx, mouseY + dy, cElement);
+								}
+							}
+							//Draw it randomized
+							else
+							{
+								if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+								{
+									createPoint(mouseX + dx, mouseY + dy, cElement);
+								}
 							}
 						}
-						//Draw it randomized
-						else
+						//Special Drag case
+						else if (cElement->index == DRAG_ELEMENT)
 						{
-							if (rand() % 3 == 1 && dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+							if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0)
 							{
-								createPoint(mouseX + dx, mouseY + dy, cElement);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
+								allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
 							}
 						}
-					}
-					//Special Drag case
-					else if (cElement->index == DRAG_ELEMENT)
-					{
-						if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0 && dx + lastMouseX < workWidth && dx + lastMouseX > 0 && dy + lastMouseY < workHeight && dy + lastMouseY > 0)
+						//Special Eraser case
+						else if (cElement->index == ERASER_ELEMENT)
 						{
-							allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
-							allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
-						}
-					}
-					//Special Eraser case
-					else if (cElement->index == ERASER_ELEMENT)
-					{
-						if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] && dx + mouseX < workWidth && dx + mouseX > 0 && dy + mouseY < workHeight && dy + mouseY > 0)
-						{
-							deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
+							if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))])
+							{
+								deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
+							}
 						}
 					}
 				}
@@ -388,48 +391,19 @@ void UpdateView(void)
 					//Reduce velocities
 					if(tempXVel < 0)
 					{
-						//__android_log_write(ANDROID_LOG_INFO, "TheElements", "tempXVel < 0");
-						if(tempInertia >= -tempXVel)
-						{
-							tempXVel = 0;
-						}
-						else
-						{
-							tempXVel += tempInertia;
-						}
+						tempXVel += 1;
 					}
 					else if(tempXVel > 0)
 					{
-						if(tempInertia >= tempXVel)
-						{
-							tempXVel = 0;
-						}
-						else
-						{
-							tempXVel -= tempInertia;
-						}
+						tempXVel -= 1;
 					}
 					if(tempYVel < 0)
 					{
-						if(tempInertia >= -tempYVel)
-						{
-							tempYVel = 0;
-						}
-						else
-						{
-							tempYVel += tempInertia;
-						}
+							tempYVel += 1;
 					}
 					else if(tempYVel > 0)
 					{
-						if(tempInertia >= tempYVel)
-						{
-							tempYVel = 0;
-						}
-						else
-						{
-							tempYVel -= tempInertia;
-						}
+							tempYVel -= 1;
 					}
 
 					tempParticle->xVel = tempXVel;
@@ -452,25 +426,15 @@ void UpdateView(void)
 					tempParticle->heat -= heatChange;
 				}
 
-				//Resolve heat changes
-				if(tempParticle->heat < tempParticle->element->lowestTemp)
-				{
-					//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
-					setElement(tempParticle, tempParticle->element->lowerElement);
-				}
-				else if(tempParticle->heat > tempParticle->element->highestTemp)
-				{
-					//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
-					setElement(tempParticle, tempParticle->element->higherElement);
-				}
-
 				int i;
-				for ( i = 0; i < MAX_SPECIALS; i++){
+				for (i = 0; i < MAX_SPECIALS; i++)
+				{
 					if(tempElement && tempElement->specials[i] != SPECIAL_NOT_SET)
 					{
 						switch((int)tempElement->specials[i])
 						{
 
+						//Generator
 						case 1:
 						{
 								//frozen[counter] = 0;
@@ -498,18 +462,20 @@ void UpdateView(void)
 										}
 									}
 								}
-
-							break;
+								break;
 						}
+						//Breakable
 						case 2:
 						{
 							if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
 							{
 								setElement(tempParticle, elements[NORMAL_ELEMENT]);
 							}
+							__android_log_write(ANDROID_LOG_INFO, "TheElements", "Breakable Trigger");
 							break;
 						}
-						case 3: //Ice cycle
+						//Growing
+						case 3:
 						{
 							int diffX, diffY;
 							struct Particle* temporAllCoords;
@@ -517,173 +483,119 @@ void UpdateView(void)
 							{
 								for (diffY = -1; diffY <= 1; diffY++)
 								{
-									if ( diffY )
-									temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-									if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
+									if (diffY + tempY > 0 && tempY + diffY < workHeight && tempX + diffX > 0 && diffX + diffX < workWidth )
 									{
-										char buffer[100];
-										sprintf(buffer, "diffX %d diffY %d tempX %d tempY %d %d %d", diffX, diffY, tempX, tempY, temporAllCoords->x, temporAllCoords->y);
-										//Change the water to ice
-										__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
-										setElement(temporAllCoords, tempParticle->element);
+										temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+										if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
+										{
+											setElement(temporAllCoords, tempParticle->element);
+										}
 									}
 								}
 							}
 
 							break;
 						}
+						//Burner
 						case 4:
 						{
-//							int i,j;
-//							struct Particle* temporAllCoords;
-//							for ( i = -1; i <= 1; i++)
-//							{
-//								for( j = -1; j <=1; j++ )
-//								{
-//									if((i!=0||j!=0) && tempX+i < workWidth && tempX+i > 0 && tempY+j < workHeight && tempY+j>1 )
-//									{
-//										temporAllCoords=allCoords[getIndex(tempX+i,tempY+j)];
-//										if(temporAllCoords){
-//											temporAllCoords->heat+=10;
-//										}
-//									}
-//								}
-//							}
-//							break;
-						}
-						case 5:
-						{
-//							if ( tempParticle->heat >= tempParticle->element->highestTemp) // if the heat is above the threshold
-//							{
-//								int explosiveness = tempParticle->specialVals[i];
-//								int diffX,diffY;
-//								int distance;
-//								struct Particle* tempAllCoords;
-//								for ( diffX = -explosiveness; diffX <= explosiveness; diffX++)
-//								{
-//									for (diffY = -explosiveness; diffY <= explosiveness; diffY++ )
-//									{
-//										distance = (int)sqrt( (float)(diffX*diffX + diffY*diffY)); //Might want to optimize this by removing the sqrt later if we have speed issues
-//										if ( distance <= explosiveness )
-//										{
-//											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-//											if (!tempAllCoords && rand()%3)
-//											{
-//												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
-//											}
-//											if ( tempAllCoords )
-//											{
-//												tempAllCoords->xVel += (int)(10*((float)explosiveness/(float)diffX));
-//												tempAllCoords->yVel += (int)(10*((float)explosiveness/(float)diffY));
-//											}
-//										}
-//									}
-//								}
-//							}
-
+							//__android_log_write(ANDROID_LOG_INFO, "TheElements", "we've got fire");
+							int diffX, diffY;
+							struct Particle* temporAllCoords;
+							for (diffX = -1; diffX <= 1; diffX++)
+							{
+								for(diffY = -1; diffY <=1; diffY++)
+								{
+									if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX > 0 && tempY+diffY < workHeight && tempY+diffY > 1)
+									{
+										temporAllCoords=allCoords[getIndex(tempX+diffX,tempY+diffY)];
+										if(temporAllCoords)
+										{
+											temporAllCoords->heat+=10;
+										}
+									}
+								}
+							}
 							break;
 						}
+						//Explosive
+						case 5:
+						{
+							if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
+							{
+								int explosiveness = tempParticle->specialVals[i];
+								int diffX, diffY;
+								int distance;
+								struct Particle* tempAllCoords;
+
+								//In radius of explosion, add velocity
+								for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
+								{
+									for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
+									{
+										distance = diffX*diffX + diffY*diffY;
+										if (distance <= explosiveness*explosiveness && tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+										{
+											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+											if (tempAllCoords && rand()%5 == 0)
+											{
+												if(diffX != 0 && tempAllCoords->xVel < explosiveness)
+												{
+													tempAllCoords->xVel += diffX / abs(diffX);
+												}
+												if(diffY != 0 && tempAllCoords->yVel < explosiveness)
+												{
+													tempAllCoords->yVel += diffY / abs(diffY);
+												}
+											}
+										}
+									}
+								}
+
+								for(diffX = -5; diffX <= 5; diffX++)
+								{
+									for(diffY = -5; diffY <= 5; diffY++)
+									{
+										tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+										if(!tempAllCoords && rand()%100 == 0)
+										{
+											createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
+										}
+										else if(tempAllCoords)
+										{
+											tempAllCoords->heat += 50;
+										}
+									}
+								}
+							}
+							break;
+
+						}
+						case 6:
+						{
+							if (rand()%tempParticle->specialVals[i])
+							{
+								deletePoint(tempParticle);
+							}
+							break;
+						}
+						//Default: do nothing
+						default:
+						break;
+
 					}
 
-					/*
-					if (fireburn[element[counter]] == 1) //Fire cycle
+					//Resolve heat changes
+					if(tempParticle->heat < tempParticle->element->lowestTemp)
 					{
-						frozen[counter] = 0;
-						random = rand();
-						if (collision[element[allCoords[tempX + 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX + 1][tempY], 5);
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX][tempY - 1], 5);
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX - 1][tempY]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX - 1][tempY], 5);
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX][tempY + 1], 5);
-							tempYVel[allCoords[tempX][tempY + 1]] = 2;
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX + 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX + 1][tempY + 1], 5);
-							tempYVel[allCoords[tempX][tempY + 1]] = 2;
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX - 1][tempY + 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX - 1][tempY + 1], 5);
-							tempYVel[allCoords[tempX][tempY + 1]] = 2;
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX + 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX + 1][tempY - 1], 5);
-						}
-						random = rand();
-						if (collision[element[allCoords[tempX - 1][tempY - 1]]][element[counter]] == 6 && random % 3 != 0)
-						{
-							setElement(allCoords[tempX - 1][tempY - 1], 5);
-						}
+						//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
+						setElement(tempParticle, tempParticle->element->lowerElement);
 					}
-					if (element[counter] == 8) //Spawn cycle
+					else if(tempParticle->heat > tempParticle->element->highestTemp)
 					{
-						frozen[counter] = 0;
-						int check1, check2, temp;
-						for (check1 = -2; check1 <= 2; check1++)
-						{
-							for (check2 = -2; check2 <= 2; check2++)
-							{
-								if (tempX + check1 > 1 && tempX + check1 < workWidth && tempY + check2 >= 0 && tempY + check2 < workHeight)
-								{
-									temp = allCoords[tempX + check1][tempY + check2];
-									if (temp != -1 && element[temp] == 7) //There's a generator adjacent
-									{
-										element[temp] = 8; //Change the generator to a spawn
-										spawn[temp] = spawn[counter]; //Make the spawn element the same as this one
-									}
-									else if (temp == -1 && rand() % 200 == 0 && loq < TPoints - 1) //There's an empty spot
-									{
-										createPoint(tempX + check1, tempY + check2, spawn[counter]); //1/200 chance of spawning
-									}
-								}
-							}
-						}
+						//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
+						setElement(tempParticle, tempParticle->element->higherElement);
 					}
-					if (growing[element[counter]] == 1) //Ice cycle
-					{
-						frozen[counter] = 0;
-						int check1, check2, temp;
-						for (check1 = -1; check1 <= 1; check1++)
-						{
-							for (check2 = -1; check2 <= 1; check2++)
-							{
-								temp = allCoords[tempX + check1][tempY + check2];
-								if (temp != -1 && element[temp] == 1 && rand() % 10 == 0)
-								{
-									//Change the water to ice
-									setElement(temp, element[counter]);
-									frozen[temp] = 0;
-								}
-							}
-						}
-					}
-					if (condensing[element[counter]] != -1) //Steam cycle
-					{
-						frozen[counter] = 0;
-						if (rand() % 200 == 0) //1/200 chance
-						{
-							setElement(counter, condensing[element[counter]]); //"Condense" the steam
-						}
-					}
-					*/
 					}
 				}
 			}

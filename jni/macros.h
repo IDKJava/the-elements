@@ -13,7 +13,7 @@
 
 #define MAX_POINTS 100000
 #define NUM_BASE_ELEMENTS 24
-#define MAX_SPECIALS 5
+#define MAX_SPECIALS 6
 
 #define DEFAULT_BRUSH_SIZE 4
 

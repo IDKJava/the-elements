@@ -92,7 +92,7 @@ public class MenuBar extends LinearLayout
 				}
 			}
 		);
-		if(MainActivity.getElement() == 3) //If the current element is eraser
+		if(MainActivity.getElement() == MainActivity.ERASER_ELEMENT) //If the current element is eraser
 		{
 			 //Start off the button to being on
 			eraser_button.setImageResource(R.drawable.eraser_on);
