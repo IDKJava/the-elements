@@ -24,13 +24,14 @@ import android.widget.ListView;
 public class CustomElementManagerActivity extends Activity
 {
 	 List<CustomElement> elementList = new ArrayList<CustomElement>();
+	 CustomElementArrayAdapter arrayAdapter;
 	//TODO(MASSIVE,ARMORED): This should display all loaded Custom Elements and allow selection,
 	//editing, and creation
 	public void onCreate(Bundle icicle)
 	{
 		super.onCreate(icicle);
 		setContentView(R.layout.custom_element_manager);
-		initElements();
+		refreshElements();
 		Window window = getWindow();
 	    // Eliminates color banding
 	    window.setFormat(PixelFormat.RGBA_8888);
@@ -40,13 +41,12 @@ public class CustomElementManagerActivity extends Activity
 	    char[] charArray = {4, 5};
 	    //CustomElement testElement = new CustomElement("TestElement", charArray, charArray);
 	    //writeFile(testElement);
-	    initElements();
-	    CustomElementArrayAdapter arrayAdapter = new CustomElementArrayAdapter(this, R.layout.custom_element_edit_item, elementList);
+	    arrayAdapter = new CustomElementArrayAdapter(this, R.layout.custom_element_edit_item, elementList);
 	    //TODO: Implement storage of elements, opening of elements, and use of them in the c-backend
 		elementListView.setAdapter(arrayAdapter);
 		
 	}
-	private void initElements()
+	private void refreshElements()
 	{
 		elementList.clear();
 		File file = new File("/sdcard/thelements/elements/");
@@ -62,6 +62,7 @@ public class CustomElementManagerActivity extends Activity
 		{
 			file.mkdirs();
 		}
+		arrayAdapter.notifyDataSetChanged();
 	}
 	private void readFile(File elementFile)//stores a CustomElement to elementList based on the passed file
 	{
@@ -132,5 +133,6 @@ public class CustomElementManagerActivity extends Activity
 		File file = new File("/sdcard/thelements/elements/" + customElement.getName());
 		if(file.exists())
 			file.delete();
+		refreshElements();
 	}
 }
