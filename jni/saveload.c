@@ -130,6 +130,10 @@ char saveState(char* saveLoc)
 							tempParticle->heat,
 							tempParticle->element->index);
 				}
+				else
+				{
+					fprintf(fp, "()");
+				}
 			}
 			fprintf(fp, "\n");
 		}
@@ -138,11 +142,10 @@ char saveState(char* saveLoc)
 
 		return TRUE;
 	}
-	else
-	{
-		//An error occurred, most likely lack of an SDCard
-		return FALSE;
-	}
+
+	fclose(fp);
+
+	return FALSE;
 }
 
 char loadState(char* loadLoc)

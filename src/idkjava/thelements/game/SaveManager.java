@@ -2,6 +2,7 @@ package idkjava.thelements.game;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.UnsupportedEncodingException;
 
 import android.util.Log;
 
@@ -40,11 +41,28 @@ public class SaveManager
 	//Overloading these functions -- be careful
 	public static void saveState(String filename)
 	{
-		saveState(filename.toCharArray());
+		try
+		{
+			saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			//Hopefully this doesn't happen
+			e.printStackTrace();
+		}
 	}
 	public static void loadState(String filename)
 	{
-		loadState(filename.toCharArray());
+		try
+		{
+			loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			//Hopefully this doesn't happen
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean fileExists(String filename)
@@ -53,8 +71,8 @@ public class SaveManager
 		return file.exists();
 	}
 	
-	public native static char saveState(char[] saveLoc);
-	public native static char loadState(char[] loadLoc);
+	public native static char saveState(byte[] saveLoc);
+	public native static char loadState(byte[] loadLoc);
 	
 	static
 	{

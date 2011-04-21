@@ -66,11 +66,32 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, job
 }
 
 //Save/load functions
-char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, char* saveLoc)
+char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
 {
-	return saveState(saveLoc);
+	jsize len = (*env)->GetArrayLength(env, saveLoc);
+	jbyte* saveLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
+	(*env)->GetByteArrayRegion(env, saveLoc, 0, len, saveLoc2);
+	char* saveLoc3 = (char*) malloc((len+1) * sizeof(char));
+	int i;
+	char buffer[100];
+	for(i = 0; i < len; i++)
+	{
+		saveLoc3[i] = saveLoc2[i];
+	}
+	saveLoc3[len] = 0;
+
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", saveLoc3);
+
+	if(saveState(saveLoc3))
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: success!");
+		return TRUE;
+	}
+
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: failed!");
+	return FALSE;
 }
-char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, char* loadLoc)
+char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
 {
 	return loadState(loadLoc);
 }
