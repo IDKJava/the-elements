@@ -56,7 +56,7 @@ public class SaveManager
 	{
 		try
 		{
-			loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename).getBytes("ISO-8859-1"));
 		}
 		catch (UnsupportedEncodingException e)
 		{

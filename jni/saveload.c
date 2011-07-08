@@ -122,7 +122,7 @@ char saveState(char* saveLoc)
 				tempParticle = allCoords[getIndex(counterX, counterY)];
 				if(tempParticle)
 				{
-					fprintf(fp, "(%d %d %d %d %d %d) ",
+					fprintf(fp, "(%f %f %d %d %d %d)",
 							tempParticle->x,
 							tempParticle->y,
 							tempParticle->xVel,
@@ -150,6 +150,9 @@ char saveState(char* saveLoc)
 
 char loadState(char* loadLoc)
 {
+	char buffer[100];
+	sprintf(buffer, "loadState: %s", loadLoc);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 	FILE *fp;
 	/*
 	char loadLoc[256];
@@ -181,18 +184,23 @@ char loadState(char* loadLoc)
 	//Load the file for reading
 	fp = fopen(loadLoc, "r");
 
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loaded successfully");
+
 	//Clear the screen and set up some temp variables
 	arraySetup();
 	elementSetup();
 	gameSetup();
 
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Setup successfully");
+
 	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY;
 	struct Element* tempElement;
 	struct Particle* tempParticle;
+	char lookAhead;
 
 	if(fp != NULL)
 	{
-		if(fscanf(fp, "%d", &numElementsSaved) == EOF)
+		if(fscanf(fp, "%d\n\n", &numElementsSaved) == EOF)
 		{
 			return FALSE;
 		}
@@ -219,7 +227,9 @@ char loadState(char* loadLoc)
 			if(fscanf(fp, "%d", &tempElement->inertia) == EOF) {return FALSE;}
 		}
 
-		if(fscanf(fp, "%d %d", &sizeX, &sizeY) == EOF) {return FALSE;}
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "Custom elements loaded");
+
+		if(fscanf(fp, "%d %d\n\n", &sizeX, &sizeY) == EOF) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
 		if(sizeX > workWidth)
@@ -235,27 +245,44 @@ char loadState(char* loadLoc)
 		{
 			for(j = 0; j < sizeY; j++)
 			{
+				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading particle");
 				if(loq <= 0) {return TRUE;}
-				tempParticle = avail[loq];
 
-				if(fscanf(fp, "(%d %d %d %d %d %d)", &tempParticle->x,
-													&tempParticle->y,
-													&tempParticle->xVel,
-													&tempParticle->yVel,
-													&tempParticle->heat,
-													&elementIndex) == EOF) {return FALSE;}
+				if(fscanf(fp, "(%c", &lookAhead) == EOF) {return FALSE;}
 
-				tempParticle->element = elements[elementIndex];
-				tempParticle->set = TRUE;
-				int k;
-				for(k = 0; k < MAX_SPECIALS; k++)
+
+				if(lookAhead != ')')
 				{
-					tempParticle->specialVals[k] = tempParticle->element->specialVals[k];
-				}
+					sprintf(buffer, "Non-blank particle: %c", lookAhead);
+					__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+					loq--;
+					tempParticle = avail[loq];
+					fseek(fp, -2, SEEK_CUR);
+					if(fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
+														&tempParticle->y,
+														&tempParticle->xVel,
+														&tempParticle->yVel,
+														&tempParticle->heat,
+														&elementIndex) == EOF) {return FALSE;}
 
-				allCoords[getIndex(i, j)] = tempParticle;
-				setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+					tempParticle->element = elements[elementIndex];
+					tempParticle->set = TRUE;
+					int k;
+					for(k = 0; k < MAX_SPECIALS; k++)
+					{
+						tempParticle->specialVals[k] = tempParticle->element->specialVals[k];
+					}
+
+					allCoords[getIndex(i, j)] = tempParticle;
+					setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+
+					sprintf(buffer, "x: %d, y: %d, element: %d", tempParticle->x, tempParticle->y, tempParticle->element->index);
+					__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+				}
+				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Particle loaded successfully");
 			}
+			//Move the cursor one forward to read over the newline
+			fseek(fp, 1, SEEK_CUR);
 		}
 
 		fclose(fp);

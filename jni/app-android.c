@@ -93,7 +93,18 @@ char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thi
 }
 char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
 {
-	return loadState(loadLoc);
+	jsize len = (*env)->GetArrayLength(env, loadLoc);
+	jbyte* loadLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
+	(*env)->GetByteArrayRegion(env, loadLoc, 0, len, loadLoc2);
+	char* loadLoc3 = (char*) malloc((len+1) * sizeof(char));
+	int i;
+	char buffer[100];
+	for(i = 0; i < len; i++)
+	{
+		loadLoc3[i] = loadLoc2[i];
+	}
+	loadLoc3[len] = 0;
+	return loadState(loadLoc3);
 }
 char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
 {
