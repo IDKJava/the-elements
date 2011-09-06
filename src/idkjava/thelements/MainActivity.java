@@ -4,6 +4,7 @@ import idkjava.thelements.game.Control;
 import idkjava.thelements.game.FileManager;
 import idkjava.thelements.game.MenuBar;
 import idkjava.thelements.game.SandView;
+import idkjava.thelements.preferences.Preferences;
 import idkjava.thelements.preferences.PreferencesActivity;
 
 import java.util.List;
@@ -31,22 +32,22 @@ public class MainActivity extends Activity
 	//Constants for zoom
 	public static final boolean ZOOMED_IN = true;
 	public static final boolean ZOOMED_OUT = false;
-	
+
 	//Constants for dialogue ids
 	private static final int INTRO_MESSAGE = 1;
 	private static final int ELEMENT_PICKER = 2;
 	private static final int BRUSH_SIZE_PICKER = 3;
-	
+
 	//Constants for elements
 	public static final char ERASER_ELEMENT = 2;
 	public static final char NORMAL_ELEMENT = 3;
-	
+
 	//Constants for intents
 	public static final char SAVE_STATE_ACTIVITY = 0;
-	
+
 	//Request code constants
 	public static final int REQUEST_CODE_SELECT_SAVE = 0;
-	
+
 	static CharSequence[] elementslist;
 
 	public static boolean play = true;
@@ -72,30 +73,30 @@ public class MainActivity extends Activity
 	{
 		//Uses onCreate from the general Activity
 		super.onCreate(savedInstanceState);
-		
+
 		//Initialize most of the arrays in JNI
 		nativeInit();
-		
-		//Set the preferences
-		PreferencesActivity.setPreferences(this);
+
+		//Init the shared preferences and set the ui state
+		Preferences.initSharedPreferences(this);
+		Preferences.loadUIState();
 
 		//Set Sensor + Manager
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		
+
 		setUpViews();
 
 		//Set up the elements list
 		Resources res = getResources();
 		elementslist = res.getTextArray(R.array.elements_list);
-		
+
 		//Load the custom elements
 		//CustomElementManager.reloadCustomElements();
-		
+
 		//Add custom elements to the elements list
 	}
 
-	
 	private final SensorEventListener mySensorListener = new SensorEventListener()
 	{
 		public void onSensorChanged(SensorEvent event)
@@ -105,62 +106,75 @@ public class MainActivity extends Activity
 		}
 
 		public void onAccuracyChanged(Sensor sensor, int accuracy)
-		{
-		}
+		{}
 	};
-	
+
 	@Override
 	protected void onPause()
 	{
+		Log.v("TheElements", "MainActivity.onPause()");
+		//Use the normal onPause
+		super.onPause();
+		//Call onPause for the view
+		sand_view.onPause();
+		
 		//Do a temp save
 		saveTempState();
 		//Set the preferences to indicate paused
 		SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
 		editor.putBoolean("paused", true);
 		editor.commit();
-		//Use the normal onPause
-		super.onPause();
-		//Call onPause for the view
-		sand_view.onPause();
+
 	}
 
 	@Override
 	protected void onResume()
 	{
-		boolean oldui = ui;
-		PreferencesActivity.setPreferences(this);
-		if(ui != oldui)
-		{
-			Log.v("TheElements", "UI was changed");
-			setUpViews();
-		}
-		
+		Log.v("TheElements", "MainActivity.onResume()");
+		//Use the super onResume
+		super.onResume();
+
+		//Load the settings shared preferences which deals with if we're resuming from pause or not
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+		//Load the regular preferences into JNI
+		Preferences.loadPreferences();
+
+		//Register the accelerometer listener
 		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+
+		//Set up the file manager for saving and loading
+		FileManager.intialize(this);
 
 		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", false))
 		{
-			//Load the save
-			//TODO: loadTempState();
+			Log.v("TheElements", "Resuming from pause");
+
+			//Check to see if UI changed
+			boolean oldui = ui;
+			Preferences.loadUIState();
+			if (ui != oldui)
+			{
+				setUpViews();
+			}
+
 			//Set the preferences to indicate unpaused
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("paused", false);
 			editor.commit();
 		}
-		
-		//Set up the file manager for saving and loading
-		FileManager.intialize(this);
-		
-		//First run
-		if (settings.getBoolean("firstrun", true))
+		else if (settings.getBoolean("firstrun", true))
 		{
+			//Indicate that the demo should be loaded by nativeLoadState()
 			shouldLoadDemo = true;
+			//Unset firstrun
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putBoolean("firstrun", false);
 			editor.commit();
 
-			showDialog(INTRO_MESSAGE); //Pop up intro message
+			//Also show the intro message
+			showDialog(INTRO_MESSAGE);
 		}
 
 		if (ui)
@@ -171,10 +185,10 @@ public class MainActivity extends Activity
 			menu_bar.setActivity(this);
 		}
 
-		//Use the super onResume
-		super.onResume();
 		//Call onResume() for view too
+		Log.v("TheElements", "sand_view.onResume()");
 		sand_view.onResume();
+		Log.v("TheElements", "sand_view.onResume() done");
 	}
 
 	protected Dialog onCreateDialog(int id) //This is called when showDialog is called
@@ -225,13 +239,13 @@ public class MainActivity extends Activity
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
-					if(item == 0)
+					if (item == 0)
 					{
 						setBrushSize((char) 0);
 					}
 					else
 					{
-						setBrushSize((char) java.lang.Math.pow(2, item-1));
+						setBrushSize((char) java.lang.Math.pow(2, item - 1));
 					}
 				}
 			});
@@ -325,19 +339,17 @@ public class MainActivity extends Activity
 		}
 		return false;
 	}
-	
+
 	//Set up the views based on the state of ui
 	private void setUpViews()
 	{
 		//Set the content view based on this variable
-		if(ui)
+		if (ui)
 		{
-			Log.v("TheElements", "setcontentview - ui");
 			setContentView(R.layout.main_activity_ui);
 		}
 		else
 		{
-			Log.v("TheElements", "setcontentview - non_ui");
 			setContentView(R.layout.main_activity_non_ui);
 		}
 
@@ -345,33 +357,35 @@ public class MainActivity extends Activity
 		menu_bar = (MenuBar) findViewById(R.id.menu_bar);
 		sand_view = (SandView) findViewById(R.id.sand_view);
 		control = (Control) findViewById(R.id.control);
-		
+
 		//Set the screen state for sand_view now that it's defined
-		PreferencesActivity.setScreenState(this);
+		Preferences.loadScreenState();
 	}
-	
-	//Save the current state
+
+	//Trigger the SaveStateActivity
 	public void saveState()
 	{
 		Intent tempIntent = new Intent(this, SaveStateActivity.class);
 		startActivity(tempIntent);
 	}
+
+	//Trigger the LoadStateActivity
 	public void loadState()
 	{
 		Intent tempIntent = new Intent(this, LoadStateActivity.class);
 		startActivity(tempIntent);
 	}
-	
+
 	//Check whether or not the game is zoomed in
-	public static boolean zoomedIn()
+	public static boolean isZoomedIn()
 	{
 		return zoomState;
 	}
 
+	//@formatter:off
 	//JNI Functions
 	//Save/load functions
 	public static native char saveTempState();
-	public static native char loadTempState();
 	public static native char loadDemoState();
 	public static native char removeTempSave();
 	
@@ -398,6 +412,7 @@ public class MainActivity extends Activity
 	public static native char login();
 	public static native char register();
 	public static native void viewErr(); //TODO: Figure this out
+	//@formatter:on
 
 	static
 	{

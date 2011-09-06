@@ -5,7 +5,7 @@
   android:layout_height="fill_parent"
   android:orientation="vertical">
 	<EditText
-		android:text="@string/enter_save_name"
+		android:hint="@string/enter_save_name"
 		android:id="@+id/save_state_filename"
 		android:layout_gravity="center_horizontal"
 		android:layout_width="200dip"

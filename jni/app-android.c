@@ -55,14 +55,41 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 	dimensionsChanged = TRUE;
 
 	arraySetup();
+	char buffer[256];
 	gameSetup();
+	sprintf(buffer, "Available particles: %d", loq);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 	glInit();
+	sprintf(buffer, "Available particles: %d", loq);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+
+	sprintf(buffer, "Available particles: %d", loq);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 }
 void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
 	glRender();
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
+}
+void Java_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
+{
+	char loadLoc[256];
+
+	strcpy(loadLoc, ROOT_FOLDER);
+	strcat(loadLoc, SAVES_FOLDER);
+	if(shouldLoadDemo)
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading demo");
+		strcat(loadLoc, DEMO_SAVE);
+	}
+	else
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadTempState");
+		strcat(loadLoc, TEMP_SAVE);
+	}
+	strcat(loadLoc, SAVE_EXTENSION);
+	loadState(loadLoc);
 }
 
 //Save/load functions
@@ -82,7 +109,7 @@ char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thi
 
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", saveLoc3);
 
-	if(saveState(saveLoc3))
+	if(saveTempToFile(saveLoc3))
 	{
 		__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: success!");
 		return TRUE;
@@ -104,25 +131,27 @@ char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thi
 		loadLoc3[i] = loadLoc2[i];
 	}
 	loadLoc3[len] = 0;
-	return loadState(loadLoc3);
+
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", loadLoc3);
+
+	if(loadFileToTemp(loadLoc3))
+	{
+		__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadLoc: success!");
+		return TRUE;
+	}
+
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadLoc: failed!");
+	return FALSE;
 }
 char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
 {
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempState");
 	char saveLoc[256];
 	strcpy(saveLoc, ROOT_FOLDER);
 	strcat(saveLoc, SAVES_FOLDER);
 	strcat(saveLoc, TEMP_SAVE);
 	strcat(saveLoc, SAVE_EXTENSION);
 	return saveState(saveLoc);
-}
-char Java_idkjava_thelements_MainActivity_loadTempState(JNIEnv* env, jobject this)
-{
-	char loadLoc[256];
-	strcpy(loadLoc, ROOT_FOLDER);
-	strcat(loadLoc, SAVES_FOLDER);
-	strcat(loadLoc, TEMP_SAVE);
-	strcat(loadLoc, SAVE_EXTENSION);
-	return loadState(loadLoc);
 }
 char Java_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
 {
@@ -153,22 +182,22 @@ void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 }
 
 //Setter functions
-void Java_idkjava_thelements_preferences_PreferencesActivity_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
+void Java_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
 {
 	cAtmosphere->borderLeft = leftBorderState;
 	cAtmosphere->borderTop = topBorderState;
 	cAtmosphere->borderRight = rightBorderState;
 	cAtmosphere->borderBottom = bottomBorderState;
 }
-void Java_idkjava_thelements_preferences_PreferencesActivity_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
+void Java_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
 {
 	accelOn = (char) accelState;
 }
-void Java_idkjava_thelements_preferences_PreferencesActivity_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
+void Java_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
 {
 	flipped = (char) flippedState;
 }
-void Java_idkjava_thelements_preferences_PreferencesActivity_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
+void Java_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
 	cAtmosphere->backgroundRed = redValue;
@@ -192,11 +221,11 @@ void Java_idkjava_thelements_preferences_PreferencesActivity_setBackgroundColor(
 	loadState(loadLoc);
 	*/
 }
-void Java_idkjava_thelements_preferences_PreferencesActivity_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
+void Java_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
 {
 	cAtmosphere->heat = temp;
 }
-void Java_idkjava_thelements_preferences_PreferencesActivity_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
+void Java_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
 {
 	cAtmosphere->gravity = gravity;
 }

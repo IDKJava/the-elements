@@ -10,7 +10,12 @@
 
 char saveState(char* saveLoc)
 {
-	FILE *fp;
+	//Pause before we start saving
+	//We should be paused in Java anyway, but this is a backup
+	char oldPlay = play;
+	play = FALSE;
+
+	FILE* fp;
 	/*
 	//Strings for file location
 	char timestamp[64], saveLoc[256];
@@ -115,9 +120,9 @@ char saveState(char* saveLoc)
 		 *   .
 		 *   .
 		 */
-		for (counterX = 0; counterX < workWidth; counterX++)
+		for (counterY = 0; counterY < workHeight; counterY++)
 		{
-			for (counterY = 0; counterY < workHeight; counterY++)
+			for (counterX = 0; counterX < workWidth; counterX++)
 			{
 				tempParticle = allCoords[getIndex(counterX, counterY)];
 				if(tempParticle)
@@ -139,21 +144,25 @@ char saveState(char* saveLoc)
 		}
 
 		fclose(fp);
-
+		play = oldPlay;
 		return TRUE;
 	}
 
 	fclose(fp);
-
+	play = oldPlay;
 	return FALSE;
 }
 
 char loadState(char* loadLoc)
 {
+	//Pause before loading so that we don't update frames while loading
+	char oldPlay = play;
+	play = FALSE;
+
 	char buffer[100];
 	sprintf(buffer, "loadState: %s", loadLoc);
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
-	FILE *fp;
+	FILE* fp;
 	/*
 	char loadLoc[256];
 	//Set up the filename
@@ -184,14 +193,10 @@ char loadState(char* loadLoc)
 	//Load the file for reading
 	fp = fopen(loadLoc, "r");
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loaded successfully");
-
 	//Clear the screen and set up some temp variables
 	arraySetup();
 	elementSetup();
 	gameSetup();
-
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Setup successfully");
 
 	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY;
 	struct Element* tempElement;
@@ -227,8 +232,6 @@ char loadState(char* loadLoc)
 			if(fscanf(fp, "%d", &tempElement->inertia) == EOF) {return FALSE;}
 		}
 
-		__android_log_write(ANDROID_LOG_INFO, "TheElements", "Custom elements loaded");
-
 		if(fscanf(fp, "%d %d\n\n", &sizeX, &sizeY) == EOF) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
@@ -241,9 +244,9 @@ char loadState(char* loadLoc)
 			sizeY = workHeight;
 		}
 
-		for(i = 0; i < sizeX; i++)
+		for(j = 0; j < sizeY; j++)
 		{
-			for(j = 0; j < sizeY; j++)
+			for(i = 0; i < sizeX; i++)
 			{
 				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading particle");
 				if(loq <= 0) {return TRUE;}
@@ -253,11 +256,12 @@ char loadState(char* loadLoc)
 
 				if(lookAhead != ')')
 				{
-					sprintf(buffer, "Non-blank particle: %c", lookAhead);
-					__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+					//Loq was checked above
 					loq--;
 					tempParticle = avail[loq];
+
 					fseek(fp, -2, SEEK_CUR);
+
 					if(fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
 														&tempParticle->y,
 														&tempParticle->xVel,
@@ -275,9 +279,6 @@ char loadState(char* loadLoc)
 
 					allCoords[getIndex(i, j)] = tempParticle;
 					setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
-
-					sprintf(buffer, "x: %d, y: %d, element: %d", tempParticle->x, tempParticle->y, tempParticle->element->index);
-					__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 				}
 				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Particle loaded successfully");
 			}
@@ -286,10 +287,87 @@ char loadState(char* loadLoc)
 		}
 
 		fclose(fp);
+		play = oldPlay;
 		return TRUE;
 	}
-
+	play = oldPlay;
 	return FALSE;
+}
+
+char saveTempToFile(char* saveLoc)
+{
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempToFile");
+	FILE* saveFile = fopen(saveLoc, "wb");
+	char tempLoc[256];
+	strcpy(tempLoc, ROOT_FOLDER);
+	strcat(tempLoc, SAVES_FOLDER);
+	strcat(tempLoc, TEMP_SAVE);
+	strcat(tempLoc, SAVE_EXTENSION);
+	FILE* tempFile = fopen(tempLoc, "rb");
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Opened the files");
+
+	char temp;
+
+	while(!feof(tempFile))
+	{
+		temp = fgetc(tempFile);
+		if(ferror(tempFile))
+		{
+			__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error reading from temp.sav file");
+			clearerr(tempFile);
+			break;
+		}
+		else if (!feof(tempFile))
+		{
+			fputc(temp, saveFile);
+			if(ferror(saveFile))
+			{
+				__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error writing to save file");
+				clearerr(saveFile);
+				break;
+			}
+		}
+	}
+
+	fclose(saveFile);
+	fclose(tempFile);
+}
+
+char loadFileToTemp(char* loadLoc)
+{
+	FILE* loadFile = fopen(loadLoc, "rb");
+	char tempLoc[256];
+	strcpy(tempLoc, ROOT_FOLDER);
+	strcat(tempLoc, SAVES_FOLDER);
+	strcat(tempLoc, TEMP_SAVE);
+	strcat(tempLoc, SAVE_EXTENSION);
+	FILE* tempFile = fopen(tempLoc, "wb");
+
+	char temp;
+
+	while(!feof(loadFile))
+	{
+		temp = fgetc(loadFile);
+		if(ferror(loadFile))
+		{
+			__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error reading from save file");
+			clearerr(loadFile);
+			break;
+		}
+		else if (!feof(loadFile))
+		{
+			fputc(temp, tempFile);
+			if(ferror(tempFile))
+			{
+				__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error writing to temp.sav file");
+				clearerr(tempFile);
+				break;
+			}
+		}
+	}
+
+	fclose(loadFile);
+	fclose(tempFile);
 }
 
 char removeTempSave(void)

@@ -44,11 +44,11 @@ public class SaveManager
 		try
 		{
 			saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
-			
+			Log.v("TheElements", "saveState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT);
 		}
 		catch (UnsupportedEncodingException e)
 		{
-			//Hopefully this doesn't happen
+			//Hopefully this doesn't happen :P
 			e.printStackTrace();
 		}
 	}
@@ -57,10 +57,11 @@ public class SaveManager
 		try
 		{
 			loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename).getBytes("ISO-8859-1"));
+			Log.v("TheElements", "loadState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename);
 		}
 		catch (UnsupportedEncodingException e)
 		{
-			//Hopefully this doesn't happen
+			//Hopefully this doesn't happen :P
 			e.printStackTrace();
 		}
 	}

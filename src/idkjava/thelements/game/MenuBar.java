@@ -14,16 +14,16 @@ public class MenuBar extends LinearLayout
 {
 	//Used when exit is called because we need the specific instance of the activity to end
 	private MainActivity activity;
-	
+
 	private Context context;
-	
-	static ImageButton eraser_button;
-	static ImageButton play_pause_button;
-	private ImageButton save_button;
-	private ImageButton load_button;
-	private ImageButton load_demo_button;
-	private ImageButton exit_button;
-	
+
+	private static ImageButton eraser_button;
+	private static ImageButton play_pause_button;
+	private static ImageButton save_button;
+	private static ImageButton load_button;
+	private static ImageButton load_demo_button;
+	private static ImageButton exit_button;
+
 	//Used for eraser
 	public static boolean eraserOn = false;
 	private static char tempElement = 0;
@@ -35,19 +35,19 @@ public class MenuBar extends LinearLayout
 		this.context = context;
 		setGravity(Gravity.CENTER_HORIZONTAL);
 	}
-	
+
 	//Used to get specific instance of activity
 	public void setActivity(MainActivity act)
 	{
 		activity = act;
 	}
-	
+
 	//Set the eraser to the off position
 	public static void setEraserOff()
 	{
 		eraserOn = false;
 		eraser_button.setImageResource(R.drawable.eraser);
-			
+
 		MainActivity.setElement(tempElement);
 	}
 
@@ -62,39 +62,36 @@ public class MenuBar extends LinearLayout
 		load_button = (ImageButton) findViewById(R.id.load_button);
 		load_demo_button = (ImageButton) findViewById(R.id.load_demo_button);
 		exit_button = (ImageButton) findViewById(R.id.exit_button);
-		
+
 		//Set up the OnClickListener for the eraser button
-		eraser_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				@Override
-				public void onClick(View v)
-				{
-					//If it was on eraser, swap back to regular element
-					if(eraserOn)
-					{
-						MainActivity.setElement(tempElement);
-						
-						//Change the button to look unclicked
-						eraser_button.setImageResource(R.drawable.eraser);
-					}
-					//If it is on a normal element, go to eraser and store that element for later
-					else
-					{
-						tempElement = MainActivity.getElement();
-						MainActivity.setElement(MainActivity.ERASER_ELEMENT);
-						
-						//Change the button to look clicked
-						eraser_button.setImageResource(R.drawable.eraser_on);
-					}
-					eraserOn = !eraserOn;
-				}
-			}
-		);
-		if(MainActivity.getElement() == MainActivity.ERASER_ELEMENT) //If the current element is eraser
+		eraser_button.setOnClickListener(new OnClickListener()
 		{
-			 //Start off the button to being on
+			@Override
+			public void onClick(View v)
+			{
+				//If it was on eraser, swap back to regular element
+				if (eraserOn)
+				{
+					MainActivity.setElement(tempElement);
+
+					//Change the button to look unclicked
+					eraser_button.setImageResource(R.drawable.eraser);
+				}
+				//If it is on a normal element, go to eraser and store that element for later
+				else
+				{
+					tempElement = MainActivity.getElement();
+					MainActivity.setElement(MainActivity.ERASER_ELEMENT);
+
+					//Change the button to look clicked
+					eraser_button.setImageResource(R.drawable.eraser_on);
+				}
+				eraserOn = !eraserOn;
+			}
+		});
+		if (MainActivity.getElement() == MainActivity.ERASER_ELEMENT) //If the current element is eraser
+		{
+			//Start off the button to being on
 			eraser_button.setImageResource(R.drawable.eraser_on);
 		}
 		else
@@ -102,32 +99,28 @@ public class MenuBar extends LinearLayout
 			//Start off the eraser in "off" position
 			eraser_button.setImageResource(R.drawable.eraser);
 		}
-		
-		
+
 		//Set up the OnClickListener for the play/pause button
-		play_pause_button.setOnClickListener
-		(
-			new OnClickListener()
+		play_pause_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
+				MainActivity.play = !MainActivity.play;
+				MainActivity.setPlayState(MainActivity.play);
+
+				if (MainActivity.play)
 				{
-					MainActivity.play = !MainActivity.play;
-					MainActivity.setPlayState(MainActivity.play);
-					
-					if(MainActivity.play)
-					{
-						play_pause_button.setImageResource(R.drawable.pause);
-					}
-					else
-					{
-						play_pause_button.setImageResource(R.drawable.play);
-					}
+					play_pause_button.setImageResource(R.drawable.pause);
 				}
-				
+				else
+				{
+					play_pause_button.setImageResource(R.drawable.play);
+				}
 			}
-		);
-		if(MainActivity.play)
+
+		});
+		if (MainActivity.play)
 		{
 			play_pause_button.setImageResource(R.drawable.pause);
 		}
@@ -135,64 +128,52 @@ public class MenuBar extends LinearLayout
 		{
 			play_pause_button.setImageResource(R.drawable.play);
 		}
-		
+
 		//Set up the OnClickListener for the save button
-		save_button.setOnClickListener
-		(
-			new OnClickListener()
+		save_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
-				{
-		    		  ((MainActivity) context).saveState();
-				}
+				((MainActivity) context).saveState();
 			}
-		);
-		
+		});
+
 		//Set up the OnClickListener for the load button
-		load_button.setOnClickListener
-		(
-			new OnClickListener()
+		load_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
-				{
-			    	  ((MainActivity) context).loadState();
-				}
+				((MainActivity) context).loadState();
 			}
-		);
-		
+		});
+
 		//Set up the OnClickListener for the load demo button
-		load_demo_button.setOnClickListener
-		(
-			new OnClickListener()
+		load_demo_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
+				if (MainActivity.loadDemoState() == 1)
 				{
-			    	  if (MainActivity.loadDemoState() == 1)
-			    	  {
-			    		  Toast.makeText(context, "Demo Loaded", Toast.LENGTH_SHORT).show();
-			    	  }
-			    	  else
-			    	  {
-			    		  Toast.makeText(context, "No Demo File or SDcard", Toast.LENGTH_LONG).show();
-			    	  }
+					Toast.makeText(context, "Demo Loaded", Toast.LENGTH_SHORT).show();
+				}
+				else
+				{
+					Toast.makeText(context, "No Demo File or SDcard", Toast.LENGTH_LONG).show();
 				}
 			}
-		);
-		
+		});
+
 		//Set up the OnClickListener for the exit button
-		exit_button.setOnClickListener
-		(
-			new OnClickListener()
+		exit_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
 			{
-				@Override
-				public void onClick(View v)
-				{
-					activity.finish();
-				}
+				activity.finish();
 			}
-		);
+		});
 	}
 }
