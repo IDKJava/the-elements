@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="fill_parent" android:drawingCacheQuality="high" android:layout_width="fill_parent" android:visibility="visible" android:layout_gravity="top">
+<MediaController android:id="@+id/ne_control" android:layout_gravity="top" android:layout_height="60dip" android:background="@drawable/ne_control_bg" android:layout_width="fill_parent" android:visibility="visible" android:paddingLeft="10dip" android:paddingRight="10dip">
+	<ImageButton android:id="@+id/ne_location_filter" android:layout_gravity="left|center" android:background="@drawable/btn_mb" android:layout_height="41dip" android:layout_width="41dip" android:layout_marginTop="2dip" android:src="@drawable/btn_local"></ImageButton>
+<ImageButton android:layout_gravity="right|center_vertical" android:id="@+id/ne_close" android:adjustViewBounds="true" android:background="@drawable/btn_mb" android:layout_height="41dip" android:layout_width="41dip" android:layout_marginTop="2dip" android:src="@drawable/btn_exit"></ImageButton>
+
+<!--
+<Spinner android:id="@+id/ne_type_filter" android:entries="@array/ne_filter_type_array" android:layout_width="200dip" android:background="@drawable/btn_mb" android:layout_height="41dip" android:layout_marginTop="2dip" android:paddingLeft="5dip" android:saveEnabled="true" android:layout_gravity="center"></Spinner>
+-->
+
+</MediaController>
+
+<!-- 
+<ScrollView
+    android:layout_width="fill_parent"
+    android:background="@drawable/bg_ne_scrollview" 
+    android:layout_marginTop="60dip" 
+    android:layout_gravity="top" android:visibility="visible" android:layout_height="wrap_content" android:id="@+id/entity_scrollview">
+	<TableLayout 
+		android:layout_height="wrap_content" 
+		android:layout_width="fill_parent" 
+		android:id="@+id/entity_container">
+	</TableLayout>
+</ScrollView>
+-->
+
+
+
+
+</FrameLayout>
