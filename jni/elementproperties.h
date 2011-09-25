@@ -51,6 +51,8 @@
 
 //Include the global macros
 #include "macros.h"
+//Include the app variables
+#include "app.h"
 
 //Define the color of the element
 extern unsigned char baseRed[];
@@ -86,5 +88,10 @@ extern char baseLowestTemp[];
 //Defines the higher and lower elements to change to outside of the correct temp range
 extern char baseHigherElement[];
 extern char baseLowerElement[];
+
+//Change a particle's heat and fix it
+char changeHeat(struct Particle* tempParticle, int heatChange);
+//Function to fix heat to [0,255]
+char fixHeat(int heat);
 
 #endif //!ELEMENTPROPERTIES_H_INCLUDED

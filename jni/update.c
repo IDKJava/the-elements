@@ -20,7 +20,7 @@ static struct Particle* tempAllCoords;
 static struct Element* tempElement;
 static struct Element* tempElement2;
 //Used for heat
-static signed char heatChange;
+static int heatChange;
 
 void UpdateView(void)
 {
@@ -159,7 +159,7 @@ void UpdateView(void)
 						tempParticle->y += ((yGravity / 9.8) * tempElement->fallVel + tempYVel);
 					}
 					//Otherwise, just do the fallvelocity
-					else if (accelOn == 0)
+					else if (!accelOn)
 					{
 						tempParticle->y += tempElement->fallVel + tempYVel;
 					}
@@ -313,8 +313,9 @@ void UpdateView(void)
 
 						//Update heat
 						heatChange = (tempParticle->heat - tempAllCoords->heat)/5;
-						tempParticle->heat -= heatChange;
-						tempAllCoords->heat += heatChange;
+						//The hotter particle should be cooled, while the cooler particle is heated
+						changeHeat(tempParticle, -heatChange);
+						changeHeat(tempAllCoords, heatChange);
 
 						//Resolve second particle heat changes
 						if(tempAllCoords->heat < tempAllCoords->element->lowestTemp)
@@ -359,7 +360,7 @@ void UpdateView(void)
 							tempY = tempAllCoords->y;
 
 							allCoords[getIndex(tempOldX, tempOldY)] = NULL;
-							setBitmapColor(tempOldX, tempOldY, elements[ERASER_ELEMENT]);
+							clearBitmapColor(tempOldX, tempOldY);
 							allCoords[getIndex(tempX, tempY)] = tempAllCoords;
 							setBitmapColor(tempX, tempY, tempAllCoords->element);
 
@@ -423,7 +424,8 @@ void UpdateView(void)
 					{
 						heatChange = (tempParticle->heat - cAtmosphere->heat)/10 + rand()%3 - 1;
 					}
-					tempParticle->heat -= heatChange;
+					//If tempParticle is hotter than the atmosphere, we want to subtract temperature
+					changeHeat(tempParticle, -heatChange);
 				}
 
 				int i;
@@ -433,10 +435,9 @@ void UpdateView(void)
 					{
 						switch((int)tempElement->specials[i])
 						{
-
-						//Generator
-						case 1:
-						{
+							//Generator
+							case 1:
+							{
 								//frozen[counter] = 0;
 								int diffX, diffY;
 								struct Particle* temporAllCoords;
@@ -463,139 +464,147 @@ void UpdateView(void)
 									}
 								}
 								break;
-						}
-						//Breakable
-						case 2:
-						{
-							if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
-							{
-								setElement(tempParticle, elements[NORMAL_ELEMENT]);
 							}
-							__android_log_write(ANDROID_LOG_INFO, "TheElements", "Breakable Trigger");
-							break;
-						}
-						//Growing
-						case 3:
-						{
-							int diffX, diffY;
-							struct Particle* temporAllCoords;
-							for (diffX = -1; diffX <= 1; diffX++)
+							//Breakable
+							case 2:
 							{
-								for (diffY = -1; diffY <= 1; diffY++)
+								if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
 								{
-									if (diffY + tempY > 0 && tempY + diffY < workHeight && tempX + diffX > 0 && diffX + diffX < workWidth )
-									{
-										temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-										if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
-										{
-											setElement(temporAllCoords, tempParticle->element);
-										}
-									}
+									setElement(tempParticle, elements[NORMAL_ELEMENT]);
 								}
+								char buffer[256];
+								sprintf(buffer, "Breakable Trigger, element: %d", tempParticle->element->index);
+								__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+								break;
 							}
-
-							break;
-						}
-						//Burner
-						case 4:
-						{
-							//__android_log_write(ANDROID_LOG_INFO, "TheElements", "we've got fire");
-							int diffX, diffY;
-							struct Particle* temporAllCoords;
-							for (diffX = -1; diffX <= 1; diffX++)
+							//Growing
+							case 3:
 							{
-								for(diffY = -1; diffY <=1; diffY++)
-								{
-									if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX > 0 && tempY+diffY < workHeight && tempY+diffY > 1)
-									{
-										temporAllCoords=allCoords[getIndex(tempX+diffX,tempY+diffY)];
-										if(temporAllCoords)
-										{
-											temporAllCoords->heat+=10;
-										}
-									}
-								}
-							}
-							break;
-						}
-						//Explosive
-						case 5:
-						{
-							if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
-							{
-								int explosiveness = tempParticle->specialVals[i];
 								int diffX, diffY;
-								int distance;
-								struct Particle* tempAllCoords;
-
-								//In radius of explosion, add velocity
-								for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
+								struct Particle* temporAllCoords;
+								for (diffX = -1; diffX <= 1; diffX++)
 								{
-									for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
+									for (diffY = -1; diffY <= 1; diffY++)
 									{
-										distance = diffX*diffX + diffY*diffY;
-										if (distance <= explosiveness*explosiveness && tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+										if (diffY + tempY > 0 && tempY + diffY < workHeight && tempX + diffX > 0 && diffX + diffX < workWidth )
 										{
-											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-											if (tempAllCoords && rand()%5 == 0)
+											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
 											{
-												if(diffX != 0 && tempAllCoords->xVel < explosiveness)
-												{
-													tempAllCoords->xVel += diffX / abs(diffX);
-												}
-												if(diffY != 0 && tempAllCoords->yVel < explosiveness)
-												{
-													tempAllCoords->yVel += diffY / abs(diffY);
-												}
+												setElement(temporAllCoords, tempParticle->element);
 											}
 										}
 									}
 								}
 
-								for(diffX = -5; diffX <= 5; diffX++)
+								break;
+							}
+							//Burner
+							case 4:
+							{
+								//__android_log_write(ANDROID_LOG_INFO, "TheElements", "we've got fire");
+								int diffX, diffY;
+								struct Particle* tempAllCoords;
+								for (diffX = -1; diffX <= 1; diffX++)
 								{
-									for(diffY = -5; diffY <= 5; diffY++)
+									for(diffY = -1; diffY <=1; diffY++)
 									{
-										tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-										if(!tempAllCoords && rand()%100 == 0)
+										if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX > 0 && tempY+diffY < workHeight && tempY+diffY > 1)
 										{
-											createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
-										}
-										else if(tempAllCoords)
-										{
-											tempAllCoords->heat += 50;
+											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if(tempAllCoords)
+											{
+												changeHeat(tempAllCoords, 10);
+											}
 										}
 									}
 								}
+								break;
 							}
-							break;
-
-						}
-						case 6:
-						{
-							if (rand()%tempParticle->specialVals[i])
+							//Explosive
+							case 5:
 							{
-								deletePoint(tempParticle);
+								if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
+								{
+									int explosiveness = tempParticle->specialVals[i];
+									int diffX, diffY;
+									int distance;
+									struct Particle* tempAllCoords;
+
+									//In radius of explosion, add velocity
+									for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
+									{
+										for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
+										{
+											distance = diffX*diffX + diffY*diffY;
+											if (distance <= explosiveness*explosiveness && tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+											{
+												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+												if (tempAllCoords && rand()%5 == 0)
+												{
+													if(diffX != 0 && tempAllCoords->xVel < explosiveness)
+													{
+														tempAllCoords->xVel += diffX / abs(diffX);
+													}
+													if(diffY != 0 && tempAllCoords->yVel < explosiveness)
+													{
+														tempAllCoords->yVel += diffY / abs(diffY);
+													}
+												}
+											}
+										}
+									}
+
+									for(diffX = -5; diffX <= 5; diffX++)
+									{
+										for(diffY = -5; diffY <= 5; diffY++)
+										{
+											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+											if(!tempAllCoords && rand()%100 == 0)
+											{
+												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
+											}
+											else if(tempAllCoords)
+											{
+												changeHeat(tempAllCoords, 50);
+											}
+										}
+									}
+								}
+								break;
+
 							}
+							//Disappearing
+							case 6:
+							{
+								/*
+								if (rand()%tempParticle->specialVals[i])
+								{
+									deletePoint(tempParticle);
+								}
+								*/
+								break;
+							}
+							//Default: do nothing
+							default:
 							break;
 						}
-						//Default: do nothing
-						default:
-						break;
-
 					}
 
 					//Resolve heat changes
 					if(tempParticle->heat < tempParticle->element->lowestTemp)
 					{
-						//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
+						char buffer[1000];
+						sprintf(buffer, "Lower heat change, old element: %d, new element: %d, temp: %d", tempParticle->element->index, tempParticle->element->lowerElement->index, tempParticle->heat);
+						__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 						setElement(tempParticle, tempParticle->element->lowerElement);
 					}
 					else if(tempParticle->heat > tempParticle->element->highestTemp)
 					{
-						//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
+						char buffer[1000];
+						sprintf(buffer, "Higher heat change, old element: %d, new element: %d, temp: %d", tempParticle->element->index, tempParticle->element->higherElement->index, tempParticle->heat);
+						__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 						setElement(tempParticle, tempParticle->element->higherElement);
-					}
 					}
 				}
 			}

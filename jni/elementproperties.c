@@ -138,8 +138,29 @@ char baseStartingTemp[] = {0, 0, 0, 0, 0, 200, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0,
 
 //Defines the highest and lowest temps that the element exists at
 char baseHighestTemp[] = {255, 255, 255, 200, 150, 255, 75, 255, 200, 125, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 225};
-char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 76, 25, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
+char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 76, 201, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
 char baseHigherElement[] = {0, 0, 0, 20, 5, 0, 4, 0, 11, 10, 0, 0, 11, 10, 10, 10, 10, 5, 0, 5, 0, 3, 0, 10};
 char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 6, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0};
+
+//Change a particle's heat and fix it
+char changeHeat(struct Particle* tempParticle, int heatChange)
+{
+	tempParticle->heat = fixHeat(tempParticle->heat + heatChange);
+}
+
+//Function to fix heat to [0,255]
+char fixHeat(int heat)
+{
+	if (heat < 0)
+	{
+		heat = 0;
+	}
+	else if(heat > 255)
+	{
+		heat = 255;
+	}
+
+	return heat;
+}
