@@ -29,14 +29,7 @@
     	android:layout_width="200sp" 
     	android:background="@drawable/btn_mm" 
     	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
-     <!-- Custom Element button -->
-    <Button
-    	android:id="@+id/custom_button"
-    	android:text="Custom Element Maker"
-    	android:gravity="center"
-    	android:layout_width="200sp" 
-    	android:background="@drawable/btn_mm" 
-    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>	
+     <!-- Custom Element button -->	
     <!-- About button -->
     <Button
     	android:id="@+id/about_button"

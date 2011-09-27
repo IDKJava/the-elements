@@ -8,7 +8,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import idkjava.thelements.R;
-import idkjava.thelements.customelements.CustomElementManagerActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -62,7 +61,6 @@ public class MenuActivity extends Activity
 		
 		start_game_button = (Button) findViewById(R.id.start_game_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
-		custom_button = (Button) findViewById(R.id.custom_button);
 		about_button = (Button) findViewById(R.id.about_button);
 		exit_button = (Button) findViewById(R.id.exit_button);
 		clear_button = (Button) findViewById(R.id.clear_button);
@@ -112,17 +110,6 @@ public class MenuActivity extends Activity
 				{
 					//Show the about dialog
 					showDialog(1);
-				}
-			}
-		);
-		custom_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					//Show the about dialog
-					 startActivity(new Intent(MenuActivity.this, CustomElementManagerActivity.class));
 				}
 			}
 		);
