@@ -38,7 +38,7 @@ void UpdateView(void)
 	//Zoom
 	if(shouldZoom)
 	{
-		__android_log_write(ANDROID_LOG_INFO, "TheElements", "zoom section of udpate");
+		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "zoom section of udpate");
 		if(zoom == ZOOMED_IN)
 		{
 			zoom = ZOOMED_OUT;
@@ -232,7 +232,7 @@ void UpdateView(void)
 					}
 					else if((int) tempParticle->y < 0)
 					{
-						if(cAtmosphere->borderTop)
+						if(cAtmosphere->borderTop && !hasSpecial(tempParticle, SPECIAL_LIFE))
 						{
 							//Bounce the particle
 							tempParticle->y = tempOldY;
@@ -472,9 +472,6 @@ void UpdateView(void)
 								{
 									setElement(tempParticle, elements[NORMAL_ELEMENT]);
 								}
-								char buffer[256];
-								sprintf(buffer, "Breakable Trigger, element: %d", tempParticle->element->index);
-								__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 								break;
 							}
 							//Growing
@@ -577,12 +574,10 @@ void UpdateView(void)
 							//Disappearing
 							case 6:
 							{
-								/*
-								if (rand()%tempParticle->specialVals[i])
+								if (rand()%tempParticle->specialVals[i] == 0)
 								{
 									deletePoint(tempParticle);
 								}
-								*/
 								break;
 							}
 							//Default: do nothing
@@ -594,16 +589,10 @@ void UpdateView(void)
 					//Resolve heat changes
 					if(tempParticle->heat < tempParticle->element->lowestTemp)
 					{
-						char buffer[1000];
-						sprintf(buffer, "Lower heat change, old element: %d, new element: %d, temp: %d", tempParticle->element->index, tempParticle->element->lowerElement->index, tempParticle->heat);
-						__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 						setElement(tempParticle, tempParticle->element->lowerElement);
 					}
 					else if(tempParticle->heat > tempParticle->element->highestTemp)
 					{
-						char buffer[1000];
-						sprintf(buffer, "Higher heat change, old element: %d, new element: %d, temp: %d", tempParticle->element->index, tempParticle->element->higherElement->index, tempParticle->heat);
-						__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 						setElement(tempParticle, tempParticle->element->higherElement);
 					}
 				}

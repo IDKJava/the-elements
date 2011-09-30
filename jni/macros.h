@@ -71,6 +71,14 @@
 #define DEFAULT_BORDER_RIGHT 1
 #define DEFAULT_BORDER_BOTTOM 1
 
+#define SPECIAL_NONE -1
+#define SPECIAL_SPAWN 1
+#define SPECIAL_BREAK 2
+#define SPECIAL_GROW 3
+#define SPECIAL_BURN 4
+#define SPECIAL_EXPLODE 5
+#define SPECIAL_LIFE 6
+
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
 

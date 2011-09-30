@@ -69,37 +69,37 @@ char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 
  *		1 = Spawn particles; Element
  *		2 = Break; Threshold velocity
  *		3 = Grow; Food element
- *		4 = Burner
+ *		4 = Burn;
  *		5 = Explode; Explosiveness
- *		6 = Life Probability
+ *		6 = Life; 1/(Probability of deletion)
  */
 //Defines the special for each base element
 
 signed char baseSpecial[][MAX_SPECIALS] =
-		{{1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{2, -1, -1, -1, -1,-1},  //Destructible Wall
-		{3, -1, -1, -1, -1,-1},
-		{4, 6, -1, -1, -1,-1}, //Fire
-		{4, -1, -1, -1, -1,-1}, //Magma
-		{-1, -1, -1, -1, -1,-1},
-		{5, -1, -1, -1, -1,-1},
-		{5, -1, -1, -1, -1,-1},
-		{5, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{2, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1},
-		{-1, -1, -1, -1, -1,-1}};
+		{{SPECIAL_SPAWN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},  //Destructible Wall
+		{SPECIAL_GROW, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_BURN, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Fire
+		{SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Magma
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}};
 
 
 //Defines the special value for each base element
@@ -115,7 +115,7 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{0,0,0,0,0,0},
 		{5,0,0,0,0,0},
 		{4,5,0,0,0,0},
-		{0,200,0,0,0,0}, //Fire
+		{0,5,0,0,0,0}, //Fire
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{7,3,0,0,0,0},
@@ -163,4 +163,15 @@ char fixHeat(int heat)
 	}
 
 	return heat;
+}
+
+//Function to check if a particle has a given special
+char hasSpecial(struct Particle* tempParticle, int special)
+{
+	int i;
+	for(i = 0; i < MAX_SPECIALS; i++)
+	{
+		if (tempParticle->element->specials[i] == special) return TRUE;
+	}
+	return FALSE;
 }
