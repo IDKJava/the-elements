@@ -22,12 +22,12 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.mobclix.android.sdk.MobclixAdView;
-import com.mobclix.android.sdk.MobclixMMABannerXLAdView;
+import com.google.ads.AdView;
 
 public class MenuActivity extends Activity
 {
-	public static MobclixMMABannerXLAdView banner_adview;
+	//AdView is instantiated, but not used for anything as of yet.
+	public static AdView banner_adview;
 	public static Button start_game_button;
 	public static Button how_to_play_button;
 	public static Button custom_button;
@@ -51,7 +51,7 @@ public class MenuActivity extends Activity
 		try
 		{
 			//Define all the objects
-			banner_adview = (MobclixMMABannerXLAdView) findViewById(R.id.banner_adview);
+			banner_adview = (AdView) findViewById(R.id.banner_adview);
 		}
 		catch (NullPointerException e)
 		{
@@ -65,14 +65,6 @@ public class MenuActivity extends Activity
 		exit_button = (Button) findViewById(R.id.exit_button);
 		clear_button = (Button) findViewById(R.id.clear_button);
 		
-		try
-		{
-			banner_adview.getAd();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
 		
 		
 		start_game_button.setOnClickListener
@@ -138,10 +130,10 @@ public class MenuActivity extends Activity
 			}
 		);
 	}
-	public void onSuccessfulLoad(MobclixAdView view)
-	{
-		loaded = true;
-	}
+//	public void onSuccessfulLoad(MobclixAdView view)
+//	{
+//		loaded = true;
+//	}
 	@Override
 	public void onResume()
 	{
