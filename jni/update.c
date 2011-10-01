@@ -7,7 +7,6 @@
  */
 
 #include "update.h"
-#include <android/log.h>
 
 static int dx, dy;
 //Used in for loops
@@ -436,7 +435,7 @@ void UpdateView(void)
 						switch((int)tempElement->specials[i])
 						{
 							//Generator
-							case 1:
+							case SPECIAL_SPAWN:
 							{
 								//frozen[counter] = 0;
 								int diffX, diffY;
@@ -466,7 +465,7 @@ void UpdateView(void)
 								break;
 							}
 							//Breakable
-							case 2:
+							case SPECIAL_BREAK:
 							{
 								if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
 								{
@@ -475,7 +474,7 @@ void UpdateView(void)
 								break;
 							}
 							//Growing
-							case 3:
+							case SPECIAL_GROW:
 							{
 								int diffX, diffY;
 								struct Particle* temporAllCoords;
@@ -496,8 +495,8 @@ void UpdateView(void)
 
 								break;
 							}
-							//Burner
-							case 4:
+							//Burn
+							case SPECIAL_BURN:
 							{
 								//__android_log_write(ANDROID_LOG_INFO, "TheElements", "we've got fire");
 								int diffX, diffY;
@@ -519,7 +518,7 @@ void UpdateView(void)
 								break;
 							}
 							//Explosive
-							case 5:
+							case SPECIAL_EXPLODE:
 							{
 								if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
 								{
@@ -572,7 +571,7 @@ void UpdateView(void)
 
 							}
 							//Disappearing
-							case 6:
+							case SPECIAL_LIFE:
 							{
 								if (rand()%tempParticle->specialVals[i] == 0)
 								{

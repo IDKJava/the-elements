@@ -85,14 +85,14 @@ signed char baseSpecial[][MAX_SPECIALS] =
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},  //Destructible Wall
-		{SPECIAL_GROW, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_GROW, SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_BURN, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Fire
-		{SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Magma
+		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Magma
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
+		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
@@ -114,7 +114,7 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{5,0,0,0,0,0},
-		{4,5,0,0,0,0},
+		{4,2,0,0,0,0},
 		{0,5,0,0,0,0}, //Fire
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
@@ -133,16 +133,16 @@ char baseSpecialValue[][MAX_SPECIALS] =
 //Defines the inertia of each element
 char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1};
 
-//Defines the initial temp of anything of that element that is spawned (-1 = atmosphere)
-char baseStartingTemp[] = {0, 0, 0, 0, 0, 200, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+//Defines the initial temp of anything of that element that is spawned (0 = atmosphere)
+char baseStartingTemp[] = {0, 0, 0, 0, 100, 200, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 //Defines the highest and lowest temps that the element exists at
 char baseHighestTemp[] = {255, 255, 255, 200, 150, 255, 75, 255, 200, 125, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 225};
-char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 76, 201, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
+char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
 char baseHigherElement[] = {0, 0, 0, 20, 5, 0, 4, 0, 11, 10, 0, 0, 11, 10, 10, 10, 10, 5, 0, 5, 0, 3, 0, 10};
-char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 6, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0};
+char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 0, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0};
 
 //Change a particle's heat and fix it
 char changeHeat(struct Particle* tempParticle, int heatChange)
