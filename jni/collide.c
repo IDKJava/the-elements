@@ -127,8 +127,10 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 				//Meltable is destroyed
 
 				//Delete firstParticle
-				unSetPoint(firstParticle);
-				firstParticle->hasMoved = TRUE;
+				firstParticle->x = firstParticle->oldX;
+				firstParticle->y = firstParticle->oldY;
+				deletePoint(firstParticle);
+				firstParticle->hasMoved = FALSE;
 			}
 			else if (rand() % 2 == 0) //Otherwise, 1/6 total
 			{
@@ -150,9 +152,13 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		case 6: //Acid - Neutralizer
 		{
 			int tempX = firstParticle->x, tempY = firstParticle->y;
-			if (rand() % 3 == 0) //1/3 Chance
+			if ( rand() % 3 == 0 ) //1/3 Chance
 			{
 				//Delete firstParticle
+			    firstParticle->x = oldXFirst;
+			    firstParticle->y = oldYFirst;
+			    deletePoint(firstParticle);
+			    firstParticle->hasMoved = FALSE;
 
 				firstParticle->x = oldXFirst;
 				firstParticle->y = oldYFirst;
@@ -166,7 +172,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 				firstParticle->y = oldYFirst;
 				firstParticle->hasMoved = FALSE;
 			}
-
+			
 			break;
 		}
 		case 7: //Neutralizer - Acid
@@ -174,7 +180,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete secondParticle
-				unSetPoint(secondParticle);
+			    unSetPoint(secondParticle);
 				secondParticle->hasMoved = TRUE;
 			}
 			else //2/3 Chance
@@ -204,8 +210,10 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		case 9: //Salt-water - Plant or Plant - Salt-water
 		{
 			//Delete firstParticle
-			unSetPoint(firstParticle);
-			firstParticle->hasMoved = TRUE;
+		    firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			deletePoint(firstParticle);
+			firstParticle->hasMoved = FALSE;
 
 			//Change the element or secondParticle to Sand
 			setElement(secondParticle, elements[3]);
@@ -215,8 +223,10 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		case 10: //Water - Sand or Sand - Water
 		{
 			//Delete firstParticle
-			unSetPoint(firstParticle);
-			firstParticle->hasMoved = TRUE;
+		    firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			deletePoint(firstParticle);
+			firstParticle->hasMoved = FALSE;
 
 			//Change the element of secondParticle to Mud
 			setElement(secondParticle, elements[21]);
