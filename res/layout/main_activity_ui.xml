@@ -4,9 +4,10 @@
 	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:background="#333" >
     
-    <com.google.ads.AdView 
+    <com.google.ads.AdView
 		android:id="@+id/banner_adview"
 		android:layout_height="50dip"
 		android:layout_width="320dip"

@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="mobclix.jar"/>
+	<classpathentry kind="lib" path="GoogleAdMobAdsSdk-4.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -22,12 +22,8 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.ads.AdView;
-
 public class MenuActivity extends Activity
 {
-	//AdView is instantiated, but not used for anything as of yet.
-	public static AdView banner_adview;
 	public static Button start_game_button;
 	public static Button how_to_play_button;
 	public static Button custom_button;
@@ -48,17 +44,7 @@ public class MenuActivity extends Activity
 		
 		setContentView(R.layout.menu_activity);
 		
-		try
-		{
-			//Define all the objects
-			banner_adview = (AdView) findViewById(R.id.banner_adview);
-		}
-		catch (NullPointerException e)
-		{
-			e.printStackTrace();
-		}
-		
-		
+		//Define all the objects
 		start_game_button = (Button) findViewById(R.id.start_game_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);

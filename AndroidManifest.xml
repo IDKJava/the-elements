@@ -13,8 +13,6 @@
     		</intent-filter>
     	</activity>
     	
-
-		<meta-data android:name="com.mobclix.APPLICATION_ID" android:value="08768ce7-859d-4f21-b2b7-f8eed8c6da74"/>
     	<activity android:name=".SplashActivity"
     			  android:label="@string/app_name"
     			  android:screenOrientation="portrait"
@@ -86,7 +84,7 @@
         </activity>
         <activity android:name=".customelements.CustomElementManagerActivity"></activity>
         <activity android:name=".customelements.CustomElementActivity"></activity>
-<!--         Google AdMob Activity Declaration -->
+		<!-- Google AdMob Activity Declaration -->
         <activity android:name="com.google.ads.AdActivity"
               android:configChanges="keyboard|keyboardHidden|orientation"/>
     </application>
