@@ -66,9 +66,11 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			secondParticle->specialVals[0] = firstParticle->element->index;
 			secondParticle->hasMoved = TRUE;
 
-			//Delete firstParticle
-			unSetPoint(firstParticle);
-			firstParticle->hasMoved = TRUE;
+			//Move back and delete firstParticle
+			firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			deletePoint(firstParticle);
+			firstParticle->hasMoved = FALSE;
 
 			break;
 		}
@@ -94,7 +96,6 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		{
 			//Define some temporary variables
 			int tempX = firstParticle->x, tempY = firstParticle->y;
-
 			if (rand() % 3 != 0) //2/3 chance
 			{
 				//Acid burns away Meltable
@@ -152,8 +153,11 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			if (rand() % 3 == 0) //1/3 Chance
 			{
 				//Delete firstParticle
-				unSetPoint(firstParticle);
-				firstParticle->hasMoved = TRUE;
+
+				firstParticle->x = oldXFirst;
+				firstParticle->y = oldYFirst;
+				deletePoint(firstParticle);
+				firstParticle->hasMoved = FALSE;
 			}
 			else //2/3 Change of bouncing
 			{
@@ -185,9 +189,11 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 		}
 		case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
 		{
-			//Delete firstParticle
-			unSetPoint(firstParticle);
-			firstParticle->hasMoved = TRUE;
+			//Move back and delete firstParticle
+			firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			deletePoint(firstParticle);
+			firstParticle->hasMoved = FALSE;
 
 			//Change the element of secondParticle to Salt-water
 			setElement(secondParticle, elements[19]);
@@ -196,7 +202,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			break;
 		}
 		case 9: //Salt-water - Plant or Plant - Salt-water
-		{;
+		{
 			//Delete firstParticle
 			unSetPoint(firstParticle);
 			firstParticle->hasMoved = TRUE;
