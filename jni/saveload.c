@@ -147,8 +147,10 @@ char saveState(char* saveLoc)
 		play = oldPlay;
 		return TRUE;
 	}
-
-	fclose(fp);
+	if(fp)
+	{
+		fclose(fp);
+	}
 	play = oldPlay;
 	return FALSE;
 }
