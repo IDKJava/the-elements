@@ -482,7 +482,7 @@ void UpdateView(void)
 								{
 									for (diffY = -1; diffY <= 1; diffY++)
 									{
-										if (diffY + tempY > 0 && tempY + diffY < workHeight && tempX + diffX > 0 && diffX + diffX < workWidth )
+										if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth )
 										{
 											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
 											if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
