@@ -7,8 +7,6 @@
  */
 
 #include "points.h"
-#include <android/log.h>
-#include <stdio.h>
 
 static int dx;
 static int dy;
@@ -98,7 +96,12 @@ void unSetPoint(struct Particle* particle)
 
 void setElement(struct Particle* particle, struct Element* newElement)
 {
+	int i;
 	particle->element = newElement;
+	for(i = 0; i < MAX_SPECIALS; i++)
+	{
+		particle->specialVals[i] = newElement->specialVals[i];
+	}
 	setBitmapColor(particle->x, particle->y, newElement);
 }
 
@@ -137,4 +140,50 @@ void unFreezeParticles(int xCoord, int yCoord)
 		}
 	}
 	*/
+}
+
+//Change a particle's heat and fix it
+char changeHeat(struct Particle* tempParticle, int heatChange)
+{
+	tempParticle->heat = fixHeat(tempParticle->heat + heatChange);
+}
+
+//Function to fix heat to [0,255]
+char fixHeat(int heat)
+{
+	if (heat < 0)
+	{
+		heat = 0;
+	}
+	else if(heat > 255)
+	{
+		heat = 255;
+	}
+
+	return heat;
+}
+
+//Function to check if a particle has a given special
+char hasSpecial(struct Particle* tempParticle, int special)
+{
+	int i;
+	for(i = 0; i < MAX_SPECIALS; i++)
+	{
+		if (tempParticle->element->specials[i] == special) return TRUE;
+	}
+	return FALSE;
+}
+
+//Sets a particle's special value
+void setSpecialVal(struct Particle* tempParticle, int special, int val)
+{
+	int i;
+	for (i = 0; i < MAX_SPECIALS; i++)
+	{
+		if (tempParticle->element->specials[i] == special)
+		{
+			tempParticle->specialVals[i] = val;
+			return;
+		}
+	}
 }

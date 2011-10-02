@@ -75,7 +75,7 @@
 #define SPECIAL_SPAWN 1
 #define SPECIAL_BREAK 2
 #define SPECIAL_GROW 3
-#define SPECIAL_BURN 4
+#define SPECIAL_HEAT 4
 #define SPECIAL_EXPLODE 5
 #define SPECIAL_LIFE 6
 

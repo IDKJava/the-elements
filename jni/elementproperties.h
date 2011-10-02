@@ -89,9 +89,4 @@ extern char baseLowestTemp[];
 extern char baseHigherElement[];
 extern char baseLowerElement[];
 
-//Change a particle's heat and fix it
-char changeHeat(struct Particle* tempParticle, int heatChange);
-//Function to fix heat to [0,255]
-char fixHeat(int heat);
-
 #endif //!ELEMENTPROPERTIES_H_INCLUDED

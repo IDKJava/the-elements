@@ -22,5 +22,8 @@ void setBitmapColor(int xCoord, int yCoord, struct Element* element);
 void clearBitmapColor(int xCoord, int yCoord);
 void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
+char changeHeat(struct Particle* tempParticle, int heatChange);
+char fixHeat(int heat);
+void setSpecialVal(struct Particle* tempParticle, int special, int val);
 
 #endif //!POINTS_H_INCLUDED

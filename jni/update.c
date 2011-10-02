@@ -434,30 +434,27 @@ void UpdateView(void)
 					{
 						switch((int)tempElement->specials[i])
 						{
-							//Generator
+							//Spawn
 							case SPECIAL_SPAWN:
 							{
 								//frozen[counter] = 0;
 								int diffX, diffY;
-								struct Particle* temporAllCoords;
+								struct Particle* tempAllCoords;
 								for (diffX = -2; diffX <= 2; diffX++)
 								{
 									for (diffY = -2; diffY <= 2; diffY++)
 									{
-										if (tempX + diffX > 1 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+										if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
 										{
-
-											//__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Spawner found");
-
-											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if (temporAllCoords && temporAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
-												setElement(temporAllCoords, elements[SPAWN_ELEMENT]);
-												temporAllCoords->specialVals[0] = tempParticle->specialVals[0];//specialVals[0] = index of element to spawn
+												setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
+												setSpecialVal(tempAllCoords, SPECIAL_SPAWN, tempParticle->specialVals[i]);
 											}
-											else if (!temporAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
+											else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
-												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[0]]); //1/200 chance of spawning
+												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[i]]);
 											}
 										}
 									}
@@ -477,17 +474,17 @@ void UpdateView(void)
 							case SPECIAL_GROW:
 							{
 								int diffX, diffY;
-								struct Particle* temporAllCoords;
+								struct Particle* tempAllCoords;
 								for (diffX = -1; diffX <= 1; diffX++)
 								{
 									for (diffY = -1; diffY <= 1; diffY++)
 									{
-										if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth )
+										if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth)
 										{
-											temporAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if (temporAllCoords != NULL && temporAllCoords->element == elements[WATER_ELEMENT] && rand() % 10 == 0)
+											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+											if (tempAllCoords && tempAllCoords->element->index == tempParticle->specialVals[i] && rand() % 10 == 0)
 											{
-												setElement(temporAllCoords, tempParticle->element);
+												setElement(tempAllCoords, tempParticle->element);
 											}
 										}
 									}
@@ -495,17 +492,16 @@ void UpdateView(void)
 
 								break;
 							}
-							//Burn
-							case SPECIAL_BURN:
+							//Heater
+							case SPECIAL_HEAT:
 							{
-								//__android_log_write(ANDROID_LOG_INFO, "TheElements", "we've got fire");
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
 								for (diffX = -1; diffX <= 1; diffX++)
 								{
 									for(diffY = -1; diffY <=1; diffY++)
 									{
-										if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX > 0 && tempY+diffY < workHeight && tempY+diffY > 1)
+										if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
 										{
 											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
 											if(tempAllCoords)
@@ -532,19 +528,18 @@ void UpdateView(void)
 									{
 										for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
 										{
-											distance = diffX*diffX + diffY*diffY;
-											if (distance <= explosiveness*explosiveness && tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+											if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
 											{
 												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-												if (tempAllCoords && rand()%5 == 0)
+												if (tempAllCoords && rand()%20 == 0)
 												{
 													if(diffX != 0 && tempAllCoords->xVel < explosiveness)
 													{
-														tempAllCoords->xVel += diffX / abs(diffX);
+														tempAllCoords->xVel += (2*(diffX > 0)-1);
 													}
 													if(diffY != 0 && tempAllCoords->yVel < explosiveness)
 													{
-														tempAllCoords->yVel += diffY / abs(diffY);
+														tempAllCoords->yVel += (2*(diffY > 0)-1);
 													}
 												}
 											}

@@ -86,7 +86,7 @@ signed char baseSpecial[][MAX_SPECIALS] =
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},  //Destructible Wall
 		{SPECIAL_GROW, SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
-		{SPECIAL_BURN, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Fire
+		{SPECIAL_HEAT, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Fire
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE}, //Magma
 		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
 		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE,SPECIAL_NONE},
@@ -113,19 +113,19 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
-		{5,0,0,0,0,0},
+		{0,0,0,0,0,0},
 		{4,2,0,0,0,0},
 		{0,5,0,0,0,0}, //Fire
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{7,3,0,0,0,0},
 		{10,0,0,0,0,0},
-		{20,0,0,0,0,0},
+		{40,0,0,0,0,0},
 		{2,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
-		{3,0,0,0,0,0},
+		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{5,0,0,0,0,0}};
@@ -143,35 +143,3 @@ char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 
 //Defines the higher and lower elements to change to outside of the correct temp range
 char baseHigherElement[] = {0, 0, 0, 20, 5, 0, 4, 0, 11, 10, 0, 0, 11, 10, 10, 10, 10, 5, 0, 5, 0, 3, 0, 10};
 char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 0, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0};
-
-//Change a particle's heat and fix it
-char changeHeat(struct Particle* tempParticle, int heatChange)
-{
-	tempParticle->heat = fixHeat(tempParticle->heat + heatChange);
-}
-
-//Function to fix heat to [0,255]
-char fixHeat(int heat)
-{
-	if (heat < 0)
-	{
-		heat = 0;
-	}
-	else if(heat > 255)
-	{
-		heat = 255;
-	}
-
-	return heat;
-}
-
-//Function to check if a particle has a given special
-char hasSpecial(struct Particle* tempParticle, int special)
-{
-	int i;
-	for(i = 0; i < MAX_SPECIALS; i++)
-	{
-		if (tempParticle->element->specials[i] == special) return TRUE;
-	}
-	return FALSE;
-}

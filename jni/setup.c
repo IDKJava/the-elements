@@ -100,7 +100,7 @@ void elementSetup()
 
 	//Allocate and initialize all the elements
 	struct Element* tempElement;
-	int i;
+	int i, j;
 	for(i = 0; i < numElements; i++)
 	{
 		if(i < NUM_BASE_ELEMENTS)
@@ -116,8 +116,10 @@ void elementSetup()
 			tempElement->state = baseState[i];
 			tempElement->specials = baseSpecial[i];
 			tempElement->specialVals = (char*) malloc(2 * sizeof(char));
-				tempElement->specialVals[0] = baseSpecialValue[i][0];
-				tempElement->specialVals[1] = baseSpecialValue[i][1];
+			for(j = 0; j < MAX_SPECIALS; j++)
+			{
+				tempElement->specialVals[j] = baseSpecialValue[i][j];
+			}
 			tempElement->inertia = baseInertia[i];
 			tempElement->startingTemp = baseStartingTemp[i];
 			tempElement->highestTemp = baseHighestTemp[i];
@@ -125,7 +127,7 @@ void elementSetup()
 		}
 		else
 		{
-			//TODO: Gotta load the thing from the array, allocate the memory for it, and store the pointer here
+			//TODO: (Custom Elements) Gotta load the thing from the array, allocate the memory for it, and store the pointer here
 		}
 
 		cElement = elements[NORMAL_ELEMENT];
