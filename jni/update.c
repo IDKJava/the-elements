@@ -430,7 +430,7 @@ void UpdateView(void)
 				int i;
 				for (i = 0; i < MAX_SPECIALS; i++)
 				{
-					if(tempElement && tempElement->specials[i] != SPECIAL_NOT_SET)
+					if(tempElement && tempElement->specials[i] != SPECIAL_NONE)
 					{
 						switch((int)tempElement->specials[i])
 						{
@@ -546,9 +546,9 @@ void UpdateView(void)
 										}
 									}
 
-									for(diffX = -5; diffX <= 5; diffX++)
+									for(diffX = -2; diffX <= 2; diffX++)
 									{
-										for(diffY = -5; diffY <= 5; diffY++)
+										for(diffY = -2; diffY <= 2; diffY++)
 										{
 											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
 											if(!tempAllCoords && rand()%100 == 0)
@@ -579,16 +579,16 @@ void UpdateView(void)
 							break;
 						}
 					}
+				}
 
-					//Resolve heat changes
-					if(tempParticle->heat < tempParticle->element->lowestTemp)
-					{
-						setElement(tempParticle, tempParticle->element->lowerElement);
-					}
-					else if(tempParticle->heat > tempParticle->element->highestTemp)
-					{
-						setElement(tempParticle, tempParticle->element->higherElement);
-					}
+				//Resolve heat changes
+				if(tempParticle->heat < tempParticle->element->lowestTemp)
+				{
+					setElement(tempParticle, tempParticle->element->lowerElement);
+				}
+				else if(tempParticle->heat > tempParticle->element->highestTemp)
+				{
+					setElement(tempParticle, tempParticle->element->higherElement);
 				}
 			}
 		}
