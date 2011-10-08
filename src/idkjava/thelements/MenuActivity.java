@@ -14,13 +14,14 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-//import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.heyzap.sdk.HeyzapLib;
 
 public class MenuActivity extends Activity
 {
@@ -36,7 +37,6 @@ public class MenuActivity extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
-		
 		super.onCreate(savedInstanceState); //Call the super method
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
@@ -115,6 +115,8 @@ public class MenuActivity extends Activity
 				}
 			}
 		);
+		
+		HeyzapLib.load(this);
 	}
 //	public void onSuccessfulLoad(MobclixAdView view)
 //	{

@@ -553,14 +553,13 @@ void UpdateView(void)
 									{
 										for(diffY = -2; diffY <= 2; diffY++)
 										{
-											tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-											if(!tempAllCoords && rand()%100 == 0)
+											if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
 											{
-												createPoint(tempX + diffX, tempY + diffY, elements[FIRE_ELEMENT]);
-											}
-											else if(tempAllCoords)
-											{
-												changeHeat(tempAllCoords, 50);
+												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+												if(tempAllCoords)
+												{
+													changeHeat(tempAllCoords, 50);
+												}
 											}
 										}
 									}

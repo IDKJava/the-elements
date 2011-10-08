@@ -51,5 +51,11 @@
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	
+	    <com.heyzap.sdk.HeyzapButton
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			checkinMessage="I just found an awesome falling sand app! Come try it out!"
+			android:gravity="bottom|left"/>
 
 </LinearLayout>

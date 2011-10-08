@@ -3,7 +3,8 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="mobclix.jar"/>
-	<classpathentry kind="lib" path="GoogleAdMobAdsSdk-4.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-4.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/heyzap-sdk-2.0.0.jar"/>
+	<classpathentry kind="lib" path="libs/mobclix.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
