@@ -95,3 +95,9 @@ int n; //Used in sending and recieving data
 struct sockaddr_in serv_addr; //The server address struct
 struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
 */
+
+/*
+ * MUTEXES
+ */
+
+pthread_mutex_t update_mutex;

@@ -18,6 +18,8 @@ extern "C" {
 #include "macros.h"
 //Include the server functions
 #include "server.h"
+//Include the pthread functions
+#include <pthread.h>
 
 /*
  * FUNCTIONS
@@ -162,6 +164,12 @@ int n; //Used in sending and recieving data
 struct sockaddr_in serv_addr; //The server address struct
 struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
 */
+
+/*
+ * MUTEXES
+ */
+
+extern pthread_mutex_t update_mutex;
 
 #ifdef __cplusplus
 }

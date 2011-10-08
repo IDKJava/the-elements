@@ -29,6 +29,8 @@
 //#include "server.h"
 //Include the rendering functions
 #include "gl.h"
+//Include pthread functions
+#include <pthread.h>
 
 
 
@@ -275,6 +277,8 @@ void Java_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject
 			float dy = (float)changeY / (float)distance;
 			int counter;
 			int oldplay = play;
+
+			pthread_mutex_lock(&update_mutex);
 			play = FALSE;
 			for (counter = 0; counter <= distance; counter++)
 			{
@@ -283,6 +287,7 @@ void Java_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject
 				UpdateView();
 			}
 			play = oldplay;
+			pthread_mutex_unlock(&update_mutex);
 		}
 	}
 	mouseX = x;

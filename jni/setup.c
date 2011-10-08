@@ -58,6 +58,9 @@ void gameSetup()
 //Set up all the variable sized arrays
 void arraySetup()
 {
+	//Set up the update_mutex
+	pthread_mutex_init(&update_mutex, NULL);
+
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
 	//Make sure everything is deallocated
 	free(colors);

@@ -14,6 +14,8 @@
 #include "app.h"
 //Include the update function
 #include "update.h"
+//Include pthread functions
+#include <pthread.h>
 
 void glInit(void);
 void glRender(void);

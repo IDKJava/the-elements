@@ -6,7 +6,6 @@
  */
 
 #include "gl.h"
-#include <android/log.h>
 
 unsigned int textureID;
 
@@ -90,7 +89,7 @@ void glRender()
 
 		dimensionsChanged = FALSE;
 		zoomChanged = FALSE;
-		__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Dimensions changed");
+		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Dimensions changed");
 
 	}
 	else if(zoomChanged)
@@ -101,10 +100,12 @@ void glRender()
 		texture[7] = (float) workHeight/texHeight;
 
 		zoomChanged = FALSE;
-		__android_log_write(ANDROID_LOG_INFO, "MainActivity", "zoom changed");
+		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "zoom changed");
 	}
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
+	pthread_mutex_lock(&update_mutex);
 	UpdateView();
+	pthread_mutex_unlock(&update_mutex);
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
 
 	//Clear the screen
