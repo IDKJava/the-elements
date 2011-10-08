@@ -518,28 +518,31 @@ void UpdateView(void)
 							{
 								if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
 								{
-									int explosiveness = tempParticle->specialVals[i];
 									int diffX, diffY;
 									int distance;
 									struct Particle* tempAllCoords;
 
-									//In radius of explosion, add velocity
-									for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
+									//In radius of explosion, add velocity with a 5% chance
+									if(rand()%20 == 0)
 									{
-										for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
+										int explosiveness = tempParticle->specialVals[i];
+										for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
 										{
-											if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+											for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
 											{
-												tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-												if (tempAllCoords && rand()%20 == 0)
+												if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
 												{
-													if(diffX != 0 && tempAllCoords->xVel < explosiveness)
+													tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
+													if (tempAllCoords)
 													{
-														tempAllCoords->xVel += (2*(diffX > 0)-1);
-													}
-													if(diffY != 0 && tempAllCoords->yVel < explosiveness)
-													{
-														tempAllCoords->yVel += (2*(diffY > 0)-1);
+														if(diffX != 0 && tempAllCoords->xVel < explosiveness)
+														{
+															tempAllCoords->xVel += (2*(diffX > 0)-1);
+														}
+														if(diffY != 0 && tempAllCoords->yVel < explosiveness)
+														{
+															tempAllCoords->yVel += (2*(diffY > 0)-1);
+														}
 													}
 												}
 											}
