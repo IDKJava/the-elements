@@ -11,7 +11,7 @@ import android.widget.EditText;
 public class SaveStateActivity extends Activity
 {
 	public static Button saveButton;
-	public static EditText filename;
+	public static EditText statename;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -20,7 +20,7 @@ public class SaveStateActivity extends Activity
 		setContentView(R.layout.save_state_activity);
 		
 		saveButton = (Button) findViewById(R.id.save_state_button);
-		filename = (EditText) findViewById(R.id.save_state_filename);
+		statename = (EditText) findViewById(R.id.save_state_filename);
 		
 		saveButton.setOnClickListener
 		(
@@ -28,10 +28,15 @@ public class SaveStateActivity extends Activity
 				{
 					public void onClick(View v)
 					{
-						SaveManager.saveState(filename.getText().toString());
+						SaveManager.saveState(statename.getText().toString());
 						finish();
 					}
 				}
 		);
+		
+		if(MainActivity.last_state_loaded != null)
+		{
+			statename.setText(MainActivity.last_state_loaded);
+		}
 	}
 }

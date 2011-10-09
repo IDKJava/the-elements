@@ -63,6 +63,8 @@ public class MainActivity extends Activity
 	public static MenuBar menu_bar;
 	public static Control control;
 	public static SandView sand_view;
+	
+	public static String last_state_loaded = null;
 
 	private SensorManager myManager;
 	private List<Sensor> sensors;

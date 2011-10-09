@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -64,37 +65,36 @@ public class LoadStateActivity extends Activity
         
         //Create a TableLayout object associated with the TableLayout in the .xml file
         TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
-        //Create a LinearLayout to contain our button within our row
+        //Create a LinearLayout to contain our row
         buttonContainer = new LinearLayout(this);
-		//Create the new TableRow that will be added
-		tr = new TableRow(this);
 		//Set some properties
 		//tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		tr.setBackgroundResource(R.drawable.load_state_tr_bg);
-		tr.setLongClickable(true);
-		tr.setClickable(true);
-		tr.setPadding(25, 10, 25, 10);
+		buttonContainer.setBackgroundResource(R.drawable.load_state_tr_bg);
+		buttonContainer.setLongClickable(true);
+		buttonContainer.setClickable(true);
+		buttonContainer.setPadding(25, 10, 25, 10);
+		buttonContainer.setGravity(Gravity.RIGHT);
 		
 		//Create a TextView to hold the filename
 		TextView filename = new TextView(this);
 		filename.setText(entityName);
+		filename.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
 		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
 		//Makes use of DisplayMetrics to create an automatic dip unit :)
 		//filename.setPadding((int)(16 * SCALE + 0.5f), 0, 0, 0);
 		//Add the TextView to the TableRow
-		tr.addView(filename);
+		buttonContainer.addView(filename);
 
 		//Set buttonContainer's gravity to right with a 16dip right padding
 		//buttonContainer.setPadding(0, 0, (int)(16 * SCALE + 0.5f), 0);
 		//buttonContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 50));
-		buttonContainer.setGravity(Gravity.RIGHT);
 		
         //Create a button to be the action invoker
         ImageButton actionButton = new ImageButton(this);
-        actionButton.setBackgroundResource(R.drawable.load_state_btn);
+        actionButton.setBackgroundResource(R.drawable.load_state_select);
         actionButton.setLayoutParams(new LayoutParams(
-                        LayoutParams.FILL_PARENT, 
+                        LayoutParams.WRAP_CONTENT, 
                         LayoutParams.WRAP_CONTENT));
         actionButton.setOnClickListener
         (
@@ -102,30 +102,61 @@ public class LoadStateActivity extends Activity
     		{
     			public void onClick(View v)
     			{
-    				//TODO: Something
+                	SaveManager.loadState(entityNameFinal);
+                	finish();
     			}
     		}
         );
-
-        //Add the button to the TableRow
         buttonContainer.addView(actionButton);
-        tr.addView(buttonContainer);
+        
+        actionButton = new ImageButton(this);
+        actionButton.setBackgroundResource(R.drawable.load_state_delete);
+        actionButton.setLayoutParams(new LayoutParams(
+                LayoutParams.WRAP_CONTENT, 
+                LayoutParams.WRAP_CONTENT));
+		actionButton.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					SaveManager.deleteState(entityNameFinal);
+					ViewGroup parent = (ViewGroup) v.getParent().getParent();
+					parent.removeView((View) v.getParent());
+					SaveManager.refresh();
+					if(SaveManager.getNumSaves() == 0)
+					{
+						TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+						tr = new TableRow(getBaseContext());
+						tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+						tr.setGravity(Gravity.CENTER);
+						
+						TextView tv = new TextView(getBaseContext());
+						tv.setText(res.getText(R.string.no_saves));
+						
+						tr.addView(tv);
+						tl.addView(tr);
+					}
+				}
+			}
+		);
+		buttonContainer.addView(actionButton);
         
         //Add a test click event
-        tr.setOnClickListener
+        buttonContainer.setOnClickListener
         (
         	new OnClickListener()
 	        {
                 public void onClick(View viewParam)
                 {
-                	SaveManager.loadState(entityNameFinal+FileManager.SAVE_EXT);
+                	SaveManager.loadState(entityNameFinal);
                 	finish();
                 }
 	        }
         );
         
         //Add the created row to our TableLayout
-        tl.addView(tr, new LayoutParams(
+        tl.addView(buttonContainer, new LayoutParams(
                 LayoutParams.FILL_PARENT, 
                 LayoutParams.WRAP_CONTENT));
     }

@@ -317,7 +317,7 @@ char saveTempToFile(char* saveLoc)
 		{
 			__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error reading from temp.sav file");
 			clearerr(tempFile);
-			break;
+			return FALSE;
 		}
 		else if (!feof(tempFile))
 		{
@@ -326,13 +326,15 @@ char saveTempToFile(char* saveLoc)
 			{
 				__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Error writing to save file");
 				clearerr(saveFile);
-				break;
+				return FALSE;
 			}
 		}
 	}
 
 	fclose(saveFile);
 	fclose(tempFile);
+
+	return TRUE;
 }
 
 char loadFileToTemp(char* loadLoc)
