@@ -1,9 +1,10 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
-import idkjava.thelements.MainActivity;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import com.idkjava.thelements.MainActivity;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
@@ -25,7 +26,11 @@ public class SandView extends GLSurfaceView
 		setEGLConfigChooser(false); //Set the EGLConfigChooser
 		setRenderer(mRenderer); //Associate it with this view
 	}
-
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+	}
 	//When a touch screen event occurs
 	public boolean onTouchEvent(final MotionEvent event)
 	{

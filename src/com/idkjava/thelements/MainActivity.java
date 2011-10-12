@@ -1,13 +1,15 @@
-package idkjava.thelements;
+package com.idkjava.thelements;
 
-import idkjava.thelements.game.Control;
-import idkjava.thelements.game.FileManager;
-import idkjava.thelements.game.MenuBar;
-import idkjava.thelements.game.SandView;
-import idkjava.thelements.preferences.Preferences;
-import idkjava.thelements.preferences.PreferencesActivity;
+import com.idkjava.thelements.R;
 
 import java.util.List;
+
+import com.idkjava.thelements.game.Control;
+import com.idkjava.thelements.game.FileManager;
+import com.idkjava.thelements.game.MenuBar;
+import com.idkjava.thelements.game.SandView;
+import com.idkjava.thelements.preferences.Preferences;
+import com.idkjava.thelements.preferences.PreferencesActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -132,6 +134,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onResume()
 	{
+		nativeInit();
 		Log.v("TheElements", "MainActivity.onResume()");
 		//Use the super onResume
 		super.onResume();

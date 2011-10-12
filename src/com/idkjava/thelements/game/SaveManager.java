@@ -1,10 +1,11 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
-import idkjava.thelements.MainActivity;
 
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.UnsupportedEncodingException;
+
+import com.idkjava.thelements.MainActivity;
 
 import android.util.Log;
 

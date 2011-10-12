@@ -6,6 +6,7 @@
  */
 
 #include "gl.h"
+#include <android/log.h>
 
 unsigned int textureID;
 
@@ -49,6 +50,7 @@ void glInit()
 	while((texWidth = texWidth << 1) < screenWidth);
 	while((texHeight = texHeight << 1) < screenHeight);
 
+
 	//Allocate the dummy array
 	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
 	//Generate the tex image
@@ -64,8 +66,13 @@ void glInit()
 void glRender()
 {
 	//Check for changes in screen dimensions or work dimensions and handle them
+	char buffer[100];
+	sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
+	__android_log_write( ANDROID_LOG_INFO, "ThElements", buffer );
+
 	if(dimensionsChanged)
 	{
+		__android_log_write( ANDROID_LOG_INFO, "ThElements", "dimensions changed" );
 		vertices[2] = (float) screenWidth;
 		vertices[5] = (float) screenHeight;
 		vertices[6] = (float) screenWidth;

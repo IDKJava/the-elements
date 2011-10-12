@@ -1,7 +1,8 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
-import idkjava.thelements.MainActivity;
-import idkjava.thelements.R;
+import com.idkjava.thelements.MainActivity;
+
+import com.idkjava.thelements.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -60,7 +61,7 @@ public class MenuBar extends LinearLayout
 		play_pause_button = (ImageButton) findViewById(R.id.play_pause_button);
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
-		load_demo_button = (ImageButton) findViewById(R.id.load_demo_button);
+		//load_demo_button = (ImageButton) findViewById(R.id.load_demo_button);
 		exit_button = (ImageButton) findViewById(R.id.exit_button);
 
 		//Set up the OnClickListener for the eraser button
@@ -150,7 +151,7 @@ public class MenuBar extends LinearLayout
 		});
 
 		//Set up the OnClickListener for the load demo button
-		load_demo_button.setOnClickListener(new OnClickListener()
+		/*load_demo_button.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -165,6 +166,7 @@ public class MenuBar extends LinearLayout
 				}
 			}
 		});
+		*/
 
 		//Set up the OnClickListener for the exit button
 		exit_button.setOnClickListener(new OnClickListener()

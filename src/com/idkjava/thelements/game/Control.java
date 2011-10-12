@@ -1,7 +1,8 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
-import idkjava.thelements.MainActivity;
-import idkjava.thelements.R;
+import com.idkjava.thelements.MainActivity;
+
+import com.idkjava.thelements.R;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;

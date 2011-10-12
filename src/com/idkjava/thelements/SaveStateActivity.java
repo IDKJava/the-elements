@@ -1,10 +1,14 @@
-package idkjava.thelements;
+package com.idkjava.thelements;
 
-import idkjava.thelements.game.SaveManager;
+import com.idkjava.thelements.game.SaveManager;
+
+import com.idkjava.thelements.R;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,6 +32,8 @@ public class SaveStateActivity extends Activity
 				{
 					public void onClick(View v)
 					{
+						InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+						imm.hideSoftInputFromWindow(statename.getWindowToken(), 0);
 						SaveManager.saveState(statename.getText().toString());
 						finish();
 					}

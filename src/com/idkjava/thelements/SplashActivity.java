@@ -1,6 +1,6 @@
-package idkjava.thelements;
+package com.idkjava.thelements;
 
-import idkjava.thelements.R;
+import com.idkjava.thelements.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;

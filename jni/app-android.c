@@ -35,7 +35,7 @@
 
 
 //Called from SandViewRenderer
-void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
+void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
 	screenWidth = width - width%2;
@@ -68,13 +68,13 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, job
 	sprintf(buffer, "Available particles: %d", loq);
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 }
-void Java_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
+void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
 	glRender();
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
 }
-void Java_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
+void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
 {
 	char loadLoc[256];
 
@@ -95,7 +95,7 @@ void Java_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, 
 }
 
 //Save/load functions
-char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
+char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
 {
 	jsize len = (*env)->GetArrayLength(env, saveLoc);
 	jbyte* saveLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
@@ -120,7 +120,7 @@ char Java_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thi
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: failed!");
 	return FALSE;
 }
-char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
+char Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
 {
 	jsize len = (*env)->GetArrayLength(env, loadLoc);
 	jbyte* loadLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
@@ -145,7 +145,7 @@ char Java_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thi
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadLoc: failed!");
 	return FALSE;
 }
-char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
+char Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempState");
 	char saveLoc[256];
@@ -155,11 +155,11 @@ char Java_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thi
 	strcat(saveLoc, SAVE_EXTENSION);
 	return saveState(saveLoc);
 }
-char Java_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
+char Java_com_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
 {
 	return removeTempSave();
 }
-char Java_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject this)
+char Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject this)
 {
 	char loadLoc[256];
 	strcpy(loadLoc, ROOT_FOLDER);
@@ -170,7 +170,7 @@ char Java_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thi
 }
 
 //General utility functions
-void Java_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
+void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
 	importGLInit();
@@ -178,28 +178,28 @@ void Java_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
 	elementSetup();
 	particleSetup();
 }
-void Java_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
+void Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
 	shouldClear = TRUE;
 }
 
 //Setter functions
-void Java_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
+void Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
 {
 	cAtmosphere->borderLeft = leftBorderState;
 	cAtmosphere->borderTop = topBorderState;
 	cAtmosphere->borderRight = rightBorderState;
 	cAtmosphere->borderBottom = bottomBorderState;
 }
-void Java_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
+void Java_com_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
 {
 	accelOn = (char) accelState;
 }
-void Java_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
+void Java_com_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
 {
 	flipped = (char) flippedState;
 }
-void Java_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
+void Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
 {
 	//Set the eraser color to the background color, used as the reference whenever background color is needed
 	cAtmosphere->backgroundRed = redValue;
@@ -223,40 +223,40 @@ void Java_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* 
 	loadState(loadLoc);
 	*/
 }
-void Java_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
+void Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
 {
 	cAtmosphere->heat = temp;
 }
-void Java_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
+void Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
 {
 	cAtmosphere->gravity = gravity;
 }
-void Java_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
+void Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
 {
 	play = (char) playState;
 }
-void Java_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
+void Java_com_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
 {
 	if(zoomState != zoom)
 	{
 		shouldZoom = TRUE;
 	}
 }
-void Java_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
+void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
 {
 	cElement = elements[element];
 }
-void Java_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this, jchar brushSizeValue)
+void Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this, jchar brushSizeValue)
 {
 	brushSize = brushSizeValue;
 }
-void Java_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
+void Java_com_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
 {
 	fingerDown = state;
 	//To prevent drawing from the previous point, invalidate the mouse pointer
 	mouseX = -1;
 }
-void Java_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
+void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
 {
 	//Set the mouse position and draw lines if needed
 	if (mouseX != -1)
@@ -295,23 +295,23 @@ void Java_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject
 }
 
 //Getter functions
-char Java_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
+char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 {
 	return cElement->index;
 }
 
 //Accelerometer related
-void Java_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)
+void Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)
 {
 	xGravity = xGravityIn;
 }
-void Java_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravityIn)
+void Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravityIn)
 {
 	yGravity = yGravityIn;
 }
 
 /* TODO: Network related
-void Java_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject this, jbyteArray minut)
+void Java_com_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject this, jbyteArray minut)
 {
 	int i; //Counter variable
 
@@ -336,7 +336,7 @@ void Java_idkjava_thelements_MainActivity_setPassword(JNIEnv *env, jobject this,
 	//Free the created byte array
 	free(minut1);
 }
-void Java_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject this, jbyteArray minut)
+void Java_com_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject this, jbyteArray minut)
 {
 	int i; //Counter variable
 
@@ -361,7 +361,7 @@ void Java_idkjava_thelements_MainActivity_setUsername(JNIEnv *env, jobject this,
 	//Free the created byte array
 	free(minut1);
 }
-int Java_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject this)
+int Java_com_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject this)
 {
 	buildbuffer(3);
 	if(!sendbuffer())
@@ -371,7 +371,7 @@ int Java_idkjava_thelements_MainActivity_login(JNIEnv *env, jobject this)
 
 	return 0;
 }
-int Java_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject this)
+int Java_com_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject this)
 {
 	buildbuffer(2);
 	if(!sendbuffer())
@@ -382,14 +382,14 @@ int Java_idkjava_thelements_MainActivity_register(JNIEnv *env, jobject this)
 
 	return 0;
 }
-char* Java_idkjava_thelements_MainActivity_viewErr (JNIEnv *env, jobject this)
+char* Java_com_idkjava_thelements_MainActivity_viewErr (JNIEnv *env, jobject this)
 {
 	return error;
 }
 */
 
 //Custom elements related
-char Java_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject this, char* loadLoc)
+char Java_com_idkjava_thelements_game_CustomElementManager_loadCustomElement(JNIEnv* env, jobject this, char* loadLoc)
 {
 	return loadCustomElement(loadLoc);
 }

@@ -1,4 +1,4 @@
-package idkjava.thelements.preferences;
+package com.idkjava.thelements.preferences;
 
 import android.content.Context;
 import android.content.SharedPreferences;

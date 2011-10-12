@@ -1,13 +1,12 @@
-package idkjava.thelements;
+package com.idkjava.thelements;
 
-import idkjava.thelements.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import idkjava.thelements.R;
+import com.idkjava.thelements.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -22,6 +21,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.heyzap.sdk.HeyzapLib;
+import com.idkjava.thelements.MainActivity;
 
 public class MenuActivity extends Activity
 {

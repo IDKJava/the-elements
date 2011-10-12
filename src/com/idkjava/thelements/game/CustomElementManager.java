@@ -1,4 +1,4 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
 import java.io.File;
 import java.io.FilenameFilter;

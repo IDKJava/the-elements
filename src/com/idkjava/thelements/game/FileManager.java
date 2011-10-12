@@ -1,6 +1,6 @@
-package idkjava.thelements.game;
+package com.idkjava.thelements.game;
 
-import idkjava.thelements.R;
+import com.idkjava.thelements.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

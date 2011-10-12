@@ -1,6 +1,6 @@
-package idkjava.thelements.preferences;
+package com.idkjava.thelements.preferences;
 
-import idkjava.thelements.R;
+import com.idkjava.thelements.R;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 
