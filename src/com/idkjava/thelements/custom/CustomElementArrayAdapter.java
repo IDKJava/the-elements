@@ -1,6 +1,6 @@
-package idkjava.thelements.customelements;
+package com.idkjava.thelements.custom;
 
-import idkjava.thelements.R;
+import com.idkjava.thelements.R;
 
 import java.util.List;
 

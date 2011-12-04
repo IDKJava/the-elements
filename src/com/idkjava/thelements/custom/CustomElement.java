@@ -1,4 +1,4 @@
-package idkjava.thelements.customelements;
+package com.idkjava.thelements.custom;
 
 public class CustomElement {
 	private String _name;

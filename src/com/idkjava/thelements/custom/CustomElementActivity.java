@@ -1,6 +1,6 @@
-package idkjava.thelements.customelements;
+package com.idkjava.thelements.custom;
 
-import idkjava.thelements.game.CustomElementManager;
+import com.idkjava.thelements.game.CustomElementManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
