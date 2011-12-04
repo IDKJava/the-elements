@@ -99,7 +99,8 @@ void elementSetup()
 
 	//Free and reallocate the elements array
 	free(elements);
-	elements = malloc(numElements * sizeof(struct Element*));
+
+	elements = malloc(numElements * sizeof(struct Element*)); // we  will realloc later for custom elements if neede
 
 	//Allocate and initialize all the elements
 	struct Element* tempElement;
@@ -127,10 +128,6 @@ void elementSetup()
 			tempElement->startingTemp = baseStartingTemp[i];
 			tempElement->highestTemp = baseHighestTemp[i];
 			tempElement->lowestTemp = baseLowestTemp[i];
-		}
-		else
-		{
-			//TODO: (Custom Elements) Gotta load the thing from the array, allocate the memory for it, and store the pointer here
 		}
 
 		cElement = elements[NORMAL_ELEMENT];

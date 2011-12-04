@@ -211,6 +211,11 @@ char loadState(char* loadLoc)
 		{
 			return FALSE;
 		}
+		int* tempMap;
+		int* tempElMap;
+		tempElMap = (int*)malloc ( 256 * sizeof(int) ); //256 is the max number of elements
+		tempMap = (int*)malloc( numElementsSaved * 3 * sizeof(int) );
+		elements = realloc( elements, (numElements + numElementsSaved) * sizeof( struct Element* ) );
 
 		for(i = 0; i < numElementsSaved; i++)
 		{
@@ -224,16 +229,31 @@ char loadState(char* loadLoc)
 			if(fscanf(fp, "%d", &tempElement->highestTemp) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &lowerElementIndex) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &higherElementIndex) == EOF) {return FALSE;}
-			tempElement->lowerElement = elements[lowerElementIndex];
-			tempElement->higherElement = elements[higherElementIndex];
 			if(fscanf(fp, "%d", &tempElement->red) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &tempElement->green) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &tempElement->blue) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &tempElement->density) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &tempElement->fallVel) == EOF) {return FALSE;}
 			if(fscanf(fp, "%d", &tempElement->inertia) == EOF) {return FALSE;}
+			tempMap[3*i] = elementIndex;
+			tempMap[3*i + 1] = lowerElementIndex;
+			tempMap[3*i + 2] = higherElementIndex;
+			tempElMap[elementIndex] = i + numElements;
+			elements[elementIndex] = tempElement;
 		}
+		for ( i = 0; i < numElementsSaved; i++ )
+		{
+			elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 1] > NUM_BASE_ELEMENTS ? 
+						elements[ tempElMap[tempMap[3*i + 1]] ] : elements[tempMap[3*i + 1]];
+			elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 2] > NUM_BASE_ELEMENTS ? 
+						elements[tempElMap[tempMap[3*i + 2]] ]: elements[tempMap[3*i + 2]];
+		}
+		free(tempMap);
+		free(tempElMap);
 
+		numElements +=  numElementsSaved;
+
+	
 		if(fscanf(fp, "%d %d\n\n", &sizeX, &sizeY) == EOF) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
@@ -241,7 +261,7 @@ char loadState(char* loadLoc)
 		{
 			sizeX = workWidth;
 		}
-		if(sizeY > workHeight)
+		if(sizeY > workHeight)	
 		{
 			sizeY = workHeight;
 		}
