@@ -3,7 +3,6 @@ package com.idkjava.thelements;
 import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.SaveManager;
 
-import com.idkjava.thelements.R;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;

@@ -66,9 +66,9 @@ void glInit()
 void glRender()
 {
 	//Check for changes in screen dimensions or work dimensions and handle them
-	char buffer[100];
-	sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
-	__android_log_write( ANDROID_LOG_INFO, "ThElements", buffer );
+	//char buffer[100];
+	//sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
+	//__android_log_write( ANDROID_LOG_INFO, "ThElements", buffer );
 
 	if(dimensionsChanged)
 	{

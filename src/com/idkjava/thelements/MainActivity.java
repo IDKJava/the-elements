@@ -24,7 +24,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -116,7 +115,7 @@ public class MainActivity extends Activity
 	@Override
 	protected void onPause()
 	{
-		Log.v("TheElements", "MainActivity.onPause()");
+		// Log.v("TheElements", "MainActivity.onPause()");
 		//Use the normal onPause
 		super.onPause();
 		//Call onPause for the view
@@ -135,7 +134,7 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		nativeInit();
-		Log.v("TheElements", "MainActivity.onResume()");
+		// Log.v("TheElements", "MainActivity.onResume()");
 		//Use the super onResume
 		super.onResume();
 
@@ -154,7 +153,7 @@ public class MainActivity extends Activity
 		//If we're resuming from a pause (not when it starts)
 		if (settings.getBoolean("paused", false))
 		{
-			Log.v("TheElements", "Resuming from pause");
+			// Log.v("TheElements", "Resuming from pause");
 
 			//Check to see if UI changed
 			boolean oldui = ui;
@@ -191,9 +190,9 @@ public class MainActivity extends Activity
 		}
 
 		//Call onResume() for view too
-		Log.v("TheElements", "sand_view.onResume()");
+		// Log.v("TheElements", "sand_view.onResume()");
 		sand_view.onResume();
-		Log.v("TheElements", "sand_view.onResume() done");
+		// Log.v("TheElements", "sand_view.onResume() done");
 	}
 
 	protected Dialog onCreateDialog(int id) //This is called when showDialog is called
