@@ -154,11 +154,6 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			    firstParticle->y = oldYFirst;
 			    deletePoint(firstParticle);
 			    firstParticle->hasMoved = FALSE;
-
-				firstParticle->x = oldXFirst;
-				firstParticle->y = oldYFirst;
-				deletePoint(firstParticle);
-				firstParticle->hasMoved = FALSE;
 			}
 			else //2/3 Change of bouncing
 			{
@@ -176,7 +171,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 			{
 				//Delete secondParticle
 			    unSetPoint(secondParticle);
-				secondParticle->hasMoved = TRUE;
+				secondParticle->hasMoved = FALSE;
 			}
 			else //2/3 Chance
 			{
