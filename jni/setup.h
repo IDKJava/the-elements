@@ -17,6 +17,8 @@
 #include "elementproperties.h"
 //Include the free function
 #include <stdlib.h>
+//Include glob for listing files in a directory
+#include <glob.h>
 
 //Set up the workspace
 void gameSetup(void);
