@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -164,7 +165,8 @@ public class MenuActivity extends Activity
 		
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setCancelable(true);
-		builder.setTitle("How to Play The Elements");
+		Resources res = getResources();
+		builder.setTitle(res.getText(R.string.how_to_play_title));
 		builder.setView(how_to_play);
 		builder.show();
 	}
@@ -174,7 +176,8 @@ public class MenuActivity extends Activity
 	   	if (id == 1) //Copyright message
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); //Declare the object
-			builder.setMessage("Element Works is created by IDKJava Copyright 2010");			      
+			Resources res = getResources();
+			builder.setMessage(res.getText(R.string.about_text));		      
 			AlertDialog alert = builder.create(); //Create object
 			return alert; //Return handle
 		}

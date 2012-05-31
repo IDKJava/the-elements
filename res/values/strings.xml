@@ -35,4 +35,6 @@
 <string name="proceed">Proceed</string>
 <string name="exit">Exit</string>
 <string name="restart_app">Please restart app for your changes to go into effect.</string>
+<string name="about_text">The Elements is created by IDKJava, Copyright 2010 - 2012</string>
+<string name="how_to_play_title">How to Play The Elements</string>
 </resources>
