@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res/com.idkjava.thelements" 
 	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#333" >
     
-    <com.google.ads.AdView
+    <!-- <com.google.ads.AdView
 		android:id="@+id/banner_adview"
 		android:layout_height="50dip"
 		android:layout_width="320dip"
@@ -15,7 +14,7 @@
 		android:layout_gravity="center"
 		ads:adUnitId="a14e8547c18ab59"
 		ads:adSize="BANNER"
-        ads:loadAdOnCreate="true"/>
+        ads:loadAdOnCreate="true"/> -->
     <!-- <TextView 
     	android:text="The Elements"
     	android:textSize="40sp"
