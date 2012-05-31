@@ -37,4 +37,10 @@
 <string name="restart_app">Please restart app for your changes to go into effect.</string>
 <string name="about_text">The Elements is created by IDKJava, Copyright 2010 - 2012</string>
 <string name="how_to_play_title">How to Play The Elements</string>
+<string name="start_game_button">Play Game</string>
+<string name="how_to_play_button">How to Play</string>
+<string name="about_button">About</string>
+<string name="blu_trumpet_button">Recommended Apps</string>
+<string name="exit_button">Exit</string>
+<string name="heyzap_checkin_message">I just found an awesome falling sand app! Come try it out!</string>
 </resources>

@@ -11,7 +11,7 @@
 	    <!-- Start game button --> 
 	    <Button
 	    	android:id="@+id/start_game_button"
-	    	android:text="Play Game" 
+	    	android:text="@string/start_game_button" 
 	    	android:layout_width="200sp"
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
@@ -20,7 +20,7 @@
 	    <!-- How-to-play button -->
 	    <Button
 	    	android:id="@+id/how_to_play_button"
-	    	android:text="How to Play"
+	    	android:text="@string/how_to_play_button"
 	    	android:gravity="center"
 	    	android:layout_width="200sp" 
 	    	android:background="@drawable/btn_mm" 
@@ -29,15 +29,15 @@
 	    <!-- About button -->
 	    <Button
 	    	android:id="@+id/about_button"
-	    	android:text="About"
+	    	android:text="@string/about_button"
 	    	android:layout_width="200sp" 
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
 
-	    <!-- Clear Quicksave button -->
+	    <!-- Blu Trumpet button -->
 	    <Button
-	    	android:id="@+id/clear_button"
-	    	android:text="Clear Quicksave"
+	    	android:id="@+id/blu_trumpet_button"
+	    	android:text="@string/blu_trumpet_button"
 	    	android:layout_width="200sp"
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
@@ -46,7 +46,7 @@
 	    <!-- Exit button -->
 	    <Button
 	    	android:id="@+id/exit_button"
-	    	android:text="Exit"
+	    	android:text="@string/exit_button"
 	    	android:layout_width="200sp"
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
@@ -55,7 +55,7 @@
 	    <com.heyzap.sdk.HeyzapButton
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			checkinMessage="I just found an awesome falling sand app! Come try it out!"
+			checkinMessage="@string/heyzap_checkin_message"
 			android:gravity="bottom|left"/>
 
 </LinearLayout>
