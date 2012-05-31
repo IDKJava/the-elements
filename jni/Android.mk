@@ -13,8 +13,8 @@ LOCAL_SRC_FILES := \
 	collide.c \
 	elementproperties.c \
     importgl.c \
-    gl.c \
     points.c \
+    rendergl.c \
     saveload.c \
     setup.c \
     update.c \

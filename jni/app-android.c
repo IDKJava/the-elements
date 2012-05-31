@@ -28,7 +28,7 @@
 //Include the server access functions
 //#include "server.h"
 //Include the rendering functions
-#include "gl.h"
+#include "rendergl.h"
 //Include pthread functions
 #include <pthread.h>
 

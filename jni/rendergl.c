@@ -5,7 +5,7 @@
  * functions appInit, appDeinit, and appRender.
  */
 
-#include "gl.h"
+#include "rendergl.h"
 #include <android/log.h>
 
 unsigned int textureID;
@@ -63,7 +63,7 @@ void glInit()
 	glTexCoordPointer(2, GL_FLOAT, 0, texture);
 }
 
-void glRender()
+/*void glRender()
 {
 	//Check for changes in screen dimensions or work dimensions and handle them
 	//char buffer[100];
@@ -72,7 +72,7 @@ void glRender()
 
 	if(dimensionsChanged)
 	{
-		__android_log_write( ANDROID_LOG_INFO, "ThElements", "dimensions changed" );
+		__android_log_write( ANDROID_LOG_INFO, "TheElements", "dimensions changed" );
 		vertices[2] = (float) screenWidth;
 		vertices[5] = (float) screenHeight;
 		vertices[6] = (float) screenWidth;
@@ -123,4 +123,68 @@ void glRender()
 
 	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+}*/
+
+void glRender()
+{
+	//Clear the screen
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	//Actually draw the rectangle with the text on it (~.015s -- Droid)
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+
+	//Check for changes in screen dimensions or work dimensions and handle them
+	//char buffer[100];
+	//sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
+	//__android_log_write( ANDROID_LOG_INFO, "ThElements", buffer );
+
+	if(dimensionsChanged)
+	{
+		__android_log_write( ANDROID_LOG_INFO, "TheElements", "dimensions changed" );
+		vertices[2] = (float) screenWidth;
+		vertices[5] = (float) screenHeight;
+		vertices[6] = (float) screenWidth;
+		vertices[7] = (float) screenHeight;
+
+		texture[2] = (float) workWidth/texWidth;
+		texture[5] = (float) workHeight/texHeight;
+		texture[6] = (float) workWidth/texWidth;
+		texture[7] = (float) workHeight/texHeight;
+
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		if (!flipped)
+		{
+			glOrthof(0, screenWidth, screenHeight, 0, -1, 1); //--Device
+		}
+		else
+		{
+			glOrthof(0, screenWidth, 0, -screenHeight, -1, 1); //--Emulator
+		}
+
+		dimensionsChanged = FALSE;
+		zoomChanged = FALSE;
+		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Dimensions changed");
+
+	}
+	else if(zoomChanged)
+	{
+		texture[2] = (float) workWidth/texWidth;
+		texture[5] = (float) workHeight/texHeight;
+		texture[6] = (float) workWidth/texWidth;
+		texture[7] = (float) workHeight/texHeight;
+
+		zoomChanged = FALSE;
+		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "zoom changed");
+	}
+
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview begin");
+	pthread_mutex_lock(&update_mutex);
+	UpdateView();
+	pthread_mutex_unlock(&update_mutex);
+	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
+
+	//Sub the work portion of the tex(~.025s -- Droid)
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
+
 }
