@@ -22,6 +22,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.heyzap.sdk.HeyzapLib;
+import com.blutrumpet.sdk.BluTrumpet;
+
 import com.idkjava.thelements.MainActivity;
 
 public class MenuActivity extends Activity
@@ -31,7 +33,7 @@ public class MenuActivity extends Activity
 	public static Button custom_button;
 	public static Button about_button;
 	public static Button exit_button;
-	public static Button clear_button;
+	public static Button blu_trumpet_button;
 	public static boolean loaded = false;
 	public long stime;
 	
@@ -39,6 +41,12 @@ public class MenuActivity extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState); //Call the super method
+		
+		//Initialize Blu Trumpet
+		if (!BluTrumpet.isInitialized())
+		{
+			 BluTrumpet.initWithAppId("2fbef62a-23e6-33f5-acbd-7071d4740f21", this);
+		}
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
 		stime = System.currentTimeMillis();
@@ -50,7 +58,7 @@ public class MenuActivity extends Activity
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);
 		exit_button = (Button) findViewById(R.id.exit_button);
-		clear_button = (Button) findViewById(R.id.clear_button);
+		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
 		
 		
 		
@@ -92,15 +100,18 @@ public class MenuActivity extends Activity
 				}
 			}
 		);
-		clear_button.setOnClickListener
+		blu_trumpet_button.setOnClickListener
 		(
 			new OnClickListener()
 			{
 				public void onClick(View v)
 				{
-					//Show the about dialog
-					MainActivity.removeTempSave();
-					Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
+					//Start the Blu Trumpet Activity
+					startActivity(new Intent(MenuActivity.this, BluTrumpetActivity.class));
+					
+					//OLD -- Clear quicksave
+					//MainActivity.removeTempSave();
+					//Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}
 		);
