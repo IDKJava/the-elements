@@ -1,9 +1,11 @@
 package com.idkjava.thelements.game;
 
+import com.idkjava.thelements.BluTrumpetActivity;
 import com.idkjava.thelements.MainActivity;
 
 import com.idkjava.thelements.R;
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -22,7 +24,7 @@ public class MenuBar extends LinearLayout
 	private static ImageButton play_pause_button;
 	private static ImageButton save_button;
 	private static ImageButton load_button;
-	private static ImageButton load_demo_button;
+	private static ImageButton app_wall_button;
 	private static ImageButton exit_button;
 
 	//Used for eraser
@@ -61,7 +63,7 @@ public class MenuBar extends LinearLayout
 		play_pause_button = (ImageButton) findViewById(R.id.play_pause_button);
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
-		//load_demo_button = (ImageButton) findViewById(R.id.load_demo_button);
+		app_wall_button = (ImageButton) findViewById(R.id.app_wall_button);
 		exit_button = (ImageButton) findViewById(R.id.exit_button);
 
 		//Set up the OnClickListener for the eraser button
@@ -150,23 +152,15 @@ public class MenuBar extends LinearLayout
 			}
 		});
 
-		//Set up the OnClickListener for the load demo button
-		/*load_demo_button.setOnClickListener(new OnClickListener()
+		//Set up the OnClickListener for the app wall button
+		app_wall_button.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				if (MainActivity.loadDemoState() == 1)
-				{
-					Toast.makeText(context, "Demo Loaded", Toast.LENGTH_SHORT).show();
-				}
-				else
-				{
-					Toast.makeText(context, "No Demo File or SDcard", Toast.LENGTH_LONG).show();
-				}
+				((MainActivity) context).startActivity(new Intent(activity, BluTrumpetActivity.class));
 			}
 		});
-		*/
 
 		//Set up the OnClickListener for the exit button
 		exit_button.setOnClickListener(new OnClickListener()
