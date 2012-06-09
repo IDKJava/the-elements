@@ -134,10 +134,10 @@ char baseSpecialValue[][MAX_SPECIALS] =
 char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1};
 
 //Defines the initial temp of anything of that element that is spawned (0 = atmosphere)
-char baseStartingTemp[] = {0, 0, 0, 0, 100, 200, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+char baseStartingTemp[] = {0, 0, 0, 0, 100, 160, 1, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 //Defines the highest and lowest temps that the element exists at
-char baseHighestTemp[] = {255, 255, 255, 200, 150, 255, 75, 255, 200, 125, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 225};
+char baseHighestTemp[] = {255, 255, 255, 154, 150, 255, 75, 255, 200, 170, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 225}; 
 char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
