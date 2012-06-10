@@ -51,6 +51,7 @@ struct Element
 	//Properties
 	char* specials;
 	char* specialVals;
+	char useElementSpecialVals;
 	char density;
 	signed char fallVel;
 	char inertia;

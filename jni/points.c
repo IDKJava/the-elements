@@ -41,7 +41,11 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 		//Set the frozen state
 		i->frozen = FALSE;
 
-		//Copy special vals from element
+		//Copy special vals from element if needed
+		if (!element->useElementSpecialVals)
+		{
+			initSpecialVals(i, element);
+		}
 		for(index = 0; index < MAX_SPECIALS; index++)
 		{
 			i->specialVals[index] = i->element->specialVals[index];
@@ -98,9 +102,9 @@ void setElement(struct Particle* particle, struct Element* newElement)
 {
 	int i;
 	particle->element = newElement;
-	for(i = 0; i < MAX_SPECIALS; i++)
+	if (!newElement->useElementSpecialVals)
 	{
-		particle->specialVals[i] = newElement->specialVals[i];
+		initSpecialVals(particle, newElement);
 	}
 	setBitmapColor(particle->x, particle->y, newElement);
 }
@@ -174,8 +178,32 @@ char hasSpecial(struct Particle* tempParticle, int special)
 	return FALSE;
 }
 
+//Gets a particle's special value
+char getSpecialVal(struct Particle* tempParticle, int special)
+{
+	struct Element* tempElement;
+	tempElement = tempParticle->element;
+
+	int i;
+	for (i = 0; i < MAX_SPECIALS; i++)
+	{
+		if (tempElement->specials[i] == special)
+		{
+			if (tempElement->useElementSpecialVals)
+			{
+				return tempElement->specialVals[i];
+			}
+			else
+			{
+				return tempParticle->specialVals[i];
+			}
+		}
+	}
+
+	return FALSE;
+}
 //Sets a particle's special value
-void setSpecialVal(struct Particle* tempParticle, int special, int val)
+void setSpecialVal(struct Particle* tempParticle, int special, char val)
 {
 	int i;
 	for (i = 0; i < MAX_SPECIALS; i++)
@@ -185,5 +213,15 @@ void setSpecialVal(struct Particle* tempParticle, int special, int val)
 			tempParticle->specialVals[i] = val;
 			return;
 		}
+	}
+}
+
+//Initialize a particle's special vals (only if not staying with the default forever)
+void initSpecialVals(struct Particle* tempParticle, struct Element* tempElement)
+{
+	int i;
+	for (i = 0; i < MAX_SPECIALS; i++)
+	{
+		tempParticle->specialVals[i] = tempElement->specialVals[i];
 	}
 }

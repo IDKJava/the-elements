@@ -102,7 +102,7 @@ char saveState(char* saveLoc)
 						elements[i]->red,
 						elements[i]->green,
 						elements[i]->blue);
-				//TODO: Specials
+				//TODO: Specials & useElementSpecialVals
 				fprintf(fp, "%d %d %d\n\n",
 						elements[i]->density,
 						elements[i]->fallVel,
@@ -112,6 +112,9 @@ char saveState(char* saveLoc)
 
 		//Save the dimensions
 		fprintf(fp, "%d %d\n\n", workWidth, workHeight);
+
+		//Save the max specials (for backward compatibility if needed)
+		fprintf(fp, "%d\n\n", MAX_SPECIALS);
 
 		//Save the particles
 		/* Save format:
@@ -134,6 +137,15 @@ char saveState(char* saveLoc)
 							tempParticle->yVel,
 							tempParticle->heat,
 							tempParticle->element->index);
+					if (tempParticle->element->useElementSpecialVals)
+					{
+						fprintf(fp, "[");
+						for (i = 0; i < MAX_SPECIALS; i++)
+						{
+							fprintf(fp, "%d ", tempParticle->specialVals[i]);
+						}
+						fprintf(fp, "]");
+					}
 				}
 				else
 				{
@@ -200,20 +212,18 @@ char loadState(char* loadLoc)
 	elementSetup();
 	gameSetup();
 
-	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY;
+	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY, fileMaxSpecials, tempSpecialVal;
 	struct Element* tempElement;
 	struct Particle* tempParticle;
 	char lookAhead;
 
 	if(fp != NULL)
 	{
-		if(fscanf(fp, "%d\n\n", &numElementsSaved) == EOF)
-		{
-			return FALSE;
-		}
+		if(fscanf(fp, "%d\n\n", &numElementsSaved) == EOF) { return FALSE; }
+
 		int* tempMap;
 		int* tempElMap;
-		tempElMap = (int*)malloc ( 256 * sizeof(int) ); //256 is the max number of elements
+		tempElMap = (int*)malloc ( MAX_ELEMENTS * sizeof(int) );
 		tempMap = (int*)malloc( numElementsSaved * 3 * sizeof(int) );
 		elements = realloc( elements, (numElements + numElementsSaved) * sizeof( struct Element* ) );
 
@@ -241,7 +251,7 @@ char loadState(char* loadLoc)
 			tempElMap[elementIndex] = i + numElements;
 			elements[elementIndex] = tempElement;
 		}
-		for ( i = 0; i < numElementsSaved; i++ )
+		for (i = 0; i < numElementsSaved; i++)
 		{
 			elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 1] > NUM_BASE_ELEMENTS ? 
 						elements[ tempElMap[tempMap[3*i + 1]] ] : elements[tempMap[3*i + 1]];
@@ -254,7 +264,11 @@ char loadState(char* loadLoc)
 		numElements +=  numElementsSaved;
 
 	
+		// Get the dimensions
 		if(fscanf(fp, "%d %d\n\n", &sizeX, &sizeY) == EOF) {return FALSE;}
+
+		// Get the max specials at the time of this file
+		if(fscanf(fp, "%d\n\n", &fileMaxSpecials) == EOF) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
 		if(sizeX > workWidth)
@@ -282,6 +296,7 @@ char loadState(char* loadLoc)
 					loq--;
 					tempParticle = avail[loq];
 
+					// Go back to before the open paren
 					fseek(fp, -2, SEEK_CUR);
 
 					if(fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
@@ -290,17 +305,32 @@ char loadState(char* loadLoc)
 														&tempParticle->yVel,
 														&tempParticle->heat,
 														&elementIndex) == EOF) {return FALSE;}
+					// Keep the element handy
+					tempElement = elements[elementIndex];
 
-					tempParticle->element = elements[elementIndex];
-					tempParticle->set = TRUE;
-					int k;
-					for(k = 0; k < MAX_SPECIALS; k++)
+					if(fscanf(fp, "%c", &lookAhead) == EOF) {return FALSE;}
+					// We have special vals data for this particle
+					if(lookAhead == '[')
 					{
-						tempParticle->specialVals[k] = tempParticle->element->specialVals[k];
+						int k;
+						for (k = 0; k < fileMaxSpecials; k++)
+						{
+							fscanf(fp, "%d ", &tempSpecialVal);
+
+							if (k < MAX_SPECIALS && !tempElement->useElementSpecialVals)
+							{
+								tempParticle->specialVals[k] = tempSpecialVal;
+							}
+						}
+						// Skip past the closing ']'
+						fseek(fp, 1, SEEK_CUR);
 					}
 
+					tempParticle->element = tempElement;
+					tempParticle->set = TRUE;
+
 					allCoords[getIndex(i, j)] = tempParticle;
-					setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+					setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
 				}
 				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Particle loaded successfully");
 			}

@@ -120,11 +120,12 @@ void elementSetup()
 	    tempElement->density = baseDensity[i];
 	    tempElement->state = baseState[i];
 	    tempElement->specials = baseSpecial[i];
-	    tempElement->specialVals = (char*) malloc(2 * sizeof(char));
+	    tempElement->specialVals = (char*) malloc(MAX_SPECIALS * sizeof(char));
 	    for(j = 0; j < MAX_SPECIALS; j++)
 	    {
 		tempElement->specialVals[j] = baseSpecialValue[i][j];
 	    }
+	    tempElement->useElementSpecialVals = baseUseElementSpecialVals[i];
 	    tempElement->inertia = baseInertia[i];
 	    tempElement->startingTemp = baseStartingTemp[i];
 	    tempElement->highestTemp = baseHighestTemp[i];

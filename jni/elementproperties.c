@@ -103,7 +103,6 @@ signed char baseSpecial[][MAX_SPECIALS] =
 
 
 //Defines the special value for each base element
-
 char baseSpecialValue[][MAX_SPECIALS] =
 		{{0,0,0,0,0,0}, //TODO: Add the element names next to all of these columns
 		{0,0,0,0,0,0},
@@ -129,6 +128,9 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{0,0,0,0,0,0},
 		{0,0,0,0,0,0},
 		{5,0,0,0,0,0}};
+
+//Specifies whether particles of this element should only use the default special vals
+char baseUseElementSpecialVals[] = {FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};
 
 //Defines the inertia of each element
 char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1};

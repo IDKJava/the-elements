@@ -346,12 +346,12 @@ void UpdateView(void)
 							allCoords[getIndex(tempX, tempY)] = tempParticle;
 							setBitmapColor(tempX, tempY, tempParticle->element);
 
-							unFreezeParticles(tempOldX, tempOldY);
+							//unFreezeParticles(tempOldX, tempOldY);
 							tempParticle->hasMoved = FALSE;
 						}
 						else
 						{
-							tempParticle->frozen++;
+							//tempParticle->frozen++;
 						}
 						if(tempAllCoords->hasMoved)
 						{
@@ -363,7 +363,7 @@ void UpdateView(void)
 							allCoords[getIndex(tempX, tempY)] = tempAllCoords;
 							setBitmapColor(tempX, tempY, tempAllCoords->element);
 
-							unFreezeParticles(tempOldX, tempOldY);
+							//unFreezeParticles(tempOldX, tempOldY);
 							tempAllCoords->hasMoved = FALSE;
 						}
 					}
@@ -375,7 +375,7 @@ void UpdateView(void)
 						allCoords[getIndex(tempX, tempY)] = tempParticle;
 						setBitmapColor(tempX, tempY, tempParticle->element);
 
-						unFreezeParticles(tempOldX, tempOldY);
+						//unFreezeParticles(tempOldX, tempOldY);
 						tempParticle->hasMoved = FALSE;
 					}
 					//Space particle is trying to move to is itself
@@ -450,11 +450,11 @@ void UpdateView(void)
 											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
 												setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
-												setSpecialVal(tempAllCoords, SPECIAL_SPAWN, tempParticle->specialVals[i]);
+												setSpecialVal(tempAllCoords, SPECIAL_SPAWN, getSpecialVal(tempParticle, SPECIAL_SPAWN));
 											}
 											else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
-												createPoint(tempX + diffX, tempY + diffY, elements[tempParticle->specialVals[i]]);
+												createPoint(tempX + diffX, tempY + diffY, elements[getSpecialVal(tempParticle, SPECIAL_SPAWN)]);
 											}
 										}
 									}
