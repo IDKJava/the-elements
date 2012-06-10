@@ -21,7 +21,6 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.heyzap.sdk.HeyzapLib;
 import com.blutrumpet.sdk.BluTrumpet;
 
 import com.idkjava.thelements.MainActivity;
@@ -127,8 +126,6 @@ public class MenuActivity extends Activity
 				}
 			}
 		);
-		
-		HeyzapLib.load(this);
 	}
 //	public void onSuccessfulLoad(MobclixAdView view)
 //	{
