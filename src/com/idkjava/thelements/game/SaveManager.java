@@ -21,7 +21,7 @@ public class SaveManager
 		{
 			public boolean accept(File dir, String name)
 			{
-				return !(name.contentEquals("demo.sav") || name.contentEquals("temp.sav"));
+				return !name.contentEquals("temp.sav");
 			}
 		};
 		//Get the array of filenames

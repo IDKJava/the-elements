@@ -33,24 +33,21 @@ public class FileManager
 			(new File(ROOT_DIR + ELEMENTS_DIR)).mkdir();
 			(new File(ROOT_DIR + ATMOSPHERES_DIR)).mkdir();
 
-			if(!(new File(ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT)).exists())
+			//Set the input stream to the demo save resource
+			InputStream in = context.getResources().openRawResource(R.raw.demo);
+			//Set the output stream to the demo save file location
+			OutputStream out = new FileOutputStream(ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT);
+			//Create a 256 byte buffer
+			byte[] buf = new byte[256];
+			//Read in 256 byte chunks from in and output to out
+			int len;
+			while ((len = in.read(buf)) != -1)
 			{
-				//Set the input stream to the demo save resource
-				InputStream in = context.getResources().openRawResource(R.raw.demo);
-				//Set the output stream to the demo save file location
-				OutputStream out = new FileOutputStream(ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT);
-				//Create a 256 byte buffer
-				byte[] buf = new byte[256];
-				//Read in 256 byte chunks from in and output to out
-				int len;
-				while ((len = in.read(buf)) != -1)
-				{
-					out.write(buf, 0, len);
-				}
-				//Close both streams
-				in.close();
-				out.close();
+				out.write(buf, 0, len);
 			}
+			//Close both streams
+			in.close();
+			out.close();
 		}
 		catch (FileNotFoundException e)
 		{
