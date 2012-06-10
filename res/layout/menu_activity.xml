@@ -16,6 +16,24 @@
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
 	    	
+	    <!-- Custom elements button -->
+	    <Button
+	    	android:id="@+id/custom_elements_button"
+	    	android:text="@string/custom_elements_button"
+	    	android:layout_width="200sp"
+	    	android:gravity="center" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+
+	    <!-- Blu Trumpet button -->
+	    <Button
+	    	android:id="@+id/blu_trumpet_button"
+	    	android:text="@string/blu_trumpet_button"
+	    	android:layout_width="200sp"
+	    	android:gravity="center" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	
 	    
 	    <!-- How-to-play button -->
 	    <Button
@@ -31,24 +49,6 @@
 	    	android:id="@+id/about_button"
 	    	android:text="@string/about_button"
 	    	android:layout_width="200sp" 
-	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
-
-	    <!-- Blu Trumpet button -->
-	    <Button
-	    	android:id="@+id/blu_trumpet_button"
-	    	android:text="@string/blu_trumpet_button"
-	    	android:layout_width="200sp"
-	    	android:gravity="center" 
-	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
-	    	
-	    <!-- Exit button -->
-	    <Button
-	    	android:id="@+id/exit_button"
-	    	android:text="@string/exit_button"
-	    	android:layout_width="200sp"
-	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
 	    
