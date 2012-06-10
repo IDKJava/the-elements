@@ -46,10 +46,6 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 		{
 			initSpecialVals(i, element);
 		}
-		for(index = 0; index < MAX_SPECIALS; index++)
-		{
-			i->specialVals[index] = i->element->specialVals[index];
-		}
 
 		//Set the initial heat
 		if(element->startingTemp == 0)

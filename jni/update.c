@@ -464,7 +464,7 @@ void UpdateView(void)
 							//Breakable
 							case SPECIAL_BREAK:
 							{
-								if (tempParticle->xVel > tempParticle->specialVals[i] || tempParticle->yVel > tempParticle->specialVals[i])
+								if (tempParticle->xVel > getSpecialVal(tempParticle, SPECIAL_BREAK) || tempParticle->yVel > getSpecialVal(tempParticle, SPECIAL_BREAK))
 								{
 									setElement(tempParticle, elements[NORMAL_ELEMENT]);
 								}
@@ -482,7 +482,7 @@ void UpdateView(void)
 										if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth)
 										{
 											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if (tempAllCoords && tempAllCoords->element->index == tempParticle->specialVals[i] && rand() % 10 == 0)
+											if (tempAllCoords && tempAllCoords->element->index == getSpecialVal(tempParticle, SPECIAL_GROW) && rand() % 10 == 0)
 											{
 												setElement(tempAllCoords, tempParticle->element);
 											}
@@ -525,7 +525,7 @@ void UpdateView(void)
 									//In radius of explosion, add velocity with a 5% chance
 									if(rand()%20 == 0)
 									{
-										int explosiveness = tempParticle->specialVals[i];
+										int explosiveness = getSpecialVal(tempParticle, SPECIAL_EXPLODE);
 										for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
 										{
 											for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
@@ -570,7 +570,7 @@ void UpdateView(void)
 							//Disappearing
 							case SPECIAL_LIFE:
 							{
-								if (rand()%tempParticle->specialVals[i] == 0)
+								if (rand()%getSpecialVal(tempParticle, SPECIAL_LIFE) == 0)
 								{
 									deletePoint(tempParticle);
 								}
