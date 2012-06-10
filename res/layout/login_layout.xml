@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+   android:orientation="horizontal"
+   android:layout_width="fill_parent"
+   android:layout_height="fill_parent"
+   >
+   
+    <TextView android:id="@+id/welcome_text"
+        android:text = "Login to Save Server"           
+        android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+        />
+       
+    <TextView android:id="@+id/username_text"
+        android:text = "username:"  
+        android:layout_centerHorizontal="true"  
+        android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/welcome_text"
+        />
+   
+    <EditText android:id="@+id/txt_username"
+             android:layout_height="wrap_content"
+             android:layout_width="250px"
+             android:layout_centerHorizontal="true"
+             android:layout_below="@+id/username_text"
+             android:singleLine="true" />
+             
+             
+    <TextView android:id="@+id/password_text"
+        android:text = "password:"  
+        android:layout_centerHorizontal="true"  
+        android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_username"
+        />
+   
+    <EditText android:id="@+id/txt_password"
+                  android:password="true"
+             android:layout_height="wrap_content"
+             android:layout_width="250px"
+             android:layout_centerHorizontal="true"
+             android:layout_below="@+id/password_text"
+             android:singleLine="true" />
+   
+      <Button 
+      		  android:id="@+id/login_button2"
+              android:text="Login"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:layout_below="@+id/txt_password"
+              />
+      <Button 
+      		  android:id="@+id/register_button"
+              android:text="Register"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_centerHorizontal="true"
+              android:layout_below="@+id/txt_password"
+              android:layout_toRightOf="@+id/login_button2"
+              />        
+               
+<Button android:layout_toRightOf="@+id/login_button2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:layout_below="@+id/register_button" android:id="@+id/engage_test" android:text="Engage  "></Button>
+</RelativeLayout>
+ 

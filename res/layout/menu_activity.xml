@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res/idkjava.thelements" 
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:orientation="vertical"
+    android:gravity="center" 
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" android:background="@drawable/mm_layout_bg">
+	    
+	    <!-- Start game button --> 
+	    <Button
+	    	android:id="@+id/start_game_button"
+	    	android:text="@string/start_game_button" 
+	    	android:layout_width="200sp"
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	
+	    
+	    <!-- How-to-play button -->
+	    <Button
+	    	android:id="@+id/how_to_play_button"
+	    	android:text="@string/how_to_play_button"
+	    	android:gravity="center"
+	    	android:layout_width="200sp" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+
+	    <!-- About button -->
+	    <Button
+	    	android:id="@+id/about_button"
+	    	android:text="@string/about_button"
+	    	android:layout_width="200sp" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+
+	    <!-- Blu Trumpet button -->
+	    <Button
+	    	android:id="@+id/blu_trumpet_button"
+	    	android:text="@string/blu_trumpet_button"
+	    	android:layout_width="200sp"
+	    	android:gravity="center" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	
+	    <!-- Exit button -->
+	    <Button
+	    	android:id="@+id/exit_button"
+	    	android:text="@string/exit_button"
+	    	android:layout_width="200sp"
+	    	android:gravity="center" 
+	    	android:background="@drawable/btn_mm" 
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    
+</LinearLayout>
