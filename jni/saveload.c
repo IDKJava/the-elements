@@ -137,7 +137,7 @@ char saveState(char* saveLoc)
 							tempParticle->yVel,
 							tempParticle->heat,
 							tempParticle->element->index);
-					if (tempParticle->element->useElementSpecialVals)
+					if (!tempParticle->element->useElementSpecialVals)
 					{
 						fprintf(fp, "[");
 						for (i = 0; i < MAX_SPECIALS; i++)
@@ -212,14 +212,14 @@ char loadState(char* loadLoc)
 	elementSetup();
 	gameSetup();
 
-	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY, fileMaxSpecials, tempSpecialVal;
+	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead;
 	struct Element* tempElement;
 	struct Particle* tempParticle;
 	char lookAhead;
 
 	if(fp != NULL)
 	{
-		if(fscanf(fp, "%d\n\n", &numElementsSaved) == EOF) { return FALSE; }
+		if((charsRead = fscanf(fp, "%d\n\n", &numElementsSaved)) == EOF || charsRead < 1) { return FALSE; }
 
 		int* tempMap;
 		int* tempElMap;
@@ -229,22 +229,22 @@ char loadState(char* loadLoc)
 
 		for(i = 0; i < numElementsSaved; i++)
 		{
-			if(fscanf(fp, "%d", &elementIndex) == EOF) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &elementIndex) == EOF || charsRead < 1)) {return FALSE;}
 
 			tempElement = (struct Element*) malloc(sizeof(struct Element));
-			if(fscanf(fp, "%s", &tempElement->name) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->state) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->startingTemp) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->lowestTemp) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->highestTemp) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &lowerElementIndex) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &higherElementIndex) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->red) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->green) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->blue) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->density) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->fallVel) == EOF) {return FALSE;}
-			if(fscanf(fp, "%d", &tempElement->inertia) == EOF) {return FALSE;}
+			if((charsRead = fscanf(fp, "%s", &tempElement->name)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->state)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->startingTemp)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->lowestTemp)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->highestTemp)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &lowerElementIndex)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &higherElementIndex)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->red)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->green)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->blue)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->density)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->fallVel)) == EOF || charsRead < 1) {return FALSE;}
+			if((charsRead = fscanf(fp, "%d", &tempElement->inertia)) == EOF || charsRead < 1) {return FALSE;}
 			tempMap[3*i] = elementIndex;
 			tempMap[3*i + 1] = lowerElementIndex;
 			tempMap[3*i + 2] = higherElementIndex;
@@ -265,10 +265,10 @@ char loadState(char* loadLoc)
 
 	
 		// Get the dimensions
-		if(fscanf(fp, "%d %d\n\n", &sizeX, &sizeY) == EOF) {return FALSE;}
+		if((charsRead = fscanf(fp, "%d %d\n\n", &sizeX, &sizeY)) == EOF || charsRead < 2) {return FALSE;}
 
 		// Get the max specials at the time of this file
-		if(fscanf(fp, "%d\n\n", &fileMaxSpecials) == EOF) {return FALSE;}
+		if((charsRead = fscanf(fp, "%d\n\n", &fileMaxSpecials)) == EOF || charsRead < 1) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
 		if(sizeX > workWidth)
@@ -287,7 +287,7 @@ char loadState(char* loadLoc)
 				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading particle");
 				if(loq <= 0) {return TRUE;}
 
-				if(fscanf(fp, "(%c", &lookAhead) == EOF) {return FALSE;}
+				if((charsRead = fscanf(fp, "(%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
 
 
 				if(lookAhead != ')')
@@ -299,23 +299,35 @@ char loadState(char* loadLoc)
 					// Go back to before the open paren
 					fseek(fp, -2, SEEK_CUR);
 
-					if(fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
+					if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
 														&tempParticle->y,
 														&tempParticle->xVel,
 														&tempParticle->yVel,
 														&tempParticle->heat,
-														&elementIndex) == EOF) {return FALSE;}
+														&elementIndex)) == EOF
+														|| charsRead < 6) {return FALSE;}
+
+					// Check for inconsistent numbers
+					if (((int)tempParticle->x) != i || ((int)tempParticle->y) != j)
+					{
+						char buffer[256];
+						sprintf(buffer, "Messed up particle: (%f, %f) vs (%d, %d); lookahead: %c", tempParticle->x, tempParticle->y, i, j, lookAhead);
+						__android_log_write(ANDROID_LOG_ERROR, "LOG", buffer);
+						tempParticle->x = i;
+						tempParticle->y = j;
+					}
+
 					// Keep the element handy
 					tempElement = elements[elementIndex];
 
-					if(fscanf(fp, "%c", &lookAhead) == EOF) {return FALSE;}
+					if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
 					// We have special vals data for this particle
 					if(lookAhead == '[')
 					{
 						int k;
 						for (k = 0; k < fileMaxSpecials; k++)
 						{
-							fscanf(fp, "%d ", &tempSpecialVal);
+							if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1) {return FALSE;}
 
 							if (k < MAX_SPECIALS && !tempElement->useElementSpecialVals)
 							{
@@ -324,6 +336,11 @@ char loadState(char* loadLoc)
 						}
 						// Skip past the closing ']'
 						fseek(fp, 1, SEEK_CUR);
+					}
+					else
+					{
+						// Put the lookAhead char back on the stream
+						fseek(fp, -1, SEEK_CUR);
 					}
 
 					tempParticle->element = tempElement;
