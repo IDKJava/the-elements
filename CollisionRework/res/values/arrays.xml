@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in app/menu examples -->
+    <string-array name="entries_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+
+    <!-- Used in app/menu examples -->
+    <string-array name="entryvalues_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+    
+	<string-array name="elements_list">
+		<item>Sand</item>
+		<item>Water</item>
+		<item>Steam</item>
+		<item>Ice</item>
+		<item>Wall</item>
+		<item>Destructible Wall</item>
+		<item>Plant</item>
+		<item>Fire</item>
+		<item>Magma</item>
+		<item>Stone</item>
+		<item>Oil</item>
+		<item>C4</item>
+		<item>C4++</item>
+		<item>Fuse</item>
+		<item>Acid</item>
+		<item>Salt</item>
+		<item>Salt-Water</item>
+		<item>Glass</item>
+		<item>Mud</item>
+		<item>Generator</item>
+		<item>Coal</item>
+	</string-array>
+
+	<string-array name="brush_size_list">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>
+		<item>16</item>
+		<item>32</item>
+	</string-array>
+</resources>

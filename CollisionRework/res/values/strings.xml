@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">The Elements</string>
+    <string name="element_prompt">Which Custom Element?</string>
+    <string name="custom_element_title">Custom Element Maker</string>
+    <string name="sand_prompt">How to react with sand:</string>
+    <string name="water_prompt">How to react with water:</string>
+    <string name="wall_prompt">How to react with wall:</string>
+    <string name="plant_prompt">How to react with plant:</string>
+    <string name="fire_prompt">How to react with fire:</string>
+    <string name="ice_prompt">How to react with ice:</string>
+    <string name="oil_prompt">How to react with oil:</string>
+    <string name="magma_prompt">How to react with magma:</string>
+    <string name="stone_prompt">How to react with stone:</string>
+    <string name="C4_prompt">How to react with C4:</string>
+    <string name="C4plus_prompt">How to react with C4++:</string>
+    <string name="Fuse_prompt">How to react with fuse:</string>
+    <string name="DestructableWall_prompt">How to react with destructable wall:</string>
+    <string name="Acid_prompt">How to react with acid:</string>
+    <string name="Steam_prompt">How to react with steam:</string>
+    <string name="Salt_prompt">How to react with salt:</string>
+    <string name="SaltWater_prompt">How to react with salt water:</string>
+    <string name="Glass_prompt">How to react with glass:</string>
+    <string name="CustomEle_prompt">How to react with custom element:</string>
+    <string name="Mud_prompt">How to react with mud:</string>
+    <string name="explonesstext">Explosiveness:</string>
+    <string name="redtext">Redness:</string>
+    <string name="bluetext">Blueness:</string>
+    <string name="greentext">Greeness:</string>
+    <string name="densitytext">Density:</string>
+    <string name="reaction_prompt">Select Reaction Type?</string>
+<string name="app_intro">Welcome to The Elements! It is very processor intensive, so we recommend downloading a task manager and ending all other programs before starting. You can load a demo save from the menu to see how it works.  If drawing is not working, please try flipping the screen in the preferences menu, or clearing the quicksave file.</string>
+<string name="brush_size_picker">Brush Size Picker</string>
+<string name="element_picker">Palette</string>
+<string name="proceed">Proceed</string>
+<string name="exit">Exit</string>
+<string name="restart_app">Please restart app for your changes to go into effect.</string>
+<string name="about_text">The Elements is created by IDKJava, Copyright 2010 - 2012</string>
+<string name="how_to_play_title">How to Play The Elements</string>
+<string name="start_game_button">Play Game</string>
+<string name="how_to_play_button">How to Play</string>
+<string name="about_button">About</string>
+<string name="blu_trumpet_button">Recommended Apps</string>
+<string name="exit_button">Exit</string>
+<string name="heyzap_checkin_message">I just found an awesome falling sand app! Come try it out!</string>
+</resources>
