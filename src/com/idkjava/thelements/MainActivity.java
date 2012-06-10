@@ -76,8 +76,8 @@ public class MainActivity extends Activity
 	{
 		//Uses onCreate from the general Activity
 		super.onCreate(savedInstanceState);
-
-		//Initialize most of the arrays in JNI
+		
+		// Initialize the native library
 		nativeInit();
 
 		//Init the shared preferences and set the ui state
@@ -133,11 +133,12 @@ public class MainActivity extends Activity
 	@Override
 	protected void onResume()
 	{
+		// Initialize the native library
 		nativeInit();
-		// Log.v("TheElements", "MainActivity.onResume()");
+		
 		//Use the super onResume
 		super.onResume();
-
+		
 		//Load the settings shared preferences which deals with if we're resuming from pause or not
 		SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 

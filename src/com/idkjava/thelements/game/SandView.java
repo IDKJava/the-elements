@@ -26,11 +26,7 @@ public class SandView extends GLSurfaceView
 		setEGLConfigChooser(false); //Set the EGLConfigChooser
 		setRenderer(mRenderer); //Associate it with this view
 	}
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-	}
+
 	//When a touch screen event occurs
 	public boolean onTouchEvent(final MotionEvent event)
 	{
