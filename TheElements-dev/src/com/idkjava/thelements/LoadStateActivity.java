@@ -19,10 +19,11 @@ import android.widget.TextView;
 
 public class LoadStateActivity extends Activity
 {
-	public static TableRow tr;
-	public static LinearLayout buttonContainer;
-	public static ImageButton actionButton;
+	private static ImageButton actionButton;
+	private static TableRow tr;
+	private static LinearLayout buttonContainer;
 	private static Resources res;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -92,7 +93,7 @@ public class LoadStateActivity extends Activity
 		//buttonContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 50));
 		
         //Create a button to be the action invoker
-        ImageButton actionButton = new ImageButton(this);
+        actionButton = new ImageButton(this);
         actionButton.setBackgroundResource(R.drawable.load_state_select);
         actionButton.setLayoutParams(new LayoutParams(
                         LayoutParams.WRAP_CONTENT, 

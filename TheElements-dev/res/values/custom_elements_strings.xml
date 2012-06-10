@@ -3,4 +3,6 @@
 <string name="custom_elements">Custom Elements</string>
 <string name="edit">Edit</string>
 <string name="create_element">Create Element</string>
+<string name="select_element">Choose an element to edit:</string>
+<string name="no_elements">There are no elements to edit.</string>
 </resources>

@@ -24,15 +24,15 @@ import android.widget.Toast;
 import com.blutrumpet.sdk.BluTrumpet;
 
 import com.idkjava.thelements.MainActivity;
+import com.idkjava.thelements.custom.CustomElementManagerActivity;
 
 public class MenuActivity extends Activity
 {
 	public static Button start_game_button;
-	public static Button how_to_play_button;
-	public static Button custom_button;
-	public static Button about_button;
-	public static Button exit_button;
+	public static Button custom_elements_button;
 	public static Button blu_trumpet_button;
+	public static Button how_to_play_button;
+	public static Button about_button;
 	public static boolean loaded = false;
 	public long stime;
 	
@@ -54,10 +54,10 @@ public class MenuActivity extends Activity
 		
 		//Define all the objects
 		start_game_button = (Button) findViewById(R.id.start_game_button);
+		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
+		custom_elements_button = (Button) findViewById(R.id.custom_elements_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);
-		exit_button = (Button) findViewById(R.id.exit_button);
-		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
 		
 		
 		
@@ -67,11 +67,36 @@ public class MenuActivity extends Activity
 			{
 				public void onClick(View v)
 				{
-					if (System.currentTimeMillis() - stime >= 1000)
-					{
-						//Start the main app activity
-						startActivity(new Intent(MenuActivity.this, SplashActivity.class));
-					}
+					//Start the main app activity
+					startActivity(new Intent(MenuActivity.this, SplashActivity.class));
+				}
+			}
+		);
+		
+		custom_elements_button.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					//Start the CustomElementManagerActivity
+					startActivity(new Intent(MenuActivity.this, CustomElementManagerActivity.class));
+				}
+			}
+		);
+		
+		blu_trumpet_button.setOnClickListener
+		(
+			new OnClickListener()
+			{
+				public void onClick(View v)
+				{
+					//Start the Blu Trumpet Activity
+					startActivity(new Intent(MenuActivity.this, BluTrumpetActivity.class));
+					
+					//OLD -- Clear quicksave
+					//MainActivity.removeTempSave();
+					//Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}
 		);
@@ -99,49 +124,13 @@ public class MenuActivity extends Activity
 				}
 			}
 		);
-		blu_trumpet_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					//Start the Blu Trumpet Activity
-					startActivity(new Intent(MenuActivity.this, BluTrumpetActivity.class));
-					
-					//OLD -- Clear quicksave
-					//MainActivity.removeTempSave();
-					//Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
-				}
-			}
-		);
-		
-		exit_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					//Quit the program
-					System.exit(0);
-				}
-			}
-		);
 	}
-//	public void onSuccessfulLoad(MobclixAdView view)
-//	{
-//		loaded = true;
-//	}
+
 	@Override
 	public void onResume()
 	{
 		stime = System.currentTimeMillis();
 		super.onResume(); //Call the super method
-	}
-	
-	@Override
-	public void onPause()
-	{
-		super.onPause(); //Call the super method
 	}
 	
 	public void how_to_play()

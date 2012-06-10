@@ -1,19 +1,25 @@
 package com.idkjava.thelements.custom;
 
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.game.SaveManager;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.graphics.PixelFormat;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.Window;
-import android.widget.ListView;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 /**
  * File format:
@@ -23,28 +29,49 @@ import android.widget.ListView;
  */
 public class CustomElementManagerActivity extends Activity
 {
-	 List<CustomElement> elementList = new ArrayList<CustomElement>();
-	 CustomElementArrayAdapter arrayAdapter;
+	private static ImageButton actionButton;
+	private static TableRow tr;
+	private static LinearLayout buttonContainer;
+	private static Resources res;
+	List<String> elementList = new ArrayList<String>();
+	CustomElementArrayAdapter arrayAdapter;
+	
+	
 	//TODO(MASSIVE,ARMORED): This should display all loaded Custom Elements and allow selection,
 	//editing, and creation
-	public void onCreate(Bundle icicle)
+	public void onCreate(Bundle savedInstanceState)
 	{
-		super.onCreate(icicle);
-		setContentView(R.layout.custom_element_manager);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.custom_element_manager_activity);
+	}
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
 		refreshElements();
-		Window window = getWindow();
-	    // Eliminates color banding
-	    window.setFormat(PixelFormat.RGBA_8888);
-	    
-	    ListView elementListView = (ListView) findViewById(R.id.customListView);
-	    //Test elements
-	    char[] charArray = {4, 5};
-	    //CustomElement testElement = new CustomElement("TestElement", charArray, charArray);
-	    //writeFile(testElement);
-	    arrayAdapter = new CustomElementArrayAdapter(this, R.layout.custom_element_edit_item, elementList);
-	    //TODO: Implement storage of elements, opening of elements, and use of them in the c-backend
-		elementListView.setAdapter(arrayAdapter);
 		
+		//Go through and find all the save files and dynamically load them
+		int length = elementList.size();
+		if(length != 0)
+		{
+			for(int i = 0; i < length; i++)
+			{
+				addEntity(elementList.get(i));
+			}
+		}
+		else
+		{
+			TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+			tr = new TableRow(this);
+			tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+			tr.setGravity(Gravity.CENTER);
+			
+			TextView tv = new TextView(this);
+			tv.setText(res.getText(R.string.no_elements));
+			
+			tr.addView(tv);
+			tl.addView(tr);
+		}
 	}
 	private void refreshElements()
 	{
@@ -55,78 +82,130 @@ public class CustomElementManagerActivity extends Activity
 			File[] elementFiles = file.listFiles();
 			for(int i = 0; i < elementFiles.length; i++)
 			{
-				readFile(elementFiles[i]);
+				loadCustomElement(elementFiles[i]);
 			}
 		}
 		else
 		{
 			file.mkdirs();
 		}
-		arrayAdapter.notifyDataSetChanged();
+		//arrayAdapter.notifyDataSetChanged();
+		
+		// Temporarily load some fake elements
+		elementList.add("Hello");
+		elementList.add("Element1");
+		elementList.add("Element2");
+		
+		
 	}
-	private void readFile(File elementFile)//stores a CustomElement to elementList based on the passed file
-	{
-		byte[] b = new byte[450];
-		String fileString;
-		try
-		{
-		FileInputStream fis = new FileInputStream(elementFile);
-		fis.read(b);
-		fileString = new String(b);
-		}
-		catch(IOException e){return;}
+	
+    public void addEntity(String entityName)
+    {
+    	final String entityNameFinal = entityName;
+        //DIP representation math
+        //final float SCALE = getBaseContext().getResources().getDisplayMetrics().density;
+        
+        //Create a TableLayout object associated with the TableLayout in the .xml file
+        TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+        //Create a LinearLayout to contain our row
+        buttonContainer = new LinearLayout(this);
+		//Set some properties
+		//tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
+		buttonContainer.setBackgroundResource(R.drawable.load_state_tr_bg);
+		buttonContainer.setLongClickable(true);
+		buttonContainer.setClickable(true);
+		buttonContainer.setPadding(25, 10, 25, 10);
+		buttonContainer.setGravity(Gravity.RIGHT);
 		
-		String[] data = fileString.split("\n");//data[0] = name, data[1] = collision array, data[2] = specials array
+		//Create a TextView to hold the filename
+		TextView elementname = new TextView(this);
+		elementname.setText(entityName);
+		elementname.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
+		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
-		String[] collisionsStrings= data[1].split(" ");
-		char[] collisions = new char[collisionsStrings.length];
-		for(int i = 0; i < collisions.length; i++)
-		{
-			collisions[i] = collisionsStrings[i].charAt(0);
-		}
-		String[] specialsStrings= data[2].split(" ");
-		char[] specials = new char[specialsStrings.length];
-		for(int i = 0; i < collisions.length; i++)
-		{
-			specials[i] = specialsStrings[i].charAt(0);
-		}
-		elementList.add(new CustomElement(data[0], collisions, specials));
-	}
-	private void writeFile(CustomElement customElement)//Writes a save file for the passed CustomElement
-	{
-		File writeFile = new File("/sdcard/thelements/elements/" + customElement.getName());
-		try
-		{
-			FileWriter writeF = new FileWriter(writeFile);
-			String name = customElement.getName();
-			String collisions = new String();
-			char[] collisionsChars = customElement.getCollisions();
-			String specials = new String();
-			char[] specialsChars = customElement.getSpecials();
-			
-			for(int i = 0; i < collisionsChars.length; i++)
+		//Makes use of DisplayMetrics to create an automatic dip unit :)
+		//filename.setPadding((int)(16 * SCALE + 0.5f), 0, 0, 0);
+		//Add the TextView to the TableRow
+		buttonContainer.addView(elementname);
+
+		//Set buttonContainer's gravity to right with a 16dip right padding
+		//buttonContainer.setPadding(0, 0, (int)(16 * SCALE + 0.5f), 0);
+		//buttonContainer.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, 50));
+		
+        //Create a button to be the action invoker
+        actionButton = new ImageButton(this);
+        actionButton.setBackgroundResource(R.drawable.load_state_select);
+        actionButton.setLayoutParams(new LayoutParams(
+                        LayoutParams.WRAP_CONTENT, 
+                        LayoutParams.WRAP_CONTENT));
+        actionButton.setOnClickListener
+        (
+    		new OnClickListener()
+    		{
+    			public void onClick(View v)
+    			{
+                	SaveManager.loadState(entityNameFinal);
+                	finish();
+    			}
+    		}
+        );
+        buttonContainer.addView(actionButton);
+        
+        actionButton = new ImageButton(this);
+        actionButton.setBackgroundResource(R.drawable.load_state_delete);
+        actionButton.setLayoutParams(new LayoutParams(
+                LayoutParams.WRAP_CONTENT, 
+                LayoutParams.WRAP_CONTENT));
+		actionButton.setOnClickListener
+		(
+			new OnClickListener()
 			{
-				if(i + 1 == collisionsChars.length)
-					collisions += collisionsChars[i];
-				else
-					collisions += collisionsChars[i] + " ";
+				public void onClick(View v)
+				{
+					SaveManager.deleteState(entityNameFinal);
+					ViewGroup parent = (ViewGroup) v.getParent().getParent();
+					parent.removeView((View) v.getParent());
+					SaveManager.refresh();
+					if(SaveManager.getNumSaves() == 0)
+					{
+						TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+						tr = new TableRow(getBaseContext());
+						tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+						tr.setGravity(Gravity.CENTER);
+						
+						TextView tv = new TextView(getBaseContext());
+						tv.setText(res.getText(R.string.no_elements));
+						
+						tr.addView(tv);
+						tl.addView(tr);
+					}
+				}
 			}
-			for(int i = 0; i < specialsChars.length; i++)
-			{
-				if(i + 1 == specialsChars.length)
-					specials += specialsChars[i];
-				else
-					specials += specialsChars[i] + " ";
-			}
-			//add newline chars
-			name += "\n";
-			collisions += "\n";
-			writeF.append(name + collisions + specials);
-			writeF.flush();
-			writeF.close();
-		}
-		catch(IOException e){return;}
-		
+		);
+		buttonContainer.addView(actionButton);
+        
+        //Add a test click event
+        buttonContainer.setOnClickListener
+        (
+        	new OnClickListener()
+	        {
+                public void onClick(View viewParam)
+                {
+                	SaveManager.loadState(entityNameFinal);
+                	finish();
+                }
+	        }
+        );
+        
+        //Add the created row to our TableLayout
+        tl.addView(buttonContainer, new LayoutParams(
+                LayoutParams.FILL_PARENT, 
+                LayoutParams.WRAP_CONTENT));
+    }
+	
+	private void loadCustomElement(File file)
+	{
+		// TODO: Make a native call
 	}
 	private void deleteFile(CustomElement customElement)
 	{
