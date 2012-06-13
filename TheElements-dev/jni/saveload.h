@@ -38,7 +38,9 @@
 #include <string.h>
 
 char saveState(char* saveLoc);
+char saveStateLogic(char* saveLoc);
 char loadState(char* loadLoc);
+char loadStateLogic(char* loadLoc);
 char removeTempSave(void);
 char saveCustomElement(struct Element* createdCustomElement);
 char loadCustomElement(char* loadLoc);
