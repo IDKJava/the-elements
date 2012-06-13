@@ -10,11 +10,21 @@
 
 char saveState(char* saveLoc)
 {
-	//Pause before we start saving
-	//We should be paused in Java anyway, but this is a backup
-	char oldPlay = play;
-	play = FALSE;
+	// Lock the mutex so that we don't continue to update
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Starting save");
+	pthread_mutex_lock(&update_mutex);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex");
 
+	char retVal = saveStateLogic(saveLoc);
+
+	// Unlock the mutex before quitting
+	pthread_mutex_unlock(&update_mutex);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Finished save");
+
+	return retVal;
+}
+char saveStateLogic(char* saveLoc)
+{
 	FILE* fp;
 	/*
 	//Strings for file location
@@ -156,23 +166,32 @@ char saveState(char* saveLoc)
 		}
 
 		fclose(fp);
-		play = oldPlay;
 		return TRUE;
 	}
 	if(fp)
 	{
 		fclose(fp);
 	}
-	play = oldPlay;
 	return FALSE;
 }
 
 char loadState(char* loadLoc)
 {
-	//Pause before loading so that we don't update frames while loading
-	char oldPlay = play;
-	play = FALSE;
+	//Lock the mutex before loading so that we don't update frames while loading
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Starting loadstate");
+	pthread_mutex_lock(&update_mutex);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex lock");
 
+	char retVal = loadStateLogic(loadLoc);
+
+	//Unlock the mutex before quitting
+	pthread_mutex_unlock(&update_mutex);
+	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Finishing loadstate");
+
+	return retVal;
+}
+char loadStateLogic(char* loadLoc)
+{
 	char buffer[100];
 	sprintf(buffer, "loadState: %s", loadLoc);
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
@@ -212,7 +231,8 @@ char loadState(char* loadLoc)
 	elementSetup();
 	gameSetup();
 
-	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex, sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead;
+	int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex,
+		sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead, failed;
 	struct Element* tempElement;
 	struct Particle* tempParticle;
 	char lookAhead;
@@ -280,86 +300,97 @@ char loadState(char* loadLoc)
 			sizeY = workHeight;
 		}
 
-		for(j = 0; j < sizeY; j++)
+
+		while(!feof(fp))
 		{
-			for(i = 0; i < sizeX; i++)
+			// Check for all particles used
+			if(loq <= 0) {return TRUE;}
+
+			// Scan in the initial character
+			if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
+
+			// If it's not '(' then something is malformed, move on
+			if(lookAhead != '(') {continue;}
+
+
+			// Go back to before the open paren
+			fseek(fp, -1, SEEK_CUR);
+			// Try to read in a particle
+			tempParticle = avail[loq-1];
+			if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
+												&tempParticle->y,
+												&tempParticle->xVel,
+												&tempParticle->yVel,
+												&tempParticle->heat,
+												&elementIndex)) == EOF
+												|| charsRead < 6) {continue;}
+
+			// We succeeded, so decrement loq to remove the particle from being available
+			loq--;
+
+			// Save the integral coordinates for writing to allCoords
+			i = (int)tempParticle->x;
+			j = (int)tempParticle->y;
+			if (i >= sizeX || j >= sizeY) { return FALSE; }
+
+			// Keep the element handy
+			if (elementIndex >= numElements) { return FALSE; }
+			tempElement = elements[elementIndex];
+
+			// If we don't use the element's specialVals, then we need to try to read in more
+			if (!tempElement->useElementSpecialVals)
 			{
-				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading particle");
-				if(loq <= 0) {return TRUE;}
-
-				if((charsRead = fscanf(fp, "(%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
-
-
-				if(lookAhead != ')')
+				failed = FALSE;
+				// Check that our lookahead is correct
+				if((charsRead = fscanf(fp, "%c", &lookAhead)) != EOF && charsRead == 1 && lookAhead == '[')
 				{
-					//Loq was checked above
-					loq--;
-					tempParticle = avail[loq];
-
-					// Go back to before the open paren
-					fseek(fp, -2, SEEK_CUR);
-
-					if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
-														&tempParticle->y,
-														&tempParticle->xVel,
-														&tempParticle->yVel,
-														&tempParticle->heat,
-														&elementIndex)) == EOF
-														|| charsRead < 6) {return FALSE;}
-
-					// Check for inconsistent numbers
-					if (((int)tempParticle->x) != i || ((int)tempParticle->y) != j)
+					int k;
+					for (k = 0; k < fileMaxSpecials; k++)
 					{
-						char buffer[256];
-						sprintf(buffer, "Messed up particle: (%f, %f) vs (%d, %d); lookahead: %c", tempParticle->x, tempParticle->y, i, j, lookAhead);
-						__android_log_write(ANDROID_LOG_ERROR, "LOG", buffer);
-						tempParticle->x = i;
-						tempParticle->y = j;
-					}
-
-					// Keep the element handy
-					tempElement = elements[elementIndex];
-
-					if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
-					// We have special vals data for this particle
-					if(lookAhead == '[')
-					{
-						int k;
-						for (k = 0; k < fileMaxSpecials; k++)
+						if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1)
 						{
-							if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1) {return FALSE;}
-
-							if (k < MAX_SPECIALS && !tempElement->useElementSpecialVals)
-							{
-								tempParticle->specialVals[k] = tempSpecialVal;
-							}
+							failed = TRUE;
+							break;
 						}
-						// Skip past the closing ']'
-						fseek(fp, 1, SEEK_CUR);
-					}
-					else
-					{
-						// Put the lookAhead char back on the stream
-						fseek(fp, -1, SEEK_CUR);
+
+						if (k < MAX_SPECIALS)
+						{
+							tempParticle->specialVals[k] = tempSpecialVal;
+						}
 					}
 
-					tempParticle->element = tempElement;
-					tempParticle->set = TRUE;
-
-					allCoords[getIndex(i, j)] = tempParticle;
-					setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
+					// Skip past the closing ']'
+					fseek(fp, 1, SEEK_CUR);
 				}
-				//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Particle loaded successfully");
+				else
+				{
+					// Put the lookAhead char back on the stream
+					fseek(fp, -1, SEEK_CUR);
+					failed = TRUE;
+				}
+
+				if (failed)
+				{
+					int k;
+					for (k = 0; k < MAX_SPECIALS; k++)
+					{
+						tempParticle->specialVals[k] = tempElement->specialVals[k];
+					}
+				}
 			}
-			//Move the cursor one forward to read over the newline
-			fseek(fp, 1, SEEK_CUR);
+
+			// Set the element and make the particle set
+			tempParticle->element = tempElement;
+			tempParticle->set = TRUE;
+
+			// Set the allCoords and bitmap color
+			allCoords[getIndex(i, j)] = tempParticle;
+			setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
 		}
 
 		fclose(fp);
-		play = oldPlay;
 		return TRUE;
 	}
-	play = oldPlay;
 	return FALSE;
 }
 
