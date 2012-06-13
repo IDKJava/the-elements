@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -144,7 +145,9 @@ public class CustomElementManagerActivity extends Activity
     		{
     			public void onClick(View v)
     			{
-                	SaveManager.loadState(entityNameFinal);
+    				Intent i = new Intent(CustomElementManagerActivity.this, CustomElementActivity.class);
+    				i.putExtra("elementname", entityNameFinal);
+    				startActivity(i);
                 	finish();
     			}
     		}
