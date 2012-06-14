@@ -1,51 +1,67 @@
 package com.idkjava.thelements.custom;
 
-public class CustomElement {
-	private String _name;
-	private char[] _collisions;
-	private char[] _specials;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+
+import com.idkjava.thelements.game.FileManager;
+
+public class CustomElement
+{
+	private String mFilename;
+	private String mName;
+	private boolean mValid;
 	
-	private boolean _enabled;
-	
-	public CustomElement(String name, char[] collisions, char[] specials)
+	public CustomElement(String filename)
 	{
-		_name = name;
-		_collisions = collisions;
-		_specials = specials;
+		mFilename = filename;
+		mValid = loadNameFromFile();
 	}
 	public String getName()
 	{
-		return _name;
+		return mName;
 	}
-	public char[] getSpecials()
+	public String getFilename()
 	{
-		return _specials;
+		return mFilename;
 	}
-	public void setSpecials(char[] in)
+	public boolean isValid()
 	{
-		_specials = in;
+		return mValid;
 	}
-	public char[] getCollisions()
+	private boolean loadNameFromFile()
 	{
-		return _collisions;
+		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename);
+		try
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
+			//TODO: Read in file format and extract name
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
-	public void setCollisions(char[] in)
+	
+	//TODO:
+	public boolean loadPropertiesFromFile()
 	{
-		_collisions = in;
-	}
-	public void toggle()
-	{
-		if(_enabled)
-			_enabled = false;
-		else
-			_enabled = true;
-	}
-	public boolean getState()
-	{
-		return _enabled;
-	}
-	public void setState(boolean state)
-	{
-		_enabled = state;
+		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename);
+		try
+		{
+			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
+			//TODO: Read in file format and extract name
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
