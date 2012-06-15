@@ -41,12 +41,6 @@ public class MenuActivity extends Activity
 	{
 		super.onCreate(savedInstanceState); //Call the super method
 		
-		//Initialize Blu Trumpet
-		if (!BluTrumpet.isInitialized())
-		{
-			 BluTrumpet.initWithAppId("2fbef62a-23e6-33f5-acbd-7071d4740f21", this);
-		}
-		
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
 		stime = System.currentTimeMillis();
 		
