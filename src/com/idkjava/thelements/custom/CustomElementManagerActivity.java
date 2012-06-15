@@ -48,6 +48,10 @@ public class CustomElementManagerActivity extends Activity
 		CustomElementManager.refresh();
 		ArrayList<CustomElement> elements = CustomElementManager.getElementList();
 		
+		// Clear the existing list
+		TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
+		tl.removeAllViews();
+		
 		//Go through and find all the save files and dynamically add them
 		int length = elements.size();
 		if(length != 0)
@@ -56,13 +60,12 @@ public class CustomElementManagerActivity extends Activity
 			{
 				if (elements.get(i).isValid())
 				{
-					addEntity(elements.get(i).getName(), elements.get(i).getFilename());
+					addEntity(elements.get(i).name, elements.get(i).getFilename());
 				}
 			}
 		}
 		else
 		{
-			TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
 			tr = new TableRow(this);
 			tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 			tr.setGravity(Gravity.CENTER);
@@ -122,7 +125,6 @@ public class CustomElementManagerActivity extends Activity
     				Intent i = new Intent(CustomElementManagerActivity.this, CustomElementActivity.class);
     				i.putExtra("filename", filenameFinal);
     				startActivity(i);
-                	finish();
     			}
     		}
         );
@@ -174,7 +176,6 @@ public class CustomElementManagerActivity extends Activity
     				Intent i = new Intent(CustomElementManagerActivity.this, CustomElementActivity.class);
     				i.putExtra("filename", filenameFinal);
     				startActivity(i);
-                	finish();
                 }
 	        }
         );

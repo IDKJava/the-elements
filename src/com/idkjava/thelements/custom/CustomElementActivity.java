@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
 
 public class CustomElementActivity extends TabActivity
@@ -17,6 +18,7 @@ public class CustomElementActivity extends TabActivity
 	 * All elements held in same file, accessed by name.
 	 */
 	private String filename;
+	public CustomElement mCustomElement;
 	
 	
 	@Override
@@ -24,6 +26,16 @@ public class CustomElementActivity extends TabActivity
 	{
 		super.onCreate(savedInstanceState);
 
+		// Try loading the element
+		filename = getIntent().getStringExtra("filename");
+		mCustomElement = new CustomElement(filename);
+		if(!mCustomElement.loadPropertiesFromFile())
+		{
+			// If loading fails, we need to quit and show a message
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_load_failed_msg), Toast.LENGTH_LONG).show();
+			finish();
+		}
+		
 		// Set the content view
 		setContentView(R.layout.custom_element_activity);
 		// Set up some variables
@@ -39,12 +51,5 @@ public class CustomElementActivity extends TabActivity
 		spec = tabHost.newTabSpec("advanced").setIndicator(res.getString(R.string.advanced_tab)).setContent(intent);
 		tabHost.addTab(spec);
 		tabHost.setCurrentTab(0);
-		
-		filename = getIntent().getStringExtra("filename");
 	}
-	
-	//When creating, the elements above and below the state that we point to are going to be
-	//indices because if you want to point to an element not yet created there will be problems
-	//When loading elements, these indices will temporarily be stored, and then once finished
-	//will be resolved to pointers
 }

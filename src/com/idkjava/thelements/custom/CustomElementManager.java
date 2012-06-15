@@ -14,6 +14,8 @@ public class CustomElementManager
 	
 	public static void refresh()
 	{
+		// Clear the old array
+		sCustomElements.clear();
 		//Get the array of filenames
 		String[] elementFiles = elementDir.list();
 		Log.v("TheElements", "CustomElementManager refreshed, files found: " + elementFiles.length);
