@@ -7,4 +7,11 @@
 <string name="no_elements">There are no elements to edit.</string>
 <string name="basic_tab">Basic</string>
 <string name="advanced_tab">Advanced</string>
+<string name="ce_name_prompt">Name:</string>
+<string name="ce_base_element_prompt">Base Element:</string><string name="ce_starting_temp_prompt">Starting temperature:</string><string name="ce_lowest_temp_prompt">Lowest Temperature:</string><string name="ce_highest_temp_prompt">Highest Temperature:</string><string name="ce_lower_element_prompt">Lower element:</string><string name="ce_higher_element_prompt">Higher element:</string><string name="ce_red_prompt">Red:</string><string name="ce_green_prompt">Green:</string><string name="ce_blue_prompt">Blue:</string><string name="ce_density_prompt">Density:</string><string name="ce_fallvel_prompt">Freefall Velocity</string>
+<string name="ce_inertia_prompt">Inertia:</string>
+<string name="custom_element_name_hint">Enter the name of your element</string>
+<string name="ce_save_button">Save and Exit</string>
+<string name="ce_unmovable_prompt">Unmovable</string>
+<string name="ce_load_failed_msg">Sorry, this element file seems to be corrupt. Please try another element.</string>
 </resources>
