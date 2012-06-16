@@ -21,8 +21,12 @@ public class CustomElementManager
 		Log.v("TheElements", "CustomElementManager refreshed, files found: " + elementFiles.length);
 		for(int i = 0; i < elementFiles.length; i++)
 		{
-			Log.v("TheElements", "..." + elementFiles[i]);
-			sCustomElements.add(new CustomElement(elementFiles[i]));
+			if (elementFiles[i].endsWith(FileManager.ELEMENT_EXT))
+			{
+				Log.v("TheElements", "..." + elementFiles[i]);
+				// Cut off the element extension when saving the filename
+				sCustomElements.add(new CustomElement(elementFiles[i].substring(0, elementFiles[i].length()-FileManager.ELEMENT_EXT.length())));
+			}
 		}
 	}
 	public static ArrayList<CustomElement> getElementList()

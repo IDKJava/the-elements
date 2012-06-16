@@ -15,9 +15,10 @@ import com.idkjava.thelements.game.FileManager;
 
 public class CustomElement
 {
-	private String mFilename;
-	private boolean mValid;
-	private boolean mLoaded;
+	private String mFilename; // What the is the filename?
+	private int mCopy; // Which numerical tag are we at? (for duplicate element names) -- Not used right now
+	private boolean mValid; // Does the file exist, and is it valid?
+	private boolean mLoaded; // Have the properties been loaded?
 	
 	// Properties
 	public String name;
@@ -39,12 +40,17 @@ public class CustomElement
 	public CustomElement(String filename)
 	{
 		mFilename = filename;
+		mCopy = 0;
 		mValid = loadNameFromFile();
 		mLoaded = false;
 	}
 	public String getFilename()
 	{
 		return mFilename;
+	}
+	public int getCopy()
+	{
+		return mCopy;
 	}
 	public boolean isValid()
 	{
@@ -56,7 +62,7 @@ public class CustomElement
 	}
 	private boolean loadNameFromFile()
 	{
-		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename);
+		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename  + FileManager.ELEMENT_EXT);
 		try
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
@@ -77,7 +83,7 @@ public class CustomElement
 	
 	public boolean loadPropertiesFromFile()
 	{
-		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename);
+		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename + FileManager.ELEMENT_EXT);
 		try
 		{
 			BufferedReader br = new BufferedReader(new InputStreamReader(new DataInputStream(new FileInputStream(fp))));
@@ -117,26 +123,26 @@ public class CustomElement
 			e.printStackTrace();
 			return false;
 		}
+		mLoaded = true;
+		mValid = true;
 		return true;
 	}
 	
 	public boolean writeToFile()
 	{
 		// Look for an available file location
-		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename);
-		if (!mLoaded)
+		File fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename + FileManager.ELEMENT_EXT);
+		/*
+		if (!mValid)
 		{
-			int counter = 0;
+			mCopy = 0;
 			while(fp.exists())
 			{
-				counter++;
-				fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename + String.valueOf(counter));
-			}
-			if (counter != 0)
-			{
-				mFilename = mFilename + String.valueOf(counter);
+				mCopy++;
+				fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + mFilename + String.valueOf(mCopy) + FileManager.ELEMENT_EXT);
 			}
 		}
+		*/
 		
 		// Now write our properties to it
 		try
@@ -146,31 +152,31 @@ public class CustomElement
 			
 			out.write(name);
 			out.newLine();
-			out.write(baseElementIndex);
+			out.write(String.valueOf(baseElementIndex));
 			out.newLine();
-			out.write(state);
+			out.write(String.valueOf(state));
 			out.newLine();
-			out.write(startingTemp);
+			out.write(String.valueOf(startingTemp));
 			out.newLine();
-			out.write(lowestTemp);
+			out.write(String.valueOf(lowestTemp));
 			out.newLine();
-			out.write(highestTemp);
+			out.write(String.valueOf(highestTemp));
 			out.newLine();
-			out.write(lowerElementIndex);
+			out.write(String.valueOf(lowerElementIndex));
 			out.newLine();
-			out.write(higherElementIndex);
+			out.write(String.valueOf(higherElementIndex));
 			out.newLine();
-			out.write(red);
+			out.write(String.valueOf(red));
 			out.newLine();
-			out.write(green);
+			out.write(String.valueOf(green));
 			out.newLine();
-			out.write(blue);
+			out.write(String.valueOf(blue));
 			out.newLine();
-			out.write(density);
+			out.write(String.valueOf(density));
 			out.newLine();
-			out.write(fallVel);
+			out.write(String.valueOf(fallVel));
 			out.newLine();
-			out.write(inertia);
+			out.write(String.valueOf(inertia));
 			
 			// TODO: Advanced
 			
@@ -181,6 +187,7 @@ public class CustomElement
 			return false;
 		}
 		
+		mValid = true;
 		return true;
 	}
 }

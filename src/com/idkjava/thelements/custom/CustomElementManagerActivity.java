@@ -71,7 +71,7 @@ public class CustomElementManagerActivity extends Activity
 			{
 				if (elements.get(i).isValid())
 				{
-					addEntity(elements.get(i).name, elements.get(i).getFilename());
+					addEntity(elements.get(i).name, elements.get(i).getFilename(), elements.get(i).getCopy());
 				}
 			}
 		}
@@ -89,7 +89,7 @@ public class CustomElementManagerActivity extends Activity
 		}
 	}
 	
-    public void addEntity(String elementName, String filename)
+    public void addEntity(String elementName, String filename, int copy)
     {
     	final String filenameFinal = filename;
         
@@ -107,8 +107,8 @@ public class CustomElementManagerActivity extends Activity
 		
 		//Create a TextView to hold the element name
 		TextView nameTextView = new TextView(this);
-		// TODO: Change this to elementName when loading works
-		nameTextView.setText(elementName);
+		String versionTag = (copy == 0) ? "" : " (" + String.valueOf(copy) + ")";
+		nameTextView.setText(elementName + versionTag);
 		nameTextView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
 		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
@@ -154,7 +154,7 @@ public class CustomElementManagerActivity extends Activity
 				public void onClick(View v)
 				{
 					// Delete the custom element file
-					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal)).delete();
+					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT_EXT)).delete();
 					
 					// Update the view accordingly
 					ViewGroup parent = (ViewGroup) v.getParent().getParent();
