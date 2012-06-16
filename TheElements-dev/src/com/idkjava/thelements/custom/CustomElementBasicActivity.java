@@ -32,6 +32,7 @@ public class CustomElementBasicActivity extends Activity
 {
 	private CustomElement mCustomElement;
 	private boolean newElement;
+	private boolean shouldIgnoreSelection;
 	
 	private EditText nameField;
 	private Spinner baseElementField;
@@ -87,8 +88,10 @@ public class CustomElementBasicActivity extends Activity
 	    // Load data from the parent activity
 		mCustomElement = ((CustomElementActivity) getParent()).mCustomElement;
 		newElement = ((CustomElementActivity) getParent()).newElement;
+		shouldIgnoreSelection = false;
 		if (!newElement)
 		{
+			shouldIgnoreSelection = true;
 			fillInfo();
 		}
 		
@@ -98,7 +101,12 @@ public class CustomElementBasicActivity extends Activity
 			public void onItemSelected(AdapterView<?> parent, View v, int pos, long id)
 			{
 				// Fill in the values with the default for that element
-				CustomElementBasicActivity.this.fillInfoFromBase(pos);
+				if (shouldIgnoreSelection)
+				{
+					shouldIgnoreSelection = false;
+					return;
+				}
+				fillInfoFromBase(pos);
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent)
@@ -147,7 +155,7 @@ public class CustomElementBasicActivity extends Activity
 	{
 		if (newElement)
 		{
-			mCustomElement = new CustomElement(nameField.getText().toString().toLowerCase() + FileManager.ELEMENT_EXT);
+			mCustomElement = new CustomElement(nameField.getText().toString().toLowerCase());
 		}
 		
 		CustomElement ce = mCustomElement;
@@ -157,7 +165,9 @@ public class CustomElementBasicActivity extends Activity
 		ce.state = getStateValFromId(stateRadioId);
 		ce.startingTemp = startingTempField.getProgress();
 		ce.lowestTemp = lowestTempField.getProgress();
+		ce.highestTemp = highestTempField.getProgress();
 		ce.lowerElementIndex = (int) (lowerElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT);
+		ce.higherElementIndex = (int) (higherElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT);
 		ce.red = redField.getProgress();
 		ce.green = greenField.getProgress();
 		ce.blue = blueField.getProgress();
@@ -221,7 +231,9 @@ public class CustomElementBasicActivity extends Activity
 		try
 		{
 			// Now fill in the actual values
-			nameField.setText(reader.readLine());
+			//nameField.setText(reader.readLine());
+			// Ignore the name
+			reader.readLine();
 			int stateVal = Integer.parseInt(reader.readLine());
 			stateField.check(getStateRadioId(stateVal));
 			startingTempField.setProgress(Integer.parseInt(reader.readLine()));
