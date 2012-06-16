@@ -113,6 +113,7 @@ void elementSetup()
 	    tempElement = (struct Element*) malloc(sizeof(struct Element));
 	    elements[i] = tempElement;
 	    tempElement->index = i;
+	    tempElement->name = baseName[i];
 	    tempElement->red = baseRed[i];
 	    tempElement->green = baseGreen[i];
 	    tempElement->blue = baseBlue[i];
@@ -123,7 +124,7 @@ void elementSetup()
 	    tempElement->specialVals = (char*) malloc(MAX_SPECIALS * sizeof(char));
 	    for(j = 0; j < MAX_SPECIALS; j++)
 	    {
-		tempElement->specialVals[j] = baseSpecialValue[i][j];
+	        tempElement->specialVals[j] = baseSpecialValue[i][j];
 	    }
 	    tempElement->useElementSpecialVals = baseUseElementSpecialVals[i];
 	    tempElement->inertia = baseInertia[i];

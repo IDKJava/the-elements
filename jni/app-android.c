@@ -299,6 +299,43 @@ char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject th
 {
 	return cElement->index;
 }
+jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject this, int i)
+{
+	char buffer[1000];
+	int length = snprintf(buffer, 1000,
+					"%s\n" // Name
+					"%d\n" // State
+					"%d\n" // Starting temp
+					"%d\n" // Lowest temp
+					"%d\n" // Highest temp
+					"%d\n" // Lower element index
+					"%d\n" // Highest element index
+					"%d\n" // Red
+					"%d\n" // Green
+					"%d\n" // Blue
+					"%d\n" // Density
+					"%d\n" // fallVel
+					"%d", // inertia
+					baseName[i],
+					(int)baseState[i],
+					(int)baseStartingTemp[i],
+					(int)baseLowestTemp[i],
+					(int)baseHighestTemp[i],
+					(int)baseLowerElement[i],
+					(int)baseHigherElement[i],
+					(int)baseRed[i],
+					(int)baseGreen[i],
+					(int)baseBlue[i],
+					(int)baseDensity[i],
+					(int)baseFallVel[i],
+					(int)baseInertia[i]);
+
+	__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
+
+	jstring retVal;
+	retVal = (*env)->NewStringUTF(env, buffer);
+	return retVal;
+}
 
 //Accelerometer related
 void Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)

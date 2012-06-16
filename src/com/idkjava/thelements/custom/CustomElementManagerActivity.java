@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -40,6 +41,16 @@ public class CustomElementManagerActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.custom_element_manager_activity);
 		res = getResources();
+		
+		Button createElementButton = (Button) findViewById(R.id.create_element_button);
+		createElementButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				startActivity(new Intent(CustomElementManagerActivity.this, CustomElementActivity.class));
+			}
+		});
 	}
 	@Override
 	protected void onResume()
@@ -97,7 +108,7 @@ public class CustomElementManagerActivity extends Activity
 		//Create a TextView to hold the element name
 		TextView nameTextView = new TextView(this);
 		// TODO: Change this to elementName when loading works
-		nameTextView.setText(filename);
+		nameTextView.setText(elementName);
 		nameTextView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
 		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		

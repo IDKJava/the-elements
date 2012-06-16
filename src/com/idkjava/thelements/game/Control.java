@@ -46,7 +46,7 @@ public class Control extends LinearLayout
 		{
 			public void onClick(View v)
 			{
-				activity.showDialog(2); //Run the element picker dialog
+				activity.showDialog(MainActivity.ELEMENT_PICKER); //Run the element picker dialog
 			}
 		});
 		//Set a palette image for the button

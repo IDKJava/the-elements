@@ -49,6 +49,36 @@
 //Include the global macros
 #include "elementproperties.h"
 
+// Define the names of the elements
+char* baseName[] = {
+		 // ----Special----
+		 "Spawn",		// 0 = Spawn
+		 "Drag",		// 1 = Drag
+		 "Eraser",		// 2 = Eraser
+		 // ----Normal----
+		 "Sand",		// 3 = Sand
+		 "Water",		// 4 = Water
+		 "Steam",		// 5 = Steam
+		 "Ice",			// 6 = Ice
+		 "Wall",		// 7 = Wall
+		 "Destructible Wall", // 8 = Destructible Wall
+		 "Plant",		// 9 = Plant
+		 "Fire",		// 10 = Fire
+		 "Magma",		// 11 = Magma
+		 "Stone",		// 12 = Stone
+		 "Oil",			// 13 = Oil
+		 "C4",			// 14 = C4
+		 "C4++",		// 15 = C4++
+		 "Fuse",		// 16 = Fuse
+		 "Acid",		// 17 = Acid
+		 "Salt",		// 18 = Salt
+		 "Salt-Water",	// 19 = Salt-Water
+		 "Glass",		// 20 = Glass
+		 "Mud",			// 21 = Mud
+		 "Generator",	// 22 = Generator
+		 "Coal"			// 23 = Coal
+};
+
 //Define the color of the element
 unsigned char baseRed[] =   {255,   0,   0, 255,   0, 220, 200, 157, 176,   0, 255, 204, 100, 143, 255, 255, 135, 150, 255,  50, 200, 100, 255,  50};
 unsigned char baseGreen[] = {255,   0,   0, 213,   0, 220, 200, 157, 176, 255,   0,  51, 100,  80, 255, 211,  25, 255, 255, 100, 255,  85, 255,  50};
