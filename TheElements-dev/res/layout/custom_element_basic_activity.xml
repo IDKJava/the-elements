@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
-	<LinearLayout
-	    android:id="@+id/basic_editor_container"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical"
-	    android:padding="10dp">
-	    <!-- Name -->
-	    <LinearLayout
-	        android:layout_width="fill_parent"
-	        android:layout_height="50dp"
-	        android:orientation="horizontal">
-	        <TextView
-	            android:text="@string/ce_name_prompt"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_marginRight="10dp"
-	            android:gravity="center_vertical|left"/>
+
+    <LinearLayout
+        android:id="@+id/basic_editor_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="10dp" >
+
+        <!-- Name -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_marginRight="10dp"
+                android:gravity="center_vertical|left"
+                android:text="@string/ce_name_prompt" />
+
 			<EditText
 			    android:id="@+id/ce_name"
 			    android:hint="@string/custom_element_name_hint"
@@ -44,6 +48,45 @@
 			    android:layout_height="wrap_content"
 			    android:layout_gravity="center_vertical"
 			    android:layout_weight="1" />
+		</LinearLayout>
+		<!-- State -->
+		<LinearLayout
+		    android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal">
+			<TextView
+	            android:text="@string/ce_state_prompt"
+	            android:layout_width="wrap_content"
+	            android:layout_height="fill_parent"
+	            android:layout_marginRight="10dp"
+	            android:gravity="center_vertical|left"/>
+
+			<RadioGroup
+			    android:id="@+id/ce_state"
+			    android:orientation="horizontal"
+			    android:gravity="right"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content" >
+
+			    <RadioButton
+			        android:id="@+id/ce_solid_state"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:checked="true"
+			        android:text="@string/ce_solid_state" />
+
+			    <RadioButton
+			        android:id="@+id/ce_liquid_state"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="@string/ce_liquid_state" />
+
+			    <RadioButton
+			        android:id="@+id/ce_gas_state"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="@string/ce_gas_state" />
+			</RadioGroup>
 
 		</LinearLayout>
 		<!-- Starting temp -->
@@ -287,7 +330,7 @@
 			    android:layout_height="0dp"
 			    android:layout_gravity="right"
 			    android:layout_weight="1"
-			    android:max="255" />
+			    android:max="254" />
 
 		</LinearLayout>
 

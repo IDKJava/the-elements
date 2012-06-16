@@ -36,7 +36,7 @@ public class MainActivity extends Activity
 
 	//Constants for dialogue ids
 	private static final int INTRO_MESSAGE = 1;
-	private static final int ELEMENT_PICKER = 2;
+	public static final int ELEMENT_PICKER = 2;
 	private static final int BRUSH_SIZE_PICKER = 3;
 
 	//Constants for elements
@@ -406,6 +406,7 @@ public class MainActivity extends Activity
 	
 	//Getters
 	public static native char getElement();
+	public static native String getElementInfo(int index);
 	
 	//Accelerometer related
 	public static native void setXGravity(float xGravity);

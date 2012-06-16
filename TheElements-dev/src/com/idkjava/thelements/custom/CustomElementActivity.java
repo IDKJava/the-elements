@@ -18,6 +18,7 @@ public class CustomElementActivity extends TabActivity
 	 * All elements held in same file, accessed by name.
 	 */
 	private String filename;
+	public boolean newElement;
 	public CustomElement mCustomElement;
 	
 	
@@ -28,12 +29,20 @@ public class CustomElementActivity extends TabActivity
 
 		// Try loading the element
 		filename = getIntent().getStringExtra("filename");
-		mCustomElement = new CustomElement(filename);
-		if(!mCustomElement.loadPropertiesFromFile())
+		if(filename != null)
 		{
-			// If loading fails, we need to quit and show a message
-			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_load_failed_msg), Toast.LENGTH_LONG).show();
-			finish();
+			newElement = false;
+			mCustomElement = new CustomElement(filename);
+			if(!mCustomElement.loadPropertiesFromFile())
+			{
+				// If loading fails, we need to quit and show a message
+				Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_load_failed_msg), Toast.LENGTH_LONG).show();
+				finish();
+			}
+		}
+		else
+		{
+			newElement = true;
 		}
 		
 		// Set the content view
