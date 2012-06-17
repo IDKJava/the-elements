@@ -100,21 +100,30 @@
 		android:layout_width="fill_parent"
 		android:layout_height="46dip"
 		android:layout_weight="0"
+		android:gravity="center_vertical"
 		android:paddingRight="3dip">
 			
 		<!-- Element Picker Button -->
 		<ImageButton
 			android:id="@+id/element_picker_button"
 			android:background="@drawable/btn_ui_element"
-			android:layout_width="42dip"
-			android:layout_margin="3dip"
-			android:layout_gravity="center"
-			android:layout_height="42dip" />
+			android:src="@drawable/palette"
+			android:layout_width="42dp"
+			android:layout_height="42dp"
+			android:layout_margin="3dp" />
+		
+		<!-- Custom Elements Button -->
+		<ImageButton
+		    android:id="@+id/custom_elements_button"
+		    android:background="@drawable/btn_ui_element"
+		    android:src="@drawable/palette_custom_elements"
+		    android:layout_width="42dp"
+		    android:layout_height="42dp"
+		    android:layout_margin="3dp" />
 		
 		<!-- Brush Size Seekbar -->
 		<SeekBar
 			android:id="@+id/brush_size_slider"
-			android:layout_gravity="center"
 			android:layout_weight="1"
 			android:progressDrawable="@drawable/bg_ui_progress"
 			android:layout_height="wrap_content"
