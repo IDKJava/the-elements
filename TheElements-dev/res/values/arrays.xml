@@ -46,4 +46,11 @@
 		<item>16</item>
 		<item>32</item>
 	</string-array>
+	<string-array name="collisions_list">
+		<item >Solid - Solid</item>
+		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item>
+	</string-array>
+	<string-array name="specials_list">
+		<item >No special</item>
+	</string-array>
 </resources>

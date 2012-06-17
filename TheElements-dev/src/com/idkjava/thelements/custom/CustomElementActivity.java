@@ -1,5 +1,7 @@
 package com.idkjava.thelements.custom;
 
+import java.util.ArrayList;
+
 import com.idkjava.thelements.R;
 import android.app.TabActivity;
 import android.content.Intent;
@@ -21,6 +23,8 @@ public class CustomElementActivity extends TabActivity
 	public boolean newElement;
 	public CustomElement mCustomElement;
 	
+	// Variables for passing data to basic activity
+	public ArrayList<Integer> collisions;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)

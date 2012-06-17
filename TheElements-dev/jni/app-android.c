@@ -336,6 +336,10 @@ jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, job
 	retVal = (*env)->NewStringUTF(env, buffer);
 	return retVal;
 }
+int Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject this)
+{
+	return MAX_SPECIALS;
+}
 
 //Accelerometer related
 void Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)

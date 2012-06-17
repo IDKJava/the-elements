@@ -407,6 +407,7 @@ public class MainActivity extends Activity
 	//Getters
 	public static native char getElement();
 	public static native String getElementInfo(int index);
+	public static native int getMaxSpecials();
 	
 	//Accelerometer related
 	public static native void setXGravity(float xGravity);

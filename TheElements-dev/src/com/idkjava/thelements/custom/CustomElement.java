@@ -177,8 +177,16 @@ public class CustomElement
 			out.write(String.valueOf(fallVel));
 			out.newLine();
 			out.write(String.valueOf(inertia));
+			out.newLine();
 			
-			// TODO: Advanced
+			int arrayLength = collisions.size();
+			for (int i = 0; i < arrayLength; i++)
+			{
+				out.write(String.valueOf(getCollisionIndexFromPos(collisions.get(i))));
+				out.newLine();
+			}
+			
+			// TODO: Specials
 			
 			out.close();
 		}
@@ -189,5 +197,11 @@ public class CustomElement
 		
 		mValid = true;
 		return true;
+	}
+	
+	private int getCollisionIndexFromPos(int pos)
+	{
+		// Use this function to do a conversion if ever needed
+		return pos;
 	}
 }

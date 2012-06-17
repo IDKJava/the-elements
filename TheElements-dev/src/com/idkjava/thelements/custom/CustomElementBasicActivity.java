@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
@@ -122,7 +123,7 @@ public class CustomElementBasicActivity extends Activity
 			{
 				if (checked)
 				{
-					inertiaNormalField.setVisibility(View.INVISIBLE);
+					inertiaNormalField.setVisibility(View.GONE);
 				}
 				else
 				{
@@ -152,10 +153,26 @@ public class CustomElementBasicActivity extends Activity
 	}
 	
 	private boolean saveElement()
+	{	
+		writePropertiesToCustom();
+		
+		if (mCustomElement.writeToFile())
+		{
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_success), Toast.LENGTH_LONG);
+			return true;
+		}
+		else
+		{
+			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_failed), Toast.LENGTH_LONG);
+			return false;
+		}
+	}
+	public void writePropertiesToCustom()
 	{
 		if (newElement)
 		{
 			mCustomElement = new CustomElement(nameField.getText().toString().toLowerCase());
+			((CustomElementActivity) getParent()).mCustomElement = mCustomElement;
 		}
 		
 		CustomElement ce = mCustomElement;
@@ -181,15 +198,20 @@ public class CustomElementBasicActivity extends Activity
 		{
 			ce.inertia = inertiaNormalField.getProgress();
 		}
-		if (ce.writeToFile())
+		ArrayList<Integer> collisions = ((CustomElementActivity) getParent()).collisions;
+		ce.collisions = new ArrayList<Integer>();
+		int numElements = getResources().getStringArray(R.array.elements_list).length;
+		for (int i = 0; i < numElements; i++)
 		{
-			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_success), Toast.LENGTH_LONG);
-			return true;
-		}
-		else
-		{
-			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_failed), Toast.LENGTH_LONG);
-			return false;
+			if (collisions.size() >= i+1)
+			{
+				ce.collisions.add(collisions.get(i));
+			}
+			else
+			{
+				Log.d("LOG", "Error: collisions array passed to save was not long enough");
+				ce.collisions.add(0);
+			}
 		}
 	}
 	
@@ -212,7 +234,7 @@ public class CustomElementBasicActivity extends Activity
 		if (ce.inertia == 255)
 		{
 			inertiaUnmovableField.setChecked(true);
-			inertiaNormalField.setVisibility(View.INVISIBLE);
+			inertiaNormalField.setVisibility(View.GONE);
 		}
 		else
 		{
@@ -250,7 +272,7 @@ public class CustomElementBasicActivity extends Activity
 			if (inertia == 255)
 			{
 				inertiaUnmovableField.setChecked(true);
-				inertiaNormalField.setVisibility(View.INVISIBLE);
+				inertiaNormalField.setVisibility(View.GONE);
 			}
 			else
 			{
