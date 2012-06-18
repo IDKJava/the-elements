@@ -51,6 +51,7 @@
 		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item>
 	</string-array>
 	<string-array name="specials_list">
-		<item >No special</item>
+		<item >No special</item><item >Spawn (generate particles of a given type)</item><item >Break (turn into sand beyond a given velocity)</item><item >Grow (duplicate on collision with a given element)</item><item >Heat (generate a fixed amount of heat)</item><item >Explode (if a particle melts/evaporates, it explodes)</item>
+		<item >Life (disappears with the given chance)</item>
 	</string-array>
 </resources>

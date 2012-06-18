@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import android.util.Log;
+
+import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.game.FileManager;
 
 public class CustomElement
@@ -36,6 +39,8 @@ public class CustomElement
 	public int fallVel;
 	public int inertia;
 	public ArrayList<Integer> collisions;
+	public ArrayList<Integer> specials;
+	public ArrayList<Integer> specialVals;
 	
 	public CustomElement(String filename)
 	{
@@ -103,9 +108,32 @@ public class CustomElement
 			inertia = Integer.parseInt(br.readLine());
 			String collisionString;
 			collisions = new ArrayList<Integer>();
-			while((collisionString = br.readLine()) != null)
+			for (int i = 0; i < MainActivity.NUM_BASE_ELEMENTS - MainActivity.NORMAL_ELEMENT; i++)
 			{
+				collisionString = br.readLine();
+				if (collisionString == null)
+				{
+					break;
+				}
 				collisions.add(Integer.parseInt(collisionString));
+			}
+			String specialString;
+			String specialValString;
+			specials = new ArrayList<Integer>();
+			specialVals = new ArrayList<Integer>();
+			Log.d("LOG", "Reading specials");
+			for (int i = 0; i < MainActivity.MAX_SPECIALS; i++)
+			{
+				specialString = br.readLine();
+				specialValString = br.readLine();
+				Log.d("LOG", "(" + specialString + ", " + specialValString + ")");
+				
+				if (specialString == null || specialValString == null)
+				{
+					break;
+				}
+				specials.add(Integer.parseInt(specialString));
+				specialVals.add(Integer.parseInt(specialValString));
 			}
 		}
 		catch (NumberFormatException e)
@@ -186,7 +214,14 @@ public class CustomElement
 				out.newLine();
 			}
 			
-			// TODO: Specials
+			arrayLength = specials.size();
+			for (int i = 0; i < arrayLength; i++)
+			{
+				out.write(String.valueOf(getSpecialIndexFromPos(specials.get(i))));
+				out.newLine();
+				out.write(String.valueOf(specialVals.get(i)));
+				out.newLine();
+			}
 			
 			out.close();
 		}
@@ -199,9 +234,27 @@ public class CustomElement
 		return true;
 	}
 	
-	private int getCollisionIndexFromPos(int pos)
+	public static int getCollisionIndexFromPos(int pos)
 	{
 		// Use this function to do a conversion if ever needed
 		return pos;
+	}
+	public static int getSpecialIndexFromPos(int pos)
+	{
+		// Use this function to do a conversion if ever needed
+		if (pos == 0)
+		{
+			return -1;
+		}
+		return pos;
+	}
+	public static int getSpecialPosFromIndex(int index)
+	{
+		// Use this function to do a conversion if ever needed
+		if (index == -1)
+		{
+			return 0;
+		}
+		return index;
 	}
 }

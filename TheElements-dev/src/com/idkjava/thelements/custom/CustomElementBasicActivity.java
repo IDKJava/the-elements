@@ -213,6 +213,33 @@ public class CustomElementBasicActivity extends Activity
 				ce.collisions.add(0);
 			}
 		}
+		ArrayList<Integer> specials = ((CustomElementActivity) getParent()).specials;
+		ArrayList<Integer> specialVals = ((CustomElementActivity) getParent()).specialVals;
+		ce.specials = new ArrayList<Integer>();
+		ce.specialVals = new ArrayList<Integer>();
+		int numSpecials = MainActivity.MAX_SPECIALS;
+		for (int i = 0; i < numSpecials; i++)
+		{
+			if (specials.size() >= i+1)
+			{
+				ce.specials.add(specials.get(i));
+			}
+			else
+			{
+				Log.d("LOG", "Error: specials array passed to save was not long enough");
+				ce.specials.add(-1);
+			}
+			
+			if (specialVals.size() >= i+1)
+			{
+				ce.specialVals.add(specialVals.get(i));
+			}
+			else
+			{
+				Log.d("LOG", "Error: special vals array passed to save was not long enough");
+				ce.specialVals.add(0);
+			}
+		}
 	}
 	
 	private void fillInfo()
