@@ -25,6 +25,8 @@ public class CustomElementActivity extends TabActivity
 	
 	// Variables for passing data to basic activity
 	public ArrayList<Integer> collisions;
+	public ArrayList<Integer> specials;
+	public ArrayList<Integer> specialVals;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
