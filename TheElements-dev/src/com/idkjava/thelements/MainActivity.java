@@ -2,6 +2,16 @@ package com.idkjava.thelements;
 
 import com.idkjava.thelements.R;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.idkjava.thelements.game.Control;
@@ -11,6 +21,7 @@ import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
+import android.R.string;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -24,6 +35,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -53,7 +65,8 @@ public class MainActivity extends Activity
 	//Constants for specials
 	public static final int MAX_SPECIALS = 6;
 
-	static CharSequence[] elementslist;
+	static CharSequence[] CSElementsList;
+	static ArrayList<String> elementsList;
 
 	public static boolean play = true;
 	public static boolean zoomState = ZOOMED_IN; //Zoomed in or not
@@ -62,6 +75,11 @@ public class MainActivity extends Activity
 
 	public static final String PREFS_NAME = "MyPrefsfile";
 	public static boolean shouldLoadDemo = false;
+	
+	public static final String ROOT_DIR = "/sdcard/thelements/";
+	public static final String ELEMENTS_DIR = "elements/";
+	public static final String LIST_NAME = "eleList";
+	public static final String LIST_EXT = ".lst";
 
 	public static boolean ui;
 
@@ -94,9 +112,7 @@ public class MainActivity extends Activity
 
 		setUpViews();
 
-		//Set up the elements list
-		Resources res = getResources();
-		elementslist = res.getTextArray(R.array.elements_list);
+		elementsList = new ArrayList<String>();
 
 		//Load the custom elements
 		//CustomElementManager.reloadCustomElements();
@@ -151,6 +167,48 @@ public class MainActivity extends Activity
 
 		//Register the accelerometer listener
 		myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+		
+		//Set up the elements list
+		Resources res = getResources();
+		CSElementsList = res.getTextArray(R.array.elements_list);
+		elementsList.clear();
+		
+		
+		
+		for ( int i = 0; i < CSElementsList.length; i++ )
+		{
+			elementsList.add(CSElementsList[i].toString());
+		}
+		List<String> list = Arrays.asList("foo", "bar", "waa");
+		CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
+		System.out.println(Arrays.toString(cs)); // [foo, bar, waa]
+		
+		try{
+			// Open the file that is the first 
+			// command line parameter
+			FileInputStream fstream = new FileInputStream(ROOT_DIR + ELEMENTS_DIR + LIST_NAME + LIST_EXT);
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine;
+			//Read File Line By Line
+			while ((strLine = br.readLine()) != null)   {
+				FileInputStream tstream = new FileInputStream(ROOT_DIR+ELEMENTS_DIR+strLine);
+				DataInputStream in2 = new DataInputStream(tstream);
+				BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+				if ( (strLine = br2.readLine()) != null )
+				{
+					elementsList.add(strLine);
+				}
+			
+			}
+			CSElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
+			//Close the input stream
+			in.close();
+		}catch (Exception e){//Catch exception if any
+			System.err.println("Error: " + e.getMessage());
+		}
+		
 
 		//Set up the file manager for saving and loading
 		FileManager.intialize(this);
@@ -225,7 +283,7 @@ public class MainActivity extends Activity
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 			builder.setTitle(R.string.element_picker); // Set the title
-			builder.setItems(elementslist, new DialogInterface.OnClickListener() //Create the list
+			builder.setItems(CSElementsList, new DialogInterface.OnClickListener() //Create the list
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{
