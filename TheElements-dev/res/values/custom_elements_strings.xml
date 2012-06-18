@@ -21,4 +21,5 @@
 <string name="collisions_heading">Define your collisions:</string>
 <string name="specials_heading">Define your special properties:</string>
 <string name="no_special_val">No value needed.</string>
+<string name="ce_empty_name_error">Error: You cannot have an empty element name!</string>
 </resources>

@@ -137,6 +137,14 @@ public class CustomElementBasicActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
+				nameField.setText(nameField.getText().toString().trim());
+				Log.d("LOG", "Name field: " + nameField.getText().toString());
+				if (nameField.getText().toString().length() <= 0)
+				{
+					Log.d("LOG", "Emtpy name field!");
+					Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_empty_name_error), Toast.LENGTH_LONG).show();
+					return;
+				}
 				ProgressDialog dialog = new ProgressDialog(CustomElementBasicActivity.this);
 				dialog.show();
 				if(CustomElementBasicActivity.this.saveElement())
@@ -153,7 +161,7 @@ public class CustomElementBasicActivity extends Activity
 	}
 	
 	private boolean saveElement()
-	{	
+	{
 		writePropertiesToCustom();
 		
 		if (mCustomElement.writeToFile())
@@ -199,45 +207,63 @@ public class CustomElementBasicActivity extends Activity
 			ce.inertia = inertiaNormalField.getProgress();
 		}
 		ArrayList<Integer> collisions = ((CustomElementActivity) getParent()).collisions;
-		ce.collisions = new ArrayList<Integer>();
-		int numElements = getResources().getStringArray(R.array.elements_list).length;
-		for (int i = 0; i < numElements; i++)
+		if (collisions != null || newElement)
 		{
-			if (collisions.size() >= i+1)
+			if (collisions == null)
 			{
-				ce.collisions.add(collisions.get(i));
+				collisions = new ArrayList<Integer>();
 			}
-			else
+			ce.collisions = new ArrayList<Integer>();
+			int numElements = getResources().getStringArray(R.array.elements_list).length;
+			for (int i = 0; i < numElements; i++)
 			{
-				Log.d("LOG", "Error: collisions array passed to save was not long enough");
-				ce.collisions.add(0);
+				if (collisions.size() >= i+1)
+				{
+					ce.collisions.add(collisions.get(i));
+				}
+				else
+				{
+					Log.d("LOG", "Error: collisions array passed to save was not long enough");
+					ce.collisions.add(0);
+				}
 			}
 		}
 		ArrayList<Integer> specials = ((CustomElementActivity) getParent()).specials;
 		ArrayList<Integer> specialVals = ((CustomElementActivity) getParent()).specialVals;
-		ce.specials = new ArrayList<Integer>();
-		ce.specialVals = new ArrayList<Integer>();
-		int numSpecials = MainActivity.MAX_SPECIALS;
-		for (int i = 0; i < numSpecials; i++)
+		if (specials != null && specialVals != null || newElement)
 		{
-			if (specials.size() >= i+1)
+			if (specials == null)
 			{
-				ce.specials.add(specials.get(i));
+				specials = new ArrayList<Integer>();
 			}
-			else
+			if (specialVals == null)
 			{
-				Log.d("LOG", "Error: specials array passed to save was not long enough");
-				ce.specials.add(-1);
+				specialVals = new ArrayList<Integer>();
 			}
-			
-			if (specialVals.size() >= i+1)
+			ce.specials = new ArrayList<Integer>();
+			ce.specialVals = new ArrayList<Integer>();
+			int numSpecials = MainActivity.MAX_SPECIALS;
+			for (int i = 0; i < numSpecials; i++)
 			{
-				ce.specialVals.add(specialVals.get(i));
-			}
-			else
-			{
-				Log.d("LOG", "Error: special vals array passed to save was not long enough");
-				ce.specialVals.add(0);
+				if (specials.size() >= i+1)
+				{
+					ce.specials.add(specials.get(i));
+				}
+				else
+				{
+					Log.d("LOG", "Error: specials array passed to save was not long enough");
+					ce.specials.add(-1);
+				}
+				
+				if (specialVals.size() >= i+1)
+				{
+					ce.specialVals.add(specialVals.get(i));
+				}
+				else
+				{
+					Log.d("LOG", "Error: special vals array passed to save was not long enough");
+					ce.specialVals.add(0);
+				}
 			}
 		}
 	}
