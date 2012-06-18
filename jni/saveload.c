@@ -560,7 +560,6 @@ char saveCustomElementHash(char* elementHash)
 
 char loadCustomElements(void)
 {
-	glob_t data;
 	char loadLoc[256];
 	char saveLoc[256];
 	//Load the file names of everything in the loading directory
@@ -592,37 +591,7 @@ char loadCustomElements(void)
 	}
 
 	closedir(mydir);
-	/*
-  switch( glob("*.*", 0, NULL, &data ) )
-  {
-    case 0:
-      break;
-    case GLOB_NOSPACE:
-    	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Out of Memory");
-      break;
-    case GLOB_ABORTED:
-    	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Reading Error");
-      break;
-    case GLOB_NOMATCH:
-    	__android_log_write(ANDROID_LOG_INFO, "TheElements", "No Files Found");
-      break;
-    default:
-      break;
-  }
 
-  __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveload end ");
-  int i;
-  for(i=0; i<data.gl_pathc; i++)
-  {
-	  loadCustomElement( data.gl_pathv[i] );
-	      fprintf(sp, data.gl_pathv[i]);
-	      fprintf(sp, "\n");
-	      __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveload printing");
-  }
-  __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveload end2");
-
-  globfree( &data );
-	 */
 	fclose(sp);
 	return FALSE;
 }

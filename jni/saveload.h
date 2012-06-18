@@ -38,8 +38,7 @@
 #include "setup.h"
 //Include the string functions
 #include <string.h>
-//Include the glob functions
-#include "glob.h"
+//Include the directory functions
 #include <dirent.h>
 
 char saveState(char* saveLoc);
