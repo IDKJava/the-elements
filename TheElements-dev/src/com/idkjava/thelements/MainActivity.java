@@ -30,15 +30,16 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 public class MainActivity extends Activity
 {
@@ -263,13 +264,10 @@ public class MainActivity extends Activity
 		if (id == INTRO_MESSAGE) // The first dialog - the intro message
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage(R.string.app_intro).setCancelable(false).setPositiveButton(R.string.exit, new DialogInterface.OnClickListener()
-			{
-				public void onClick(DialogInterface dialog, int id)
-				{
-					finish();
-				}
-			}).setNegativeButton(R.string.proceed, new DialogInterface.OnClickListener()
+			WebView wv = new WebView(getBaseContext());
+			wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
+			wv.setBackgroundColor(Color.BLACK);
+			builder.setView(wv).setCancelable(false).setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener()
 			{
 				public void onClick(DialogInterface dialog, int id)
 				{
