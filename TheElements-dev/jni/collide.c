@@ -14,7 +14,26 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     //Temporary variables
     int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY;
     //The type of the collision (retrieved from a static array)
-    int type = collision[firstParticle->element->index][secondParticle->element->index];
+
+    int fs = firstParticle->element->index;
+    int ss = secondParticle->element->index;
+    int type;
+    if (fs >= NUM_BASE_ELEMENTS && ss >= NUM_BASE_ELEMENTS)
+    {
+    	type = elements[fs]->collisions[elements[ss]->base];
+    }
+    else if ( fs >= NUM_BASE_ELEMENTS)
+    {
+    	type = elements[fs]->collisions[ss];
+    }
+    else if ( ss >= NUM_BASE_ELEMENTS)
+    {
+      //type = reciprocals[elements[ss]->collisions[fs]];
+    }
+    else
+    {
+    	type = collision[firstParticle->element->index][secondParticle->element->index];
+    }
 
     switch(type)
     {

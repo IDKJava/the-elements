@@ -20,6 +20,8 @@
 #include "points.h"
 //Include logging
 //#include <android/log.h>
+//Include collision data
+//#include "collisions.h"
 
 void collide (struct Particle* firstParticle, struct Particle* secondParticle);
 

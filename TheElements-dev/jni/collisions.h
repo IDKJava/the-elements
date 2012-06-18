@@ -60,6 +60,21 @@
  *		* = Should not happen, something messed up
  */
 
+char reciprocals[NUM_COLLISIONS] =
+{
+		0,
+		1,
+		3,
+		2,
+		5,
+		4,
+		7,
+		6,
+		8,
+		9,
+		10
+};
+
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
 {
 	//Spawn 0

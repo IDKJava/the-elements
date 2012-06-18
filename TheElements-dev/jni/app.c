@@ -66,6 +66,7 @@ int workHeight;
 int stupidTegra;
 
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
+char reciprocals[NUM_COLLISIONS];
 
 char shouldClear = FALSE;
 char shouldZoom = FALSE;
