@@ -90,9 +90,7 @@ void atmosphereSetup()
 
 void elementSetup()
 {
-
-
-	//TODO: Load custom elements	__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraysetup end");
+	__android_log_write(ANDROID_LOG_INFO, "LOG", "Element setup");
 	//Calculate numElements
 	//Calculate special size
 	//Calculate special value size

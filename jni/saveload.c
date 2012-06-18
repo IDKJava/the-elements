@@ -70,6 +70,7 @@ char saveStateLogic(char* saveLoc)
 			elementSaveFilter[i] = 0;
 		}
 
+		__android_log_write(ANDROID_LOG_INFO, "LOG", "Start preprocessing loop");
 		//Preprocessing loop
 		numElementsToBeSaved = 0;
 		for (counterX = 0; counterX < workWidth; counterX++)
@@ -85,6 +86,7 @@ char saveStateLogic(char* saveLoc)
 				}
 			}
 		}
+		__android_log_write(ANDROID_LOG_INFO, "LOG", "End preprocessing loop");
 
 		//First write how many custom elements will be saved
 		fprintf(fp, "%d\n\n", numElementsToBeSaved);
@@ -101,29 +103,41 @@ char saveStateLogic(char* saveLoc)
 		 */
 		for (i = 0; i < numElements; i++)
 		{
+			char buffer[10];
+			sprintf(buffer, "%d", i);
+			__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 			if(elementSaveFilter[i] == 1)
 			{
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "0");
 				fprintf(fp, "%d\n", i);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "1");
 				fprintf(fp, "%s\n", elements[i]->name);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "2");
 				fprintf(fp, "%d %d %d %d\n",
 						elements[i]->state,
 						elements[i]->startingTemp,
 						elements[i]->lowestTemp,
 						elements[i]->highestTemp);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "3");
 				fprintf(fp, "%d %d\n",
 						elements[i]->lowerElement->index,
 						elements[i]->higherElement->index);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "4");
 				fprintf(fp, "%d %d %d\n",
 						elements[i]->red,
 						elements[i]->green,
 						elements[i]->blue);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "5");
 				//TODO: Specials & useElementSpecialVals
 				fprintf(fp, "%d %d %d\n\n",
 						elements[i]->density,
 						elements[i]->fallVel,
 						elements[i]->inertia);
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "6");
 			}
 		}
+
+		__android_log_write(ANDROID_LOG_INFO, "LOG", "Wrote custom elements");
 
 		//Save the dimensions
 		fprintf(fp, "%d %d\n\n", workWidth, workHeight);
@@ -621,6 +635,7 @@ char loadCustomElement(char* loadLoc)
 	tempCustom->collisions = malloc( NUM_BASE_ELEMENTS * sizeof(char));
 	tempCustom->specials = malloc( MAX_SPECIALS*sizeof(char));
 	tempCustom->specialVals = malloc( MAX_SPECIALS*sizeof(char));
+	tempCustom->useElementSpecialVals = elements[tempCustom->base]->useElementSpecialVals;
 
 	int i;
 	for (i = 0; i < NUM_BASE_ELEMENTS;i++ )
@@ -653,6 +668,10 @@ char loadCustomElement(char* loadLoc)
 	//Increment number of Elements and add the newest element in
 	numElements++;
 	elements[numElements-1] = tempCustom;
+
+	char buffer[256];
+	sprintf(buffer, "Loaded custom element, index: %d, element->index: %d", numElements-1, tempCustom->index);
+	__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 
 	return FALSE;
 }
