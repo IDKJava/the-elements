@@ -17,7 +17,9 @@
 #define ATMOSPHERES_FOLDER "atmospheres/"
 #define TEMP_SAVE "temp"
 #define DEMO_SAVE "demo"
+#define LIST_SAVE "eleList"
 //File extensions
+#define LIST_EXTENSION ".lst"
 #define SAVE_EXTENSION ".sav"
 #define ELEMENT_EXTENSION ".ele"
 #define ATMOSPHERE_EXTENSION ".atm"
@@ -36,6 +38,9 @@
 #include "setup.h"
 //Include the string functions
 #include <string.h>
+//Include the glob functions
+#include "glob.h"
+#include <dirent.h>
 
 char saveState(char* saveLoc);
 char saveStateLogic(char* saveLoc);

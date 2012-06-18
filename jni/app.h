@@ -45,13 +45,16 @@ struct Element
 	struct Element* lowerElement;
 	struct Element* higherElement;
 	
+	char useElementSpecialVals;
+
 	//Dealing with drawing
 	char red, green, blue;
-	
+
 	//Properties
 	char* specials;
 	char* specialVals;
-	char useElementSpecialVals;
+	char* collisions;  // Only for customs
+	char base; //Only for customs
 	char density;
 	signed char fallVel;
 	char inertia;
@@ -134,6 +137,7 @@ extern int stupidTegra;
 
 //Collision matrix
 extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
+extern char reciprocals[NUM_COLLISIONS];
 
 //Set when a clear is requested, unset when cleared
 extern char shouldClear;
