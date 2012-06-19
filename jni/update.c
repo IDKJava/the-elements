@@ -7,6 +7,7 @@
  */
 
 #include "update.h"
+#include <android/log.h>
 
 static int dx, dy;
 //Used in for loops
@@ -152,6 +153,7 @@ void UpdateView(void)
 				//Update coords
 				if(tempInertia != INERTIA_UNMOVABLE)
 				{
+					//__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
 					//If accelOn, do tempYVel based on that
 					if (yGravity != 0 && accelOn)
 					{
@@ -294,6 +296,9 @@ void UpdateView(void)
 					tempParticle->xVel = tempXVel;
 					tempParticle->yVel = tempYVel;
 
+
+					//__android_log_write(ANDROID_LOG_INFO, "LOG", "End update coords");
+
 					//Indicate that the particle has moved
 					tempParticle->hasMoved = TRUE;
 
@@ -384,6 +389,8 @@ void UpdateView(void)
 						tempParticle->hasMoved = FALSE;
 						tempParticle->frozen++;
 					}
+
+					//__android_log_write(ANDROID_LOG_INFO, "LOG", "End resolve collisions");
 				}
 				//Inertia unmovable object still need to deal with velocities
 				else
@@ -427,9 +434,21 @@ void UpdateView(void)
 					changeHeat(tempParticle, -heatChange);
 				}
 
+				//__android_log_write(ANDROID_LOG_INFO, "LOG", "End update heat");
+
 				int i;
 				for (i = 0; i < MAX_SPECIALS; i++)
 				{
+					if (!tempElement->specials)
+					{
+						__android_log_write(ANDROID_LOG_ERROR, "LOG", "Null specials array!");
+						break;
+					}
+					/*
+					char buffer[256];
+					sprintf(buffer, "Processing special: %d, val: %d", i, tempElement->specials[i]);
+					__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
+					*/
 					if(tempElement && tempElement->specials[i] != SPECIAL_NONE)
 					{
 						switch((int)tempElement->specials[i])
@@ -437,6 +456,7 @@ void UpdateView(void)
 							//Spawn
 							case SPECIAL_SPAWN:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special spawn");
 								//frozen[counter] = 0;
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
@@ -464,6 +484,7 @@ void UpdateView(void)
 							//Breakable
 							case SPECIAL_BREAK:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special break");
 								if (tempParticle->xVel > getSpecialVal(tempParticle, SPECIAL_BREAK) || tempParticle->yVel > getSpecialVal(tempParticle, SPECIAL_BREAK))
 								{
 									setElement(tempParticle, elements[NORMAL_ELEMENT]);
@@ -473,6 +494,7 @@ void UpdateView(void)
 							//Growing
 							case SPECIAL_GROW:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special grow");
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
 								for (diffX = -1; diffX <= 1; diffX++)
@@ -495,6 +517,7 @@ void UpdateView(void)
 							//Heater
 							case SPECIAL_HEAT:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special heat");
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
 								for (diffX = -1; diffX <= 1; diffX++)
@@ -516,6 +539,7 @@ void UpdateView(void)
 							//Explosive
 							case SPECIAL_EXPLODE:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special explode");
 								if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
 								{
 									int diffX, diffY;
@@ -570,6 +594,7 @@ void UpdateView(void)
 							//Disappearing
 							case SPECIAL_LIFE:
 							{
+								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special life");
 								if (rand()%getSpecialVal(tempParticle, SPECIAL_LIFE) == 0)
 								{
 									deletePoint(tempParticle);
@@ -580,8 +605,12 @@ void UpdateView(void)
 							default:
 							break;
 						}
+
+						//__android_log_write(ANDROID_LOG_INFO, "LOG", "End special");
 					}
 				}
+
+				//__android_log_write(ANDROID_LOG_INFO, "LOG",  "End specials loop");
 
 				//Resolve heat changes
 				if(tempParticle->heat < tempParticle->element->lowestTemp)
@@ -592,6 +621,9 @@ void UpdateView(void)
 				{
 					setElement(tempParticle, tempParticle->element->higherElement);
 				}
+
+
+				//__android_log_write(ANDROID_LOG_INFO, "LOG", "End resolve heat changes");
 			}
 		}
 		//__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");

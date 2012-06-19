@@ -91,6 +91,9 @@ char saveStateLogic(char* saveLoc)
 		//First write how many custom elements will be saved
 		fprintf(fp, "%d\n\n", numElementsToBeSaved);
 
+		//Save the max specials (for backward compatibility if needed)
+		fprintf(fp, "%d\n\n", MAX_SPECIALS);
+
 		//Save the custom elements that need to be saved
 		/* Save format:
 		 * index
@@ -98,8 +101,9 @@ char saveStateLogic(char* saveLoc)
 		 * state startingTemp lowestTemp highestTemp
 		 * lowerElement->index higherElement->index
 		 * red green blue
-		 * TODO: specials
 		 * density fallVel inertia
+		 * special specialVal ... (line seperated)
+		 * collisions (line seperated)
 		 */
 		for (i = 0; i < numElements; i++)
 		{
@@ -128,12 +132,26 @@ char saveStateLogic(char* saveLoc)
 						elements[i]->green,
 						elements[i]->blue);
 				__android_log_write(ANDROID_LOG_INFO, "LOG", "5");
-				//TODO: Specials & useElementSpecialVals
 				fprintf(fp, "%d %d %d\n\n",
 						elements[i]->density,
 						elements[i]->fallVel,
 						elements[i]->inertia);
 				__android_log_write(ANDROID_LOG_INFO, "LOG", "6");
+				int j;
+				// Collisions
+				for (j = 0; j < NUM_BASE_ELEMENTS; j++)
+				{
+					fprintf(fp, "%d\n",
+							elements[i]->collisions[j]);
+				}
+				// Specials
+				for (j = 0; j < MAX_SPECIALS; j++)
+				{
+					fprintf(fp, "%d %d\n",
+							elements[i]->specials[j],
+							elements[i]->specialVals[j]);
+				}
+				fprintf(fp, "\n");
 			}
 		}
 
@@ -141,9 +159,6 @@ char saveStateLogic(char* saveLoc)
 
 		//Save the dimensions
 		fprintf(fp, "%d %d\n\n", workWidth, workHeight);
-
-		//Save the max specials (for backward compatibility if needed)
-		fprintf(fp, "%d\n\n", MAX_SPECIALS);
 
 		//Save the particles
 		/* Save format:
@@ -258,7 +273,12 @@ char loadStateLogic(char* loadLoc)
 
 	if(fp != NULL)
 	{
+		__android_log_write(ANDROID_LOG_INFO, "LOG", "Loading custom elements in the save");
+		// Get the number of custom elements saved in the file
 		if((charsRead = fscanf(fp, "%d\n\n", &numElementsSaved)) == EOF || charsRead < 1) { return FALSE; }
+
+		// Get the max specials at the time of this file
+		if((charsRead = fscanf(fp, "%d\n\n", &fileMaxSpecials)) == EOF || charsRead < 1) {return FALSE;}
 
 		int* tempMap;
 		int* tempElMap;
@@ -284,6 +304,45 @@ char loadStateLogic(char* loadLoc)
 			if((charsRead = fscanf(fp, "%d", &tempElement->density)) == EOF || charsRead < 1) {return FALSE;}
 			if((charsRead = fscanf(fp, "%d", &tempElement->fallVel)) == EOF || charsRead < 1) {return FALSE;}
 			if((charsRead = fscanf(fp, "%d", &tempElement->inertia)) == EOF || charsRead < 1) {return FALSE;}
+
+			int j;
+			char special, specialVal, collision;
+			tempElement->specials = malloc (MAX_SPECIALS * sizeof(char));
+			tempElement->specialVals = malloc (MAX_SPECIALS * sizeof(char));
+			tempElement->collisions = malloc (NUM_BASE_ELEMENTS * sizeof(char));
+			// Load collisions
+			for (j = 0; j < NUM_BASE_ELEMENTS; j++)
+			{
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "Loading collisions");
+				charsRead = fscanf(fp, "%d", &collision);
+				if (charsRead < 1 || charsRead == EOF)
+				{
+					tempElement->collisions[j] = 0;
+				}
+				else
+				{
+					tempElement->collisions[j] = collision;
+				}
+			}
+			// Load specials
+			for (j = 0; j < fileMaxSpecials; j++)
+			{
+				__android_log_write(ANDROID_LOG_INFO, "LOG", "Loading specials");
+				charsRead = fscanf(fp, "%d %d", &special, &specialVal);
+				if (j < MAX_SPECIALS)
+				{
+					if (charsRead < 2 || charsRead == EOF)
+					{
+						tempElement->specials[j] = SPECIAL_NONE;
+						tempElement->specialVals[j] = 0;
+					}
+					else
+					{
+						tempElement->specials[j] = special;
+						tempElement->specialVals[j] = specialVal;
+					}
+				}
+			}
 			tempMap[3*i] = elementIndex;
 			tempMap[3*i + 1] = lowerElementIndex;
 			tempMap[3*i + 2] = higherElementIndex;
@@ -301,13 +360,12 @@ char loadStateLogic(char* loadLoc)
 		free(tempElMap);
 
 		numElements +=  numElementsSaved;
+		__android_log_write(ANDROID_LOG_INFO, "LOG", "Done loading custom elements in the save");
 
 
 		// Get the dimensions
 		if((charsRead = fscanf(fp, "%d %d\n\n", &sizeX, &sizeY)) == EOF || charsRead < 2) {return FALSE;}
 
-		// Get the max specials at the time of this file
-		if((charsRead = fscanf(fp, "%d\n\n", &fileMaxSpecials)) == EOF || charsRead < 1) {return FALSE;}
 
 		//Make sure saves are portable from different dimensions
 		if(sizeX > workWidth)
@@ -617,7 +675,8 @@ char loadCustomElement(char* loadLoc)
 	int lowerElementIndex, higherElementIndex;
 
 	struct Element* tempCustom = (struct Element*) malloc(sizeof(struct Element));
-	if(fscanf(fp, "%s", &tempCustom->name) == EOF) {return FALSE;}
+	tempCustom->name = malloc(MAX_CE_NAME_LENGTH * sizeof(char));
+	if(fgets(tempCustom->name, MAX_CE_NAME_LENGTH, fp) == NULL) {return FALSE;}
 	if(fscanf(fp, "%d", &tempCustom->base) == EOF) {return FALSE;}
 	if(fscanf(fp, "%d", &tempCustom->state) == EOF) {return FALSE;}
 	if(fscanf(fp, "%d", &tempCustom->startingTemp) == EOF) {return FALSE;}
@@ -640,12 +699,21 @@ char loadCustomElement(char* loadLoc)
 	int i;
 	for (i = 0; i < NUM_BASE_ELEMENTS;i++ )
 	{
-		fscanf(fp,"%d",&tempCustom->collisions[i]);
+		if(fscanf(fp,"%d",&tempCustom->collisions[i]) == EOF)
+		{
+			tempCustom->collisions[i] = 0;
+		}
 	}
 	for (i = 0; i < MAX_SPECIALS;i++ )
 	{
-		fscanf(fp,"%d",&tempCustom->specials[i]);
-		fscanf(fp,"%d",&tempCustom->specialVals[i]);
+		if(fscanf(fp,"%d",&tempCustom->specials[i]) == EOF)
+		{
+			tempCustom->specials[i] = SPECIAL_NONE;
+		}
+		if(fscanf(fp,"%d",&tempCustom->specialVals[i]) == EOF)
+		{
+			tempCustom->specialVals[i] = 0;
+		}
 	}
 
 	struct Element** tempElementArray;
