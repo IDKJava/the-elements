@@ -18,6 +18,7 @@ import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
 import com.idkjava.thelements.game.SandView;
+import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
@@ -180,9 +181,6 @@ public class MainActivity extends Activity
 		{
 			elementsList.add(CSElementsList[i].toString());
 		}
-		List<String> list = Arrays.asList("foo", "bar", "waa");
-		CharSequence[] cs = list.toArray(new CharSequence[list.size()]);
-		System.out.println(Arrays.toString(cs)); // [foo, bar, waa]
 		
 		try{
 			// Open the file that is the first 
@@ -243,6 +241,9 @@ public class MainActivity extends Activity
 
 			//Also show the intro message
 			showDialog(INTRO_MESSAGE);
+			
+			//Finally, delete the temp save, in case there were save format changes
+			SaveManager.deleteState("temp");
 		}
 
 		if (ui)
