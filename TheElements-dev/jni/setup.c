@@ -144,6 +144,7 @@ void elementSetup()
 		}
 	}
 	loadCustomElements();
+	__android_log_write(ANDROID_LOG_INFO, "LOG", "End element setup");
 }
 
 void particleSetup()
