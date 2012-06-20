@@ -40,6 +40,9 @@
 #include <string.h>
 //Include the directory functions
 #include <dirent.h>
+#include <sys/stat.h>
+//Include error reporting functions
+#include <errno.h>
 
 char saveState(char* saveLoc);
 char saveStateLogic(char* saveLoc);

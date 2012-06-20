@@ -645,7 +645,19 @@ char loadCustomElements(void)
 
 	FILE* sp = fopen(saveLoc, "wb");
 
+	struct stat sb;
+	if (!stat(loadLoc, &sb) == 0 || !S_ISDIR(sb.st_mode))
+	{
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", "Directory doesn't exist!");
+		return FALSE;
+	}
 	DIR* mydir = opendir(loadLoc);
+	if (!mydir)
+	{
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", "Null directory! Quitting.");
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", strerror(errno));
+		return FALSE;
+	}
 
 	struct dirent *entry = NULL;
 
