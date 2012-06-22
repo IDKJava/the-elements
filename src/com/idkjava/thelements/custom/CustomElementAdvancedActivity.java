@@ -1,27 +1,23 @@
 package com.idkjava.thelements.custom;
 
-import com.idkjava.thelements.MainActivity;
-import com.idkjava.thelements.R;
+import java.util.ArrayList;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.MainActivity;
+import com.idkjava.thelements.R;
 
-public class CustomElementAdvancedActivity extends Activity
+public class CustomElementAdvancedActivity extends FlurryActivity
 {
 	private CustomElement mCustomElement;
 	private boolean newElement;

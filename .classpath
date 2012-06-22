@@ -3,8 +3,8 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/GoogleAdMobAdsSdk-4.1.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/bt-android-sdk-1.1.1.jar"/>
+	<classpathentry kind="lib" path="libs/FlurryAgent.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

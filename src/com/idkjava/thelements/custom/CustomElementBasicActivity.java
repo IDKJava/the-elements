@@ -1,16 +1,10 @@
 package com.idkjava.thelements.custom;
 
 import java.io.BufferedReader;
-import java.io.CharArrayReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 
-import com.idkjava.thelements.MainActivity;
-import com.idkjava.thelements.R;
-import com.idkjava.thelements.game.FileManager;
-
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +23,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-public class CustomElementBasicActivity extends Activity
+import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.MainActivity;
+import com.idkjava.thelements.R;
+
+public class CustomElementBasicActivity extends FlurryActivity
 {
 	private CustomElement mCustomElement;
 	private boolean newElement;

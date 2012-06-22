@@ -1,12 +1,10 @@
 package com.idkjava.thelements;
 
-import com.idkjava.thelements.R;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class SplashActivity extends Activity
+public class SplashActivity extends FlurryActivity
 {
 	@Override
 	protected void onCreate (Bundle savedInstanceState)
@@ -27,17 +25,5 @@ public class SplashActivity extends Activity
 						finish();
 					}
 				}, 5);
-	}
-	
-	@Override
-	protected void onResume()
-	{
-		super.onResume();
-	}
-	
-	@Override
-	protected void onPause()
-	{
-		super.onPause();
 	}
 }
