@@ -1,19 +1,15 @@
 package com.idkjava.thelements.custom;
 
-import com.idkjava.thelements.R;
-import com.idkjava.thelements.game.FileManager;
-
 import java.io.File;
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,13 +18,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.R;
+import com.idkjava.thelements.game.FileManager;
+
 /**
  * File format:
  * NAME\n
  * COLLISION ARRAY (space separated)\n
  * SPECIALS ARRAY (space separated)
  */
-public class CustomElementManagerActivity extends Activity
+public class CustomElementManagerActivity extends FlurryActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

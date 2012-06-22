@@ -1,9 +1,5 @@
 package com.idkjava.thelements;
 
-import com.idkjava.thelements.game.FileManager;
-import com.idkjava.thelements.game.SaveManager;
-
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -17,7 +13,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class LoadStateActivity extends Activity
+import com.idkjava.thelements.game.SaveManager;
+
+public class LoadStateActivity extends FlurryActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

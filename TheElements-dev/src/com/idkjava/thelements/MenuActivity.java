@@ -6,27 +6,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.idkjava.thelements.R;
-
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.blutrumpet.sdk.BluTrumpet;
-
-import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 
-public class MenuActivity extends Activity
+public class MenuActivity extends FlurryActivity
 {
 	public static Button start_game_button;
 	public static Button custom_elements_button;

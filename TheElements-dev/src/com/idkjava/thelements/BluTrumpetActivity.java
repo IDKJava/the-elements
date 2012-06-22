@@ -1,12 +1,11 @@
 package com.idkjava.thelements;
 
-import com.blutrumpet.sdk.BluTrumpet;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
-public class BluTrumpetActivity extends Activity
+import com.blutrumpet.sdk.BluTrumpet;
+
+public class BluTrumpetActivity extends FlurryActivity
 {
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -18,7 +17,7 @@ public class BluTrumpetActivity extends Activity
 		//Initialize Blu Trumpet
 		if (!BluTrumpet.isInitialized())
 		{
-			 BluTrumpet.initWithAppId("2fbef62a-23e6-33f5-acbd-7071d4740f21", this);
+			 BluTrumpet.initWithAppId(Globals.bluTrumpetAppId, this);
 		}
 		
 		ViewGroup container = ((ViewGroup) findViewById(R.id.blu_trumpet_container));
