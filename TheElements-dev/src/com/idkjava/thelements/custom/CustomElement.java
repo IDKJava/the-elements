@@ -42,7 +42,17 @@ public class CustomElement
 	public ArrayList<Integer> specials;
 	public ArrayList<Integer> specialVals;
 	
+	// Constructors
+	public CustomElement() {}
 	public CustomElement(String filename)
+	{
+		mFilename = filename;
+		mCopy = 0;
+		mValid = loadNameFromFile();
+		mLoaded = false;
+	}
+	// Call if you use the default constructor
+	public void setFilename(String filename)
 	{
 		mFilename = filename;
 		mCopy = 0;
