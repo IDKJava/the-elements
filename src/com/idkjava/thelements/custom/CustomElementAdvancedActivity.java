@@ -19,6 +19,7 @@ import com.idkjava.thelements.R;
 
 public class CustomElementAdvancedActivity extends FlurryActivity
 {
+	private CustomElementActivity mParent;
 	private CustomElement mCustomElement;
 	private boolean newElement;
 	//private Button saveButton;
@@ -39,9 +40,12 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		setContentView(R.layout.custom_element_advanced_activity);
 		//saveButton = (Button) findViewById(R.id.ce_advanced_save_button);
 		
+		// Save a pointer to the parent activity
+		mParent = ((CustomElementActivity) getParent());
+		
 	    // Load data from the parent activity
-		mCustomElement = ((CustomElementActivity) getParent()).mCustomElement;
-		newElement = ((CustomElementActivity) getParent()).newElement;
+		mCustomElement = mParent.mCustomElement;
+		newElement = mParent.newElement;
 		
 		// Create an arraylist to save the spinners we make
 		collisionsSpinnerList = new ArrayList<Spinner>();
@@ -65,13 +69,6 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			label.setText(element);
 			spinner = new Spinner(this);
 			spinner.setAdapter(collisions);
-			if (!newElement)
-			{
-				if (mCustomElement.collisions.size() >= i+1)
-				{
-					spinner.setSelection(mCustomElement.collisions.get(i));
-				}
-			}
 			collisionsSpinnerList.add(spinner);
 			collisionsLayout.addView(label);
 			collisionsLayout.addView(spinner);
@@ -92,6 +89,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int pos, long id)
 			{
+				// This is a total hack
 				if (numListenerSkips > 0)
 				{
 					numListenerSkips--;
@@ -151,20 +149,6 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			specialsSpinnerList.add(spinner);
 		}
 		
-		// Initialize the values
-		if (!newElement)
-		{
-			Log.d("LOG", "num specials loaded: " + mCustomElement.specials.size());
-			for (int i = 0; i < maxSpecials; i++)
-			{
-				if (mCustomElement.specials.size() >= i+1)
-				{
-					specialsSpinnerList.get(i).setSelection(CustomElement.getSpecialPosFromIndex(mCustomElement.specials.get(i)));
-					setSpecialVal(mCustomElement.specials.get(i), specialsLayoutList.get(i), mCustomElement.specialVals.get(i));
-				}
-			}
-		}
-		
 		/* The save button is too complicated for now -- finish this up later
 		saveButton.setOnClickListener(new OnClickListener()
 		{
@@ -184,13 +168,39 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	}
 	
 	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		
+		// Initialize the collision values
+		for (int i = 0; i < elementsList.length; i++)
+		{
+			if (mParent.collisions.size() >= i+1)
+			{
+				Log.d("LOG", "Initializing collision from parent saved values: " + mParent.collisions.get(i));
+				collisionsSpinnerList.get(i).setSelection(mParent.collisions.get(i));
+			}
+		}
+		// Initialize the special values
+		for (int i = 0; i < maxSpecials; i++)
+		{
+			if (mParent.specials.size() >= i+1)
+			{
+				Log.d("LOG", "Initializing special from parent saved values: " + mParent.specials.get(i) + ", " + mParent.specialVals.get(i));
+				specialsSpinnerList.get(i).setSelection(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
+				setSpecialVal(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)), specialsLayoutList.get(i), mParent.specialVals.get(i));
+			}
+		}
+	}
+	
+	@Override
 	protected void onPause()
 	{
 		super.onPause();
 		
 		// Write the collisions to the parent activity
-		((CustomElementActivity) getParent()).collisions = new ArrayList<Integer>();
-		ArrayList<Integer> collisions = ((CustomElementActivity) getParent()).collisions;
+		mParent.collisions = new ArrayList<Integer>();
+		ArrayList<Integer> collisions = mParent.collisions;
 		int numSpinners = collisionsSpinnerList.size();
 		for (int i = 0; i < numSpinners; i++)
 		{
@@ -200,8 +210,8 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		// Write the specials to parent activity
 		ArrayList<Integer> specials = new ArrayList<Integer>();
 		ArrayList<Integer> specialVals = new ArrayList<Integer>();
-		((CustomElementActivity) getParent()).specials = specials;
-		((CustomElementActivity) getParent()).specialVals = specialVals;
+		mParent.specials = specials;
+		mParent.specialVals = specialVals;
 		for (int i = 0; i < maxSpecials; i++)
 		{			LinearLayout specialContainer = specialsLayoutList.get(i);
 			int special = ((Spinner) specialContainer.getChildAt(0)).getSelectedItemPosition();

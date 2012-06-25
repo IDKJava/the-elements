@@ -49,6 +49,7 @@ public class CustomElementActivity extends TabActivity
 		else
 		{
 			newElement = true;
+			mCustomElement = new CustomElement();
 		}
 		
 		// Set the content view

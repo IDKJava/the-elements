@@ -32,6 +32,7 @@ public class CustomElementBasicActivity extends FlurryActivity
 	private CustomElement mCustomElement;
 	private boolean newElement;
 	private boolean shouldIgnoreSelection;
+	private CustomElementActivity mParent;
 	
 	private EditText nameField;
 	private Spinner baseElementField;
@@ -59,6 +60,9 @@ public class CustomElementBasicActivity extends FlurryActivity
 		
 		setContentView(R.layout.custom_element_basic_activity);
 		
+		// Set the parent activity
+		mParent = ((CustomElementActivity) getParent());
+		
 		// Select all the fields
 		nameField = (EditText) findViewById(R.id.ce_name);
 		baseElementField = (Spinner) findViewById(R.id.ce_base_element);
@@ -85,13 +89,18 @@ public class CustomElementBasicActivity extends FlurryActivity
 	    higherElementField.setAdapter(elementAdapter);
 		
 	    // Load data from the parent activity
-		mCustomElement = ((CustomElementActivity) getParent()).mCustomElement;
-		newElement = ((CustomElementActivity) getParent()).newElement;
+		mCustomElement = mParent.mCustomElement;
+		newElement = mParent.newElement;
 		shouldIgnoreSelection = false;
 		if (!newElement)
 		{
 			shouldIgnoreSelection = true;
+			// Fill in the basic view info
 			fillInfo();
+			// Also save the special and custom data in the parent activity
+			mParent.collisions = mCustomElement.collisions;
+			mParent.specials = mCustomElement.specials;
+			mParent.specialVals = mCustomElement.specialVals;
 		}
 		
 		baseElementField.setOnItemSelectedListener(new OnItemSelectedListener ()
@@ -175,12 +184,13 @@ public class CustomElementBasicActivity extends FlurryActivity
 	}
 	public void writePropertiesToCustom()
 	{
+		// If this is a new element, we need to set the filename, otherwise we use the previous one
 		if (newElement)
 		{
-			mCustomElement = new CustomElement(nameField.getText().toString().toLowerCase());
-			((CustomElementActivity) getParent()).mCustomElement = mCustomElement;
+			mCustomElement.setFilename(nameField.getText().toString().toLowerCase());
 		}
 		
+		// Write all the normal properties to the custom element from the fields in basic
 		CustomElement ce = mCustomElement;
 		ce.name = nameField.getText().toString();
 		ce.baseElementIndex = (int) baseElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT;
@@ -204,14 +214,22 @@ public class CustomElementBasicActivity extends FlurryActivity
 		{
 			ce.inertia = inertiaNormalField.getProgress();
 		}
-		ArrayList<Integer> collisions = ((CustomElementActivity) getParent()).collisions;
-		if (collisions != null || newElement)
+		
+		// Get the list of collisions from the parent activity (the method of transferring from Advanced)
+		ArrayList<Integer> collisions = mParent.collisions;
+		// If collisions is null and it's not a new element, then we didn't change anything, so leave it the same
+		if (!(collisions == null && !newElement))
 		{
+			// If collisions is null, then we need to create an arraylist for it
 			if (collisions == null)
 			{
 				collisions = new ArrayList<Integer>();
 			}
+			
+			// Clear the previous collisions
 			ce.collisions = new ArrayList<Integer>();
+			// Walk through the collisions we got from Advanced and set it
+			// (use 0 as the default if there was an error transferring)
 			int numElements = getResources().getStringArray(R.array.elements_list).length;
 			for (int i = 0; i < numElements; i++)
 			{
@@ -226,10 +244,12 @@ public class CustomElementBasicActivity extends FlurryActivity
 				}
 			}
 		}
-		ArrayList<Integer> specials = ((CustomElementActivity) getParent()).specials;
-		ArrayList<Integer> specialVals = ((CustomElementActivity) getParent()).specialVals;
-		if (specials != null && specialVals != null || newElement)
+		ArrayList<Integer> specials = mParent.specials;
+		ArrayList<Integer> specialVals = mParent.specialVals;
+		// If either is null and this is not a new element, then we don't want to bother writing
+		if (!((specials == null || specialVals == null) && !newElement))
 		{
+			// Create the arraylists if needed
 			if (specials == null)
 			{
 				specials = new ArrayList<Integer>();
@@ -238,8 +258,13 @@ public class CustomElementBasicActivity extends FlurryActivity
 			{
 				specialVals = new ArrayList<Integer>();
 			}
+			
+			// Overwrite the previous arraylists in the custom
 			ce.specials = new ArrayList<Integer>();
 			ce.specialVals = new ArrayList<Integer>();
+			
+			// Walk through the specials, and write both the index and val
+			// (using sane defaults and logging if issues occur)
 			int numSpecials = MainActivity.MAX_SPECIALS;
 			for (int i = 0; i < numSpecials; i++)
 			{
@@ -330,6 +355,39 @@ public class CustomElementBasicActivity extends FlurryActivity
 				inertiaUnmovableField.setChecked(false);
 				inertiaNormalField.setVisibility(View.VISIBLE);
 				inertiaNormalField.setProgress(inertia);
+			}
+			
+			// Save collisions and specials for the advanced activity
+			mParent.collisions = new ArrayList<Integer>();
+			String line;
+			for (int i = 0; i < MainActivity.NUM_BASE_ELEMENTS-MainActivity.NORMAL_ELEMENT; i++)
+			{
+				line = reader.readLine();
+				if (line == null)
+				{
+					return;
+				}
+				
+				mParent.collisions.add(Integer.parseInt(line));
+			}
+			mParent.specials = new ArrayList<Integer>();
+			mParent.specialVals = new ArrayList<Integer>();
+			String[] tempVals;
+			for (int i = 0; i < MainActivity.MAX_SPECIALS; i++)
+			{
+				line = reader.readLine();
+				if (line == null)
+				{
+					return;
+				}
+				
+				tempVals = line.split("\\s+", 2);
+				if (tempVals.length < 2)
+				{
+					return;
+				}
+				mParent.specials.add(Integer.parseInt(tempVals[0]));
+				mParent.specialVals.add(Integer.parseInt(tempVals[1]));
 			}
 		}
 		catch (IOException e)

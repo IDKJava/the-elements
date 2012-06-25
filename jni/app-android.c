@@ -301,8 +301,9 @@ char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject th
 }
 jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject this, int i)
 {
-	char buffer[1000];
-	int length = snprintf(buffer, 1000,
+#define BUFFER_SIZE 1000
+	char buffer[BUFFER_SIZE];
+	int length = snprintf(buffer, BUFFER_SIZE,
 					"%s\n" // Name
 					"%d\n" // State
 					"%d\n" // Starting temp
@@ -315,7 +316,7 @@ jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, job
 					"%d\n" // Blue
 					"%d\n" // Density
 					"%d\n" // fallVel
-					"%d", // inertia
+					"%d\n", // inertia
 					baseName[i],
 					(int)baseState[i],
 					(int)baseStartingTemp[i],
@@ -329,6 +330,21 @@ jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, job
 					(int)baseDensity[i],
 					(int)baseFallVel[i],
 					(int)baseInertia[i]);
+	int j;
+	for (j = 0; j < NUM_BASE_ELEMENTS-NORMAL_ELEMENT; j++)
+	{
+		length += snprintf(&(buffer[length]), BUFFER_SIZE-length,
+				"%d\n", // Collision number j
+				collision[i][j+NORMAL_ELEMENT]);
+	}
+
+	for (j = 0; j < MAX_SPECIALS; j++)
+	{
+		length += snprintf(&(buffer[length]), BUFFER_SIZE-length,
+				"%d %d\n", // Special number j
+				baseSpecial[i][j],
+				baseSpecialValue[i][j]);
+	}
 
 	__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 
