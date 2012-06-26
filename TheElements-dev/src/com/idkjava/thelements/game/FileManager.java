@@ -21,6 +21,7 @@ public class FileManager
 	public static final String SAVE_EXT = ".sav";
 	public static final String ELEMENT_EXT = ".ele";
 	public static final String ATMOSPHERE_EXT = ".atm";
+	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
 	
 	public static void intialize(Context context)

@@ -2,6 +2,7 @@ package com.idkjava.thelements;
 
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -16,14 +17,17 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
+import com.idkjava.thelements.game.FileManager;
 
 public class MenuActivity extends FlurryActivity
 {
 	public static Button start_game_button;
 	public static Button custom_elements_button;
 	public static Button blu_trumpet_button;
+	public static Button fix_me_button;
 	public static Button how_to_play_button;
 	public static Button about_button;
 	public static boolean loaded = false;
@@ -41,8 +45,9 @@ public class MenuActivity extends FlurryActivity
 		
 		//Define all the objects
 		start_game_button = (Button) findViewById(R.id.start_game_button);
-		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
 		custom_elements_button = (Button) findViewById(R.id.custom_elements_button);
+		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
+		fix_me_button = (Button) findViewById(R.id.fix_me_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);
 		
@@ -87,6 +92,15 @@ public class MenuActivity extends FlurryActivity
 				}
 			}
 		);
+		
+		fix_me_button.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				startActivity(new Intent(MenuActivity.this, FixMeActivity.class));
+			}
+		});
 		
 		how_to_play_button.setOnClickListener
 		(
