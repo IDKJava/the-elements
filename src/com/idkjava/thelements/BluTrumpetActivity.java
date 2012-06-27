@@ -14,12 +14,6 @@ public class BluTrumpetActivity extends FlurryActivity
 		
 		setContentView(R.layout.blu_trumpet_activity);
 		
-		//Initialize Blu Trumpet
-		if (!BluTrumpet.isInitialized())
-		{
-			 BluTrumpet.initWithAppId(Globals.bluTrumpetAppId, this);
-		}
-		
 		ViewGroup container = ((ViewGroup) findViewById(R.id.blu_trumpet_container));
 		container.addView(BluTrumpet.getAppWall());
 	}
