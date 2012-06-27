@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageButton;
@@ -139,7 +140,8 @@ public class MenuBar extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
-				if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+				Log.d("LOG", "Checking sdcard state: " + Environment.getExternalStorageState() + " vs " + Environment.MEDIA_MOUNTED);
+				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 				{
 					((MainActivity) context).saveState();
 				}
@@ -156,7 +158,7 @@ public class MenuBar extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
-				if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 				{
 					((MainActivity) context).loadState();
 				}

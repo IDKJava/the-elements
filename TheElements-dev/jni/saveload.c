@@ -563,6 +563,8 @@ char loadFileToTemp(char* loadLoc)
 
 	fclose(loadFile);
 	fclose(tempFile);
+
+	return TRUE;
 }
 
 char removeTempSave(void)

@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.idkjava.thelements.FlurryActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.game.FileManager;
 
 public class CustomElementBasicActivity extends FlurryActivity
 {
@@ -173,7 +174,10 @@ public class CustomElementBasicActivity extends FlurryActivity
 		
 		if (mCustomElement.writeToFile())
 		{
-			Toast.makeText(getApplicationContext(), R.string.ce_save_success, Toast.LENGTH_LONG).show();
+			Toast.makeText(getApplicationContext(),
+					getResources().getString(R.string.ce_save_success) + " "
+					+ mCustomElement.getFilename() + FileManager.ELEMENT_EXT,
+					Toast.LENGTH_LONG).show();
 			return true;
 		}
 		else

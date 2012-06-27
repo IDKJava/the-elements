@@ -103,7 +103,11 @@ public class LoadStateActivity extends FlurryActivity
     		{
     			public void onClick(View v)
     			{
-                	SaveManager.loadState(entityNameFinal);
+                	boolean success = SaveManager.loadState(entityNameFinal);
+                	if (!success)
+                	{
+                		Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
+                	}
                 	finish();
     			}
     		}
