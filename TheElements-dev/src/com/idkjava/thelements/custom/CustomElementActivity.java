@@ -42,7 +42,7 @@ public class CustomElementActivity extends TabActivity
 			if(!mCustomElement.loadPropertiesFromFile())
 			{
 				// If loading fails, we need to quit and show a message
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_load_failed_msg), Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), R.string.ce_load_failed_msg, Toast.LENGTH_LONG).show();
 				finish();
 			}
 		}

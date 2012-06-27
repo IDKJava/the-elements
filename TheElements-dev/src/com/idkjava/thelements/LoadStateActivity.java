@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.idkjava.thelements.game.SaveManager;
 
@@ -32,7 +33,7 @@ public class LoadStateActivity extends FlurryActivity
 		res = getResources();
 		
 		//Refresh the files list
-		SaveManager.refresh();
+		SaveManager.refresh(this);
 		//Go through and find all the save files and dynamically load them
 		int length = SaveManager.getNumSaves();
 		if(length != 0)
@@ -123,7 +124,7 @@ public class LoadStateActivity extends FlurryActivity
 					SaveManager.deleteState(entityNameFinal);
 					ViewGroup parent = (ViewGroup) v.getParent().getParent();
 					parent.removeView((View) v.getParent());
-					SaveManager.refresh();
+					SaveManager.refresh(LoadStateActivity.this);
 					if(SaveManager.getNumSaves() == 0)
 					{
 						TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
@@ -149,7 +150,11 @@ public class LoadStateActivity extends FlurryActivity
 	        {
                 public void onClick(View viewParam)
                 {
-                	SaveManager.loadState(entityNameFinal);
+                	boolean success = SaveManager.loadState(entityNameFinal);
+                	if (!success)
+                	{
+                		Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
+                	}
                 	finish();
                 }
 	        }

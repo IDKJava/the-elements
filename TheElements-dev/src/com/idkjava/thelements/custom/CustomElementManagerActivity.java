@@ -56,7 +56,7 @@ public class CustomElementManagerActivity extends FlurryActivity
 	protected void onResume()
 	{
 		super.onResume();
-		CustomElementManager.refresh();
+		CustomElementManager.refresh(this);
 		ArrayList<CustomElement> elements = CustomElementManager.getElementList();
 		
 		// Clear the existing list

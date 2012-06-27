@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.idkjava.thelements.game.SaveManager;
 
@@ -32,7 +33,11 @@ public class SaveStateActivity extends FlurryActivity
 					{
 						InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 						imm.hideSoftInputFromWindow(statename.getWindowToken(), 0);
-						SaveManager.saveState(statename.getText().toString());
+						boolean success = SaveManager.saveState(statename.getText().toString());
+						if (!success)
+						{
+							Toast.makeText(getApplicationContext(), R.string.save_state_failed, Toast.LENGTH_SHORT).show();
+						}
 						finish();
 					}
 				}

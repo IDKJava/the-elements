@@ -6,6 +6,7 @@ import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -138,7 +139,14 @@ public class MenuBar extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
-				((MainActivity) context).saveState();
+				if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+				{
+					((MainActivity) context).saveState();
+				}
+				else
+				{
+					Toast.makeText(context, R.string.sdcard_not_found, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -148,7 +156,14 @@ public class MenuBar extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
-				((MainActivity) context).loadState();
+				if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED)
+				{
+					((MainActivity) context).loadState();
+				}
+				else
+				{
+					Toast.makeText(context, R.string.sdcard_not_found, Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
