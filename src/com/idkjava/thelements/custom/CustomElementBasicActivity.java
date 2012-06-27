@@ -149,7 +149,7 @@ public class CustomElementBasicActivity extends FlurryActivity
 				if (nameField.getText().toString().length() <= 0)
 				{
 					Log.d("LOG", "Emtpy name field!");
-					Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_empty_name_error), Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), R.string.ce_empty_name_error, Toast.LENGTH_LONG).show();
 					return;
 				}
 				ProgressDialog dialog = new ProgressDialog(CustomElementBasicActivity.this);
@@ -173,12 +173,12 @@ public class CustomElementBasicActivity extends FlurryActivity
 		
 		if (mCustomElement.writeToFile())
 		{
-			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_success), Toast.LENGTH_LONG);
+			Toast.makeText(getApplicationContext(), R.string.ce_save_success, Toast.LENGTH_LONG).show();
 			return true;
 		}
 		else
 		{
-			Toast.makeText(getApplicationContext(), getResources().getString(R.string.ce_save_failed), Toast.LENGTH_LONG);
+			Toast.makeText(getApplicationContext(), R.string.ce_save_failed, Toast.LENGTH_LONG).show();
 			return false;
 		}
 	}

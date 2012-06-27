@@ -475,12 +475,20 @@ char saveTempToFile(char* saveLoc)
 {
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempToFile");
 	FILE* saveFile = fopen(saveLoc, "wb");
+	if (saveFile == NULL)
+	{
+		return FALSE;
+	}
 	char tempLoc[256];
 	strcpy(tempLoc, ROOT_FOLDER);
 	strcat(tempLoc, SAVES_FOLDER);
 	strcat(tempLoc, TEMP_SAVE);
 	strcat(tempLoc, SAVE_EXTENSION);
 	FILE* tempFile = fopen(tempLoc, "rb");
+	if (tempFile == NULL)
+	{
+		return FALSE;
+	}
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Opened the files");
 
 	char temp;
@@ -515,12 +523,20 @@ char saveTempToFile(char* saveLoc)
 char loadFileToTemp(char* loadLoc)
 {
 	FILE* loadFile = fopen(loadLoc, "rb");
+	if (loadFile == NULL)
+	{
+		return FALSE;
+	}
 	char tempLoc[256];
 	strcpy(tempLoc, ROOT_FOLDER);
 	strcat(tempLoc, SAVES_FOLDER);
 	strcat(tempLoc, TEMP_SAVE);
 	strcat(tempLoc, SAVE_EXTENSION);
 	FILE* tempFile = fopen(tempLoc, "wb");
+	if (tempFile == NULL)
+	{
+		return FALSE;
+	}
 
 	char temp;
 
@@ -600,17 +616,17 @@ char saveCustomElement(struct Element* cCElement)
 //Saves the custom element to the correct file
 char saveCustomElementHash(char* elementHash)
 {
-	char saveLoc[256];
-	char name[256];
+	char saveLoc[MAX_CE_NAME_LENGTH];
+	char name[MAX_CE_NAME_LENGTH];
 
 	//Extract the name out of the elementHash, there might be a better way to do this but w/e, particularly I don't think the second while is needed but meh
 	strcpy(name,elementHash);
 	int i = 0;
-	while ( elementHash[i] != ' ')
+	while (elementHash[i] != ' ')
 	{
 		i++;
 	}
-	while( i < 256 )
+	while(i < MAX_ELEMENTS)
 	{
 		name[i] = 0;
 	}
@@ -623,11 +639,16 @@ char saveCustomElementHash(char* elementHash)
 	FILE* saveFile;
 
 	saveFile = fopen(saveLoc,"wb");
-	fprintf( saveFile,elementHash);
+	if (saveFile == NULL)
+	{
+		return FALSE;
+	}
+
+	fprintf(saveFile, elementHash);
 	fclose(saveFile);
 
 
-	return FALSE;
+	return TRUE;
 }
 
 char loadCustomElements(void)
@@ -644,17 +665,22 @@ char loadCustomElements(void)
 	strcat(saveLoc, LIST_EXTENSION);
 
 	FILE* sp = fopen(saveLoc, "wb");
+	if (sp == NULL)
+	{
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", "loadCustomElements: Unable to open file");
+		return FALSE;
+	}
 
 	struct stat sb;
 	if (!stat(loadLoc, &sb) == 0 || !S_ISDIR(sb.st_mode))
 	{
-		__android_log_write(ANDROID_LOG_ERROR, "LOG", "Directory doesn't exist!");
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", "loadCustomElements: Directory doesn't exist!");
 		return FALSE;
 	}
 	DIR* mydir = opendir(loadLoc);
 	if (!mydir)
 	{
-		__android_log_write(ANDROID_LOG_ERROR, "LOG", "Null directory! Quitting.");
+		__android_log_write(ANDROID_LOG_ERROR, "LOG", "loadCustomElements: Null directory! Quitting.");
 		__android_log_write(ANDROID_LOG_ERROR, "LOG", strerror(errno));
 		return FALSE;
 	}
@@ -663,12 +689,12 @@ char loadCustomElements(void)
 
 	while((entry = readdir(mydir))) /* If we get EOF, the expression is 0 and the loop stops. */
 	{
-		if ( !strcmp(get_filename_ext(entry->d_name),ELEMENT_EXTENSION))
+		if (!strcmp(get_filename_ext(entry->d_name), ELEMENT_EXTENSION))
 		{
 			char location[256];
-			strcpy( location, loadLoc);
-			strcat( location, entry->d_name);
-			loadCustomElement( location );
+			strcpy(location, loadLoc);
+			strcat(location, entry->d_name);
+			loadCustomElement(location);
 			fprintf(sp, entry->d_name);
 			fprintf(sp, "\n");
 		}
@@ -677,12 +703,16 @@ char loadCustomElements(void)
 	closedir(mydir);
 
 	fclose(sp);
-	return FALSE;
+	return TRUE;
 }
 char loadCustomElement(char* loadLoc)
 {
 	FILE* fp;
 	fp = fopen(loadLoc, "rb");
+	if (loadLoc == NULL)
+	{
+		return FALSE;
+	}
 
 	int lowerElementIndex, higherElementIndex;
 
@@ -703,9 +733,9 @@ char loadCustomElement(char* loadLoc)
 	if(fscanf(fp, "%d", &tempCustom->fallVel) == EOF) {return FALSE;}
 	if(fscanf(fp, "%d", &tempCustom->inertia) == EOF) {return FALSE;}
 
-	tempCustom->collisions = malloc( NUM_BASE_ELEMENTS * sizeof(char));
-	tempCustom->specials = malloc( MAX_SPECIALS*sizeof(char));
-	tempCustom->specialVals = malloc( MAX_SPECIALS*sizeof(char));
+	tempCustom->collisions = malloc(NUM_BASE_ELEMENTS * sizeof(char));
+	tempCustom->specials = malloc(MAX_SPECIALS*sizeof(char));
+	tempCustom->specialVals = malloc(MAX_SPECIALS*sizeof(char));
 	tempCustom->useElementSpecialVals = elements[tempCustom->base]->useElementSpecialVals;
 
 	int i;
@@ -730,13 +760,13 @@ char loadCustomElement(char* loadLoc)
 
 	struct Element** tempElementArray;
 	tempElementArray = malloc(numElements*sizeof( struct Element*));
-	for ( i = 0; i < numElements; i++)
+	for (i = 0; i < numElements; i++)
 	{
 		tempElementArray[i] = elements[i];
 	}
 	free(elements);
 	elements = malloc((numElements+1)*sizeof( struct Element*));
-	for ( i = 0; i < numElements; i++)
+	for (i = 0; i < numElements; i++)
 	{
 		elements[i] = tempElementArray[i];
 	}
@@ -753,5 +783,5 @@ char loadCustomElement(char* loadLoc)
 	sprintf(buffer, "Loaded custom element, index: %d, element->index: %d", numElements-1, tempCustom->index);
 	__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 
-	return FALSE;
+	return TRUE;
 }

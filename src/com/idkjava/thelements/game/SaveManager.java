@@ -6,15 +6,18 @@ import java.io.FilenameFilter;
 import java.io.UnsupportedEncodingException;
 
 import com.idkjava.thelements.MainActivity;
+import com.idkjava.thelements.R;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SaveManager
 {
 	public static String[] saveFiles;
 	public static final File saveDir = new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR);
 	
-	public static void refresh()
+	public static void refresh(Context c)
 	{
 		//Filter the files in the directory to exclude the demo and temp saves
 		FilenameFilter filter = new FilenameFilter()
@@ -26,6 +29,10 @@ public class SaveManager
 		};
 		//Get the array of filenames
 		saveFiles = saveDir.list(filter);
+		if (saveFiles == null)
+		{
+			Toast.makeText(c.getApplicationContext(), R.string.sdcard_not_found, Toast.LENGTH_SHORT).show();
+		}
 		Log.v("TheElements", "SaveManager refreshed, files found: " + saveFiles.length);
 		for(int i = 0; i < saveFiles.length; i++)
 		{
@@ -42,32 +49,50 @@ public class SaveManager
 	}
 	
 	//Overloading these functions -- be careful
-	public static void saveState(String statename)
+	public static boolean saveState(String statename)
 	{
+		Log.v("TheElements", "saveState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT);
 		try
 		{
-			saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
-			Log.v("TheElements", "saveState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT);
+			char retVal = saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			Log.v("LOG", "saveState retVal: " + (int)retVal);
+			if(retVal == 0)
+			{
+				return false;
+			}
+			
+			return true;
 		}
 		catch (UnsupportedEncodingException e)
 		{
 			//Hopefully this doesn't happen :P
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
-	public static void loadState(String statename)
+	public static boolean loadState(String statename)
 	{
+		//Log.v("TheElements", "loadState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT);
 		try
 		{
-			loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			char retVal = loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			Log.v("LOG", "loadState retVal: " + (int)retVal);
+			if(retVal == 0)
+			{
+				return false;
+			}
 			MainActivity.last_state_loaded = statename;
-			//Log.v("TheElements", "loadState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT);
+			
+			return true;
 		}
 		catch (UnsupportedEncodingException e)
 		{
 			//Hopefully this doesn't happen :P
 			e.printStackTrace();
 		}
+		
+		return false;
 	}
 	public static void deleteState(String statename)
 	{

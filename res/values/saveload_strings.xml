@@ -6,4 +6,6 @@
 <string name="save">Save</string>
 <string name="select_state">Select a state save to load:</string>
 <string name="no_saves">There are no saves available to be loaded.</string>
+<string name="save_state_failed">Failed to save! Please make sure you have an sdcard mounted.</string>
+<string name="load_state_failed">Failed to load! Please make sure you have an sdcard mounted.</string>
 </resources>
