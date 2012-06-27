@@ -19,8 +19,9 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.blutrumpet.sdk.BluTrumpet;
+import com.blutrumpet.sdk.StoreType;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
-import com.idkjava.thelements.game.FileManager;
 
 public class MenuActivity extends FlurryActivity
 {
@@ -125,6 +126,12 @@ public class MenuActivity extends FlurryActivity
 				}
 			}
 		);
+		
+		//Initialize Blu Trumpet
+		if (!BluTrumpet.isInitialized())
+		{
+			 BluTrumpet.initWithAppId(Globals.bluTrumpetAppId, StoreType.GOOGLE_PLAY, this);
+		}
 	}
 
 	@Override
