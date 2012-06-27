@@ -80,6 +80,7 @@ public class SaveManager
 			Log.v("LOG", "loadState retVal: " + (int)retVal);
 			if(retVal == 0)
 			{
+				Log.e("LOG", "loadState failed -- returning false");
 				return false;
 			}
 			MainActivity.last_state_loaded = statename;

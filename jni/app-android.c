@@ -74,6 +74,7 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env,
 	glRender();
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
 }
+// TODO: I think this should be removed, but I don't have the time to figure it out right now
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
 {
 	char loadLoc[256];
@@ -117,7 +118,7 @@ char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject
 		return TRUE;
 	}
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: failed!");
+	__android_log_write(ANDROID_LOG_ERROR, "TheElements", "saveState: failed!");
 	return FALSE;
 }
 char Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
@@ -142,7 +143,7 @@ char Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject
 		return TRUE;
 	}
 
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", "loadLoc: failed!");
+	__android_log_write(ANDROID_LOG_ERROR, "TheElements", "loadLoc: failed!");
 	return FALSE;
 }
 char Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
