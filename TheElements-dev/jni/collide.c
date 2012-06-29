@@ -28,7 +28,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     }
     else if ( ss >= NUM_BASE_ELEMENTS)
     {
-      //type = reciprocals[elements[ss]->collisions[fs]];
+    	type = reciprocals[elements[ss]->collisions[fs]];
     }
     else
     {

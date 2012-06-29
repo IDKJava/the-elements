@@ -437,6 +437,7 @@ void UpdateView(void)
 				//__android_log_write(ANDROID_LOG_INFO, "LOG", "End update heat");
 
 				int i;
+				char specialLoopDone = FALSE;
 				for (i = 0; i < MAX_SPECIALS; i++)
 				{
 					if (!tempElement->specials)
@@ -573,6 +574,7 @@ void UpdateView(void)
 										}
 									}
 
+									// Add heat
 									for(diffX = -2; diffX <= 2; diffX++)
 									{
 										for(diffY = -2; diffY <= 2; diffY++)
@@ -587,6 +589,11 @@ void UpdateView(void)
 											}
 										}
 									}
+
+									// Change this particle to fire, and quit the specials loop
+									setElement(tempParticle, elements[10]);
+									specialLoopDone = TRUE;
+									break;
 								}
 								break;
 
@@ -607,6 +614,11 @@ void UpdateView(void)
 						}
 
 						//__android_log_write(ANDROID_LOG_INFO, "LOG", "End special");
+					}
+
+					if (specialLoopDone == TRUE)
+					{
+						break;
 					}
 				}
 

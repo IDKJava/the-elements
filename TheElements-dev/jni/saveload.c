@@ -741,7 +741,7 @@ char loadCustomElement(char* loadLoc)
 	tempCustom->useElementSpecialVals = elements[tempCustom->base]->useElementSpecialVals;
 
 	int i;
-	for (i = 0; i < NUM_BASE_ELEMENTS;i++ )
+	for (i = 0; i < NUM_BASE_ELEMENTS-NORMAL_ELEMENT;i++ )
 	{
 		if(fscanf(fp,"%d",&tempCustom->collisions[i]) == EOF)
 		{
