@@ -23,8 +23,6 @@ public class Control extends LinearLayout
 	private ImageButton custom_elements_button;
 	private SeekBar brush_size_slider;
 
-	final CharSequence[] elementslist = {"Sand", "Water", "Plant", "Wall", "Fire", "Ice", "Generator", "Oil", "Magma", "Stone", "C4"};
-
 	//Constructor
 	public Control(Context context, AttributeSet attrs)
 	{

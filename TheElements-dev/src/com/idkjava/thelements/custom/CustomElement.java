@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -241,7 +242,59 @@ public class CustomElement
 		}
 		
 		mValid = true;
-		return true;
+		
+		// Add this element to the element list
+		fp = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
+		
+		if (!fp.exists())
+		{
+			try
+			{
+				FileWriter writer = new FileWriter(fp);
+				BufferedWriter out = new BufferedWriter(writer);
+				out.write(mFilename + FileManager.ELEMENT_EXT);
+				out.newLine();
+				
+				return true;
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			return false;
+		}
+		else if (fp.canRead() && fp.canWrite())
+		{
+			try
+			{
+				FileReader reader = new FileReader(fp);
+				BufferedReader br = new BufferedReader(reader);
+				
+				String line;
+				while((line = br.readLine()) != null)
+				{
+					if (line == mFilename)
+					{
+						return true;
+					}
+				}
+				
+				FileWriter writer = new FileWriter(fp);
+				BufferedWriter bw = new BufferedWriter(writer);
+				bw.append(mFilename + "\n");
+				
+				return true;
+			}
+			catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+			
+			return false;
+		}
+		
+		return false;
 	}
 	
 	public static int getCollisionIndexFromPos(int pos)

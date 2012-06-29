@@ -58,7 +58,7 @@ public class MainActivity extends FlurryActivity
 	//Constants for specials
 	public static final int MAX_SPECIALS = 6;
 
-	static CharSequence[] CSElementsList;
+	static CharSequence[] baseElementsList;
 	static ArrayList<String> elementsList;
 
 	public static boolean play = true;
@@ -68,11 +68,6 @@ public class MainActivity extends FlurryActivity
 
 	public static final String PREFS_NAME = "MyPrefsfile";
 	public static boolean shouldLoadDemo = false;
-	
-	public static final String ROOT_DIR = "/sdcard/thelements/";
-	public static final String ELEMENTS_DIR = "elements/";
-	public static final String LIST_NAME = "eleList";
-	public static final String LIST_EXT = ".lst";
 
 	public static boolean ui;
 
@@ -106,11 +101,6 @@ public class MainActivity extends FlurryActivity
 		setUpViews();
 
 		elementsList = new ArrayList<String>();
-
-		//Load the custom elements
-		//CustomElementManager.reloadCustomElements();
-
-		//Add custom elements to the elements list
 	}
 
 	private final SensorEventListener mySensorListener = new SensorEventListener()
@@ -163,43 +153,46 @@ public class MainActivity extends FlurryActivity
 		
 		//Set up the elements list
 		Resources res = getResources();
-		CSElementsList = res.getTextArray(R.array.elements_list);
+		baseElementsList = res.getTextArray(R.array.elements_list);
 		elementsList.clear();
 		
-		
-		
-		for ( int i = 0; i < CSElementsList.length; i++ )
+		// Add the base elements
+		for (int i = 0; i < baseElementsList.length; i++)
 		{
-			elementsList.add(CSElementsList[i].toString());
+			elementsList.add(baseElementsList[i].toString());
 		}
 		
-		try{
-			// Open the file that is the first 
-			// command line parameter
-			FileInputStream fstream = new FileInputStream(ROOT_DIR + ELEMENTS_DIR + LIST_NAME + LIST_EXT);
+		// Load the custom elements
+		try
+		{
+			// Open the file that is the first command line parameter
+			FileInputStream fstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
 			// Get the object of DataInputStream
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
-			//Read File Line By Line
-			while ((strLine = br.readLine()) != null)   {
-				FileInputStream tstream = new FileInputStream(ROOT_DIR+ELEMENTS_DIR+strLine);
+			//Read file line by line
+			while ((strLine = br.readLine()) != null)
+			{
+				FileInputStream tstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + strLine);
 				DataInputStream in2 = new DataInputStream(tstream);
 				BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-				if ( (strLine = br2.readLine()) != null )
+				if ((strLine = br2.readLine()) != null)
 				{
 					elementsList.add(strLine);
 				}
-			
 			}
-			CSElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
+			baseElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
 			//Close the input stream
 			in.close();
-		}catch (Exception e){//Catch exception if any
+		}
+		//Catch any exceptions
+		catch (Exception e)
+		{
 			System.err.println("Error: " + e.getMessage());
 		}
 		
-
+		
 		//Set up the file manager for saving and loading
 		FileManager.intialize(this);
 
@@ -273,7 +266,7 @@ public class MainActivity extends FlurryActivity
 		{
 			AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 			builder.setTitle(R.string.element_picker); // Set the title
-			builder.setItems(CSElementsList, new DialogInterface.OnClickListener() //Create the list
+			builder.setItems(baseElementsList, new DialogInterface.OnClickListener() //Create the list
 			{
 				public void onClick(DialogInterface dialog, int item)
 				{

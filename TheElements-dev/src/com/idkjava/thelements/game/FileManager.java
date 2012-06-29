@@ -23,6 +23,8 @@ public class FileManager
 	public static final String ATMOSPHERE_EXT = ".atm";
 	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
+	public static final String ELEMENT_LIST_NAME = "eleList";
+	public static final String LIST_EXT = ".lst";
 	
 	public static void intialize(Context context)
 	{		
