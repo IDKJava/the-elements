@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/clear_screen"
-	      android:title="Clear Screen"
-	      android:icon="@android:drawable/ic_menu_delete"/>
 	<item android:id="@+id/toggle_size"
 	      android:title="Toggle Size"
 	      android:icon="@android:drawable/ic_menu_zoom"/>
 	<item android:id="@+id/preferences"
 	      android:title="Preferences"
 	      android:icon="@android:drawable/ic_menu_preferences"/>
+	<item android:id="@+id/exit"
+		  android:title="Exit" 
+		  android:icon="@android:drawable/ic_menu_close_clear_cancel"/>
 </menu>

@@ -27,7 +27,7 @@ public class MenuBar extends LinearLayout
 	private static ImageButton save_button;
 	private static ImageButton load_button;
 	private static ImageButton app_wall_button;
-	private static ImageButton exit_button;
+	private static ImageButton clear_button;
 
 	//Used for eraser
 	public static boolean eraserOn = false;
@@ -66,7 +66,7 @@ public class MenuBar extends LinearLayout
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
 		app_wall_button = (ImageButton) findViewById(R.id.app_wall_button);
-		exit_button = (ImageButton) findViewById(R.id.exit_button);
+		clear_button = (ImageButton) findViewById(R.id.clear_screen_button);
 
 		//Set up the OnClickListener for the eraser button
 		eraser_button.setOnClickListener(new OnClickListener()
@@ -180,12 +180,12 @@ public class MenuBar extends LinearLayout
 		});
 
 		//Set up the OnClickListener for the exit button
-		exit_button.setOnClickListener(new OnClickListener()
+		clear_button.setOnClickListener(new OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				activity.finish();
+				((MainActivity) context).clearScreen();
 			}
 		});
 	}

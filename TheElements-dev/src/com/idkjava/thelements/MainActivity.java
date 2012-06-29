@@ -345,12 +345,7 @@ public class MainActivity extends FlurryActivity
 			{
 				showDialog(BRUSH_SIZE_PICKER);
 				return true;
-			}
-			case R.id.clear_screen:
-			{
-				clearScreen();
-				return true;
-			}
+			}			
 			case R.id.play_pause:
 			{
 				play = !play;
@@ -448,7 +443,7 @@ public class MainActivity extends FlurryActivity
 	
 	//General utility functions
     public static native void nativeInit();
-	public static native void clearScreen();
+	public native void clearScreen();
 	
 	//Setters
 	public static native void setPlayState(boolean playState);
