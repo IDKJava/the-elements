@@ -271,26 +271,31 @@ void UpdateView(void)
 							tempXVel -= tempInertia;
 						}
 					}
+					// Update y vel based on inertia, always approaching 0
 					if(tempYVel < 0)
 					{
-						if(tempInertia >= -tempYVel)
+						tempYVel += tempInertia;
+
+						if (tempYVel >= 0)
 						{
 							tempYVel = 0;
 						}
 						else
 						{
-							tempYVel += tempInertia;
+							tempYVel++;
 						}
 					}
 					else if(tempYVel > 0)
 					{
-						if(tempInertia >= tempYVel)
+						tempYVel -= tempInertia;
+
+						if(tempYVel <= 0)
 						{
 							tempYVel = 0;
 						}
 						else
 						{
-							tempYVel -= tempInertia;
+							tempYVel--;
 						}
 					}
 					tempParticle->xVel = tempXVel;
@@ -521,16 +526,19 @@ void UpdateView(void)
 								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special heat");
 								int diffX, diffY;
 								struct Particle* tempAllCoords;
-								for (diffX = -1; diffX <= 1; diffX++)
+								if (rand()%5 == 0)
 								{
-									for(diffY = -1; diffY <=1; diffY++)
+									for (diffX = -1; diffX <= 1; diffX++)
 									{
-										if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
+										for(diffY = -1; diffY <=1; diffY++)
 										{
-											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if(tempAllCoords)
+											if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
 											{
-												changeHeat(tempAllCoords, 10);
+												tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+												if(tempAllCoords)
+												{
+													changeHeat(tempAllCoords, getSpecialVal(tempParticle, SPECIAL_HEAT));
+												}
 											}
 										}
 									}
@@ -607,6 +615,34 @@ void UpdateView(void)
 									deletePoint(tempParticle);
 								}
 								break;
+							}
+							//Alive
+							case SPECIAL_ALIVE:
+							{
+								if ((tempParticle->y+1 == workHeight) || (allCoords[getIndex(tempParticle->x, tempParticle->y+1)] != NULL))
+								{
+									int randVal = rand()%100;
+									// Randomly wander
+									if (randVal >= 0 && randVal <= 40)
+									{
+										if (tempParticle->xVel <= 4)
+										{
+											tempParticle->xVel += 2;
+										}
+									}
+									else if (randVal >= 41 && randVal <= 80)
+									{
+										if (tempParticle->xVel >= -4)
+										{
+											tempParticle->xVel -= 2;
+										}
+									}
+									// Jump
+									else if (randVal >= 81 && randVal <= 85)
+									{
+										tempParticle->yVel = -5;
+									}
+								}
 							}
 							//Default: do nothing
 							default:

@@ -4,15 +4,15 @@
  * Some overall macros needed by the JNI code.
  * These are not all of the macros defined, but
  * are ones that are global and may need to be
- * changed often, especially TElements (when
- * adding new elements)
+ * changed often, especially NUM_BASE_ELEMENTS
+ * (when adding new elements)
  */
 
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
 #define MAX_POINTS 100000
-#define NUM_BASE_ELEMENTS 24
+#define NUM_BASE_ELEMENTS 25
 #define MAX_SPECIALS 6
 #define MAX_ELEMENTS 256
 
@@ -57,6 +57,7 @@
 #define MUD_ELEMENT 21
 #define GENERATOR_ELEMENT 22
 #define COAL_ELEMENT 23
+#define BUG_ELEMENT 24
 
 #define GENERATOR_SPAWN_PROB 200
 
@@ -81,6 +82,7 @@
 #define SPECIAL_HEAT 4
 #define SPECIAL_EXPLODE 5
 #define SPECIAL_LIFE 6
+#define SPECIAL_ALIVE 7
 
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
