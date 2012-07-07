@@ -35,8 +35,9 @@
 		<item>Mud</item>
 		<item>Generator</item>
 		<item>Coal</item>
-		<item >Bug</item>
+		<item >Ant</item>
 		<item >Gunpowder</item>
+		<item >Mosquito</item>
 	</string-array>
 
 	<string-array name="brush_size_list">
