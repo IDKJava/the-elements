@@ -616,34 +616,60 @@ void UpdateView(void)
 								}
 								break;
 							}
-							//Alive
-							case SPECIAL_ALIVE:
+							//Wander
+							case SPECIAL_WANDER:
+							{
+								int randVal = rand()%100;
+								// Randomly wander
+								int wanderVal = getSpecialVal(tempParticle, SPECIAL_WANDER);
+								if (randVal <= wanderVal)
+								{
+									if (tempParticle->xVel <= 4)
+									{
+										tempParticle->xVel += 2;
+									}
+								}
+								else if (randVal >= wanderVal+1 && randVal <= wanderVal*2)
+								{
+									if (tempParticle->xVel >= -4)
+									{
+										tempParticle->xVel -= 2;
+									}
+								}
+
+								randVal = rand()%100;
+								if ( randVal <= wanderVal)
+								{
+									if ( tempParticle->yVel >= -4)
+									{
+										tempParticle->yVel -= 2;
+									}
+								}
+								if ( randVal >= wanderVal + 1 && randVal <= wanderVal*2)
+								{
+									if ( tempParticle->yVel <= 4)
+									{
+										tempParticle->yVel += 2;
+									}
+								}
+
+								break;
+							}
+							//Jump
+							case SPECIAL_JUMP:
 							{
 								if ((tempParticle->y+1 == workHeight) || (allCoords[getIndex(tempParticle->x, tempParticle->y+1)] != NULL))
 								{
 									int randVal = rand()%100;
-									// Randomly wander
-									if (randVal >= 0 && randVal <= 40)
+									int jumpVal = getSpecialVal(tempParticle, SPECIAL_JUMP);
+									if (randVal < jumpVal)
 									{
-										if (tempParticle->xVel <= 4)
-										{
-											tempParticle->xVel += 2;
-										}
-									}
-									else if (randVal >= 41 && randVal <= 80)
-									{
-										if (tempParticle->xVel >= -4)
-										{
-											tempParticle->xVel -= 2;
-										}
-									}
-									// Jump
-									else if (randVal >= 81 && randVal <= 85)
-									{
-										tempParticle->yVel = -5;
+										tempParticle->yVel -= 5;
 									}
 								}
+								break;
 							}
+
 							//Default: do nothing
 							default:
 							break;

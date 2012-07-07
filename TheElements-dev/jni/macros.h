@@ -82,7 +82,8 @@
 #define SPECIAL_HEAT 4
 #define SPECIAL_EXPLODE 5
 #define SPECIAL_LIFE 6
-#define SPECIAL_ALIVE 7
+#define SPECIAL_WANDER 7
+#define SPECIAL_JUMP 8
 
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
