@@ -90,7 +90,7 @@ unsigned char baseBlue[] =  {255,   0,   0,  85, 255, 225, 255, 157, 164,   0,  
 signed char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1};
 
 //Defines the density of each base element
-char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10, 10};
+char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10, 4};
 
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
 char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0};
