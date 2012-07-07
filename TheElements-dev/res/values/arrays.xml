@@ -36,6 +36,7 @@
 		<item>Generator</item>
 		<item>Coal</item>
 		<item >Bug</item>
+		<item >Gunpowder</item>
 	</string-array>
 
 	<string-array name="brush_size_list">
