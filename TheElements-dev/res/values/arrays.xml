@@ -56,5 +56,7 @@
 	<string-array name="specials_list">
 		<item >No special</item><item >Spawn (generate particles of a given type)</item><item >Break (turn into sand beyond a given velocity)</item><item >Grow (duplicate on collision with a given element)</item><item >Heat (generate a fixed amount of heat)</item><item >Explode (if a particle melts/evaporates, it explodes)</item>
 		<item >Life (disappears with the given chance)</item>
+		<item >Wander (move around randomly)</item>
+		<item >Jump (randomly jump upwards)</item>
 	</string-array>
 </resources>

@@ -275,8 +275,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			seekbar.setMax(30);
 			return seekbar;
 		}
-		// Life
+		// Life, Wander, Jump -- seekbar probability
 		case 6:
+		case 7:
+		case 8:
 		{
 			// SeekBar
 			SeekBar seekbar = new SeekBar(this);
@@ -296,44 +298,26 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special
+		// No special, Heat
 		case 0:
-		{
-			// No special val
-			return 0;
-		}
-		// Spawn
-		case 1:
-		{
-			// The view is a Spinner
-			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
-		}
-		// Break
-		case 2:
-		{
-			// The view is a SeekBar
-			return ((SeekBar) container.getChildAt(1)).getProgress();
-		}
-		// Grow
-		case 3:
-		{
-			// The view is a Spinner
-			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
-		}
-		// Heat
 		case 4:
 		{
 			// No special val
 			return 0;
 		}
-		// Explode
-		case 5:
+		// Spawn, Grow
+		case 1:
+		case 3:
 		{
-			// The view is a SeekBar
-			return ((SeekBar) container.getChildAt(1)).getProgress();
+			// The view is a Spinner
+			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
 		}
-		// Life
+		// Break, Explode, Life, Wander, Jump
+		case 2:
+		case 5:
 		case 6:
+		case 7:
+		case 8:
 		{
 			// The view is a SeekBar
 			return ((SeekBar) container.getChildAt(1)).getProgress();
@@ -358,45 +342,8 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// No special val
 			return;
 		}
-		// Spawn
+		// Spawn, Grow
 		case 1:
-		{
-			// The view is a Spinner
-			clearContainerChild(container);
-			Spinner child = (Spinner) getSpecialValView(special);
-			if (child == null)
-			{
-				Log.d("LOG", "Error: No child existed");
-				return;
-			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
-			
-			child.setSelection(val - MainActivity.NORMAL_ELEMENT);
-			return;
-		}
-		// Break
-		case 2:
-		{
-			// The view is a SeekBar
-			clearContainerChild(container);
-			SeekBar child = (SeekBar) getSpecialValView(special);
-			if (child == null)
-			{
-				Log.d("LOG", "Error: No child existed");
-				return;
-			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
-			
-			child.setProgress(val);
-			return;
-		}
-		// Grow
 		case 3:
 		{
 			// The view is a Spinner
@@ -411,7 +358,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			lp.setMargins(30, 0, 30, 10);
 			child.setLayoutParams(lp);
 			container.addView(child);
-
+			
 			child.setSelection(val - MainActivity.NORMAL_ELEMENT);
 			return;
 		}
@@ -433,28 +380,13 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// No special val
 			return;
 		}
-		// Explode
-		case 5:
-		{
-			// The view is a SeekBar
-			clearContainerChild(container);
-			SeekBar child = (SeekBar) getSpecialValView(special);
-			if (child == null)
-			{
-				Log.d("LOG", "Error: No child existed");
-				return;
-			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
-			
 
-			child.setProgress(val);
-			return;
-		}
-		// Life
+		// Break, Explode, Life, Wander, Jump
+		case 2:
+		case 5:
 		case 6:
+		case 7:
+		case 8:
 		{
 			// The view is a SeekBar
 			clearContainerChild(container);
