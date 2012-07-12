@@ -2,7 +2,6 @@ package com.idkjava.thelements;
 
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,10 +16,10 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.blutrumpet.sdk.BluTrumpet;
 import com.blutrumpet.sdk.StoreType;
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 
 public class MenuActivity extends FlurryActivity
@@ -32,7 +31,6 @@ public class MenuActivity extends FlurryActivity
 	public static Button how_to_play_button;
 	public static Button about_button;
 	public static boolean loaded = false;
-	public long stime;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
@@ -40,7 +38,6 @@ public class MenuActivity extends FlurryActivity
 		super.onCreate(savedInstanceState); //Call the super method
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE); //Get rid of title bar
-		stime = System.currentTimeMillis();
 		
 		setContentView(R.layout.menu_activity);
 		
@@ -60,6 +57,7 @@ public class MenuActivity extends FlurryActivity
 			{
 				public void onClick(View v)
 				{
+					FlurryAgent.logEvent("Start game button (main menu)");
 					//Start the main app activity
 					startActivity(new Intent(MenuActivity.this, SplashActivity.class));
 				}
@@ -72,6 +70,7 @@ public class MenuActivity extends FlurryActivity
 			{
 				public void onClick(View v)
 				{
+					FlurryAgent.logEvent("Custom elements button (main menu)");
 					//Start the CustomElementManagerActivity
 					startActivity(new Intent(MenuActivity.this, CustomElementManagerActivity.class));
 				}
@@ -84,6 +83,7 @@ public class MenuActivity extends FlurryActivity
 			{
 				public void onClick(View v)
 				{
+					FlurryAgent.logEvent("BluTrumpet button (main menu)");
 					//Start the Blu Trumpet Activity
 					startActivity(new Intent(MenuActivity.this, BluTrumpetActivity.class));
 					
@@ -99,6 +99,7 @@ public class MenuActivity extends FlurryActivity
 			@Override
 			public void onClick(View v)
 			{
+				FlurryAgent.logEvent("Fix me button (main menu)");
 				startActivity(new Intent(MenuActivity.this, FixMeActivity.class));
 			}
 		});
@@ -132,13 +133,6 @@ public class MenuActivity extends FlurryActivity
 		{
 			 BluTrumpet.initWithAppId(Globals.bluTrumpetAppId, StoreType.GOOGLE_PLAY, this);
 		}
-	}
-
-	@Override
-	public void onResume()
-	{
-		stime = System.currentTimeMillis();
-		super.onResume(); //Call the super method
 	}
 	
 	public void how_to_play()

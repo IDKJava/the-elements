@@ -1,5 +1,6 @@
 package com.idkjava.thelements.game;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.BluTrumpetActivity;
 import com.idkjava.thelements.MainActivity;
 
@@ -175,6 +176,7 @@ public class MenuBar extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
+				FlurryAgent.logEvent("BluTrumpet button (app)");
 				((MainActivity) context).startActivity(new Intent(activity, BluTrumpetActivity.class));
 			}
 		});

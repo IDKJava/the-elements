@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.FlurryActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
@@ -178,6 +180,10 @@ public class CustomElementBasicActivity extends FlurryActivity
 					getResources().getString(R.string.ce_save_success) + " "
 					+ mCustomElement.getFilename() + FileManager.ELEMENT_EXT,
 					Toast.LENGTH_LONG).show();
+			// Log the custom element name
+			Hashtable<String, String> params = new Hashtable<String, String>();
+			params.put("Name", mCustomElement.getFilename());
+			FlurryAgent.logEvent("Element saved", params);
 			return true;
 		}
 		else

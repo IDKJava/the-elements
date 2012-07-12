@@ -1,5 +1,6 @@
 package com.idkjava.thelements.game;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.MainActivity;
 
 import com.idkjava.thelements.R;
@@ -60,6 +61,7 @@ public class Control extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
+				FlurryAgent.logEvent("Custom elements button (app)");
 				activity.startActivity(new Intent(activity, CustomElementManagerActivity.class));
 			}
 		});
