@@ -44,4 +44,10 @@
 <string name="custom_elements_button">Custom Elements</string>
 <string name="heyzap_checkin_message">I just found an awesome falling sand app! Come try it out!</string>
 <string name="sdcard_not_found">Warning: SD Card inaccessible. You will not be able to save or load.</string>
+<string name="eraser">Eraser</string>
+<string name="clear_screen">Clear Screen</string>
+<string name="play_pause">Play/Pause</string>
+<string name="toggle_size">Toggle Size</string>
+<string name="load">Load</string>
+<string name="preferences">Preferences</string>
 </resources>

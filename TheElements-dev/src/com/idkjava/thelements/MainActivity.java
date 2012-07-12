@@ -25,6 +25,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import com.flurry.android.FlurryAgent;
+import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
@@ -93,6 +95,8 @@ public class MainActivity extends FlurryActivity
 		//Init the shared preferences and set the ui state
 		Preferences.initSharedPreferences(this);
 		Preferences.loadUIState();
+		
+		FlurryAgent.logEvent("UI state: " + ui);
 
 		//Set Sensor + Manager
 		myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -338,7 +342,12 @@ public class MainActivity extends FlurryActivity
 			{
 				showDialog(BRUSH_SIZE_PICKER);
 				return true;
-			}			
+			}
+			case R.id.clear_screen:		
+			{		
+				clearScreen();		
+				return true;		
+			}	
 			case R.id.play_pause:
 			{
 				play = !play;
@@ -366,9 +375,9 @@ public class MainActivity extends FlurryActivity
 				loadState();
 				return true;
 			}
-			case R.id.load_demo:
+			case R.id.custom_element_editor:
 			{
-				loadDemoState();
+				startActivity(new Intent(MainActivity.this, CustomElementManagerActivity.class));
 				return true;
 			}
 			case R.id.preferences:

@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:id="@+id/element_picker"
-		  android:title="Element Picker" />
+		  android:title="@string/element_picker" />
 	<item android:id="@+id/brush_size_picker"
-		  android:title="Brush Size Picker" />
+		  android:title="@string/brush_size_picker" />
 	<item android:id="@+id/eraser"
-		  android:title="Eraser" />
+		  android:title="@string/eraser" />
 	<item android:id="@+id/clear_screen"
-	      android:title="Clear Screen"
+	      android:title="@string/clear_screen"
 	      android:icon="@android:drawable/ic_menu_delete"/>
 	<item android:id="@+id/play_pause"
-		  android:title="Play/Pause" />
-	<item android:id="@+id/toggle_size"
-	      android:title="Toggle Size"
+		  android:title="@string/play_pause" />
+	<item android:id="@+id/custom_element_editor" android:title="@string/custom_elements"></item><item android:id="@+id/toggle_size"
+	      android:title="@string/toggle_size"
 	      android:icon="@android:drawable/ic_menu_zoom"/>
 	<item android:id="@+id/save"
-		  android:title="Save" />
+		  android:title="@string/save" />
 	<item android:id="@+id/load"
-		  android:title="Load" />
-	<item android:id="@+id/load_demo"
-		  android:title="Load Demo" />
+		  android:title="@string/load" />
 	<item android:id="@+id/preferences"
-	      android:title="Preferences"
+	      android:title="@string/preferences"
 	      android:icon="@android:drawable/ic_menu_preferences"/>
 	<item android:id="@+id/exit"
-		  android:title="Exit" />
+		  android:title="@string/exit" />
+	
 </menu>
