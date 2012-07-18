@@ -80,7 +80,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     {
         //Change the generator to spawner
         setElement(secondParticle, elements[SPAWN_ELEMENT]);
-        setSpecialVal(secondParticle, SPECIAL_SPAWN, firstParticle->element->index);
+        setParticleSpecialVal(secondParticle, SPECIAL_SPAWN, firstParticle->element->index);
         secondParticle->hasMoved = TRUE;
 
         //Move back and delete firstParticle
@@ -96,7 +96,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     {
         //Change the generator to spawner
         setElement(firstParticle, elements[SPAWN_ELEMENT]);
-        setSpecialVal(firstParticle, SPECIAL_SPAWN, secondParticle->element->index);
+        setParticleSpecialVal(firstParticle, SPECIAL_SPAWN, secondParticle->element->index);
         firstParticle->hasMoved = TRUE;
 
         //Delete secondParticle

@@ -44,8 +44,6 @@ struct Element
 	char startingTemp, lowestTemp, highestTemp;
 	struct Element* lowerElement;
 	struct Element* higherElement;
-	
-	char useElementSpecialVals;
 
 	//Dealing with drawing
 	char red, green, blue;

@@ -476,11 +476,11 @@ void UpdateView(void)
 											if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
 											{
 												setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
-												setSpecialVal(tempAllCoords, SPECIAL_SPAWN, getSpecialVal(tempParticle, SPECIAL_SPAWN));
+												setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(tempParticle, SPECIAL_SPAWN));
 											}
 											else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
 											{
-												createPoint(tempX + diffX, tempY + diffY, elements[getSpecialVal(tempParticle, SPECIAL_SPAWN)]);
+												createPoint(tempX + diffX, tempY + diffY, elements[getParticleSpecialVal(tempParticle, SPECIAL_SPAWN)]);
 											}
 										}
 									}
@@ -491,7 +491,7 @@ void UpdateView(void)
 							case SPECIAL_BREAK:
 							{
 								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special break");
-								if (tempParticle->xVel > getSpecialVal(tempParticle, SPECIAL_BREAK) || tempParticle->yVel > getSpecialVal(tempParticle, SPECIAL_BREAK))
+								if (tempParticle->xVel > getElementSpecialVal(tempElement, SPECIAL_BREAK) || tempParticle->yVel > getElementSpecialVal(tempElement, SPECIAL_BREAK))
 								{
 									setElement(tempParticle, elements[NORMAL_ELEMENT]);
 								}
@@ -510,7 +510,7 @@ void UpdateView(void)
 										if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth)
 										{
 											tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-											if (tempAllCoords && tempAllCoords->element->index == getSpecialVal(tempParticle, SPECIAL_GROW) && rand() % 10 == 0)
+											if (tempAllCoords && tempAllCoords->element->index == getElementSpecialVal(tempElement, SPECIAL_GROW) && rand() % 10 == 0)
 											{
 												setElement(tempAllCoords, tempParticle->element);
 											}
@@ -537,7 +537,7 @@ void UpdateView(void)
 												tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
 												if(tempAllCoords)
 												{
-													changeHeat(tempAllCoords, getSpecialVal(tempParticle, SPECIAL_HEAT));
+													changeHeat(tempAllCoords, getElementSpecialVal(tempElement, SPECIAL_HEAT));
 												}
 											}
 										}
@@ -558,7 +558,7 @@ void UpdateView(void)
 									//In radius of explosion, add velocity with a 5% chance
 									if(rand()%20 == 0)
 									{
-										int explosiveness = getSpecialVal(tempParticle, SPECIAL_EXPLODE);
+										int explosiveness = getElementSpecialVal(tempElement, SPECIAL_EXPLODE);
 										for (diffX = -explosiveness; diffX <= explosiveness; diffX++)
 										{
 											for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
@@ -610,7 +610,7 @@ void UpdateView(void)
 							case SPECIAL_LIFE:
 							{
 								//__android_log_write(ANDROID_LOG_INFO, "LOG", "Special life");
-								if (rand()%getSpecialVal(tempParticle, SPECIAL_LIFE) == 0)
+								if (rand()%getElementSpecialVal(tempElement, SPECIAL_LIFE) == 0)
 								{
 									deletePoint(tempParticle);
 								}
@@ -621,7 +621,7 @@ void UpdateView(void)
 							{
 								int randVal = rand()%100;
 								// Randomly wander
-								int wanderVal = getSpecialVal(tempParticle, SPECIAL_WANDER);
+								int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
 								if (randVal <= wanderVal)
 								{
 									if (tempParticle->xVel <= 4)
@@ -661,7 +661,7 @@ void UpdateView(void)
 								if ((tempParticle->y+1 == workHeight) || (allCoords[getIndex(tempParticle->x, tempParticle->y+1)] != NULL))
 								{
 									int randVal = rand()%100;
-									int jumpVal = getSpecialVal(tempParticle, SPECIAL_JUMP);
+									int jumpVal = getElementSpecialVal(tempElement, SPECIAL_JUMP);
 									if (randVal < jumpVal)
 									{
 										tempParticle->yVel -= 5;

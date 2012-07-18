@@ -175,9 +175,6 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{10,0,0,0,0,0}, //Mosquito
 };
 
-//Specifies whether particles of this element should only use the default special vals
-char baseUseElementSpecialVals[] = {FALSE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE};
-
 //Defines the inertia of each element
 char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1, 1, 1, 1};
 

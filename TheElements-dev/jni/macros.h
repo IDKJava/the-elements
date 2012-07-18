@@ -60,6 +60,8 @@
 #define ANT_ELEMENT 24
 #define GUNPOWDER_ELEMENT 25
 #define MOSQUITO_ELEMENT 26
+#define WOOD 27
+#define TERMITE 28
 
 #define GENERATOR_SPAWN_PROB 200
 
@@ -86,6 +88,8 @@
 #define SPECIAL_LIFE 6
 #define SPECIAL_WANDER 7
 #define SPECIAL_JUMP 8
+
+#define SPECIAL_VAL_UNSET 255
 
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");

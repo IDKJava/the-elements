@@ -41,11 +41,8 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
 		//Set the frozen state
 		i->frozen = FALSE;
 
-		//Copy special vals from element if needed
-		if (!element->useElementSpecialVals)
-		{
-			initSpecialVals(i, element);
-		}
+		//Clear all particle special vals
+		clearSpecialVals(i);
 
 		//Set the initial heat
 		if(element->startingTemp == 0)
@@ -98,10 +95,7 @@ void setElement(struct Particle* particle, struct Element* newElement)
 {
 	int i;
 	particle->element = newElement;
-	if (!newElement->useElementSpecialVals)
-	{
-		initSpecialVals(particle, newElement);
-	}
+	clearSpecialVals(particle);
 	setBitmapColor(particle->x, particle->y, newElement);
 }
 
@@ -175,7 +169,8 @@ char hasSpecial(struct Particle* tempParticle, int special)
 }
 
 //Gets a particle's special value
-char getSpecialVal(struct Particle* tempParticle, int special)
+//WARNING: Just gets the first special of that type it finds
+char getParticleSpecialVal(struct Particle* tempParticle, int special)
 {
 	struct Element* tempElement;
 	tempElement = tempParticle->element;
@@ -185,21 +180,15 @@ char getSpecialVal(struct Particle* tempParticle, int special)
 	{
 		if (tempElement->specials[i] == special)
 		{
-			if (tempElement->useElementSpecialVals)
-			{
-				return tempElement->specialVals[i];
-			}
-			else
-			{
-				return tempParticle->specialVals[i];
-			}
+			return tempParticle->specialVals[i];
 		}
 	}
 
 	return FALSE;
 }
 //Sets a particle's special value
-void setSpecialVal(struct Particle* tempParticle, int special, char val)
+//WARNING: Just sets the first special of that type it finds
+void setParticleSpecialVal(struct Particle* tempParticle, int special, char val)
 {
 	int i;
 	for (i = 0; i < MAX_SPECIALS; i++)
@@ -211,13 +200,25 @@ void setSpecialVal(struct Particle* tempParticle, int special, char val)
 		}
 	}
 }
-
-//Initialize a particle's special vals (only if not staying with the default forever)
-void initSpecialVals(struct Particle* tempParticle, struct Element* tempElement)
+//Gets an element's special value
+//WARNING: Just gets the first special of that type it finds
+char getElementSpecialVal(struct Element* tempElement, int special)
 {
 	int i;
 	for (i = 0; i < MAX_SPECIALS; i++)
 	{
-		tempParticle->specialVals[i] = tempElement->specialVals[i];
+		if (tempElement->specials[i] == special)
+		{
+			return tempElement->specialVals[i];
+		}
+	}
+}
+
+void clearSpecialVals(struct Particle* tempParticle)
+{
+	int i;
+	for (i = 0; i < MAX_SPECIALS; i++)
+	{
+		tempParticle->specialVals[i] = SPECIAL_VAL_UNSET;
 	}
 }

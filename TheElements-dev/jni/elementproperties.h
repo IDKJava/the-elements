@@ -81,8 +81,6 @@ extern char baseState[];
 extern signed char baseSpecial[][MAX_SPECIALS];
 //Defines the special value for each base element
 extern char baseSpecialValue[][MAX_SPECIALS];
-//Specifies whether particles of this element should only use the default special vals
-extern char baseUseElementSpecialVals[];
 //Defines the inertia of each element
 extern char baseInertia[];
 //Defines the starting temp of the element (-1 = atmosphere)

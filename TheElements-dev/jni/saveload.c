@@ -181,15 +181,12 @@ char saveStateLogic(char* saveLoc)
 							tempParticle->yVel,
 							tempParticle->heat,
 							tempParticle->element->index);
-					if (!tempParticle->element->useElementSpecialVals)
+					fprintf(fp, "[");
+					for (i = 0; i < MAX_SPECIALS; i++)
 					{
-						fprintf(fp, "[");
-						for (i = 0; i < MAX_SPECIALS; i++)
-						{
-							fprintf(fp, "%d ", tempParticle->specialVals[i]);
-						}
-						fprintf(fp, "]");
+						fprintf(fp, "%d ", tempParticle->specialVals[i]);
 					}
+					fprintf(fp, "]");
 				}
 				else
 				{
@@ -414,46 +411,39 @@ char loadStateLogic(char* loadLoc)
 			if (elementIndex >= numElements) { return FALSE; }
 			tempElement = elements[elementIndex];
 
-			// If we don't use the element's specialVals, then we need to try to read in more
-			if (!tempElement->useElementSpecialVals)
+			// Read in special vals
+			failed = FALSE;
+			// Check that our lookahead is correct
+			if((charsRead = fscanf(fp, "%c", &lookAhead)) != EOF && charsRead == 1 && lookAhead == '[')
 			{
-				failed = FALSE;
-				// Check that our lookahead is correct
-				if((charsRead = fscanf(fp, "%c", &lookAhead)) != EOF && charsRead == 1 && lookAhead == '[')
+				int k;
+				for (k = 0; k < fileMaxSpecials; k++)
 				{
-					int k;
-					for (k = 0; k < fileMaxSpecials; k++)
+					if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1)
 					{
-						if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1)
-						{
-							failed = TRUE;
-							break;
-						}
-
-						if (k < MAX_SPECIALS)
-						{
-							tempParticle->specialVals[k] = tempSpecialVal;
-						}
+						failed = TRUE;
+						break;
 					}
 
-					// Skip past the closing ']'
-					fseek(fp, 1, SEEK_CUR);
-				}
-				else
-				{
-					// Put the lookAhead char back on the stream
-					fseek(fp, -1, SEEK_CUR);
-					failed = TRUE;
-				}
-
-				if (failed)
-				{
-					int k;
-					for (k = 0; k < MAX_SPECIALS; k++)
+					if (k < MAX_SPECIALS)
 					{
-						tempParticle->specialVals[k] = tempElement->specialVals[k];
+						tempParticle->specialVals[k] = tempSpecialVal;
 					}
 				}
+
+				// Skip past the closing ']'
+				fseek(fp, 1, SEEK_CUR);
+			}
+			else
+			{
+				// Put the lookAhead char back on the stream
+				fseek(fp, -1, SEEK_CUR);
+				failed = TRUE;
+			}
+			// If reading in failed, initialize to cleared
+			if (failed)
+			{
+				clearSpecialVals(tempParticle);
 			}
 
 			// Set the element and make the particle set
@@ -738,7 +728,6 @@ char loadCustomElement(char* loadLoc)
 	tempCustom->collisions = malloc(NUM_BASE_ELEMENTS * sizeof(char));
 	tempCustom->specials = malloc(MAX_SPECIALS*sizeof(char));
 	tempCustom->specialVals = malloc(MAX_SPECIALS*sizeof(char));
-	tempCustom->useElementSpecialVals = elements[tempCustom->base]->useElementSpecialVals;
 
 	int i;
 	for (i = 0; i < NUM_BASE_ELEMENTS-NORMAL_ELEMENT;i++ )

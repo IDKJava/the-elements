@@ -124,7 +124,6 @@ void elementSetup()
 			{
 				tempElement->specialVals[j] = baseSpecialValue[i][j];
 			}
-			tempElement->useElementSpecialVals = baseUseElementSpecialVals[i];
 			tempElement->inertia = baseInertia[i];
 			tempElement->startingTemp = baseStartingTemp[i];
 			tempElement->highestTemp = baseHighestTemp[i];
