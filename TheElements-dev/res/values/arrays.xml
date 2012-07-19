@@ -38,6 +38,8 @@
 		<item >Ant</item>
 		<item >Gunpowder</item>
 		<item >Mosquito</item>
+		<item >Wood</item>
+		<item >Termite</item>
 	</string-array>
 
 	<string-array name="brush_size_list">
