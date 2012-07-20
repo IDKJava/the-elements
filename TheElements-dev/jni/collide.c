@@ -109,49 +109,49 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     {
         //Define some temporary variables
         int tempX = firstParticle->x, tempY = firstParticle->y;
-        if (rand() % 3 != 0) //2/3 chance
+        if (rand() % 3 != 0 ) //2/3 chance
         {
             //Acid burns away Meltable
             unSetPoint(secondParticle);
         }
-        else if (rand() % 2 == 0) //Otherwise, 1/6 total
+        else if (rand() % 2 == 0 ) //Otherwise, 1/6 total
         {
             //Acid is neutralized
             //Move firstParticle back and delete it
-            firstParticle->x = firstParticle->oldX;
-            firstParticle->y = firstParticle->oldY;
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
             deletePoint(firstParticle);
             firstParticle->hasMoved = FALSE;
         }
-	else //Otherwise, 1/6 total
-	{
-	    //Acid bounces
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    firstParticle->hasMoved = FALSE;
-	}
+		else //Otherwise, 1/6 total
+		{
+			//Acid bounces
+			firstParticle->x = oldXFirst;
+			firstParticle->y = oldYFirst;
+			firstParticle->hasMoved = FALSE;
+		}
 
 	break;
     }
     case 5: //Meltable - Acid
     {
-	if (rand() % 3 != 0) //2/3 chance
+	if (rand() % 3 != 0 ) //2/3 chance
 	{
 	    //Meltable is destroyed
 
 	    //Delete firstParticle
-	    firstParticle->x = firstParticle->oldX;
-	    firstParticle->y = firstParticle->oldY;
+	    firstParticle->x = oldXFirst;
+	    firstParticle->y = oldYFirst;
 	    deletePoint(firstParticle);
 	    firstParticle->hasMoved = FALSE;
 	}
-	else if (rand() % 2 == 0) //Otherwise, 1/6 totaln
+	else if (rand() % 2 == 0 ) //Otherwise, 1/6 totaln
 	{
 	    //Acid is neutralized
 
 	    //Delete secondParticle
 	    unSetPoint(secondParticle);
-	    secondParticle->hasMoved = TRUE;
+	    secondParticle->hasMoved = FALSE;
 	}
 	else //Otherwise, 1/6 total
 	{
