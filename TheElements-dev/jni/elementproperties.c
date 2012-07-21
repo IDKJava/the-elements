@@ -88,7 +88,7 @@ char* baseName[] = {
 		 "Mosquito",	// 26 = Mosquito
 		 "Wood",		// 27 = Wood
 		 "Termite",		// 28 = Termite
-		 "InsectKiller"// 29 = InsectKiller
+		 "Insect Killer"// 29 = Insect Killer
 };
 
 //Define the color of the element
