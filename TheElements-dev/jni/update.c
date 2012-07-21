@@ -669,6 +669,67 @@ void UpdateView(void)
 								}
 								break;
 							}
+							// Tunnel
+							case SPECIAL_TUNNEL:
+							{
+								int targetElementIndex = getElementSpecialVal(tempElement, SPECIAL_TUNNEL);
+								int state = getParticleSpecialVal(tempParticle, SPECIAL_TUNNEL);
+
+								int curX = tempParticle->x, curY = tempParticle->y;
+								int diffX, diffY;
+
+								if (state == SPECIAL_VAL_UNSET)
+								{
+									// Look in a random diagonal
+									int randomDir = rand()%4;
+									diffX = 2*(randomDir%2) - 1;
+									diffY = (randomDir - randomDir%2) - 1;
+									if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
+									{
+										continue;
+									}
+									struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+									if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+									{
+										// Remove the tempAllCoords particle, and move this particle there
+										unSetPoint(tempAllCoords);
+										allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+										allCoords[getIndex(curX, curY)] = NULL;
+										clearBitmapColor(curX, curY);
+										tempParticle->x = curX + diffX;
+										tempParticle->y = curY + diffY;
+										// Set the y velocity to the fall velocity to counteract movement
+										tempParticle->yVel = tempParticle->element->fallVel;
+										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, randomDir);
+									}
+								}
+								else
+								{
+									// We're already moving in a direction
+									diffX = 2*(state%2) - 1;
+									diffY = (state - state%2) - 1;
+
+									struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+									if (tempAllCoords == NULL || tempAllCoords->element->index != targetElementIndex)
+									{
+										// Go back to the unset state
+										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+										continue;
+									}
+									else
+									{
+										// Remove the tempAllCoords particle, and move this particle there
+										unSetPoint(tempAllCoords);
+										allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+										allCoords[getIndex(curX, curY)] = NULL;
+										clearBitmapColor(curX, curY);
+										tempParticle->x = curX + diffX;
+										tempParticle->y = curY + diffY;
+										// Set the y velocity to the fall velocity to counteract movement
+										tempParticle->yVel = tempParticle->element->fallVel;
+									}
+								}
+							}
 
 							//Default: do nothing
 							default:

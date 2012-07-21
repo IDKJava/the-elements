@@ -88,6 +88,7 @@
 #define SPECIAL_LIFE 6
 #define SPECIAL_WANDER 7
 #define SPECIAL_JUMP 8
+#define SPECIAL_TUNNEL 9
 
 #define SPECIAL_VAL_UNSET 255
 

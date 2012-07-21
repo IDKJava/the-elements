@@ -1,5 +1,5 @@
 /*
- * update.c
+ * update.h
  * -----------------------------------
  * Declares the function UpdateView(), which
  * is called every frame to update all the
