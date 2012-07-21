@@ -231,16 +231,6 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// No view
 			return null;
 		}
-		// Spawn
-		case 1:
-		{
-			// Element spinner
-			Spinner spinner = new Spinner(this);
-			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.elements_list, android.R.layout.simple_spinner_item);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinner.setAdapter(adapter);
-			return spinner;
-		}
 		// Break
 		case 2:
 		{
@@ -249,8 +239,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			seekbar.setMax(30);
 			return seekbar;
 		}
-		// Grow
+		// Spawn, Grow, Tunnel
+		case 1:
 		case 3:
+		case 9:
 		{
 			// Element spinner
 			Spinner spinner = new Spinner(this);
@@ -305,9 +297,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// No special val
 			return 0;
 		}
-		// Spawn, Grow
+		// Spawn, Grow, Tunnel
 		case 1:
 		case 3:
+		case 9:
 		{
 			// The view is a Spinner
 			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
@@ -342,9 +335,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// No special val
 			return;
 		}
-		// Spawn, Grow
+		// Spawn, Grow, Tunnel
 		case 1:
 		case 3:
+		case 9:
 		{
 			// The view is a Spinner
 			clearContainerChild(container);

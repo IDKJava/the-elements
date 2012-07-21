@@ -61,5 +61,6 @@
 		<item >Life (disappears with the given chance)</item>
 		<item >Wander (move around randomly)</item>
 		<item >Jump (randomly jump upwards)</item>
+		<item >Tunnel</item>
 	</string-array>
 </resources>
