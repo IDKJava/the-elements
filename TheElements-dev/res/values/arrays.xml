@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <!-- Used in app/menu examples -->
+    <string-array name="entries_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+
+    <!-- Used in app/menu examples -->
+    <string-array name="entryvalues_list_preference">
+        <item>black</item>
+        <item>white</item>
+    </string-array>
+    
+	<string-array name="elements_list">
+		<item>Sand</item>
+		<item>Water</item>
+		<item>Steam</item>
+		<item>Ice</item>
+		<item>Wall</item>
+		<item>Destructible Wall</item>
+		<item>Plant</item>
+		<item>Fire</item>
+		<item>Magma</item>
+		<item>Stone</item>
+		<item>Oil</item>
+		<item>C4</item>
+		<item>C4++</item>
+		<item>Fuse</item>
+		<item>Acid</item>
+		<item>Salt</item>
+		<item>Salt-Water</item>
+		<item>Glass</item>
+		<item>Mud</item>
+		<item>Generator</item>
+		<item>Coal</item>
+		<item >Ant</item>
+		<item >Gunpowder</item>
+		<item >Mosquito</item>
+		<item >Wood</item>
+		<item >Termite</item>
+		<item >Insect Killer</item>
+	</string-array>
+
+	<string-array name="brush_size_list">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>4</item>
+		<item>8</item>
+		<item>16</item>
+		<item>32</item>
+	</string-array>
+	<string-array name="collisions_list">
+		<item >Solid - Solid</item>
+		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item>
+	</string-array>
+	<string-array name="specials_list">
+		<item >No special</item><item >Spawn (generate particles of a given type)</item><item >Break (turn into sand beyond a given velocity)</item><item >Grow (duplicate on collision with a given element)</item><item >Heat (generate a fixed amount of heat)</item><item >Explode (if a particle melts/evaporates, it explodes)</item>
+		<item >Life (disappears with the given chance)</item>
+		<item >Wander (move around randomly)</item>
+		<item >Jump (randomly jump upwards)</item>
+		<item >Tunnel</item>
+	</string-array>
+</resources>
