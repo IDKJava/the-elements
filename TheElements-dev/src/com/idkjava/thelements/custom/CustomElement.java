@@ -117,16 +117,48 @@ public class CustomElement
 			density = Integer.parseInt(br.readLine());
 			fallVel = Integer.parseInt(br.readLine());
 			inertia = Integer.parseInt(br.readLine());
+			
+			// Collisions
 			String collisionString;
 			collisions = new ArrayList<Integer>();
-			for (int i = 0; i < MainActivity.NUM_BASE_ELEMENTS - MainActivity.NORMAL_ELEMENT; i++)
+			// Custom element header line -- C###, indicates how many collisions to read
+			int numCollisionsToRead;
+			br.mark(1000);
+			collisionString = br.readLine();
+			if (collisionString.startsWith("C"))
+			{
+				Log.d("LOG", "Found collisions header: " + collisionString);
+				// Try reading the number of collisions, fallback to as many elements as we have
+				try
+				{
+					numCollisionsToRead = Integer.parseInt(collisionString.substring(1));
+				}
+				catch (IndexOutOfBoundsException e)
+				{
+					numCollisionsToRead = MainActivity.NUM_BASE_ELEMENTS - MainActivity.NORMAL_ELEMENT;
+				}
+			}
+			else
+			{
+				Log.d("LOG", "No collision header found");
+				// Move the pointer back to before this line, since it is part of the data to be read
+				br.reset();
+				numCollisionsToRead = MainActivity.NUM_BASE_ELEMENTS - MainActivity.NORMAL_ELEMENT;
+			}
+			int collision;
+			for (int i = 0; i < numCollisionsToRead; i++)
 			{
 				collisionString = br.readLine();
 				if (collisionString == null)
 				{
 					break;
 				}
-				collisions.add(Integer.parseInt(collisionString));
+				collision = Integer.parseInt(collisionString);
+				if (collision < 0 || collision > MainActivity.NUM_COLLISIONS)
+				{
+					collision = 0;
+				}
+				collisions.add(collision);
 			}
 			String specialString;
 			String specialValString;
@@ -219,6 +251,8 @@ public class CustomElement
 			out.newLine();
 			
 			int arrayLength = collisions.size();
+			out.write("C" + String.valueOf(arrayLength));
+			out.newLine();
 			for (int i = 0; i < arrayLength; i++)
 			{
 				out.write(String.valueOf(getCollisionIndexFromPos(collisions.get(i))));

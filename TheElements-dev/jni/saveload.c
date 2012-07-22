@@ -699,15 +699,17 @@ char loadCustomElements(void)
 }
 char loadCustomElement(char* loadLoc)
 {
+	// Try opening the custom element file
 	FILE* fp;
 	fp = fopen(loadLoc, "rb");
-	if (loadLoc == NULL)
+	if (fp == NULL)
 	{
 		return FALSE;
 	}
 
 	int lowerElementIndex, higherElementIndex;
 
+	// Create the struct and read in basic properties
 	struct Element* tempCustom = (struct Element*) malloc(sizeof(struct Element));
 	tempCustom->name = malloc(MAX_CE_NAME_LENGTH * sizeof(char));
 	if(fgets(tempCustom->name, MAX_CE_NAME_LENGTH, fp) == NULL) {return FALSE;}
@@ -725,19 +727,29 @@ char loadCustomElement(char* loadLoc)
 	if(fscanf(fp, "%d", &tempCustom->fallVel) == EOF) {return FALSE;}
 	if(fscanf(fp, "%d", &tempCustom->inertia) == EOF) {return FALSE;}
 
+	// Allocate collisions and specials related arrays
 	tempCustom->collisions = malloc(NUM_BASE_ELEMENTS * sizeof(char));
 	tempCustom->specials = malloc(MAX_SPECIALS*sizeof(char));
 	tempCustom->specialVals = malloc(MAX_SPECIALS*sizeof(char));
 
+	// Read in the collisions header, with a reasonable fallback
+	int numCollisionsToRead;
+	int read;
+	if ((read = fscanf(fp, "C%d", &numCollisionsToRead)) == EOF || read < 1)
+	{
+		numCollisionsToRead = NUM_BASE_ELEMENTS - NORMAL_ELEMENT;
+	}
+	// Read those many collisions from the file
 	int i;
-	for (i = 0; i < NUM_BASE_ELEMENTS-NORMAL_ELEMENT;i++ )
+	for (i = 0; i < numCollisionsToRead; i++)
 	{
 		if(fscanf(fp,"%d",&tempCustom->collisions[i]) == EOF)
 		{
 			tempCustom->collisions[i] = 0;
 		}
 	}
-	for (i = 0; i < MAX_SPECIALS;i++ )
+	// Read MAX_SPECIALS specials from the file
+	for (i = 0; i < MAX_SPECIALS; i++)
 	{
 		if(fscanf(fp,"%d",&tempCustom->specials[i]) == EOF)
 		{
@@ -749,6 +761,8 @@ char loadCustomElement(char* loadLoc)
 		}
 	}
 
+	// Effectively a realloc
+	// TODO: Replace with realloc
 	struct Element** tempElementArray;
 	tempElementArray = malloc(numElements*sizeof( struct Element*));
 	for (i = 0; i < numElements; i++)
@@ -762,11 +776,12 @@ char loadCustomElement(char* loadLoc)
 		elements[i] = tempElementArray[i];
 	}
 
+	// Resolve index-based values
 	tempCustom->index = numElements;
 	tempCustom->higherElement = elements[higherElementIndex];
 	tempCustom->lowerElement = elements[lowerElementIndex];
 
-	//Increment number of Elements and add the newest element in
+	// Increment number of Elements and add the newest element in
 	numElements++;
 	elements[numElements-1] = tempCustom;
 
