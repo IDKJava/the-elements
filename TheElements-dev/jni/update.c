@@ -694,6 +694,7 @@ void UpdateView(void)
 										// Remove the tempAllCoords particle, and move this particle there
 										unSetPoint(tempAllCoords);
 										allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+										setBitmapColor(curX+diffX, curY+diffY, tempElement);
 										allCoords[getIndex(curX, curY)] = NULL;
 										clearBitmapColor(curX, curY);
 										tempParticle->x = curX + diffX;
@@ -721,6 +722,7 @@ void UpdateView(void)
 										// Remove the tempAllCoords particle, and move this particle there
 										unSetPoint(tempAllCoords);
 										allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+										setBitmapColor(curX+diffX, curY+diffY, tempElement);
 										allCoords[getIndex(curX, curY)] = NULL;
 										clearBitmapColor(curX, curY);
 										tempParticle->x = curX + diffX;
