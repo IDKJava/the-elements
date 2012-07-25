@@ -709,6 +709,12 @@ void UpdateView(void)
 									// We're already moving in a direction
 									diffX = 2*(state%2) - 1;
 									diffY = (state - state%2) - 1;
+									if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
+									{
+										// Go back to the unset state
+										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+										continue;
+									}
 
 									struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
 									if (tempAllCoords == NULL || tempAllCoords->element->index != targetElementIndex)
