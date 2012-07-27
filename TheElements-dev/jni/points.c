@@ -184,7 +184,7 @@ char getParticleSpecialVal(struct Particle* tempParticle, int special)
 		}
 	}
 
-	return FALSE;
+	return SPECIAL_VAL_UNSET;
 }
 //Sets a particle's special value
 //WARNING: Just sets the first special of that type it finds
@@ -212,6 +212,8 @@ char getElementSpecialVal(struct Element* tempElement, int special)
 			return tempElement->specialVals[i];
 		}
 	}
+
+	return SPECIAL_VAL_UNSET;
 }
 
 void clearSpecialVals(struct Particle* tempParticle)

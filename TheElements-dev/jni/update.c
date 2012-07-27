@@ -619,6 +619,13 @@ void UpdateView(void)
 							//Wander
 							case SPECIAL_WANDER:
 							{
+								// Don't wander while tunneling
+								// FIXME: This is a hacky solution, come up with something more elegant
+								if (getParticleSpecialVal(tempParticle, SPECIAL_TUNNEL) != SPECIAL_VAL_UNSET)
+								{
+									continue;
+								}
+
 								int randVal = rand()%100;
 								// Randomly wander
 								int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
@@ -678,6 +685,7 @@ void UpdateView(void)
 								int curX = tempParticle->x, curY = tempParticle->y;
 								int diffX, diffY;
 
+								// TODO: Break tunneling stuff out into its own function (make a specials.c file?)
 								if (state == SPECIAL_VAL_UNSET)
 								{
 									// Look in a random diagonal
@@ -702,6 +710,24 @@ void UpdateView(void)
 										// Set the y velocity to the fall velocity to counteract movement
 										tempParticle->yVel = tempParticle->element->fallVel;
 										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, randomDir);
+
+
+										// Add particles around this point, forming a "tunnel"
+										if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
+										{
+											if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+											{
+												createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
+											}
+											if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+											{
+												createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
+											}
+											if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+											{
+												createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
+											}
+										}
 									}
 								}
 								else
@@ -721,6 +747,37 @@ void UpdateView(void)
 									{
 										// Go back to the unset state
 										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+										// Look for any particle back the way we came and (if there is one)
+										// tunnel into it
+										tempAllCoords = allCoords[getIndex(curX, curY+diffY)];
+										if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+										{
+											// Remove the tempAllCoords particle, and move this particle there
+											unSetPoint(tempAllCoords);
+											allCoords[getIndex(curX, curY+diffY)] = tempParticle;
+											setBitmapColor(curX, curY+diffY, tempElement);
+											allCoords[getIndex(curX, curY)] = NULL;
+											clearBitmapColor(curX, curY);
+											tempParticle->x = curX;
+											tempParticle->y = curY + diffY;
+										}
+										else
+										{
+											tempAllCoords = allCoords[getIndex(curX+diffX, curY)];
+											if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+											{
+												// Remove the tempAllCoords particle, and move this particle there
+												unSetPoint(tempAllCoords);
+												allCoords[getIndex(curX+diffX, curY)] = tempParticle;
+												setBitmapColor(curX+diffX, curY, tempElement);
+												allCoords[getIndex(curX, curY)] = NULL;
+												clearBitmapColor(curX, curY);
+												tempParticle->x = curX + diffX;
+												tempParticle->y = curY;
+											}
+										}
+										// Add velocity so that the particle stays still for one step
+										tempParticle->yVel = tempParticle->element->fallVel;
 										continue;
 									}
 									else
@@ -735,6 +792,24 @@ void UpdateView(void)
 										tempParticle->y = curY + diffY;
 										// Set the y velocity to the fall velocity to counteract movement
 										tempParticle->yVel = tempParticle->element->fallVel;
+
+
+										// Add particles around this point, forming a "tunnel"
+										if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
+										{
+											if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+											{
+												createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
+											}
+											if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+											{
+												createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
+											}
+											if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+											{
+												createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
+											}
+										}
 									}
 								}
 							}
