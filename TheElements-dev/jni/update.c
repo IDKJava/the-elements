@@ -443,6 +443,7 @@ void UpdateView(void)
 
 				int i;
 				char specialLoopDone = FALSE;
+				char shouldResolveHeatChanges = TRUE;
 				for (i = 0; i < MAX_SPECIALS; i++)
 				{
 					if (!tempElement->specials)
@@ -812,6 +813,76 @@ void UpdateView(void)
 										}
 									}
 								}
+
+								break;
+							}
+							// Burn
+							// FIXME: This very rarely causes stuck particles
+							case SPECIAL_BURN:
+							{
+								// Burn doesn't trigger when explode is set
+								if (getElementSpecialVal(tempElement, SPECIAL_EXPLODE) != SPECIAL_VAL_UNSET)
+								{
+									continue;
+								}
+
+								int state = getParticleSpecialVal(tempParticle, SPECIAL_BURN);
+								// Not burning yet
+								if (state == SPECIAL_VAL_UNSET)
+								{
+									//If the heat is above the threshold
+									if (tempParticle->heat >= tempParticle->element->highestTemp)
+									{
+										int avgLife = getElementSpecialVal(tempElement, SPECIAL_BURN);
+										int life = avgLife + rand()%5 - 2;
+										if (life < 1) { life = 1; }
+										setParticleSpecialVal(tempParticle, SPECIAL_BURN, life);
+										shouldResolveHeatChanges = FALSE;
+									}
+								}
+								// Already burning
+								else
+								{
+									// Make sure the wood doesn't change states yet
+									shouldResolveHeatChanges = FALSE;
+
+									// FIXME: This is identical to special heat, break this function out into specials.c
+									int diffX, diffY;
+									struct Particle* tempAllCoords;
+									for (diffX = -1; diffX <= 1; diffX++)
+									{
+										for(diffY = -1; diffY <=1; diffY++)
+										{
+											if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
+											{
+												tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
+												if(tempAllCoords)
+												{
+													changeHeat(tempAllCoords, 1000/(state*getElementSpecialVal(tempElement, SPECIAL_BURN)));
+												}
+											}
+										}
+									}
+
+									// If we're done with our life total
+									if (state <= 1)
+									{
+										// Change to fire
+										setElement(tempParticle, elements[FIRE_ELEMENT]);
+										//deletePoint(tempParticle);
+										specialLoopDone = TRUE;
+									}
+									else
+									{
+										// Decrement life total left
+										setParticleSpecialVal(tempParticle, SPECIAL_BURN, state-1);
+
+										// Set the color to fire
+										setBitmapColor(tempX, tempY, elements[FIRE_ELEMENT]);
+									}
+								}
+
+								break;
 							}
 
 							//Default: do nothing
@@ -831,13 +902,16 @@ void UpdateView(void)
 				//__android_log_write(ANDROID_LOG_INFO, "LOG",  "End specials loop");
 
 				//Resolve heat changes
-				if(tempParticle->heat < tempParticle->element->lowestTemp)
+				if (shouldResolveHeatChanges)
 				{
-					setElement(tempParticle, tempParticle->element->lowerElement);
-				}
-				else if(tempParticle->heat > tempParticle->element->highestTemp)
-				{
-					setElement(tempParticle, tempParticle->element->higherElement);
+					if(tempParticle->heat < tempParticle->element->lowestTemp)
+					{
+						setElement(tempParticle, tempParticle->element->lowerElement);
+					}
+					else if(tempParticle->heat > tempParticle->element->highestTemp)
+					{
+						setElement(tempParticle, tempParticle->element->higherElement);
+					}
 				}
 
 

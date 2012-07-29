@@ -89,6 +89,7 @@
 #define SPECIAL_WANDER 7
 #define SPECIAL_JUMP 8
 #define SPECIAL_TUNNEL 9
+#define SPECIAL_BURN 10
 
 #define SPECIAL_VAL_UNSET 255
 
