@@ -56,6 +56,8 @@ short mouseY;
 short lastMouseX;
 short lastMouseY;
 
+int randOffset = 0;
+
 unsigned char* colors;
 
 int screenWidth;

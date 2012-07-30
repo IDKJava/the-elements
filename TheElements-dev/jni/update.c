@@ -85,7 +85,7 @@ void UpdateView(void)
 						if (cElement->index >= NORMAL_ELEMENT)
 						{
 							//Draw it solid
-							if(cElement->inertia == INERTIA_UNMOVABLE)
+							if(cElement->inertia == INERTIA_UNMOVABLE || cElement->index == ELECTRICITY_ELEMENT)
 							{
 								if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
 								{
@@ -128,6 +128,10 @@ void UpdateView(void)
 	//Particles update
 	if (play)
 	{
+		if ( rand()%1000 == 1 )
+		{
+			randOffset = rand();
+		}
 		//Physics update
 		for (counter = 0; counter < MAX_POINTS; counter++)
 		{
@@ -217,7 +221,7 @@ void UpdateView(void)
 					}
 					if((int) tempParticle->y >= workHeight)
 					{
-						if(cAtmosphere->borderBottom)
+						if(cAtmosphere->borderBottom && !(tempParticle->element == elements[ELECTRICITY_ELEMENT]))
 						{
 							//Bounce the particle
 							tempParticle->y = tempOldY;
@@ -442,6 +446,7 @@ void UpdateView(void)
 				//__android_log_write(ANDROID_LOG_INFO, "LOG", "End update heat");
 
 				int i;
+
 				char specialLoopDone = FALSE;
 				char shouldResolveHeatChanges = TRUE;
 				for (i = 0; i < MAX_SPECIALS; i++)
@@ -456,7 +461,7 @@ void UpdateView(void)
 					sprintf(buffer, "Processing special: %d, val: %d", i, tempElement->specials[i]);
 					__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 					*/
-					if(tempElement && tempElement->specials[i] != SPECIAL_NONE)
+					if(tempParticle->set && tempElement && tempElement->specials[i] != SPECIAL_NONE)
 					{
 						switch((int)tempElement->specials[i])
 						{
@@ -881,6 +886,238 @@ void UpdateView(void)
 										setBitmapColor(tempX, tempY, elements[FIRE_ELEMENT]);
 									}
 								}
+
+								break;
+							}
+							case SPECIAL_CONDUCT:
+							{
+								int property;
+								struct Particle* tempAllCoords;
+								int curX = tempParticle->x, curY = tempParticle->y;
+								property = getParticleSpecialVal(tempParticle,SPECIAL_CONDUCT);
+								if ( property != SPECIAL_VAL_UNSET )
+								{
+									if ( property & ELECTRIC_WAIT)
+									{
+										setBitmapColor(curX,curY,elements[ELECTRICITY_ELEMENT]);
+										setParticleSpecialVal(tempParticle,SPECIAL_CONDUCT,property & 15); //15 == 00001111
+										break;
+									}
+									if( property == ELECTRIC_NO_DIR )
+									{
+										property = (((rand()%2) << 2) & ELECTRIC_XN) | ELECTRIC_X1;
+									}
+									int i = (property & ELECTRIC_X1) * ((ELECTRIC_XN & property) ? -1 : 1);
+									int j = ((property & ELECTRIC_Y1) >> 1) * ((ELECTRIC_YN & property) ? -1 : 1);
+
+									int tempI, k, transfered = FALSE;
+									for ( k = 0; k < 4; k++)
+									{
+										if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+										{
+											tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
+											if ( tempAllCoords != NULL)
+											{
+												if( hasSpecial(tempAllCoords, SPECIAL_CONDUCT) )
+												{
+													setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCT,
+															(i ? ELECTRIC_X1 : 0) |
+															(i < 0 ? ELECTRIC_XN : 0) |
+															(j ? ELECTRIC_Y1 : 0) |
+															(j < 0 ? ELECTRIC_YN :0) |
+															ELECTRIC_WAIT);
+													setBitmapColor(curX+i,curY+j,elements[ELECTRICITY_ELEMENT]);
+													transfered = TRUE;
+													break;
+												}
+											}
+										}
+										//There exists a nice binary operation to do this ( check right, left behind, then return), but this is clearer
+										//If we need speed we can use binary operations to get these numbers
+										tempI = i;
+										switch ( k )
+										{
+										case 0:
+										{
+											i = j;
+											j = tempI;
+											break;
+										}
+										case 1:
+										{
+											i = -i;
+											j = -j;
+											break;
+										}
+										case 2:
+										{
+											i = j;
+											j = -tempI;
+											break;
+										}
+										case 3:
+										{
+											i = -i;
+											j = -j;
+											break;
+										}
+										}
+									}
+									if(!transfered)
+									{
+										i = i - j;
+										j = i + j;
+										for (k = 0; k < 4; k++ )
+										{
+											if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+											{
+												tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
+												if ( tempAllCoords != NULL)
+												{
+													if( hasSpecial(tempAllCoords, SPECIAL_CONDUCT) )
+													{
+														setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCT,
+																(i ? ELECTRIC_X1 : 0) |
+																(i < 0 ? ELECTRIC_XN : 0) |
+																(j ? ELECTRIC_Y1 : 0) |
+																(j < 0 ? ELECTRIC_YN :0) |
+																ELECTRIC_WAIT);
+														transfered = TRUE;
+														break;
+													}
+												}
+											}
+											switch ( k )
+											{
+											case 0:
+											{
+												i = j;
+												j = -tempI;
+												break;
+											}
+											case 1:
+											{
+												i = -i;
+												j = -j;
+												break;
+											}
+											case 2:
+											{
+												i = j;
+												j = tempI;
+												break;
+											}
+											case 3:
+											{
+												i = -i;
+												j = -j;
+												break;
+											}
+											}
+										}
+									}
+									if(!transfered)
+									{
+										for ( k = 0; k < 4; k++)
+										{
+											if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+											{
+												tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
+												if ( tempAllCoords == NULL)
+												{
+													createPoint(curX + i, curY + j, elements[ELECTRICITY_ELEMENT]);
+													transfered = TRUE;
+													break;
+												}
+											}
+											//There exists a nice binary operation to do this ( check right, left behind, then return), but this is clearer
+											//If we need speed we can use binary operations to get these numbers
+											tempI = i;
+											switch ( k )
+											{
+											case 0:
+											{
+												i = j;
+												j = tempI;
+												break;
+											}
+											case 1:
+											{
+												i = -i;
+												j = -j;
+												break;
+											}
+											case 2:
+											{
+												i = j;
+												j = -tempI;
+												break;
+											}
+											case 3:
+											{
+												i = -i;
+												j = -j;
+												break;
+											}
+											}
+										}
+										if(!transfered)
+										{
+											i = i - j;
+											j = i + j;
+											for (k = 0; k < 4; k++ )
+											{
+												if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+												{
+													tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
+													if ( tempAllCoords == NULL)
+													{
+														createPoint(curX + i, curY + j, elements[ELECTRICITY_ELEMENT]);
+														transfered = TRUE;
+													}
+												}
+												switch ( k )
+												{
+												case 0:
+												{
+													i = j;
+													j = -tempI;
+													break;
+												}
+												case 1:
+												{
+													i = -i;
+													j = -j;
+													break;
+												}
+												case 2:
+												{
+													i = j;
+													j = tempI;
+													break;
+												}
+												case 3:
+												{
+													i = -i;
+													j = -j;
+													break;
+												}
+												}
+											}
+										}
+									}
+									setParticleSpecialVal(tempParticle,SPECIAL_CONDUCT,SPECIAL_VAL_UNSET);
+									setBitmapColor(curX,curY,tempParticle->element);
+								}
+								break;
+							}
+							case SPECIAL_TRAIL:
+							{
+								struct Particle* tempAllCoords;
+								int i, j,tempIndex, found = FALSE;
+								int curX = tempParticle->x, curY = tempParticle->y;
+								srand(curX*curY + randOffset);
+								tempParticle->xVel = rand()%3 - 1;
 
 								break;
 							}

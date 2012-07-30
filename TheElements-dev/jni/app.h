@@ -120,6 +120,8 @@ extern short mouseY;
 extern short lastMouseX;
 extern short lastMouseY;
 
+extern int randOffset;
+
 //Array for bitmap drawing
 extern unsigned char* colors;
 

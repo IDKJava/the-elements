@@ -41,6 +41,9 @@
 		<item >Wood</item>
 		<item >Termite</item>
 		<item >Insect Killer</item>
+		<item >Electricity</item>
+		<item >Metal</item>
+		
 	</string-array>
 
 	<string-array name="brush_size_list">

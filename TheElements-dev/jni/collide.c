@@ -150,8 +150,8 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 	    //Acid is neutralized
 
 	    //Delete secondParticle
-	    unSetPoint(secondParticle);
-	    secondParticle->hasMoved = FALSE;
+		unSetPoint(secondParticle);
+		secondParticle->hasMoved = FALSE;
 	}
 	else //Otherwise, 1/6 total
 	{
@@ -230,16 +230,52 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     }
     case 10: //Water - Sand or Sand - Water
     {
-	//Delete firstParticle
-	firstParticle->x = oldXFirst;
-	firstParticle->y = oldYFirst;
-	deletePoint(firstParticle);
-	firstParticle->hasMoved = FALSE;
+    	//Delete firstParticle
+		firstParticle->x = oldXFirst;
+		firstParticle->y = oldYFirst;
+		deletePoint(firstParticle);
+		firstParticle->hasMoved = FALSE;
 
 	//Change the element of secondParticle to Mud
 	setElement(secondParticle, elements[21]);
 	secondParticle->hasMoved = TRUE;
 	break;
+    }
+    case 11: //Electricity - Conductive
+    {
+    	//Delete first Particle
+
+    	firstParticle->x = oldXFirst;
+		firstParticle->y = oldYFirst;
+		deletePoint(firstParticle);
+		firstParticle->hasMoved = FALSE;
+
+
+
+
+
+
+    	//Electrify the second particle
+    	setParticleSpecialVal(secondParticle,SPECIAL_CONDUCT,ELECTRIC_NO_DIR);
+
+    	break;
+    }
+    case 12: //Conductive - Electricity
+    {
+    	//Delete the second Particle
+    	unSetPoint(secondParticle);
+		secondParticle->hasMoved = FALSE;
+
+		//Electrify the first Particle
+		setParticleSpecialVal(firstParticle,SPECIAL_CONDUCT,ELECTRIC_NO_DIR);
+		firstParticle->hasMoved = TRUE;
+		break;
+    }
+    case 13: //Electricity - Electricity
+    {
+    	unSetPoint(secondParticle);
+    	secondParticle->hasMoved = FALSE;
+    	break;
     }
     }
 }
