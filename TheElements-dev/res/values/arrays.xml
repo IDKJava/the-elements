@@ -56,11 +56,7 @@
 		<item >Solid - Solid</item>
 		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item>
 	</string-array>
-	<string-array name="specials_list">
-		<item >No special</item><item >Spawn (generate particles of a given type)</item><item >Break (turn into sand beyond a given velocity)</item><item >Grow (duplicate on collision with a given element)</item><item >Heat (generate a fixed amount of heat)</item><item >Explode (if a particle melts/evaporates, it explodes)</item>
-		<item >Life (disappears with the given chance)</item>
-		<item >Wander (move around randomly)</item>
-		<item >Jump (randomly jump upwards)</item>
-		<item >Tunnel</item>
+	<string-array name="specials_list"><item >No special</item><item >Spawn (generate particles)</item><item >Break (turn into sand)</item><item >Grow (duplicate on collision)</item><item >Heat (generate heat)</item><item >Explode</item><item >Life (disappear over time)</item><item >Wander</item><item >Jump</item><item >Tunnel</item><item >Burn</item>
 	</string-array>
+	<string-array name="specials_description_list"><item ></item><item >Which type of particles to generate</item><item >Threshold velocity (higher = less breakable)</item><item >Which element does this element grow with</item><item >How much heat to generate</item><item >How explosive is it</item><item >How long before it disappears (on average)</item><item >How much should it wander</item><item >How often does it jump</item><item >Which element does it tunnel into</item><item >How long does it burn (on average)</item></string-array>
 </resources>

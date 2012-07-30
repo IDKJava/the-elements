@@ -83,46 +83,98 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		LinearLayout specialsLayout = (LinearLayout) findViewById(R.id.ce_specials_layout);
 		LinearLayout container;
 		// We want to skip maxSpecials listener calls for initialization
-		numListenerSkips = maxSpecials;
+		//numListenerSkips = maxSpecials;
 		OnItemSelectedListener spinnerListener = new OnItemSelectedListener()
 		{
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View v, int pos, long id)
 			{
 				// This is a total hack
+				/*
 				if (numListenerSkips > 0)
 				{
 					numListenerSkips--;
 					return;
 				}
+				*/
 				Log.d("LOG", "Special selected: " + pos);
+				// Get the child LinearLayout
+				LinearLayout child = (LinearLayout) ((LinearLayout)parent.getParent()).getChildAt(1);
+				// Special case for pos == 0 -- hide the LinearLayout
 				if (pos == 0)
 				{
-					// Remove the existing view
-					View child = ((LinearLayout)parent.getParent()).getChildAt(1);
 					if (child != null)
 					{
-						((LinearLayout)parent.getParent()).removeView(child);
-					}
-				}
-				else
-				{
-					// Remove the existing view
-					View child = ((LinearLayout)parent.getParent()).getChildAt(1);
-					if (child != null)
-					{
-						((LinearLayout)parent.getParent()).removeView(child);
+						child.setVisibility(View.GONE);
 					}
 					
-					// Add a new view based on the special val
-					child = getSpecialValView(pos);
-					if (child != null)
+					return;
+				}
+				// Pos != 0, do normal set up and display
+				if (child == null)
+				{
+					child = new LinearLayout(CustomElementAdvancedActivity.this);
+					child.setOrientation(LinearLayout.VERTICAL);
+					LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+					lp.setMargins(30, 0, 30, 10);
+					child.setLayoutParams(lp);
+					((LinearLayout)parent.getParent()).addView(child);
+					
+					TextView tv = new TextView(CustomElementAdvancedActivity.this);
+					tv.setText(getSpecialValText(pos));
+					View valView = getSpecialValView(pos);
+					child.addView(tv);
+					if (valView != null)
 					{
-						LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-						lp.setMargins(30, 0, 30, 10);
-						child.setLayoutParams(lp);
-						((LinearLayout)parent.getParent()).addView(child);
+						child.addView(valView);
 					}
+				}
+				
+				// Get the children of the child view, set them to the appropriate values
+				TextView textView = null;
+				View specialValView = null;
+				try
+				{
+					textView = (TextView) child.getChildAt(0);
+					if (textView == null)
+					{
+						textView = new TextView(CustomElementAdvancedActivity.this);
+						child.addView(textView);
+					}
+					textView.setText(getSpecialValText(pos));
+					specialValView = child.getChildAt(1);
+					if (specialValView != null)
+					{
+						child.removeViewAt(1);
+					}
+					specialValView = getSpecialValView(pos);
+					if (specialValView != null)
+					{
+						child.addView(specialValView);
+					}
+				}
+				catch (ClassCastException e)
+				{
+					Log.d("LOG", "The subview for a special is messed up");
+					child.removeAllViews();
+					textView = new TextView(CustomElementAdvancedActivity.this);
+					child.addView(textView);
+					textView.setText(getSpecialValText(pos));
+					specialValView = getSpecialValView(pos);
+					if (specialValView != null)
+					{
+						child.addView(specialValView);
+					}
+				}
+
+				// If we're selecting the special initially, we already have a special val that we can initialize to
+				int i = ((LinearLayout)parent.getParent().getParent()).indexOfChild((View) parent.getParent());
+				Log.d("LOG", "Checking special val: " + pos + ", " + i);
+				Log.d("LOG", "..." + CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
+				if (pos != 0 && i < mParent.specials.size() && pos == CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)))
+				{
+					Log.d("LOG", "Initializing special val: " + pos);
+					setSpecialVal(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)), child, mParent.specialVals.get(i));
 				}
 			}
 			@Override
@@ -184,11 +236,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		// Initialize the special values
 		for (int i = 0; i < maxSpecials; i++)
 		{
-			if (mParent.specials.size() >= i+1)
+			if (i < mParent.specials.size())
 			{
 				Log.d("LOG", "Initializing special from parent saved values: " + mParent.specials.get(i) + ", " + mParent.specialVals.get(i));
 				specialsSpinnerList.get(i).setSelection(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
-				setSpecialVal(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)), specialsLayoutList.get(i), mParent.specialVals.get(i));
 			}
 		}
 	}
@@ -213,14 +264,16 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		mParent.specials = specials;
 		mParent.specialVals = specialVals;
 		for (int i = 0; i < maxSpecials; i++)
-		{			LinearLayout specialContainer = specialsLayoutList.get(i);
+		{
+			LinearLayout specialContainer = specialsLayoutList.get(i);
 			int special = ((Spinner) specialContainer.getChildAt(0)).getSelectedItemPosition();
-			int specialVal = getSpecialVal(special, specialContainer);
+			int specialVal = getSpecialVal(special, (LinearLayout) specialContainer.getChildAt(1));
 			specials.add(special);
 			specialVals.add(specialVal);
 		}
 	}
 	
+	// Get the view associated with setting the value for a particular special
 	private View getSpecialValView(int special)
 	{
 		switch(special)
@@ -251,14 +304,6 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			spinner.setAdapter(adapter);
 			return spinner;
 		}
-		// Heat
-		case 4:
-		{
-			// TextView that says no value
-			TextView tv = new TextView(this);
-			tv.setText(getResources().getString(R.string.no_special_val));
-			return tv;
-		}
 		// Explode
 		case 5:
 		{
@@ -267,10 +312,12 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			seekbar.setMax(30);
 			return seekbar;
 		}
-		// Life, Wander, Jump -- seekbar probability
+		// Life, Wander, Jump, Heat, Burn -- seekbar probability
+		case 4:
 		case 6:
 		case 7:
 		case 8:
+		case 10:
 		{
 			// SeekBar
 			SeekBar seekbar = new SeekBar(this);
@@ -285,14 +332,19 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		}
 		}
 	}
+	// Get the description text for the special
+	private String getSpecialValText(int special)
+	{
+		return getResources().getStringArray(R.array.specials_description_list)[special];
+	}
 	
+	// Get the special val based on the special
 	private int getSpecialVal(int special, LinearLayout container)
 	{
 		switch(special)
 		{
-		// No special, Heat
+		// No special
 		case 0:
-		case 4:
 		{
 			// No special val
 			return 0;
@@ -305,12 +357,14 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// The view is a Spinner
 			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
 		}
-		// Break, Explode, Life, Wander, Jump
+		// Break, Explode, Life, Wander, Jump, Burn, Heat
 		case 2:
+		case 4:
 		case 5:
 		case 6:
 		case 7:
 		case 8:
+		case 10:
 		{
 			// The view is a SeekBar
 			return ((SeekBar) container.getChildAt(1)).getProgress();
@@ -323,10 +377,9 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		}
 		}
 	}
+	// Set the special val in the container based on the special
 	private void setSpecialVal(int special, LinearLayout container, int val)
 	{
-		// Assumes the container doesn't contain any child yet
-		
 		switch(special)
 		{
 		// No special
@@ -341,61 +394,31 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 9:
 		{
 			// The view is a Spinner
-			clearContainerChild(container);
-			Spinner child = (Spinner) getSpecialValView(special);
+			Spinner child = (Spinner) container.getChildAt(1);
 			if (child == null)
 			{
-				Log.d("LOG", "Error: No child existed");
+				Log.e("LOG", "Error: no child existed");
 				return;
 			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
-			
 			child.setSelection(val - MainActivity.NORMAL_ELEMENT);
 			return;
 		}
-		// Heat
-		case 4:
-		{
-			clearContainerChild(container);
-			TextView child = (TextView) getSpecialValView(special);
-			if (child == null)
-			{
-				Log.d("LOG", "Error: No child existed");
-				return;
-			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
 
-			// No special val
-			return;
-		}
-
-		// Break, Explode, Life, Wander, Jump
+		// Break, Explode, Life, Wander, Jump, Burn, Heat
 		case 2:
+		case 4:
 		case 5:
 		case 6:
 		case 7:
 		case 8:
+		case 10:
 		{
-			// The view is a SeekBar
-			clearContainerChild(container);
-			SeekBar child = (SeekBar) getSpecialValView(special);
+			SeekBar child = (SeekBar) container.getChildAt(1);
 			if (child == null)
 			{
-				Log.d("LOG", "Error: No child existed");
+				Log.e("LOG", "Error: No child existed");
 				return;
 			}
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-			lp.setMargins(30, 0, 30, 10);
-			child.setLayoutParams(lp);
-			container.addView(child);
-			
-
 			child.setProgress(val);
 			return;
 		}
@@ -405,14 +428,6 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			Log.d("LOG", "Unrecognized special selected");
 			return;
 		}
-		}
-	}
-	private void clearContainerChild(LinearLayout container)
-	{
-		View child = container.getChildAt(1);
-		if (child != null)
-		{
-			container.removeView(child);
 		}
 	}
 }
