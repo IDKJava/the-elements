@@ -736,16 +736,72 @@ void UpdateView(void)
 										}
 									}
 								}
+								// We're already moving in a direction
 								else
 								{
-									// We're already moving in a direction
+									// Move the particle back to it's old location, to avoid
+									// collision velocities messing up tunneling
+									if (allCoords[getIndex(tempOldX, tempOldY)] == NULL)
+									{
+										allCoords[getIndex(curX, curY)] = NULL;
+										clearBitmapColor(curX, curY);
+										allCoords[getIndex(tempOldX, tempOldY)] = tempParticle;
+										setBitmapColor(tempOldX, tempOldY, tempElement);
+
+										tempParticle->x = tempOldX;
+										tempParticle->y = tempOldY;
+										curX = tempOldX;
+										curY = tempOldY;
+									}
+
 									diffX = 2*(state%2) - 1;
 									diffY = (state - state%2) - 1;
 									if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
 									{
 										// Go back to the unset state
 										setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
-										continue;
+
+										// Look in a random diagonal
+										int randomDir = rand()%4;
+										diffX = 2*(randomDir%2) - 1;
+										diffY = (randomDir - randomDir%2) - 1;
+										if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
+										{
+											continue;
+										}
+										struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+										if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+										{
+											// Remove the tempAllCoords particle, and move this particle there
+											unSetPoint(tempAllCoords);
+											allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+											setBitmapColor(curX+diffX, curY+diffY, tempElement);
+											allCoords[getIndex(curX, curY)] = NULL;
+											clearBitmapColor(curX, curY);
+											tempParticle->x = curX + diffX;
+											tempParticle->y = curY + diffY;
+											// Set the y velocity to the fall velocity to counteract movement
+											tempParticle->yVel = tempParticle->element->fallVel;
+											setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, randomDir);
+
+
+											// Add particles around this point, forming a "tunnel"
+											if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
+											{
+												if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+												{
+													createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
+												}
+												if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+												{
+													createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
+												}
+												if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+												{
+													createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
+												}
+											}
+										}
 									}
 
 									struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
