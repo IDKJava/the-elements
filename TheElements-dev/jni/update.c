@@ -945,6 +945,7 @@ void UpdateView(void)
 
 								break;
 							}
+							// Conduct
 							case SPECIAL_CONDUCT:
 							{
 								int property;
@@ -1167,6 +1168,7 @@ void UpdateView(void)
 								}
 								break;
 							}
+							// Trail
 							case SPECIAL_TRAIL:
 							{
 								struct Particle* tempAllCoords;

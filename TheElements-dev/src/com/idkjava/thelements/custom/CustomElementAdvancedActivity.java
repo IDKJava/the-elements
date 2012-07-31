@@ -278,8 +278,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special
+		// No special, Conduct, Trail
 		case 0:
+		case 11:
+		case 12:
 		{
 			// No view
 			return null;
@@ -343,8 +345,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special
+		// No special, Conduct, Trail
 		case 0:
+		case 11:
+		case 12:
 		{
 			// No special val
 			return 0;
@@ -382,8 +386,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special
+		// No special, Conduct, Trail
 		case 0:
+		case 11:
+		case 12:
 		{
 			// No special val
 			return;
