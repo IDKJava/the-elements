@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="fix_me_button">Fix Me!</string>
+<string name="fix_me_string">Attempting to fix common problems:</string>
+<string name="fix_me_temp_sav">Moving temp.sav to temp.sav.bak...</string>
+<string name="fix_me_temp_sav_failed">Moving temp.sav unsuccessful.</string>
+<string name="fix_me_temp_sav_succeeded">Moving temp.sav succeeded! \nPlease send us a copy of /sdcard/thelements/saves/temp.sav.bak to help us fix the problem.</string>
+<string name="fix_me_done">Done troubleshooting, press Back to return. \nPlease try the app again and report the problem to idkjava@gmail.com</string>
+</resources>
