@@ -45,9 +45,9 @@
 #include <errno.h>
 
 char saveState(char* saveLoc);
-char saveStateLogic(char* saveLoc);
+char saveStateLogic(FILE* fp);
 char loadState(char* loadLoc);
-char loadStateLogic(char* loadLoc);
+char loadStateLogic(FILE* fp);
 char removeTempSave(void);
 char saveCustomElement(struct Element* createdCustomElement);
 char loadCustomElement(char* loadLoc);

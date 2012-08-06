@@ -20,7 +20,12 @@ char saveState(char* saveLoc)
 	pthread_mutex_lock(&update_mutex);
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex");
 
-	char retVal = saveStateLogic(saveLoc);
+	FILE* fp = fopen(saveLoc, "w");
+	char retVal = saveStateLogic(fp);
+	if (fp)
+	{
+		fclose(fp);
+	}
 
 	// Unlock the mutex before quitting
 	pthread_mutex_unlock(&update_mutex);
@@ -28,35 +33,8 @@ char saveState(char* saveLoc)
 
 	return retVal;
 }
-char saveStateLogic(char* saveLoc)
+char saveStateLogic(FILE* fp)
 {
-	FILE* fp;
-	/*
-	//Strings for file location
-	char timestamp[64], saveLoc[256];
-
-	time_t rawtime;
-	if (type == NORMAL_SAVE)
-	{
-		//Generate the filename based on date and time
-		time(&rawtime);
-		strftime(timestamp, 255, "%Y-%m-%d-%H:%M", localtime(&rawtime));
-		strcpy(saveLoc, ROOT_FOLDER);
-		strcat(saveLoc, SAVES_FOLDER);
-		strcat(saveLoc, timestamp);
-		strcat(saveLoc, SAVE_EXTENSION);
-	}
-	else if (type == TEMP_SAVE)
-	{
-		//Generate the temp save filename
-		strcpy(saveLoc, ROOT_FOLDER);
-		strcat(saveLoc, SAVES_FOLDER);
-		strcat(saveLoc, TEMP_SAVE_FILE);
-		strcat(saveLoc, SAVE_EXTENSION);
-	}
-	 */
-	fp = fopen(saveLoc, "w");
-
 	if (fp != NULL)
 	{
 		int i, counterX, counterY, numElementsToBeSaved;
@@ -70,7 +48,6 @@ char saveStateLogic(char* saveLoc)
 			elementSaveFilter[i] = 0;
 		}
 
-		__android_log_write(ANDROID_LOG_INFO, "LOG", "Start preprocessing loop");
 		//Preprocessing loop
 		numElementsToBeSaved = 0;
 		for (counterX = 0; counterX < workWidth; counterX++)
@@ -86,7 +63,6 @@ char saveStateLogic(char* saveLoc)
 				}
 			}
 		}
-		__android_log_write(ANDROID_LOG_INFO, "LOG", "End preprocessing loop");
 
 		//First write how many custom elements will be saved
 		fprintf(fp, "%d\n\n", numElementsToBeSaved);
@@ -213,7 +189,12 @@ char loadState(char* loadLoc)
 	pthread_mutex_lock(&update_mutex);
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex lock");
 
-	char retVal = loadStateLogic(loadLoc);
+	FILE* fp = fopen(loadLoc, "r");
+	char retVal = loadStateLogic(fp);
+	if (fp)
+	{
+		fclose(fp);
+	}
 
 	//Unlock the mutex before quitting
 	pthread_mutex_unlock(&update_mutex);
@@ -221,42 +202,8 @@ char loadState(char* loadLoc)
 
 	return retVal;
 }
-char loadStateLogic(char* loadLoc)
+char loadStateLogic(FILE* fp)
 {
-	char buffer[100];
-	sprintf(buffer, "loadState: %s", loadLoc);
-	__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
-	FILE* fp;
-	/*
-	char loadLoc[256];
-	//Set up the filename
-	if (type == NORMAL_SAVE)
-	{
-		if(sizeof(filename)/sizeof(char) > 256)
-		{
-			return FALSE;
-		}
-
-		strcpy(loadLoc, filename);
-	}
-	else if (type == TEMP_SAVE)
-	{
-		strcpy(loadLoc, ROOT_FOLDER);
-		strcat(loadLoc, SAVES_FOLDER);
-		strcat(loadLoc, TEMP_SAVE_FILE);
-		strcat(loadLoc, SAVE_EXTENSION);
-	}
-	else if (type == DEMO_SAVE)
-	{
-		strcpy(loadLoc, ROOT_FOLDER);
-		strcat(loadLoc, SAVES_FOLDER);
-		strcat(loadLoc, DEMO_SAVE_FILE);
-		strcat(loadLoc, SAVE_EXTENSION);
-	}
-	 */
-	//Load the file for reading
-	fp = fopen(loadLoc, "r");
-
 	//Clear the screen and set up some temp variables
 	arraySetup();
 	elementSetup();
@@ -699,9 +646,11 @@ char loadCustomElements(void)
 }
 char loadCustomElement(char* loadLoc)
 {
+	// REMOVE THIS
+	char buffer[256];
+
 	// Try opening the custom element file
-	FILE* fp;
-	fp = fopen(loadLoc, "rb");
+	FILE* fp = fopen(loadLoc, "r");
 	if (fp == NULL)
 	{
 		return FALSE;
@@ -735,6 +684,7 @@ char loadCustomElement(char* loadLoc)
 	// Read in the collisions header, with a reasonable fallback
 	int numCollisionsToRead;
 	int read;
+	fseek(fp, 1, SEEK_CUR); // Skip the newline
 	if ((read = fscanf(fp, "C%d", &numCollisionsToRead)) == EOF || read < 1)
 	{
 		numCollisionsToRead = NUM_BASE_ELEMENTS - NORMAL_ELEMENT;
@@ -785,9 +735,10 @@ char loadCustomElement(char* loadLoc)
 	numElements++;
 	elements[numElements-1] = tempCustom;
 
-	char buffer[256];
 	sprintf(buffer, "Loaded custom element, index: %d, element->index: %d", numElements-1, tempCustom->index);
 	__android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
+
+	fclose(fp);
 
 	return TRUE;
 }
