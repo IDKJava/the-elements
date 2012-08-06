@@ -691,9 +691,13 @@ char loadCustomElement(char* loadLoc)
 	}
 	// Read those many collisions from the file
 	int i;
-	for (i = 0; i < numCollisionsToRead; i++)
+	for (i = 0; i < numCollisionsToRead + NORMAL_ELEMENT; i++)
 	{
-		if(fscanf(fp,"%d",&tempCustom->collisions[i]) == EOF)
+		if (i < NORMAL_ELEMENT)
+		{
+			tempCustom->collisions[i] = 0;
+		}
+		else if(fscanf(fp,"%d",&tempCustom->collisions[i]) == EOF)
 		{
 			tempCustom->collisions[i] = 0;
 		}
