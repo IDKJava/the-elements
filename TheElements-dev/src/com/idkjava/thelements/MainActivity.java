@@ -49,7 +49,7 @@ public class MainActivity extends FlurryActivity
 	//Constants for elements
 	public static final char ERASER_ELEMENT = 2;
 	public static final char NORMAL_ELEMENT = 3;
-	public static final int NUM_BASE_ELEMENTS = 29;
+	public static final int NUM_BASE_ELEMENTS = 32;
 
 	//Constants for intents
 	public static final char SAVE_STATE_ACTIVITY = 0;
@@ -59,7 +59,7 @@ public class MainActivity extends FlurryActivity
 	
 	//Constants for specials, collisions
 	public static final int MAX_SPECIALS = 6;
-	public static final int NUM_COLLISIONS = 11;
+	public static final int NUM_COLLISIONS = 14;
 
 	static CharSequence[] baseElementsList;
 	static ArrayList<String> elementsList;
