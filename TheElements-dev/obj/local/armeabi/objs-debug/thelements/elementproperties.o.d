@@ -1,4 +1,5 @@
-obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
+obj/local/armeabi/objs-debug/thelements/elementproperties.o: \
+ jni/elementproperties.c jni/elementproperties.h jni/macros.h jni/app.h \
  jni/server.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdint.h \
@@ -54,9 +55,11 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h
 
-jni/app.h:
+jni/elementproperties.h:
 
 jni/macros.h:
+
+jni/app.h:
 
 jni/server.h:
 

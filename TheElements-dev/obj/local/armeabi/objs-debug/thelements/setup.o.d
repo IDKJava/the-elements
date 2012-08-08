@@ -1,5 +1,5 @@
-obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
- jni/server.h \
+obj/local/armeabi/objs-debug/thelements/setup.o: jni/setup.c jni/setup.h \
+ jni/app.h jni/macros.h jni/server.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdint.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/_types.h \
@@ -52,7 +52,25 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/signal.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h \
+ jni/elementproperties.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdlib.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/alloca.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/memory.h \
+ jni/saveload.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdio.h \
+ jni/points.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/dirent.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/stat.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/stat.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/errno.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/errno.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/errno.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/errno.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/errno-base.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/log.h
+
+jni/setup.h:
 
 jni/app.h:
 
@@ -165,3 +183,35 @@ jni/server.h:
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h:
+
+jni/elementproperties.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdlib.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/alloca.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/memory.h:
+
+jni/saveload.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdio.h:
+
+jni/points.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/dirent.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/stat.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/stat.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/errno.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/errno.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/errno.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/errno.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/errno-base.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/log.h:

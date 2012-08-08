@@ -1,12 +1,17 @@
-obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
- jni/server.h \
+obj/local/armeabi/objs-debug/thelements/collide.o: jni/collide.c \
+ jni/collide.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdlib.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/api-level.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/string.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/malloc.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/alloca.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/strings.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdint.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/_types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/_types.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/api-level.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/posix_types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/stddef.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/compiler.h \
@@ -15,6 +20,9 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/kernel.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/sysmacros.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/memory.h \
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdio.h \
+ jni/app.h jni/macros.h jni/server.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/socket.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/socket.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/socket.h \
@@ -33,7 +41,6 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/ipv6.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/netinet/in6.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/netdb.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/strings.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/pthread.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/time.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/time.h \
@@ -47,18 +54,29 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/internal_types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/limits.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/syslimits.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/string.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/malloc.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/signal.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h \
- /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h
+ /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h \
+ jni/points.h
 
-jni/app.h:
+jni/collide.h:
 
-jni/macros.h:
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdlib.h:
 
-jni/server.h:
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/api-level.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/string.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/malloc.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/alloca.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/strings.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h:
 
@@ -67,12 +85,6 @@ jni/server.h:
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/_types.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/_types.h:
-
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs.h:
-
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h:
-
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/android/api-level.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/linux/posix_types.h:
 
@@ -89,6 +101,16 @@ jni/server.h:
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/machine/kernel.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/sysmacros.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/memory.h:
+
+/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdio.h:
+
+jni/app.h:
+
+jni/macros.h:
+
+jni/server.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/socket.h:
 
@@ -126,8 +148,6 @@ jni/server.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/netdb.h:
 
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/strings.h:
-
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/pthread.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/time.h:
@@ -154,10 +174,6 @@ jni/server.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/syslimits.h:
 
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/string.h:
-
-/home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/malloc.h:
-
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/signal.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h:
@@ -165,3 +181,5 @@ jni/server.h:
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h:
 
 /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h:
+
+jni/points.h:

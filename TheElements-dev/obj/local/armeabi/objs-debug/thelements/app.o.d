@@ -1,5 +1,5 @@
-obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
- jni/server.h \
+obj/local/armeabi/objs-debug/thelements/app.o: jni/app.c jni/app.h \
+ jni/macros.h jni/server.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdint.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/_types.h \

@@ -1,5 +1,5 @@
-obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
- jni/server.h \
+obj/local/armeabi/objs-debug/thelements/points.o: jni/points.c \
+ jni/points.h jni/app.h jni/macros.h jni/server.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/types.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/stdint.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sys/_types.h \
@@ -53,6 +53,8 @@ obj/local/armeabi/objs/thelements/app.o: jni/app.c jni/app.h jni/macros.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/asm/sigcontext.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/sched.h
+
+jni/points.h:
 
 jni/app.h:
 

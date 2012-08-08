@@ -1,4 +1,4 @@
-obj/local/armeabi/objs/thelements/importgl.o: jni/importgl.c \
+obj/local/armeabi/objs-debug/thelements/importgl.o: jni/importgl.c \
  jni/importgl.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/GLES/gl.h \
  /home/gurtej/android-ndk-r8/platforms/android-8/arch-arm/usr/include/GLES/glplatform.h \
