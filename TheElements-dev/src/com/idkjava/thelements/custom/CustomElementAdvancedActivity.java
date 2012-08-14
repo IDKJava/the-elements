@@ -278,10 +278,9 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct, Trail
+		// No special, Conduct
 		case 0:
 		case 11:
-		case 12:
 		{
 			// No view
 			return null;
@@ -306,8 +305,9 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			spinner.setAdapter(adapter);
 			return spinner;
 		}
-		// Explode
+		// Explode, Trail
 		case 5:
+		case 12:
 		{
 			// SeekBar
 			SeekBar seekbar = new SeekBar(this);
@@ -345,10 +345,9 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct, Trail
+		// No special, Conduct
 		case 0:
 		case 11:
-		case 12:
 		{
 			// No special val
 			return 0;
@@ -361,7 +360,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			// The view is a Spinner
 			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
 		}
-		// Break, Explode, Life, Wander, Jump, Burn, Heat
+		// Break, Explode, Life, Wander, Jump, Burn, Heat, Trail
 		case 2:
 		case 4:
 		case 5:
@@ -369,6 +368,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 7:
 		case 8:
 		case 10:
+		case 12:
 		{
 			// The view is a SeekBar
 			return ((SeekBar) container.getChildAt(1)).getProgress();
@@ -386,10 +386,9 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct, Trail
+		// No special, Conduct
 		case 0:
 		case 11:
-		case 12:
 		{
 			// No special val
 			return;
@@ -410,7 +409,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 			return;
 		}
 
-		// Break, Explode, Life, Wander, Jump, Burn, Heat
+		// Break, Explode, Life, Wander, Jump, Burn, Heat, Trail
 		case 2:
 		case 4:
 		case 5:
@@ -418,6 +417,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 7:
 		case 8:
 		case 10:
+		case 12:
 		{
 			SeekBar child = (SeekBar) container.getChildAt(1);
 			if (child == null)
