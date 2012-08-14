@@ -128,7 +128,8 @@ void UpdateView(void)
 	//Particles update
 	if (play)
 	{
-		if ( rand()%1000 == 1 )
+		// Change the random offset every so often (used in Trail)
+		if (rand()%1000 == 1)
 		{
 			randOffset = rand();
 		}
@@ -1171,11 +1172,24 @@ void UpdateView(void)
 							// Trail
 							case SPECIAL_TRAIL:
 							{
+								// Pull out the special val and clean it, it will determine
+								// how variable the path is (i.e. how much velocity is the max added)
+								int variability = getElementSpecialVal(tempElement, SPECIAL_TRAIL);
+								if (variability < 3)
+								{
+									variability = 3;
+								}
+								variability -= (variability+1)%2;
+
 								struct Particle* tempAllCoords;
 								int i, j,tempIndex, found = FALSE;
 								int curX = tempParticle->x, curY = tempParticle->y;
+								// Seed the rand function with the current location
+								// (plus a randomizer that doesn't change very often)
 								srand(curX*curY + randOffset);
-								tempParticle->xVel = rand()%3 - 1;
+								// Add random velocity based on seed (so the same location
+								// will get the same velocity boost)
+								tempParticle->xVel += rand()%variability - variability/2;
 
 								break;
 							}

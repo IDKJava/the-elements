@@ -190,7 +190,7 @@ char baseSpecialValue[][MAX_SPECIALS] =
 		{10,0,0,0,0,0}, //Wood
 		{5,27,0,0,0,0}, //Termite
 		{0,0,0,0,0,0}, //Insect Killer
-		{0,0,0,0,0,0}, //Electricity
+		{3,0,0,0,0,0}, //Electricity
 		{SPECIAL_VAL_UNSET,0,0,0,0,0} //Metal
 };
 
