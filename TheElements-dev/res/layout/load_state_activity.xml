@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:background="@drawable/load_state_scrollview_bg">
+  	<LinearLayout
+  		android:layout_width="fill_parent"
+  		android:layout_height="60dip"
+  		android:layout_gravity="top">
+		<TextView
+	  		android:layout_width="fill_parent"
+	  		android:layout_height="fill_parent"
+	  		android:gravity="center"
+	  		android:textSize="20sp"
+	  		android:text="@string/select_state"/>
+  	</LinearLayout>
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_marginTop="60dip"
+		android:layout_gravity="top"
+    	android:visibility="visible">
+		<TableLayout
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent"
+			android:id="@+id/loads_container">
+		</TableLayout>
+	</ScrollView>
+</FrameLayout>

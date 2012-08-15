@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="custom_elements">Custom Elements</string>
+<string name="edit">Edit</string>
+<string name="create_element">Create Element</string>
+<string name="select_element">Choose an element to edit:</string>
+<string name="no_elements">There are no elements to edit.</string>
+<string name="basic_tab">Basic</string>
+<string name="advanced_tab">Advanced</string>
+<string name="ce_name_prompt">Name:</string>
+<string name="ce_base_element_prompt">Base Element:</string><string name="ce_starting_temp_prompt">Starting temperature:</string><string name="ce_lowest_temp_prompt">Lowest Temperature:</string><string name="ce_highest_temp_prompt">Highest Temperature:</string><string name="ce_lower_element_prompt">Lower element:</string><string name="ce_higher_element_prompt">Higher element:</string><string name="ce_red_prompt">Red:</string><string name="ce_green_prompt">Green:</string><string name="ce_blue_prompt">Blue:</string><string name="ce_density_prompt">Density:</string><string name="ce_fallvel_prompt">Freefall Velocity</string>
+<string name="ce_inertia_prompt">Inertia:</string>
+<string name="custom_element_name_hint">Element name</string>
+<string name="ce_save_button">Save and Exit</string>
+<string name="ce_unmovable_prompt">Unmovable</string>
+<string name="ce_load_failed_msg">Sorry, this element file seems to be corrupt. Please try another element.</string>
+<string name="ce_state_prompt">State:</string>
+<string name="ce_solid_state">Solid</string><string name="ce_liquid_state">Liquid</string><string name="ce_gas_state">Gas</string>
+<string name="ce_save_success">Successfully saved element to </string>
+<string name="ce_save_failed">Failed to save element, make sure you have an sdcard inserted and mounted.</string>
+<string name="collisions_heading">Define your collisions:</string>
+<string name="specials_heading">Define your special properties:</string>
+<string name="no_special_val">No value needed.</string>
+<string name="ce_empty_name_error">Error: You cannot have an empty element name!</string>
+</resources>
