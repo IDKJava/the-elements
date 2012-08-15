@@ -227,7 +227,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		// Initialize the collision values
 		for (int i = 0; i < elementsList.length; i++)
 		{
-			if (mParent.collisions.size() >= i+1)
+			if (mParent.collisions != null && i < mParent.collisions.size())
 			{
 				Log.d("LOG", "Initializing collision from parent saved values: " + mParent.collisions.get(i));
 				collisionsSpinnerList.get(i).setSelection(mParent.collisions.get(i));
@@ -236,7 +236,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		// Initialize the special values
 		for (int i = 0; i < maxSpecials; i++)
 		{
-			if (i < mParent.specials.size())
+			if (mParent.specials != null && i < mParent.specials.size())
 			{
 				Log.d("LOG", "Initializing special from parent saved values: " + mParent.specials.get(i) + ", " + mParent.specialVals.get(i));
 				specialsSpinnerList.get(i).setSelection(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
