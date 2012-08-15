@@ -278,9 +278,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct
+		// No special, Conductive, Conductable
 		case 0:
 		case 11:
+		case 12:
 		{
 			// No view
 			return null;
@@ -307,7 +308,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		}
 		// Explode, Trail
 		case 5:
-		case 12:
+		case 13:
 		{
 			// SeekBar
 			SeekBar seekbar = new SeekBar(this);
@@ -345,9 +346,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct
+		// No special, Conductive, Conductable
 		case 0:
 		case 11:
+		case 12:
 		{
 			// No special val
 			return 0;
@@ -368,7 +370,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 7:
 		case 8:
 		case 10:
-		case 12:
+		case 13:
 		{
 			// The view is a SeekBar
 			return ((SeekBar) container.getChildAt(1)).getProgress();
@@ -386,9 +388,10 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 	{
 		switch(special)
 		{
-		// No special, Conduct
+		// No special, Conductive, Conductable
 		case 0:
 		case 11:
+		case 12:
 		{
 			// No special val
 			return;
@@ -417,7 +420,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 7:
 		case 8:
 		case 10:
-		case 12:
+		case 13:
 		{
 			SeekBar child = (SeekBar) container.getChildAt(1);
 			if (child == null)

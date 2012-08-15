@@ -24,6 +24,7 @@ void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
 char changeHeat(struct Particle* tempParticle, int heatChange);
 char fixHeat(int heat);
+char hasSpecial(struct Particle* tempParticle, int special);
 char getParticleSpecialVal(struct Particle* tempParticle, int special);
 void setParticleSpecialVal(struct Particle* tempParticle, int special, char val);
 char getElementSpecialVal(struct Element* tempElement, int special);

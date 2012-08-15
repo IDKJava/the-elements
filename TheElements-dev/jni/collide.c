@@ -9,8 +9,17 @@
 
 #include "collide.h"
 
+#include "stdbool.h"
+
 void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 {
+	//Specials hook on collision
+	bool collisionOverridden = collisionSpecials(firstParticle, secondParticle);
+	if (collisionOverridden)
+	{
+		return;
+	}
+
     //Temporary variables
     int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY;
     //The type of the collision (retrieved from a static array)
@@ -241,37 +250,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 	secondParticle->hasMoved = TRUE;
 	break;
     }
-    case 11: //Electricity - Conductive
-    {
-    	//Delete first Particle
-
-    	firstParticle->x = oldXFirst;
-		firstParticle->y = oldYFirst;
-		deletePoint(firstParticle);
-		firstParticle->hasMoved = FALSE;
-
-
-
-
-
-
-    	//Electrify the second particle
-    	setParticleSpecialVal(secondParticle,SPECIAL_CONDUCT,ELECTRIC_NO_DIR);
-
-    	break;
-    }
-    case 12: //Conductive - Electricity
-    {
-    	//Delete the second Particle
-    	unSetPoint(secondParticle);
-		secondParticle->hasMoved = FALSE;
-
-		//Electrify the first Particle
-		setParticleSpecialVal(firstParticle,SPECIAL_CONDUCT,ELECTRIC_NO_DIR);
-		firstParticle->hasMoved = TRUE;
-		break;
-    }
-    case 13: //Electricity - Electricity
+    case 11: //Destroy -- second particle is erased
     {
     	unSetPoint(secondParticle);
     	secondParticle->hasMoved = FALSE;

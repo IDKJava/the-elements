@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := \
     rendergl.c \
     saveload.c \
     setup.c \
+    specials.c \
     update.c \
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog

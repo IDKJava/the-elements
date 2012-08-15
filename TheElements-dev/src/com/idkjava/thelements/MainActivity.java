@@ -59,7 +59,7 @@ public class MainActivity extends FlurryActivity
 	
 	//Constants for specials, collisions
 	public static final int MAX_SPECIALS = 6;
-	public static final int NUM_COLLISIONS = 14;
+	public static final int NUM_COLLISIONS = 12;
 
 	static CharSequence[] baseElementsList;
 	static ArrayList<String> elementsList;

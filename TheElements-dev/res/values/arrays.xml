@@ -57,16 +57,18 @@
 	</string-array>
 	<string-array name="collisions_list">
 		<item >Solid - Solid</item>
-		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item>
-		<item >Electricity - Conductive</item><item >Conductive - Electricity</item><item >Electricity - Electricity</item>
+		<item >Density based</item><item >Generator (non-custom becomes generator)</item><item >Generator (custom becomes generator)</item><item >Acid - Meltable (non-custom dissolves)</item><item >Meltable - Acid (custom dissolves)</item><item >Acid - Neutralizer (custom is neutralized)</item><item >Neutralizer - Acid (non-custom is neutralized)</item><item >SaltWater (turns into SaltWater on collision)</item><item >Death (turns into Sand on collision)</item><item >Mud (turns into Mud on collision)</item><item >Destroy (second particle removed)</item>
 	</string-array>
 	<string-array name="specials_list"><item >No special</item><item >Spawn (generate particles)</item><item >Break (turn into sand)</item><item >Grow (duplicate on collision)</item><item >Heat (generate heat)</item><item >Explode</item><item >Life (disappear over time)</item><item >Wander</item><item >Jump</item><item >Tunnel</item><item >Burn</item>
-	<item >Conduct</item>
-	<item >Trail</item>
+	<item >Conductive</item>
+	<item >Conductable</item><item >Trail</item>
+	
 	</string-array>
 	<string-array name="specials_description_list"><item ></item><item >Which type of particles to generate</item><item >Threshold velocity (higher = less breakable)</item><item >Which element does this element grow with</item><item >How much heat to generate</item><item >How explosive is it</item><item >How long before it disappears (on average)</item><item >How much should it wander</item><item >How often does it jump</item><item >Which element does it tunnel into</item><item >How long does it burn (on average)</item>
-	<item >(Currently disabled)</item>
+	<item >No special value.</item>
 	
 	
-<item >How variable should the trail be</item></string-array>
+<item >No special value.</item><item >How variable should the trail be</item>
+
+</string-array>
 </resources>

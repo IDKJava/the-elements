@@ -318,7 +318,6 @@ void UpdateView(void)
 
 					//Updating allCoords and collision resolution
 					tempAllCoords = allCoords[getIndex(tempX, tempY)];
-					//__android_log_write(ANDROID_LOG_INFO, "TheElements", "Got here");
 
 					//If the space the particle is trying to move to is taken and isn't itself
 					if (tempAllCoords != NULL && tempAllCoords != tempParticle)
@@ -947,22 +946,25 @@ void UpdateView(void)
 								break;
 							}
 							// Conduct
-							case SPECIAL_CONDUCT:
+							case SPECIAL_CONDUCTIVE:
 							{
 								int property;
 								struct Particle* tempAllCoords;
 								int curX = tempParticle->x, curY = tempParticle->y;
-								property = getParticleSpecialVal(tempParticle,SPECIAL_CONDUCT);
+								property = getParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE);
 								if ( property != SPECIAL_VAL_UNSET )
 								{
-									if ( property & ELECTRIC_WAIT)
+									// Wait one frame, remove the electric wait bit
+									if (property & ELECTRIC_WAIT)
 									{
 										setBitmapColor(curX,curY,elements[ELECTRICITY_ELEMENT]);
-										setParticleSpecialVal(tempParticle,SPECIAL_CONDUCT,property & 15); //15 == 00001111
+										setParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE, property & 15); //15 == 00001111
 										break;
 									}
+									// If no direction, select a random direction
 									if( property == ELECTRIC_NO_DIR )
 									{
+										// 0 or 1 in XN, 1 in X1
 										property = (((rand()%2) << 2) & ELECTRIC_XN) | ELECTRIC_X1;
 									}
 									int i = (property & ELECTRIC_X1) * ((ELECTRIC_XN & property) ? -1 : 1);
@@ -976,9 +978,9 @@ void UpdateView(void)
 											tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
 											if ( tempAllCoords != NULL)
 											{
-												if( hasSpecial(tempAllCoords, SPECIAL_CONDUCT) )
+												if( hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE) )
 												{
-													setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCT,
+													setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCTIVE,
 															(i ? ELECTRIC_X1 : 0) |
 															(i < 0 ? ELECTRIC_XN : 0) |
 															(j ? ELECTRIC_Y1 : 0) |
@@ -1032,9 +1034,9 @@ void UpdateView(void)
 												tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
 												if ( tempAllCoords != NULL)
 												{
-													if( hasSpecial(tempAllCoords, SPECIAL_CONDUCT) )
+													if( hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE) )
 													{
-														setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCT,
+														setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCTIVE,
 																(i ? ELECTRIC_X1 : 0) |
 																(i < 0 ? ELECTRIC_XN : 0) |
 																(j ? ELECTRIC_Y1 : 0) |
@@ -1164,7 +1166,7 @@ void UpdateView(void)
 											}
 										}
 									}
-									setParticleSpecialVal(tempParticle,SPECIAL_CONDUCT,SPECIAL_VAL_UNSET);
+									setParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE, SPECIAL_VAL_UNSET);
 									setBitmapColor(curX,curY,tempParticle->element);
 								}
 								break;
