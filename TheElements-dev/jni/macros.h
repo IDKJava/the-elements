@@ -17,6 +17,7 @@
 #define MAX_ELEMENTS 256
 
 #define MAX_CE_NAME_LENGTH 256
+#define MAX_UDID_LENGTH 256
 
 #define NUM_COLLISIONS 13
 

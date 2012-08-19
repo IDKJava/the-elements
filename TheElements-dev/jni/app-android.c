@@ -171,8 +171,18 @@ char Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject
 }
 
 //General utility functions
-void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this)
+void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this, jstring udidString, jint jversionCode)
 {
+	// Set some global variables
+	int jstringLen = (*env)->GetStringUTFLength(env, udidString);
+	if (jstringLen > MAX_UDID_LENGTH-1)
+	{
+		jstringLen = MAX_UDID_LENGTH-1;
+	}
+	(*env)->GetStringUTFRegion(env, udidString, 0, jstringLen, udid);
+	udid[jstringLen] = 0;
+	versionCode = jversionCode;
+
 	__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
 	importGLInit();
 	atmosphereSetup();

@@ -84,6 +84,10 @@ struct Atmosphere
  * VARIABLES
  */
 
+//Variables to track the user/app version
+extern char udid[];
+extern int versionCode;
+
 //An array of all the elements
 extern struct Element** elements;
 //The number of elements available
