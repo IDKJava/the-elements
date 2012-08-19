@@ -56,6 +56,19 @@ public class MenuBar extends LinearLayout
 
 		MainActivity.setElement(tempElement);
 	}
+	//Set the eraser to the off position
+	public void setPlayState(boolean state)
+	{
+		
+		if (state)
+		{
+			play_pause_button.setImageResource(R.drawable.pause);
+		}
+		else
+		{
+			play_pause_button.setImageResource(R.drawable.play);
+		}
+	}	
 
 	//Called when it's finished inflating the XML layout
 	@Override
@@ -162,6 +175,7 @@ public class MenuBar extends LinearLayout
 				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
 				{
 					((MainActivity) context).loadState();
+				
 				}
 				else
 				{

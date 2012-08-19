@@ -66,7 +66,7 @@ public class MainActivity extends FlurryActivity
 	static CharSequence[] baseElementsList;
 	static ArrayList<String> elementsList;
 
-	public static boolean play = true;
+	public static boolean play = false;
 	public static boolean zoomState = ZOOMED_IN; //Zoomed in or not
 
 	private SensorManager mSensorManager;
@@ -237,7 +237,12 @@ public class MainActivity extends FlurryActivity
 			control.setActivity(this);
 			//Set instance of activity for MenuBar also
 			menu_bar.setActivity(this);
+			
+			//start paused
+			play = false;
+			menu_bar.setPlayState(false);
 		}
+		
 
 		//Call onResume() for view too
 		// Log.v("TheElements", "sand_view.onResume()");
@@ -276,8 +281,10 @@ public class MainActivity extends FlurryActivity
 						MenuBar.setEraserOff();
 					}
 					setElement((char) (item + NORMAL_ELEMENT));
+					setPlayState(true);
 				}
 			});
+			setPlayState(false);
 			AlertDialog alert = builder.create(); // Create the dialog
 
 			return alert; // Return handle
