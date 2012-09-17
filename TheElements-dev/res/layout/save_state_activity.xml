@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent"
+  android:windowSoftInputMode="adjustPan"
+  android:orientation="vertical">
+	<EditText
+		android:hint="@string/enter_save_name"
+		android:id="@+id/save_state_filename"
+		android:layout_gravity="center_horizontal"
+		android:layout_width="200dip"
+		android:layout_marginRight="10px"
+		android:layout_marginLeft="10px"
+		android:windowSoftInputMode="adjustPan"
+		android:layout_height="wrap_content" />
+	<Button
+		android:text="@string/save"
+		android:id="@+id/save_state_button"
+		android:layout_gravity="center_horizontal"
+		android:layout_width="150dip"
+		android:layout_height="wrap_content" />
+</LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<string name="saving">Saving...</string>
+<string name="loading">Loading...</string>
+<string name="enter_save_name">Enter name for save</string>
+<string name="save">Save</string>
+<string name="select_state">Select a state save to load:</string>
+<string name="no_saves">There are no saves available to be loaded.</string>
+<string name="save_state_failed">Failed to save! Please make sure you have an sdcard mounted.</string>
+<string name="load_state_failed">Failed to load! The save file is corrupted or there is no mounted sdcard.</string>
+</resources>
