@@ -47,8 +47,8 @@ void glInit()
 	//Set up texWidth and texHeight
 	texWidth = 1;
 	texHeight = 1;
-	while((texWidth = texWidth << 1) < screenWidth);
-	while((texHeight = texHeight << 1) < screenHeight);
+	while((texWidth = texWidth << 1) < (screenWidth-screenWidth%zoomFactor));
+	while((texHeight = texHeight << 1) < (screenHeight-screenHeight%zoomFactor));
 
 
 	//Allocate the dummy array

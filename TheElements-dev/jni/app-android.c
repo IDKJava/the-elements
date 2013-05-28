@@ -38,18 +38,10 @@
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
-    screenWidth = width - width%2;
-    screenHeight = height - height%2;
-    if (zoom == ZOOMED_IN)
-    {
-        workWidth = screenWidth / 2;
-        workHeight = screenHeight / 2;
-    }
-    else
-    {
-        workWidth = screenWidth;
-        workHeight = screenHeight;
-    }
+    screenWidth = width;
+    screenHeight = height;
+    workWidth = screenWidth / zoomFactor;
+    workHeight = screenHeight / zoomFactor;
 
     //Finds nearest power of 2 to work Width
     stupidTegra = 1;
@@ -248,9 +240,9 @@ void Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject 
 }
 void Java_com_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
 {
-    if(zoomState != zoom)
+    if(zoomState != zoomFactor)
     {
-        shouldZoom = TRUE;
+	shouldZoom = TRUE;
     }
 }
 void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
@@ -269,40 +261,44 @@ void Java_com_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobje
 }
 void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
 {
+    // Translate x and y coords to zoomed coords
+    int zoomedX = x / zoomFactor;
+    int zoomedY = y / zoomFactor;
+
     //Set the mouse position and draw lines if needed
     if (mouseX != -1)
     {
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
+	lastMouseX = mouseX;
+	lastMouseY = mouseY;
 
-        int changeX = x - lastMouseX; //change in x (delta x)
-        int changeY = y - lastMouseY; //change in y (delta y)
-
-
-        int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
+	int changeX = zoomedX - lastMouseX; //change in x (delta x)
+	int changeY = zoomedY - lastMouseY; //change in y (delta y)
 
 
-        if (distance > 0 && cElement->index != DRAG_ELEMENT) //if it's not the same place and not wind
-        {
-            float dx = (float)changeX / (float)distance; // change divided by distance
-            float dy = (float)changeY / (float)distance;
-            int counter;
-            int oldplay = play;
+	int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
 
-            pthread_mutex_lock(&update_mutex);
-            play = FALSE;
-            for (counter = 0; counter <= distance; counter++)
-            {
-                mouseY = dy * counter + lastMouseY;
-                mouseX = dx * counter + lastMouseX;
-                UpdateView();
-            }
-            play = oldplay;
-            pthread_mutex_unlock(&update_mutex);
-        }
+
+	if (distance > 0 && cElement->index != DRAG_ELEMENT) //if it's not the same place and not wind
+	{
+	    float dx = (float)changeX / (float)distance; // change divided by distance
+	    float dy = (float)changeY / (float)distance;
+	    int counter;
+	    int oldplay = play;
+
+	    pthread_mutex_lock(&update_mutex);
+	    play = FALSE;
+	    for (counter = 0; counter <= distance; counter++)
+	    {
+		mouseY = dy * counter + lastMouseY;
+		mouseX = dx * counter + lastMouseX;
+		UpdateView();
+	    }
+	    play = oldplay;
+	    pthread_mutex_unlock(&update_mutex);
+	}
     }
-    mouseX = x;
-    mouseY = y;
+    mouseX = zoomedX;
+    mouseY = zoomedY;
 }
 
 //Getter functions

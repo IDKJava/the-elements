@@ -38,7 +38,6 @@ struct Element* cElement;
 struct Atmosphere* cAtmosphere;
 
 char play = TRUE;
-char zoom = ZOOMED_IN;
 char flipped = FALSE;
 char fingerDown = FALSE;
 char accelOn = FALSE;
@@ -51,6 +50,7 @@ char borderLeft = TRUE;
 char borderRight = TRUE;
 
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
+unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 
 struct Particle** allCoords;
 

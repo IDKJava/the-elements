@@ -105,7 +105,6 @@ extern struct Atmosphere* cAtmosphere;
 
 //State variables
 extern char play;
-extern char zoom;
 extern char flipped;
 extern char fingerDown;
 extern char accelOn;
@@ -113,6 +112,7 @@ extern char dimensionsChanged;
 extern char zoomChanged;
 
 extern unsigned char brushSize;
+extern unsigned char zoomFactor;
 
 //A map of all the points (a two-dimensional variable-size array)
 extern struct Particle** allCoords;

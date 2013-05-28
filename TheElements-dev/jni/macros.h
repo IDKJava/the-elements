@@ -23,14 +23,13 @@
 
 #define DEFAULT_BRUSH_SIZE 4
 
-#define ZOOMED_IN 1
-#define ZOOMED_OUT 0
-
 #define TRUE 1
 #define FALSE 0
 
 #define FINGER_DOWN 1
 #define FINGER_UP 0
+
+#define DEFAULT_ZOOM_FACTOR 4
 
 #define NORMAL_ELEMENT 3
 

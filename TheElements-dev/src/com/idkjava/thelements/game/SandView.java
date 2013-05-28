@@ -40,17 +40,8 @@ public class SandView extends GLSurfaceView
 			setFingerState(FINGER_UP);
 		}
 
-		//Set the touch position in JNI
-		if (MainActivity.isZoomedIn())
-		{
-			//Both x and y are halved because it needs to be zoomed in
-			setMouseLocation((int) event.getX() / 2, (int) event.getY() / 2);
-		}
-		else
-		{
-			//X and y are normal, because it is zoomed out
-			setMouseLocation((int) event.getX(), (int) event.getY());
-		}
+		//Pass raw touch coords into the native code
+		setMouseLocation((int) event.getX(), (int) event.getY());
 
 		return true;
 	}
