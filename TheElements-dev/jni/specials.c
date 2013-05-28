@@ -16,21 +16,21 @@
 // Set hasMoved for fp, if it's allcoords has changed.
 bool collisionSpecials(struct Particle* firstParticle, struct Particle* secondParticle)
 {
-	// If the conduction specials match on the particles, override the collision
-	if (hasSpecial(firstParticle, SPECIAL_CONDUCTABLE)
-			&& hasSpecial(secondParticle, SPECIAL_CONDUCTIVE))
-	{
-    	//Delete first Particle
-    	firstParticle->x = firstParticle->oldX;
-		firstParticle->y = firstParticle->oldY;
-		deletePoint(firstParticle);
-		firstParticle->hasMoved = FALSE;
+    // If the conduction specials match on the particles, override the collision
+    if (hasSpecial(firstParticle, SPECIAL_CONDUCTABLE)
+        && hasSpecial(secondParticle, SPECIAL_CONDUCTIVE))
+    {
+        //Delete first Particle
+        firstParticle->x = firstParticle->oldX;
+        firstParticle->y = firstParticle->oldY;
+        deletePoint(firstParticle);
+        firstParticle->hasMoved = FALSE;
 
-    	//Electrify the second particle
-    	setParticleSpecialVal(secondParticle, SPECIAL_CONDUCTIVE, ELECTRIC_NO_DIR);
+        //Electrify the second particle
+        setParticleSpecialVal(secondParticle, SPECIAL_CONDUCTIVE, ELECTRIC_NO_DIR);
 
-    	return TRUE;
-	}
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }

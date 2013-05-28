@@ -13,12 +13,12 @@
 
 void collide(struct Particle* firstParticle, struct Particle* secondParticle)
 {
-	//Specials hook on collision
-	bool collisionOverridden = collisionSpecials(firstParticle, secondParticle);
-	if (collisionOverridden)
-	{
-		return;
-	}
+    //Specials hook on collision
+    bool collisionOverridden = collisionSpecials(firstParticle, secondParticle);
+    if (collisionOverridden)
+    {
+        return;
+    }
 
     //Temporary variables
     int oldXFirst = firstParticle->oldX, oldYFirst = firstParticle->oldY;
@@ -29,32 +29,32 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     int type;
     if (fs >= NUM_BASE_ELEMENTS && ss >= NUM_BASE_ELEMENTS)
     {
-    	type = elements[fs]->collisions[elements[ss]->base];
+        type = elements[fs]->collisions[elements[ss]->base];
     }
     else if ( fs >= NUM_BASE_ELEMENTS)
     {
-    	type = elements[fs]->collisions[ss];
+        type = elements[fs]->collisions[ss];
     }
     else if ( ss >= NUM_BASE_ELEMENTS)
     {
-    	type = reciprocals[elements[ss]->collisions[fs]];
+        type = reciprocals[elements[ss]->collisions[fs]];
     }
     else
     {
-    	type = collision[firstParticle->element->index][secondParticle->element->index];
+        type = collision[firstParticle->element->index][secondParticle->element->index];
     }
 
     switch(type)
     {
     case 0: //Solid - Solid
     {
-	//First particle goes back to where it was before
-	firstParticle->x = oldXFirst;
-	firstParticle->y = oldYFirst;
-	firstParticle->hasMoved = FALSE;
+        //First particle goes back to where it was before
+        firstParticle->x = oldXFirst;
+        firstParticle->y = oldYFirst;
+        firstParticle->hasMoved = FALSE;
 
-	firstParticle->xVel = (rand() % 3) - 1;
-	break;
+        firstParticle->xVel = (rand() % 3) - 1;
+        break;
     }
     case 1: //Density Based
     {
@@ -132,129 +132,129 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
             deletePoint(firstParticle);
             firstParticle->hasMoved = FALSE;
         }
-		else //Otherwise, 1/6 total
-		{
-			//Acid bounces
-			firstParticle->x = oldXFirst;
-			firstParticle->y = oldYFirst;
-			firstParticle->hasMoved = FALSE;
-		}
+        else //Otherwise, 1/6 total
+        {
+            //Acid bounces
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            firstParticle->hasMoved = FALSE;
+        }
 
-	break;
+        break;
     }
     case 5: //Meltable - Acid
     {
-	if (rand() % 3 != 0 ) //2/3 chance
-	{
-	    //Meltable is destroyed
+        if (rand() % 3 != 0 ) //2/3 chance
+        {
+            //Meltable is destroyed
 
-	    //Delete firstParticle
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    deletePoint(firstParticle);
-	    firstParticle->hasMoved = FALSE;
-	}
-	else if (rand() % 2 == 0 ) //Otherwise, 1/6 totaln
-	{
-	    //Acid is neutralized
+            //Delete firstParticle
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            deletePoint(firstParticle);
+            firstParticle->hasMoved = FALSE;
+        }
+        else if (rand() % 2 == 0 ) //Otherwise, 1/6 totaln
+        {
+            //Acid is neutralized
 
-	    //Delete secondParticle
-		unSetPoint(secondParticle);
-		secondParticle->hasMoved = FALSE;
-	}
-	else //Otherwise, 1/6 total
-	{
-	    //Meltable bounces
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    firstParticle->hasMoved = FALSE;
-	}
-	break;
+            //Delete secondParticle
+            unSetPoint(secondParticle);
+            secondParticle->hasMoved = FALSE;
+        }
+        else //Otherwise, 1/6 total
+        {
+            //Meltable bounces
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            firstParticle->hasMoved = FALSE;
+        }
+        break;
     }
     case 6: //Acid - Neutralizer
     {
-	int tempX = firstParticle->x, tempY = firstParticle->y;
-	if ( rand() % 3 == 0 ) //1/3 Chance
-	{
-	    //Delete firstParticle
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    deletePoint(firstParticle);
-	    firstParticle->hasMoved = FALSE;
-	}
-	else //2/3 Change of bouncing
-	{
-	    //Move the point back
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    firstParticle->hasMoved = FALSE;
-	}
-			
-	break;
+        int tempX = firstParticle->x, tempY = firstParticle->y;
+        if ( rand() % 3 == 0 ) //1/3 Chance
+        {
+            //Delete firstParticle
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            deletePoint(firstParticle);
+            firstParticle->hasMoved = FALSE;
+        }
+        else //2/3 Change of bouncing
+        {
+            //Move the point back
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            firstParticle->hasMoved = FALSE;
+        }
+                        
+        break;
     }
     case 7: //Neutralizer - Acid
     {
-	if (rand() % 3 == 0) //1/3 Chance
-	{
-	    //Delete secondParticle
-	    unSetPoint(secondParticle);
-	    secondParticle->hasMoved = FALSE;
-	}
-	else //2/3 Chance
-	{
-	    //Move the water back
-	    firstParticle->x = oldXFirst;
-	    firstParticle->y = oldYFirst;
-	    firstParticle->hasMoved = FALSE;
-	}
+        if (rand() % 3 == 0) //1/3 Chance
+        {
+            //Delete secondParticle
+            unSetPoint(secondParticle);
+            secondParticle->hasMoved = FALSE;
+        }
+        else //2/3 Chance
+        {
+            //Move the water back
+            firstParticle->x = oldXFirst;
+            firstParticle->y = oldYFirst;
+            firstParticle->hasMoved = FALSE;
+        }
 
-	break;
+        break;
     }
     case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
     {
-	//Move back and delete firstParticle
-	firstParticle->x = oldXFirst;
-	firstParticle->y = oldYFirst;
-	deletePoint(firstParticle);
-	firstParticle->hasMoved = FALSE;
+        //Move back and delete firstParticle
+        firstParticle->x = oldXFirst;
+        firstParticle->y = oldYFirst;
+        deletePoint(firstParticle);
+        firstParticle->hasMoved = FALSE;
 
-	//Change the element of secondParticle to Salt-water
-	setElement(secondParticle, elements[19]);
-	secondParticle->hasMoved = TRUE;
+        //Change the element of secondParticle to Salt-water
+        setElement(secondParticle, elements[19]);
+        secondParticle->hasMoved = TRUE;
 
-	break;
+        break;
     }
     case 9: //Salt-water - Plant or Plant - Salt-water
     {
-	//Delete firstParticle
-	firstParticle->x = oldXFirst;
-	firstParticle->y = oldYFirst;
-	deletePoint(firstParticle);
-	firstParticle->hasMoved = FALSE;
-		    
-	//Change the element or secondParticle to Sand
-	setElement(secondParticle, elements[3]);
-	secondParticle->hasMoved = TRUE;
-	break;
+        //Delete firstParticle
+        firstParticle->x = oldXFirst;
+        firstParticle->y = oldYFirst;
+        deletePoint(firstParticle);
+        firstParticle->hasMoved = FALSE;
+                    
+        //Change the element or secondParticle to Sand
+        setElement(secondParticle, elements[3]);
+        secondParticle->hasMoved = TRUE;
+        break;
     }
     case 10: //Water - Sand or Sand - Water
     {
-    	//Delete firstParticle
-		firstParticle->x = oldXFirst;
-		firstParticle->y = oldYFirst;
-		deletePoint(firstParticle);
-		firstParticle->hasMoved = FALSE;
+        //Delete firstParticle
+        firstParticle->x = oldXFirst;
+        firstParticle->y = oldYFirst;
+        deletePoint(firstParticle);
+        firstParticle->hasMoved = FALSE;
 
-	//Change the element of secondParticle to Mud
-	setElement(secondParticle, elements[21]);
-	secondParticle->hasMoved = TRUE;
-	break;
+        //Change the element of secondParticle to Mud
+        setElement(secondParticle, elements[21]);
+        secondParticle->hasMoved = TRUE;
+        break;
     }
     case 11: //Destroy -- second particle is erased
     {
-    	unSetPoint(secondParticle);
-    	secondParticle->hasMoved = FALSE;
-    	break;
+        unSetPoint(secondParticle);
+        secondParticle->hasMoved = FALSE;
+        break;
     }
     }
 }

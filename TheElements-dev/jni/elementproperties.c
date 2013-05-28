@@ -6,50 +6,50 @@
  * these arrays as well.
  *
  * Properties list:
- * 		-red
- * 		-green
- * 		-blue
- *		-fallVel
- *		-density
- *		-state
- *		-special
- *		-specialVal
- *		-inertia
+ *              -red
+ *              -green
+ *              -blue
+ *              -fallVel
+ *              -density
+ *              -state
+ *              -special
+ *              -specialVal
+ *              -inertia
  *
  * Elements list:
  * ----Special----
- *		0 = Spawn
- *		1 = Drag
- *		2 = Eraser
+ *              0 = Spawn
+ *              1 = Drag
+ *              2 = Eraser
  * ----Normal----
- *		3 = Sand
- *		4 = Water
- *		5 = Steam
- *		6 = Ice
- *		7 = Wall
- *		8 = Destructible Wall
- *		9 = Plant
- *		10 = Fire
- *		11 = Magma
- *		12 = Stone
- *		13 = Oil
- *		14 = C4
- *		15 = C4++
- *		16 = Fuse
- *		17 = Acid
- *		18 = Salt
- *		19 = Salt-Water
- *		20 = Glass
- *		21 = Mud
- *		22 = Generator
- *		23 = Coal
- *		24 = Ant
- *		25 = Gunpowder
- *		26 = Mosquito
- *		27 = Wood
- *		28 = Termite
- *		29 = Insect Killer
- *		30 = Electricity
+ *              3 = Sand
+ *              4 = Water
+ *              5 = Steam
+ *              6 = Ice
+ *              7 = Wall
+ *              8 = Destructible Wall
+ *              9 = Plant
+ *              10 = Fire
+ *              11 = Magma
+ *              12 = Stone
+ *              13 = Oil
+ *              14 = C4
+ *              15 = C4++
+ *              16 = Fuse
+ *              17 = Acid
+ *              18 = Salt
+ *              19 = Salt-Water
+ *              20 = Glass
+ *              21 = Mud
+ *              22 = Generator
+ *              23 = Coal
+ *              24 = Ant
+ *              25 = Gunpowder
+ *              26 = Mosquito
+ *              27 = Wood
+ *              28 = Termite
+ *              29 = Insect Killer
+ *              30 = Electricity
  * ----Add Elements Above----
  */
 
@@ -58,40 +58,40 @@
 
 // Define the names of the elements
 char* baseName[] = {
-		 // ----Special----
-		 "Spawn",		// 0 = Spawn
-		 "Drag",		// 1 = Drag
-		 "Eraser",		// 2 = Eraser
-		 // ----Normal----
-		 "Sand",		// 3 = Sand
-		 "Water",		// 4 = Water
-		 "Steam",		// 5 = Steam
-		 "Ice",			// 6 = Ice
-		 "Wall",		// 7 = Wall
-		 "Destructible Wall", // 8 = Destructible Wall
-		 "Plant",		// 9 = Plant
-		 "Fire",		// 10 = Fire
-		 "Magma",		// 11 = Magma
-		 "Stone",		// 12 = Stone
-		 "Oil",			// 13 = Oil
-		 "C4",			// 14 = C4
-		 "C4++",		// 15 = C4++
-		 "Fuse",		// 16 = Fuse
-		 "Acid",		// 17 = Acid
-		 "Salt",		// 18 = Salt
-		 "Salt-Water",	// 19 = Salt-Water
-		 "Glass",		// 20 = Glass
-		 "Mud",			// 21 = Mud
-		 "Generator",	// 22 = Generator
-		 "Coal",		// 23 = Coal
-		 "Ant",			// 24 = Ant
-		 "Gunpowder",	// 25 = Gunpowder
-		 "Mosquito",	// 26 = Mosquito
-		 "Wood",		// 27 = Wood
-		 "Termite",		// 28 = Termite
-		 "Insect Killer", // 29 = Insect Killer
-		 "Electricity",  // 30 = Electricity
-		 "Metal",        // 31 = Metal
+    // ----Special----
+    "Spawn",               // 0 = Spawn
+    "Drag",                // 1 = Drag
+    "Eraser",              // 2 = Eraser
+    // ----Normal----
+    "Sand",                // 3 = Sand
+    "Water",               // 4 = Water
+    "Steam",               // 5 = Steam
+    "Ice",                 // 6 = Ice
+    "Wall",                // 7 = Wall
+    "Destructible Wall", // 8 = Destructible Wall
+    "Plant",               // 9 = Plant
+    "Fire",                // 10 = Fire
+    "Magma",               // 11 = Magma
+    "Stone",               // 12 = Stone
+    "Oil",                 // 13 = Oil
+    "C4",                  // 14 = C4
+    "C4++",                // 15 = C4++
+    "Fuse",                // 16 = Fuse
+    "Acid",                // 17 = Acid
+    "Salt",                // 18 = Salt
+    "Salt-Water",  // 19 = Salt-Water
+    "Glass",               // 20 = Glass
+    "Mud",                 // 21 = Mud
+    "Generator",   // 22 = Generator
+    "Coal",                // 23 = Coal
+    "Ant",                 // 24 = Ant
+    "Gunpowder",   // 25 = Gunpowder
+    "Mosquito",    // 26 = Mosquito
+    "Wood",                // 27 = Wood
+    "Termite",             // 28 = Termite
+    "Insect Killer", // 29 = Insect Killer
+    "Electricity",  // 30 = Electricity
+    "Metal",        // 31 = Metal
 };
 
 //Define the color of the element
@@ -110,88 +110,88 @@ char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 
 
 /*
  * Specials list:
- *	   -1 = None;
- *		1 = Spawn particles; Element
- *		2 = Break; Threshold velocity
- *		3 = Grow; Food element
- *		4 = Burn;
- *		5 = Explode; Explosiveness
- *		6 = Life; 1/(Probability of deletion)
+ *         -1 = None;
+ *              1 = Spawn particles; Element
+ *              2 = Break; Threshold velocity
+ *              3 = Grow; Food element
+ *              4 = Burn;
+ *              5 = Explode; Explosiveness
+ *              6 = Life; 1/(Probability of deletion)
  */
 //Defines the special for each base element
 
 signed char baseSpecial[][MAX_SPECIALS] =
 {
-		{SPECIAL_SPAWN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Spawn
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Drag
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Eraser
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Sand
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Water
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Steam
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Ice
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Wall
-		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE},  //Destructible Wall
-		{SPECIAL_GROW, SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Plant
-		{SPECIAL_HEAT, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Fire
-		{SPECIAL_HEAT, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Magma
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Stone
-		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Oil
-		{SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //C4
-		{SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //C4++
-		{SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, // Fuse
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Acid
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Salt
-		{SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Salt-water
-		{SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Glass
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Mud
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Generator
-		{SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Coal
-		{SPECIAL_WANDER, SPECIAL_JUMP, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Ant
-		{SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Gunpowder
-		{SPECIAL_WANDER, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Mosquito
-		{SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Wood
-		{SPECIAL_WANDER, SPECIAL_TUNNEL, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Termite
-		{SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Insect Killer
-		{SPECIAL_TRAIL, SPECIAL_CONDUCTABLE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Electricity
-		{SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE} //Metal
+    {SPECIAL_SPAWN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Spawn
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Drag
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Eraser
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Sand
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Water
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Steam
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Ice
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Wall
+    {SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE},  //Destructible Wall
+    {SPECIAL_GROW, SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Plant
+    {SPECIAL_HEAT, SPECIAL_LIFE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Fire
+    {SPECIAL_HEAT, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Magma
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Stone
+    {SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Oil
+    {SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //C4
+    {SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //C4++
+    {SPECIAL_EXPLODE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, // Fuse
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Acid
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Salt
+    {SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Salt-water
+    {SPECIAL_BREAK, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Glass
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Mud
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Generator
+    {SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Coal
+    {SPECIAL_WANDER, SPECIAL_JUMP, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Ant
+    {SPECIAL_EXPLODE, SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Gunpowder
+    {SPECIAL_WANDER, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Mosquito
+    {SPECIAL_BURN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Wood
+    {SPECIAL_WANDER, SPECIAL_TUNNEL, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Termite
+    {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Insect Killer
+    {SPECIAL_TRAIL, SPECIAL_CONDUCTABLE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Electricity
+    {SPECIAL_CONDUCTIVE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE} //Metal
 };
 
 
 //Defines the special value for each base element
 char baseSpecialValue[][MAX_SPECIALS] =
 {
-		{0,0,0,0,0,0}, //TODO: Add the element names next to all of these columns
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{4,5,0,0,0,0}, //Plant
-		{20,5,0,0,0,0}, //Fire
-		{3,0,0,0,0,0}, //Magma
-		{0,0,0,0,0,0},
-		{7,3,0,0,0,0},
-		{10,0,0,0,0,0}, //C4
-		{20,0,0,0,0,0}, //C4++
-		{2,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{0,0,0,0,0,0},
-		{20,0,0,0,0,0}, //Coal
-		{10,0,0,0,0,0}, //Ant
-		{20,0,0,0,0,0}, //Gunpowder
-		{10,0,0,0,0,0}, //Mosquito
-		{10,0,0,0,0,0}, //Wood
-		{5,27,0,0,0,0}, //Termite
-		{0,0,0,0,0,0}, //Insect Killer
-		{3,0,0,0,0,0}, //Electricity
-		{SPECIAL_VAL_UNSET,0,0,0,0,0} //Metal
+    {0,0,0,0,0,0}, //TODO: Add the element names next to all of these columns
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {4,5,0,0,0,0}, //Plant
+    {20,5,0,0,0,0}, //Fire
+    {3,0,0,0,0,0}, //Magma
+    {0,0,0,0,0,0},
+    {7,3,0,0,0,0},
+    {10,0,0,0,0,0}, //C4
+    {20,0,0,0,0,0}, //C4++
+    {2,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {0,0,0,0,0,0},
+    {20,0,0,0,0,0}, //Coal
+    {10,0,0,0,0,0}, //Ant
+    {20,0,0,0,0,0}, //Gunpowder
+    {10,0,0,0,0,0}, //Mosquito
+    {10,0,0,0,0,0}, //Wood
+    {5,27,0,0,0,0}, //Termite
+    {0,0,0,0,0,0}, //Insect Killer
+    {3,0,0,0,0,0}, //Electricity
+    {SPECIAL_VAL_UNSET,0,0,0,0,0} //Metal
 };
 
 //Defines the inertia of each element

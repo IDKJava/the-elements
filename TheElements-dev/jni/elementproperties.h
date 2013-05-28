@@ -6,43 +6,43 @@
  * these arrays as well.
  *
  * Properties list:
- * 		-red
- * 		-green
- * 		-blue
- *		-fallVel
- *		-density
- *		-state
- *		-special
- *		-specialVal
- *		-inertia
+ *              -red
+ *              -green
+ *              -blue
+ *              -fallVel
+ *              -density
+ *              -state
+ *              -special
+ *              -specialVal
+ *              -inertia
  *
  * Elements list:
  * ----Special----
- *		0 = Spawn
- *		1 = Drag
- *		2 = Eraser
+ *              0 = Spawn
+ *              1 = Drag
+ *              2 = Eraser
  * ----Normal----
- *		3 = Sand
- *		4 = Water
- *		5 = Steam
- *		6 = Ice
- *		7 = Wall
- *		8 = Destructible Wall
- *		9 = Plant
- *		10 = Fire
- *		11 = Magma
- *		12 = Stone
- *		13 = Oil
- *		14 = C4
- *		15 = C4++
- *		16 = Fuse
- *		17 = Acid
- *		18 = Salt
- *		19 = Salt-Water
- *		20 = Glass
- *		21 = Mud
- *		22 = Generator
- *		23 = Coal
+ *              3 = Sand
+ *              4 = Water
+ *              5 = Steam
+ *              6 = Ice
+ *              7 = Wall
+ *              8 = Destructible Wall
+ *              9 = Plant
+ *              10 = Fire
+ *              11 = Magma
+ *              12 = Stone
+ *              13 = Oil
+ *              14 = C4
+ *              15 = C4++
+ *              16 = Fuse
+ *              17 = Acid
+ *              18 = Salt
+ *              19 = Salt-Water
+ *              20 = Glass
+ *              21 = Mud
+ *              22 = Generator
+ *              23 = Coal
  * ----Add Elements Above----
  */
 
@@ -70,12 +70,12 @@ extern char baseDensity[];
 extern char baseState[];
 /*
  * Specials list:
- *	   -1 = None;
- *		0 = Spawn particles; Element
- *		1 = Break; Threshold velocity
- *		2 = Grow; Food element
- *		3 = Burn; Threshold
- *		4 = Explode; Explosiveness
+ *         -1 = None;
+ *              0 = Spawn particles; Element
+ *              1 = Break; Threshold velocity
+ *              2 = Grow; Food element
+ *              3 = Burn; Threshold
+ *              4 = Explode; Explosiveness
  */
 //Defines the special for each base element
 extern signed char baseSpecial[][MAX_SPECIALS];

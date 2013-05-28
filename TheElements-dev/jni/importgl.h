@@ -46,11 +46,11 @@ extern "C" {
  * Should be called once on application initialization.
  * Returns non-zero on success and 0 on failure.
  */
-extern int importGLInit();
+    extern int importGLInit();
 
 /* Frees the handle to egl & gl functions library.
  */
-extern void importGLDeinit();
+    extern void importGLDeinit();
 
 
 #ifndef IMPORTGL_API
@@ -63,48 +63,48 @@ extern void importGLDeinit();
 #define FNDEF(retType, funcName, args) IMPORTGL_API retType (*funcPtr_##funcName) args IMPORTGL_FNPTRINIT
 
 #ifndef ANDROID_NDK
-FNDEF(EGLBoolean, eglChooseConfig, (EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config));
-FNDEF(EGLContext, eglCreateContext, (EGLDisplay dpy, EGLConfig config, EGLContext share_list, const EGLint *attrib_list));
-FNDEF(EGLSurface, eglCreateWindowSurface, (EGLDisplay dpy, EGLConfig config, NativeWindowType window, const EGLint *attrib_list));
-FNDEF(EGLBoolean, eglDestroyContext, (EGLDisplay dpy, EGLContext ctx));
-FNDEF(EGLBoolean, eglDestroySurface, (EGLDisplay dpy, EGLSurface surface));
-FNDEF(EGLBoolean, eglGetConfigAttrib, (EGLDisplay dpy, EGLConfig config, EGLint attribute, EGLint *value));
-FNDEF(EGLBoolean, eglGetConfigs, (EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config));
-FNDEF(EGLDisplay, eglGetDisplay, (NativeDisplayType display));
-FNDEF(EGLint, eglGetError, (void));
-FNDEF(EGLBoolean, eglInitialize, (EGLDisplay dpy, EGLint *major, EGLint *minor));
-FNDEF(EGLBoolean, eglMakeCurrent, (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx));
-FNDEF(EGLBoolean, eglSwapBuffers, (EGLDisplay dpy, EGLSurface draw));
-FNDEF(EGLBoolean, eglTerminate, (EGLDisplay dpy));
+    FNDEF(EGLBoolean, eglChooseConfig, (EGLDisplay dpy, const EGLint *attrib_list, EGLConfig *configs, EGLint config_size, EGLint *num_config));
+    FNDEF(EGLContext, eglCreateContext, (EGLDisplay dpy, EGLConfig config, EGLContext share_list, const EGLint *attrib_list));
+    FNDEF(EGLSurface, eglCreateWindowSurface, (EGLDisplay dpy, EGLConfig config, NativeWindowType window, const EGLint *attrib_list));
+    FNDEF(EGLBoolean, eglDestroyContext, (EGLDisplay dpy, EGLContext ctx));
+    FNDEF(EGLBoolean, eglDestroySurface, (EGLDisplay dpy, EGLSurface surface));
+    FNDEF(EGLBoolean, eglGetConfigAttrib, (EGLDisplay dpy, EGLConfig config, EGLint attribute, EGLint *value));
+    FNDEF(EGLBoolean, eglGetConfigs, (EGLDisplay dpy, EGLConfig *configs, EGLint config_size, EGLint *num_config));
+    FNDEF(EGLDisplay, eglGetDisplay, (NativeDisplayType display));
+    FNDEF(EGLint, eglGetError, (void));
+    FNDEF(EGLBoolean, eglInitialize, (EGLDisplay dpy, EGLint *major, EGLint *minor));
+    FNDEF(EGLBoolean, eglMakeCurrent, (EGLDisplay dpy, EGLSurface draw, EGLSurface read, EGLContext ctx));
+    FNDEF(EGLBoolean, eglSwapBuffers, (EGLDisplay dpy, EGLSurface draw));
+    FNDEF(EGLBoolean, eglTerminate, (EGLDisplay dpy));
 #endif /* !ANDROID_NDK */
 
-FNDEF(void, glBlendFunc, (GLenum sfactor, GLenum dfactor));
-FNDEF(void, glClear, (GLbitfield mask));
-FNDEF(void, glClearColorx, (GLclampx red, GLclampx green, GLclampx blue, GLclampx alpha));
-FNDEF(void, glColor4x, (GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha));
-FNDEF(void, glColorPointer, (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer));
-FNDEF(void, glDisable, (GLenum cap));
-FNDEF(void, glDisableClientState, (GLenum array));
-FNDEF(void, glDrawArrays, (GLenum mode, GLint first, GLsizei count));
-FNDEF(void, glEnable, (GLenum cap));
-FNDEF(void, glEnableClientState, (GLenum array));
-FNDEF(void, glFrustumx, (GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar));
-FNDEF(GLenum, glGetError, (void));
-FNDEF(void, glLightxv, (GLenum light, GLenum pname, const GLfixed *params));
-FNDEF(void, glLoadIdentity, (void));
-FNDEF(void, glMaterialx, (GLenum face, GLenum pname, GLfixed param));
-FNDEF(void, glMaterialxv, (GLenum face, GLenum pname, const GLfixed *params));
-FNDEF(void, glMatrixMode, (GLenum mode));
-FNDEF(void, glMultMatrixx, (const GLfixed *m));
-FNDEF(void, glNormalPointer, (GLenum type, GLsizei stride, const GLvoid *pointer));
-FNDEF(void, glPopMatrix, (void));
-FNDEF(void, glPushMatrix, (void));
-FNDEF(void, glRotatex, (GLfixed angle, GLfixed x, GLfixed y, GLfixed z));
-FNDEF(void, glScalex, (GLfixed x, GLfixed y, GLfixed z));
-FNDEF(void, glShadeModel, (GLenum mode));
-FNDEF(void, glTranslatex, (GLfixed x, GLfixed y, GLfixed z));
-FNDEF(void, glVertexPointer, (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer));
-FNDEF(void, glViewport, (GLint x, GLint y, GLsizei width, GLsizei height));
+    FNDEF(void, glBlendFunc, (GLenum sfactor, GLenum dfactor));
+    FNDEF(void, glClear, (GLbitfield mask));
+    FNDEF(void, glClearColorx, (GLclampx red, GLclampx green, GLclampx blue, GLclampx alpha));
+    FNDEF(void, glColor4x, (GLfixed red, GLfixed green, GLfixed blue, GLfixed alpha));
+    FNDEF(void, glColorPointer, (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer));
+    FNDEF(void, glDisable, (GLenum cap));
+    FNDEF(void, glDisableClientState, (GLenum array));
+    FNDEF(void, glDrawArrays, (GLenum mode, GLint first, GLsizei count));
+    FNDEF(void, glEnable, (GLenum cap));
+    FNDEF(void, glEnableClientState, (GLenum array));
+    FNDEF(void, glFrustumx, (GLfixed left, GLfixed right, GLfixed bottom, GLfixed top, GLfixed zNear, GLfixed zFar));
+    FNDEF(GLenum, glGetError, (void));
+    FNDEF(void, glLightxv, (GLenum light, GLenum pname, const GLfixed *params));
+    FNDEF(void, glLoadIdentity, (void));
+    FNDEF(void, glMaterialx, (GLenum face, GLenum pname, GLfixed param));
+    FNDEF(void, glMaterialxv, (GLenum face, GLenum pname, const GLfixed *params));
+    FNDEF(void, glMatrixMode, (GLenum mode));
+    FNDEF(void, glMultMatrixx, (const GLfixed *m));
+    FNDEF(void, glNormalPointer, (GLenum type, GLsizei stride, const GLvoid *pointer));
+    FNDEF(void, glPopMatrix, (void));
+    FNDEF(void, glPushMatrix, (void));
+    FNDEF(void, glRotatex, (GLfixed angle, GLfixed x, GLfixed y, GLfixed z));
+    FNDEF(void, glScalex, (GLfixed x, GLfixed y, GLfixed z));
+    FNDEF(void, glShadeModel, (GLenum mode));
+    FNDEF(void, glTranslatex, (GLfixed x, GLfixed y, GLfixed z));
+    FNDEF(void, glVertexPointer, (GLint size, GLenum type, GLsizei stride, const GLvoid *pointer));
+    FNDEF(void, glViewport, (GLint x, GLint y, GLsizei width, GLsizei height));
 
 
 #undef FN
