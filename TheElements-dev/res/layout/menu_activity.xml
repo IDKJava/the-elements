@@ -25,14 +25,6 @@
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
 
-	    <!-- Blu Trumpet button -->
-	    <Button
-	    	android:id="@+id/blu_trumpet_button"
-	    	android:text="@string/blu_trumpet_button"
-	    	android:layout_width="200sp"
-	    	android:gravity="center" 
-	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
 	    
 	    <!-- Fix me button -->
 	    <Button

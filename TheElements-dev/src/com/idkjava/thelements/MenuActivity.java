@@ -17,8 +17,6 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
 
-import com.blutrumpet.sdk.BluTrumpet;
-import com.blutrumpet.sdk.StoreType;
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 
@@ -26,7 +24,6 @@ public class MenuActivity extends FlurryActivity
 {
 	public static Button start_game_button;
 	public static Button custom_elements_button;
-	public static Button blu_trumpet_button;
 	public static Button fix_me_button;
 	public static Button how_to_play_button;
 	public static Button about_button;
@@ -44,7 +41,6 @@ public class MenuActivity extends FlurryActivity
 		//Define all the objects
 		start_game_button = (Button) findViewById(R.id.start_game_button);
 		custom_elements_button = (Button) findViewById(R.id.custom_elements_button);
-		blu_trumpet_button = (Button) findViewById(R.id.blu_trumpet_button);
 		fix_me_button = (Button) findViewById(R.id.fix_me_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);
@@ -73,23 +69,6 @@ public class MenuActivity extends FlurryActivity
 					FlurryAgent.logEvent("Custom elements button (main menu)");
 					//Start the CustomElementManagerActivity
 					startActivity(new Intent(MenuActivity.this, CustomElementManagerActivity.class));
-				}
-			}
-		);
-		
-		blu_trumpet_button.setOnClickListener
-		(
-			new OnClickListener()
-			{
-				public void onClick(View v)
-				{
-					FlurryAgent.logEvent("BluTrumpet button (main menu)");
-					//Start the Blu Trumpet Activity
-					startActivity(new Intent(MenuActivity.this, BluTrumpetActivity.class));
-					
-					//OLD -- Clear quicksave
-					//MainActivity.removeTempSave();
-					//Toast.makeText(getBaseContext(), "Quicksave file erased", Toast.LENGTH_SHORT).show();
 				}
 			}
 		);
@@ -128,11 +107,6 @@ public class MenuActivity extends FlurryActivity
 			}
 		);
 		
-		//Initialize Blu Trumpet
-		if (!BluTrumpet.isInitialized())
-		{
-			 BluTrumpet.initWithAppId(Globals.bluTrumpetAppId, StoreType.GOOGLE_PLAY, this);
-		}
 	}
 	
 	public void how_to_play()
