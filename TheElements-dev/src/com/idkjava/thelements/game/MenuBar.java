@@ -1,12 +1,9 @@
 package com.idkjava.thelements.game;
 
-import com.flurry.android.FlurryAgent;
-import com.idkjava.thelements.BluTrumpetActivity;
 import com.idkjava.thelements.MainActivity;
 
 import com.idkjava.thelements.R;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,16 +15,12 @@ import android.widget.Toast;
 
 public class MenuBar extends LinearLayout
 {
-	//Used when exit is called because we need the specific instance of the activity to end
-	private MainActivity activity;
-
 	private Context context;
 
 	private static ImageButton eraser_button;
 	private static ImageButton play_pause_button;
 	private static ImageButton save_button;
 	private static ImageButton load_button;
-	private static ImageButton app_wall_button;
 	private static ImageButton clear_button;
 
 	//Used for eraser
@@ -40,12 +33,6 @@ public class MenuBar extends LinearLayout
 		super(context, attrs);
 		this.context = context;
 		setGravity(Gravity.CENTER_HORIZONTAL);
-	}
-
-	//Used to get specific instance of activity
-	public void setActivity(MainActivity act)
-	{
-		activity = act;
 	}
 
 	//Set the eraser to the off position
@@ -79,7 +66,6 @@ public class MenuBar extends LinearLayout
 		play_pause_button = (ImageButton) findViewById(R.id.play_pause_button);
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
-		app_wall_button = (ImageButton) findViewById(R.id.app_wall_button);
 		clear_button = (ImageButton) findViewById(R.id.clear_screen_button);
 
 		//Set up the OnClickListener for the eraser button
@@ -184,16 +170,6 @@ public class MenuBar extends LinearLayout
 			}
 		});
 
-		//Set up the OnClickListener for the app wall button
-		app_wall_button.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				FlurryAgent.logEvent("BluTrumpet button (app)");
-				((MainActivity) context).startActivity(new Intent(activity, BluTrumpetActivity.class));
-			}
-		});
 
 		//Set up the OnClickListener for the exit button
 		clear_button.setOnClickListener(new OnClickListener()
