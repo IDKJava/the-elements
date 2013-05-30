@@ -306,6 +306,18 @@ char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject th
 {
     return cElement->index;
 }
+char Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject this, int i)
+{    
+    return elements[i]->red;
+}
+char Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject this, int i)
+{
+    return elements[i]->green;
+}
+char Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject this, int i)
+{
+    return elements[i]->blue;
+}
 jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject this, int i)
 {
 #define BUFFER_SIZE 1000
