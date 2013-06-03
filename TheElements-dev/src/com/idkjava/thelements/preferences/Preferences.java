@@ -4,6 +4,7 @@ import com.idkjava.thelements.MainActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -27,7 +28,8 @@ public class Preferences
 	public static void loadPreferences()
 	{
 		Log.v("TheElements", "setPreferences");
-		setBackgroundColor((char) sharedPreferences.getInt("background_red", 0), (char) sharedPreferences.getInt("background_green", 0), (char) sharedPreferences.getInt("background_blue", 0));
+		int backgroundColor = sharedPreferences.getInt("background_color",0);
+		setBackgroundColor((char) Color.red(backgroundColor), (char) Color.green(backgroundColor), (char) Color.blue(backgroundColor));
 		setFlippedState(sharedPreferences.getBoolean("flipped_state", false));
 		setAccelState(sharedPreferences.getBoolean("accel_state", false));
 		setAtmosphereTemp((char) sharedPreferences.getInt("atmosphere_temp", 100));

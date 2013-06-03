@@ -23,7 +23,7 @@
 	    	android:layout_width="200sp"
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
 
 	    
 	    <!-- Fix me button -->
@@ -33,7 +33,7 @@
 	    	android:layout_width="200sp"
 	    	android:gravity="center"
 	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
 	    
 	    <!-- How-to-play button -->
 	    <Button
@@ -42,7 +42,7 @@
 	    	android:gravity="center"
 	    	android:layout_width="200sp" 
 	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
 
 	    <!-- About button -->
 	    <Button
@@ -50,6 +50,6 @@
 	    	android:text="@string/about_button"
 	    	android:layout_width="200sp" 
 	    	android:background="@drawable/btn_mm" 
-	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="3dip"/>
+	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
 	    
 </LinearLayout>
