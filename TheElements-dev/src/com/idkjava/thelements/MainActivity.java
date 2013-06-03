@@ -24,12 +24,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -96,376 +98,383 @@ public class MainActivity extends FlurryActivity
     private List<Sensor> sensors;
     private Sensor accSensor;
 
+    private static float mDPI; 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-        {
-            //Uses onCreate from the general Activity
-            super.onCreate(savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) 
+    {
+        //Uses onCreate from the general Activity
+        super.onCreate(savedInstanceState);
 
-            //Init the shared preferences and set the ui state
-            Preferences.initSharedPreferences(this);
-            Preferences.loadUIState();
+        //Init the shared preferences and set the ui state
+        Preferences.initSharedPreferences(this);
+        Preferences.loadUIState();
                 
-            FlurryAgent.logEvent("UI state: " + ui);
+        FlurryAgent.logEvent("UI state: " + ui);
+            
+        //Set Sensor + Manager
+        myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-            //Set Sensor + Manager
-            myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-            accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        setUpViews();
 
-            setUpViews();
+        elementsList = new ArrayList<String>();
 
-            elementsList = new ArrayList<String>();
-        }
+        // Get DPI from screen -- TODO: Sometimes this lies, add custom function to do this with hardcoded values
+        DisplayMetrics dm = new DisplayMetrics();
+        ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
+        mDPI = dm.densityDpi;
+    }
 
     private final SensorEventListener mySensorListener = new SensorEventListener()
+    {
+        public void onSensorChanged(SensorEvent event)
         {
-            public void onSensorChanged(SensorEvent event)
-                {
-                    setXGravity(event.values[0]);
-                    setYGravity(event.values[1]);
-                }
+            setXGravity(event.values[0]);
+            setYGravity(event.values[1]);
+        }
 
-            public void onAccuracyChanged(Sensor sensor, int accuracy)
-                {}
-        };
+        public void onAccuracyChanged(Sensor sensor, int accuracy)
+        {}
+    };
 
     @Override
     protected void onPause()
-        {
-            // Log.v("TheElements", "MainActivity.onPause()");
-            //Use the normal onPause
-            super.onPause();
-            //Call onPause for the view
-            sand_view.onPause();
+    {
+        // Log.v("TheElements", "MainActivity.onPause()");
+        //Use the normal onPause
+        super.onPause();
+        //Call onPause for the view
+        sand_view.onPause();
                 
-            //Do a temp save
-            saveTempState();
-            //Set the preferences to indicate paused
-            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
-            editor.putBoolean("paused", true);
-            editor.commit();
+        //Do a temp save
+        saveTempState();
+        //Set the preferences to indicate paused
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
+        editor.putBoolean("paused", true);
+        editor.commit();
 
-        }
+    }
 
     @Override
     protected void onResume()
+    {
+        //Use the super onResume
+        super.onResume();
+                
+        //Load the settings shared preferences which deals with if we're resuming from pause or not
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+
+        //Load the regular preferences into JNI
+        Preferences.loadPreferences();
+
+        //Register the accelerometer listener
+        myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
+                
+        //Set up the elements list
+        Resources res = getResources();
+        baseElementsList = res.getTextArray(R.array.elements_list);
+        elementsList.clear();
+                
+        // Add the base elements
+        for (int i = 0; i < baseElementsList.length; i++)
         {
-            //Use the super onResume
-            super.onResume();
-                
-            //Load the settings shared preferences which deals with if we're resuming from pause or not
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-
-            //Load the regular preferences into JNI
-            Preferences.loadPreferences();
-
-            //Register the accelerometer listener
-            myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
-                
-            //Set up the elements list
-            Resources res = getResources();
-            baseElementsList = res.getTextArray(R.array.elements_list);
-            elementsList.clear();
-                
-            // Add the base elements
-            for (int i = 0; i < baseElementsList.length; i++)
-            {
-                elementsList.add(baseElementsList[i].toString());
-            }
-                
-            // Load the custom elements
-            try
-            {
-                // Open the file that is the first command line parameter
-                FileInputStream fstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
-                // Get the object of DataInputStream
-                DataInputStream in = new DataInputStream(fstream);
-                BufferedReader br = new BufferedReader(new InputStreamReader(in));
-                String strLine;
-                //Read file line by line
-                while ((strLine = br.readLine()) != null)
-                {
-                    FileInputStream tstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + strLine);
-                    DataInputStream in2 = new DataInputStream(tstream);
-                    BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-                    if ((strLine = br2.readLine()) != null)
-                    {
-                        elementsList.add(strLine);
-                    }
-                }
-                baseElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
-                //Close the input stream
-                in.close();
-            }
-            //Catch any exceptions
-            catch (Exception e)
-            {
-                System.err.println("Error: " + e.getMessage());
-            }
-                
-                
-            //Set up the file manager for saving and loading
-            FileManager.intialize(this);
-
-            //If we're resuming from a pause (not when it starts)
-            if (settings.getBoolean("paused", false))
-            {
-                // Log.v("TheElements", "Resuming from pause");
-
-                //Check to see if UI changed
-                boolean oldui = ui;
-                Preferences.loadUIState();
-                if (ui != oldui)
-                {
-                    setUpViews();
-                }
-
-                //Set the preferences to indicate unpaused
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("paused", false);
-                editor.commit();
-            }
-            else if (settings.getBoolean("firstrun", true))
-            {
-                //Indicate that the demo should be loaded by nativeLoadState()
-                shouldLoadDemo = true;
-                //Unset firstrun
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putBoolean("firstrun", false);
-                editor.commit();
-
-                //Also show the intro message
-                showDialog(INTRO_MESSAGE);
-                        
-                //Finally, delete the temp save, in case there were save format changes
-                SaveManager.deleteState("temp");
-            }
-
-            if (ui)
-            {
-                //This is where I set the activity for Control so that I can call showDialog() from it
-                control.setActivity(this);
-                        
-                //start paused
-                play = false;
-                menu_bar.setPlayState(false);
-            }
-                
-
-            //Call onResume() for view too
-            // Log.v("TheElements", "sand_view.onResume()");
-            sand_view.onResume();
-            // Log.v("TheElements", "sand_view.onResume() done");
+            elementsList.add(baseElementsList[i].toString());
         }
+                
+        // Load the custom elements
+        try
+        {
+            // Open the file that is the first command line parameter
+            FileInputStream fstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
+            // Get the object of DataInputStream
+            DataInputStream in = new DataInputStream(fstream);
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            String strLine;
+            //Read file line by line
+            while ((strLine = br.readLine()) != null)
+            {
+                FileInputStream tstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + strLine);
+                DataInputStream in2 = new DataInputStream(tstream);
+                BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
+                if ((strLine = br2.readLine()) != null)
+                {
+                    elementsList.add(strLine);
+                }
+            }
+            baseElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
+            //Close the input stream
+            in.close();
+        }
+        //Catch any exceptions
+        catch (Exception e)
+        {
+            System.err.println("Error: " + e.getMessage());
+        }
+                
+                
+        //Set up the file manager for saving and loading
+        FileManager.intialize(this);
+
+        //If we're resuming from a pause (not when it starts)
+        if (settings.getBoolean("paused", false))
+        {
+            // Log.v("TheElements", "Resuming from pause");
+
+            //Check to see if UI changed
+            boolean oldui = ui;
+            Preferences.loadUIState();
+            if (ui != oldui)
+            {
+                setUpViews();
+            }
+
+            //Set the preferences to indicate unpaused
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("paused", false);
+            editor.commit();
+        }
+        else if (settings.getBoolean("firstrun", true))
+        {
+            //Indicate that the demo should be loaded by nativeLoadState()
+            shouldLoadDemo = true;
+            //Unset firstrun
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("firstrun", false);
+            editor.commit();
+
+            //Also show the intro message
+            showDialog(INTRO_MESSAGE);
+                        
+            //Finally, delete the temp save, in case there were save format changes
+            SaveManager.deleteState("temp");
+        }
+
+        if (ui)
+        {
+            //This is where I set the activity for Control so that I can call showDialog() from it
+            control.setActivity(this);
+                        
+            //start paused
+            play = false;
+            menu_bar.setPlayState(false);
+        }
+                
+
+        //Call onResume() for view too
+        // Log.v("TheElements", "sand_view.onResume()");
+        sand_view.onResume();
+        // Log.v("TheElements", "sand_view.onResume() done");
+    }
 
     protected Dialog onCreateDialog(int id) //This is called when showDialog is called
+    {
+        if (id == INTRO_MESSAGE) // The first dialog - the intro message
         {
-            if (id == INTRO_MESSAGE) // The first dialog - the intro message
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            WebView wv = new WebView(getBaseContext());
+            wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
+            wv.setBackgroundColor(Color.BLACK);
+            builder.setView(wv).setCancelable(false).setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener()
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                WebView wv = new WebView(getBaseContext());
-                wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
-                wv.setBackgroundColor(Color.BLACK);
-                builder.setView(wv).setCancelable(false).setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int id)
-                            {
-                                dialog.cancel();
-                            }
-                    });
-                AlertDialog alert = builder.create(); // Actually create the message
-                return alert; // Return the object created
-            }
-            else if (id == ELEMENT_PICKER) // Element picker
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
-
-                ListAdapter adapter = new ElementAdapter( this, (String[]) elementsList.toArray(new String[elementsList.size()]));
-
-                builder.setTitle(R.string.element_picker); // Set the title
-                builder.setSingleChoiceItems( adapter, -1, new OnClickListener() {
-                    
-                        public void onClick(DialogInterface dialog, int item)
-                            {
-                                if (MenuBar.eraserOn)
-                                {
-                                    MenuBar.setEraserOff();
-                                }
-                                setElement((char) (item + NORMAL_ELEMENT));
-                                setPlayState(true);
-                                dialog.dismiss();
-                            }
-                    });
-
-                setPlayState(false);
-                AlertDialog alert = builder.create(); // Create the dialog
-
-                return alert; // Return handle
-            }
-            else if (id == BRUSH_SIZE_PICKER)
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
-                builder.setTitle(R.string.brush_size_picker);
-                builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener()
-                    {
-                        public void onClick(DialogInterface dialog, int item)
-                            {
-                                if (item == 0)
-                                {
-                                    setBrushSize((char) 0);
-                                }
-                                else
-                                {
-                                    setBrushSize((char) java.lang.Math.pow(2, item - 1));
-                                }
-                            }
-                    });
-                AlertDialog alert = builder.create(); // Create object
-                return alert; // Return handle
-            }
-
-            return null; //Default case: return nothing
+                public void onClick(DialogInterface dialog, int id)
+                {
+                    dialog.cancel();
+                }
+            });
+            AlertDialog alert = builder.create(); // Actually create the message
+            return alert; // Return the object created
         }
+        else if (id == ELEMENT_PICKER) // Element picker
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
+
+            ListAdapter adapter = new ElementAdapter( this, (String[]) elementsList.toArray(new String[elementsList.size()]));
+
+            builder.setTitle(R.string.element_picker); // Set the title
+            builder.setSingleChoiceItems( adapter, -1, new OnClickListener() {
+                    
+                public void onClick(DialogInterface dialog, int item)
+                {
+                    if (MenuBar.eraserOn)
+                    {
+                        MenuBar.setEraserOff();
+                    }
+                    setElement((char) (item + NORMAL_ELEMENT));
+                    setPlayState(true);
+                    dialog.dismiss();
+                }
+            });
+
+            setPlayState(false);
+            AlertDialog alert = builder.create(); // Create the dialog
+
+            return alert; // Return handle
+        }
+        else if (id == BRUSH_SIZE_PICKER)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
+            builder.setTitle(R.string.brush_size_picker);
+            builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener()
+            {
+                public void onClick(DialogInterface dialog, int item)
+                {
+                    if (item == 0)
+                    {
+                        setBrushSize((char) 0);
+                    }
+                    else
+                    {
+                        setBrushSize((char) java.lang.Math.pow(2, item - 1));
+                    }
+                }
+            });
+            AlertDialog alert = builder.create(); // Create object
+            return alert; // Return handle
+        }
+
+        return null; //Default case: return nothing
+    }
 
     public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
+    {
+        // Create an inflater to inflate the menu already defined in res/menu/options_menu.xml
+        // This seems to be a bit faster at loading the menu, and easier to modify
+        MenuInflater inflater = getMenuInflater();
+        if (ui)
         {
-            // Create an inflater to inflate the menu already defined in res/menu/options_menu.xml
-            // This seems to be a bit faster at loading the menu, and easier to modify
-            MenuInflater inflater = getMenuInflater();
-            if (ui)
-            {
-                menu.clear();
-                inflater.inflate(R.menu.options_menu_small, menu);
-            }
-            else
-            {
-                menu.clear();
-                inflater.inflate(R.menu.options_menu_large, menu);
-            }
-
-            return true;
+            menu.clear();
+            inflater.inflate(R.menu.options_menu_small, menu);
         }
+        else
+        {
+            menu.clear();
+            inflater.inflate(R.menu.options_menu_large, menu);
+        }
+
+        return true;
+    }
 
     public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
         {
-            switch (item.getItemId())
-            {
-            case R.id.element_picker:
-            {
-                showDialog(ELEMENT_PICKER);
-                return true;
-            }
-            case R.id.brush_size_picker:
-            {
-                showDialog(BRUSH_SIZE_PICKER);
-                return true;
-            }
-            case R.id.clear_screen:             
-            {           
-                clearScreen();          
-                return true;            
-            }   
-            case R.id.play_pause:
-            {
-                play = !play;
-                setPlayState(play);
-                return true;
-            }
-            case R.id.eraser:
-            {
-                setElement(ERASER_ELEMENT);
-                return true;
-            }
-            case R.id.toggle_size:
-            {
-                zoomState = !zoomState;
-                setZoomState(zoomState);
-                return true;
-            }
-            case R.id.save:
-            {
-                saveState();
-                return true;
-            }
-            case R.id.load:
-            {
-                loadState();
-                return true;
-            }
-            case R.id.custom_element_editor:
-            {
-                startActivity(new Intent(MainActivity.this, CustomElementManagerActivity.class));
-                return true;
-            }
-            case R.id.preferences:
-            {
-                startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
-                return true;
-            }
-            case R.id.exit:
-            {
-                System.exit(0);
-                return true;
-            }
-            }
-            return false;
+        case R.id.element_picker:
+        {
+            showDialog(ELEMENT_PICKER);
+            return true;
         }
+        case R.id.brush_size_picker:
+        {
+            showDialog(BRUSH_SIZE_PICKER);
+            return true;
+        }
+        case R.id.clear_screen:             
+        {           
+            clearScreen();          
+            return true;            
+        }   
+        case R.id.play_pause:
+        {
+            play = !play;
+            setPlayState(play);
+            return true;
+        }
+        case R.id.eraser:
+        {
+            setElement(ERASER_ELEMENT);
+            return true;
+        }
+        case R.id.toggle_size:
+        {
+            zoomState = !zoomState;
+            setZoomState(zoomState);
+            return true;
+        }
+        case R.id.save:
+        {
+            saveState();
+            return true;
+        }
+        case R.id.load:
+        {
+            loadState();
+            return true;
+        }
+        case R.id.custom_element_editor:
+        {
+            startActivity(new Intent(MainActivity.this, CustomElementManagerActivity.class));
+            return true;
+        }
+        case R.id.preferences:
+        {
+            startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
+            return true;
+        }
+        case R.id.exit:
+        {
+            System.exit(0);
+            return true;
+        }
+        }
+        return false;
+    }
 
     //Set up the views based on the state of ui
     private void setUpViews()
+    {
+        // Initialize the native library (SandView needs to make calls)
+        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        int versionCode;
+        try
         {
-            // Initialize the native library (SandView needs to make calls)
-            String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            int versionCode;
-            try
-            {
-                versionCode = getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
-            }
-            catch (NameNotFoundException e)
-            {
-                versionCode = -1;
-                e.printStackTrace();
-            }
-            nativeInit(androidId, versionCode);
-                
-            //Set the content view based on this variable
-            if (ui)
-            {
-                setContentView(R.layout.main_activity_ui);
-            }
-            else
-            {
-                setContentView(R.layout.main_activity_non_ui);
-            }
-
-            //Set the new view and control box and menu bar to the stuff defined in layout
-            menu_bar = (MenuBar) findViewById(R.id.menu_bar);
-            sand_view = (SandView) findViewById(R.id.sand_view);
-            control = (Control) findViewById(R.id.control);
-
-            //Set the screen state for sand_view now that it's defined
-            Preferences.loadScreenState();
+            versionCode = getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
         }
+        catch (NameNotFoundException e)
+        {
+            versionCode = -1;
+            e.printStackTrace();
+        }
+        nativeInit(androidId, versionCode);
+                
+        //Set the content view based on this variable
+        if (ui)
+        {
+            setContentView(R.layout.main_activity_ui);
+        }
+        else
+        {
+            setContentView(R.layout.main_activity_non_ui);
+        }
+
+        //Set the new view and control box and menu bar to the stuff defined in layout
+        menu_bar = (MenuBar) findViewById(R.id.menu_bar);
+        sand_view = (SandView) findViewById(R.id.sand_view);
+        control = (Control) findViewById(R.id.control);
+
+        //Set the screen state for sand_view now that it's defined
+        Preferences.loadScreenState();
+    }
 
     //Trigger the SaveStateActivity
     public void saveState()
-        {
-            Intent tempIntent = new Intent(this, SaveStateActivity.class);
-            startActivity(tempIntent);
-        }
+    {
+        Intent tempIntent = new Intent(this, SaveStateActivity.class);
+        startActivity(tempIntent);
+    }
 
     //Trigger the LoadStateActivity
     public void loadState()
-        {
-            Intent tempIntent = new Intent(this, LoadStateActivity.class);
-            startActivity(tempIntent);
-        }
+    {
+        Intent tempIntent = new Intent(this, LoadStateActivity.class);
+        startActivity(tempIntent);
+    }
 
     //Check whether or not the game is zoomed in
     public static boolean isZoomedIn()
-        {
-            return zoomState;
-        }
+    {
+        return zoomState;
+    }
         
         
     /**
@@ -482,42 +491,47 @@ public class MainActivity extends FlurryActivity
         }
 
         public ElementAdapter(Context context, String[] elements)
-            {
-                super(context, RESOURCE, elements);
-                inflater = LayoutInflater.from(context);
-            }
+        {
+            super(context, RESOURCE, elements);
+            inflater = LayoutInflater.from(context);
+        }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent)
-            {
-                ViewHolder holder;
+        {
+            ViewHolder holder;
 
-                if ( convertView == null ) {
-                    // inflate a new view and setup the view holder for future use
-                    convertView = inflater.inflate( RESOURCE, null );
+            if ( convertView == null ) {
+                // inflate a new view and setup the view holder for future use
+                convertView = inflater.inflate( RESOURCE, null );
 
-                    holder = new ViewHolder();
-                    holder.nameTxVw =
-                        (TextView) convertView.findViewById(R.id.elementname);
-                    convertView.setTag( holder );
-                }  else {
-                    // view already defined, retrieve view holder
-                    holder = (ViewHolder) convertView.getTag();
-                }
-
-                String name = (String) getItem(position);
-                int realElementPosition = position + NORMAL_ELEMENT;
-                holder.nameTxVw.setText(name);
-                int theColor = Color.rgb(getElementRed(realElementPosition), 
-                		getElementGreen(realElementPosition), getElementBlue(realElementPosition));
-                ColorDrawable elementColor = new ColorDrawable(theColor);
-                elementColor.setBounds(0, 0, COLOR_SQUARE_SIZE, COLOR_SQUARE_SIZE);
-                holder.nameTxVw.setCompoundDrawables( elementColor, null, null, null );
-
-                return convertView;
+                holder = new ViewHolder();
+                holder.nameTxVw =
+                    (TextView) convertView.findViewById(R.id.elementname);
+                convertView.setTag( holder );
+            }  else {
+                // view already defined, retrieve view holder
+                holder = (ViewHolder) convertView.getTag();
             }
+
+            String name = (String) getItem(position);
+            int realElementPosition = position + NORMAL_ELEMENT;
+            holder.nameTxVw.setText(name);
+            int theColor = Color.rgb(getElementRed(realElementPosition), 
+                                     getElementGreen(realElementPosition), getElementBlue(realElementPosition));
+            ColorDrawable elementColor = new ColorDrawable(theColor);
+                
+            elementColor.setBounds(0, 0, toPx(COLOR_SQUARE_SIZE), toPx(COLOR_SQUARE_SIZE));
+            holder.nameTxVw.setCompoundDrawables( elementColor, null, null, null );
+
+            return convertView;
+        }
     }
-        
+
+    //Converts dp to pixels
+    public static int toPx(int dp) {
+        return (int)((dp*mDPI)/160f);
+    }        
 
     //@formatter:off
     //JNI Functions
@@ -556,7 +570,7 @@ public class MainActivity extends FlurryActivity
     //@formatter:on
 
     static
-        {
-            System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
-        }
+    {
+        System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
+    }
 }
