@@ -49,7 +49,8 @@
 char saveState(char* saveLoc);
 char saveStateLogic(FILE* fp);
 char loadState(char* loadLoc);
-char loadStateLogic(FILE* fp);
+char loadStateLogicV0(FILE* fp);
+char loadStateLogicV1(FILE* fp);
 char removeTempSave(void);
 char saveCustomElement(struct Element* createdCustomElement);
 char loadCustomElement(char* loadLoc);
