@@ -37,101 +37,14 @@ char saveStateLogic(FILE* fp)
 {
     if (fp != NULL)
     {
-        int i, counterX, counterY, numElementsToBeSaved;
+        int i, counterX, counterY;
         struct Particle* tempParticle;
-        char* elementSaveFilter;
-        elementSaveFilter = (char*)malloc(numElements * sizeof(char));
 
-        //Initialize elementSaveFilter
-        for(i = 0; i < numElements; i++)
-        {
-            elementSaveFilter[i] = 0;
-        }
-
-        //Preprocessing loop
-        numElementsToBeSaved = 0;
-        for (counterX = 0; counterX < workWidth; counterX++)
-        {
-            for (counterY = 0; counterY < workHeight; counterY++)
-            {
-                tempParticle = allCoords[getIndex(counterX, counterY)];
-                //If the particle is a custom element, indicate that we need to save this element
-                if(tempParticle && tempParticle->element->index >= NUM_BASE_ELEMENTS && elementSaveFilter[tempParticle->element->index] != 1)
-                {
-                    elementSaveFilter[tempParticle->element->index] = 1;
-                    numElementsToBeSaved++;
-                }
-            }
-        }
-
-        //First write how many custom elements will be saved
-        fprintf(fp, "%d\n\n", numElementsToBeSaved);
+        //First write the version code for this saveload version
+        fprintf(fp, "%s\n\n", SAVELOAD_VERSION_CODE);
 
         //Save the max specials (for backward compatibility if needed)
         fprintf(fp, "%d\n\n", MAX_SPECIALS);
-
-        //Save the custom elements that need to be saved
-        /* Save format:
-         * index
-         * name
-         * state startingTemp lowestTemp highestTemp
-         * lowerElement->index higherElement->index
-         * red green blue
-         * density fallVel inertia
-         * special specialVal ... (line seperated)
-         * collisions (line seperated)
-         */
-        for (i = 0; i < numElements; i++)
-        {
-            char buffer[10];
-            sprintf(buffer, "%d", i);
-            __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
-            if(elementSaveFilter[i] == 1)
-            {
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "0");
-                fprintf(fp, "%d\n", i);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "1");
-                fprintf(fp, "%s\n", elements[i]->name);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "2");
-                fprintf(fp, "%d %d %d %d\n",
-                        elements[i]->state,
-                        elements[i]->startingTemp,
-                        elements[i]->lowestTemp,
-                        elements[i]->highestTemp);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "3");
-                fprintf(fp, "%d %d\n",
-                        elements[i]->lowerElement->index,
-                        elements[i]->higherElement->index);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "4");
-                fprintf(fp, "%d %d %d\n",
-                        elements[i]->red,
-                        elements[i]->green,
-                        elements[i]->blue);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "5");
-                fprintf(fp, "%d %d %d\n\n",
-                        elements[i]->density,
-                        elements[i]->fallVel,
-                        elements[i]->inertia);
-                __android_log_write(ANDROID_LOG_INFO, "LOG", "6");
-                int j;
-                // Collisions
-                for (j = 0; j < NUM_BASE_ELEMENTS; j++)
-                {
-                    fprintf(fp, "%d\n",
-                            elements[i]->collisions[j]);
-                }
-                // Specials
-                for (j = 0; j < MAX_SPECIALS; j++)
-                {
-                    fprintf(fp, "%d %d\n",
-                            elements[i]->specials[j],
-                            elements[i]->specialVals[j]);
-                }
-                fprintf(fp, "\n");
-            }
-        }
-
-        __android_log_write(ANDROID_LOG_INFO, "LOG", "Wrote custom elements");
 
         //Save the dimensions
         fprintf(fp, "%d %d\n\n", workWidth, workHeight);
@@ -150,13 +63,29 @@ char saveStateLogic(FILE* fp)
                 tempParticle = allCoords[getIndex(counterX, counterY)];
                 if(tempParticle)
                 {
-                    fprintf(fp, "(%f %f %d %d %d %d)",
-                            tempParticle->x,
-                            tempParticle->y,
-                            tempParticle->xVel,
-                            tempParticle->yVel,
-                            tempParticle->heat,
-                            tempParticle->element->index);
+                    // Normal element
+                    if(tempParticle->element->index < NUM_BASE_ELEMENTS)
+                    {
+                        fprintf(fp, "B(%f %f %d %d %d %d)",
+                                tempParticle->x,
+                                tempParticle->y,
+                                tempParticle->xVel,
+                                tempParticle->yVel,
+                                tempParticle->heat,
+                                tempParticle->element->index);
+                    }
+                    // Custom element
+                    else
+                    {
+                        fprintf(fp, "C(%f %f %d %d %d %lu)",
+                                tempParticle->x,
+                                tempParticle->y,
+                                tempParticle->xVel,
+                                tempParticle->yVel,
+                                tempParticle->heat,
+                                hashElement(tempParticle->element));
+                    }
+
                     fprintf(fp, "[");
                     for (i = 0; i < MAX_SPECIALS; i++)
                     {
@@ -166,7 +95,8 @@ char saveStateLogic(FILE* fp)
                 }
                 else
                 {
-                    fprintf(fp, "()");
+                    // E -- empty location
+                    fprintf(fp, "E");
                 }
             }
             fprintf(fp, "\n");
@@ -190,12 +120,34 @@ char loadState(char* loadLoc)
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex lock");
 
     FILE* fp = fopen(loadLoc, "r");
-    char retVal = loadStateLogic(fp);
-    play = FALSE;
+
+    char retVal = 0;
+    char buffer[100];
+    int charsRead;
+    // Choose which load state logic to use based on the version tag
+    if ((charsRead = fscanf(fp, "%s\n\n", &buffer)) == EOF) { return FALSE; }
+    if (charsRead == 0 || strcmp(buffer, SAVELOAD_VERSION_CODE) != 0)
+    {
+        fseek(fp, 0, SEEK_SET);
+        retVal = loadStateLogicV0(fp);
+    }
+    else if (strcmp(buffer, SAVELOAD_VERSION_CODE) == 0)
+    {
+        fseek(fp, 0, SEEK_SET);
+        retVal = loadStateLogicV1(fp);
+    }
+
+    if (!retVal)
+    {
+        __android_log_write(ANDROID_LOG_ERROR, "TheElements", "Load file appears corrupted");
+    }
     if (fp)
     {
         fclose(fp);
     }
+
+    // Set play to true on every load
+    play = TRUE;
 
     //Unlock the mutex before quitting
     pthread_mutex_unlock(&update_mutex);
@@ -203,7 +155,7 @@ char loadState(char* loadLoc)
 
     return retVal;
 }
-char loadStateLogic(FILE* fp)
+char loadStateLogicV0(FILE* fp)
 {
     //Clear the screen and set up some temp variables
     arraySetup();
@@ -296,9 +248,9 @@ char loadStateLogic(FILE* fp)
         }
         for (i = 0; i < numElementsSaved; i++)
         {
-            elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 1] > NUM_BASE_ELEMENTS ? 
+            elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 1] > NUM_BASE_ELEMENTS ?
                 elements[ tempElMap[tempMap[3*i + 1]] ] : elements[tempMap[3*i + 1]];
-            elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 2] > NUM_BASE_ELEMENTS ? 
+            elements[ tempMap[3*i] ]->lowerElement = tempMap[3*i + 2] > NUM_BASE_ELEMENTS ?
                 elements[tempElMap[tempMap[3*i + 2]] ]: elements[tempMap[3*i + 2]];
         }
         free(tempMap);
@@ -317,7 +269,7 @@ char loadStateLogic(FILE* fp)
         {
             sizeX = workWidth;
         }
-        if(sizeY > workHeight)  
+        if(sizeY > workHeight)
         {
             sizeY = workHeight;
         }
@@ -401,6 +353,164 @@ char loadStateLogic(FILE* fp)
             // Set the allCoords and bitmap color
             allCoords[getIndex(i, j)] = tempParticle;
             setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
+        }
+
+        fclose(fp);
+        return TRUE;
+    }
+    return FALSE;
+}
+char loadStateLogicV1(FILE* fp)
+{
+    //Clear the screen and set up some temp variables
+    arraySetup();
+    elementSetup();
+    gameSetup();
+
+    int i, j, elementIndex, elementHash,
+        sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead, failed;
+    struct Element* tempElement;
+    struct Particle* tempParticle;
+    char buffer[64];
+    char lookAhead;
+
+    if(fp != NULL)
+    {
+        // Get the saveload version code
+        if((charsRead = fscanf(fp, "%s\n\n", &buffer)) == EOF || charsRead < 1) { return FALSE; }
+        if(strcmp(buffer, SAVELOAD_VERSION_CODE) != 0) { return FALSE; }
+
+        // Get the max specials at the time of this file
+        if((charsRead = fscanf(fp, "%d\n\n", &fileMaxSpecials)) == EOF || charsRead < 1) {return FALSE;}
+
+        // Get the dimensions
+        if((charsRead = fscanf(fp, "%d %d\n\n", &sizeX, &sizeY)) == EOF || charsRead < 2) {return FALSE;}
+
+
+        //Make sure saves are portable from different dimensions
+        if(sizeX > workWidth)
+        {
+            sizeX = workWidth;
+        }
+        if(sizeY > workHeight)
+        {
+            sizeY = workHeight;
+        }
+
+
+        while(!feof(fp))
+        {
+            failed = FALSE;
+
+            // Check for all particles used
+            if(loq <= 0) {return TRUE;}
+
+            // Scan in the initial character
+            if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
+
+            // Basic particle
+            if(lookAhead == 'B')
+            {
+                // Try to read in a particle
+                tempParticle = avail[loq-1];
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
+                                       &tempParticle->y,
+                                       &tempParticle->xVel,
+                                       &tempParticle->yVel,
+                                       &tempParticle->heat,
+                                       &elementIndex)) == EOF
+                   || charsRead < 6) {continue;}
+                tempParticle->element = elements[elementIndex];
+            }
+            // Custom particle
+            else if(lookAhead == 'C')
+            {
+                // Try to read in a particle
+                tempParticle = avail[loq-1];
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)", &tempParticle->x,
+                                       &tempParticle->y,
+                                       &tempParticle->xVel,
+                                       &tempParticle->yVel,
+                                       &tempParticle->heat,
+                                       &elementHash)) == EOF
+                   || charsRead < 6) {continue;}
+
+                // Find custom with that hash, and set the index
+                elementIndex = findElementFromHash(elementHash);
+                if (elementIndex)
+                {
+                    tempParticle->element = elements[elementIndex];
+                }
+                else
+                {
+                    // Don't fail now, we need to finish reading in all specials, etc. so that
+                    // we don't corrupt the stream. Instead, finish reading in, then don't actually
+                    // allocate the element.
+                    failed = TRUE;
+                }
+            }
+            // Empty location
+            else if(lookAhead == 'E')
+            {
+                continue;
+            }
+            else
+            {
+                // Ignore whitespace and other characters
+                continue;
+            }
+
+            // Save the integral coordinates for writing to allCoords
+            i = (int)tempParticle->x;
+            j = (int)tempParticle->y;
+            if (i >= sizeX || j >= sizeY) { return FALSE; }
+
+            // Check that our lookahead is correct
+            if((charsRead = fscanf(fp, "%c", &lookAhead)) != EOF && charsRead == 1 && lookAhead == '[')
+            {
+                int k;
+                for (k = 0; k < fileMaxSpecials; k++)
+                {
+                    if((charsRead = fscanf(fp, "%d ", &tempSpecialVal)) == EOF || charsRead < 1)
+                    {
+                        failed = TRUE;
+                        break;
+                    }
+
+                    if (k < MAX_SPECIALS)
+                    {
+                        tempParticle->specialVals[k] = tempSpecialVal;
+                    }
+                }
+
+                // Skip past the closing ']'
+                fseek(fp, 1, SEEK_CUR);
+            }
+            else
+            {
+                // Put the lookAhead char back on the stream
+                fseek(fp, -1, SEEK_CUR);
+                failed = TRUE;
+            }
+            // If reading in failed, initialize to cleared
+            if (failed)
+            {
+                clearSpecialVals(tempParticle);
+            }
+
+            // Only finish creating the particle if we succeed
+            if (!failed)
+            {
+                // Remove the particle from avail
+                loq--;
+
+                // Make the particle set
+                tempParticle->set = TRUE;
+
+                // Set the allCoords and bitmap color
+                allCoords[getIndex(i, j)] = tempParticle;
+                setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+            }
         }
 
         fclose(fp);
@@ -522,74 +632,6 @@ char removeTempSave(void)
 
     return FALSE;
 }
-//TODO:
-/*
-  char saveCustomElement(struct Element* cCElement)
-  {
-  char saveLoc[256];
-  strcpy(saveLoc, ROOT_FOLDER);
-  strcat(saveLoc, ELEMENTS_FOLDER);
-  strcat(saveLoc, createdCustomElement->name);
-  strcat(saveLoc, ELEMENT_EXTENSION);
-
-  FILE* saveFile;
-
-  saveFile = fopen(saveFile,"wb");
-
-  fprintf(saveFile, cCElement->name );
-  fprintf(saveFile, " %d", cCElement->startingTemp,
-  cCElement->lowestTemp,
-  cCElement->highestTemp,
-  cCElement->lowerElement->index,
-  cCElement->higherElement->index,
-  cCElement->)
-
-
-
-  fclose(saveFile);
-  //TODO: Save to saveLoc
-
-  return FALSE;
-  }
-*/
-
-//Saves the custom element to the correct file
-char saveCustomElementHash(char* elementHash)
-{
-    char saveLoc[MAX_CE_NAME_LENGTH];
-    char name[MAX_CE_NAME_LENGTH];
-
-    //Extract the name out of the elementHash, there might be a better way to do this but w/e, particularly I don't think the second while is needed but meh
-    strcpy(name,elementHash);
-    int i = 0;
-    while (elementHash[i] != ' ')
-    {
-        i++;
-    }
-    while(i < MAX_ELEMENTS)
-    {
-        name[i] = 0;
-    }
-
-    strcpy(saveLoc, ROOT_FOLDER);
-    strcat(saveLoc, ELEMENTS_FOLDER);
-    strcat(saveLoc, name);
-    strcat(saveLoc, ELEMENT_EXTENSION);
-
-    FILE* saveFile;
-
-    saveFile = fopen(saveLoc,"wb");
-    if (saveFile == NULL)
-    {
-        return FALSE;
-    }
-
-    fprintf(saveFile, elementHash);
-    fclose(saveFile);
-
-
-    return TRUE;
-}
 
 char loadCustomElements(void)
 {
@@ -647,8 +689,6 @@ char loadCustomElements(void)
 }
 char loadCustomElement(char* loadLoc)
 {
-    // REMOVE THIS
-    char buffer[256];
 
     // Try opening the custom element file
     FILE* fp = fopen(loadLoc, "r");
@@ -740,10 +780,81 @@ char loadCustomElement(char* loadLoc)
     numElements++;
     elements[numElements-1] = tempCustom;
 
+    // REMOVE THIS
+    char buffer[256];
     sprintf(buffer, "Loaded custom element, index: %d, element->index: %d", numElements-1, tempCustom->index);
     __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 
     fclose(fp);
 
     return TRUE;
+}
+
+
+// Hash an element (usually a custom element), for the purposes of identifying later
+unsigned long hashElement(struct Element* element)
+{
+    //Stringify the element
+    char* stringified = stringifyElement(element);
+    unsigned long hash = hashStr(stringified);
+    free(stringified);
+    return hash;
+}
+char* stringifyElement(struct Element* element)
+{
+    char* buffer = (char*)malloc(sizeof(char)*1024);
+    int offset = 0;
+    offset += sprintf(&buffer[offset], "%d%s", element->index, element->name);
+    offset += sprintf(&buffer[offset], "%c%c%c%c%d%d", element->state,
+                      element->startingTemp,
+                      element->lowestTemp,
+                      element->highestTemp,
+                      element->lowerElement->index,
+                      element->higherElement->index);
+    offset += sprintf(&buffer[offset], "%c%c%c", element->red,
+                      element->blue,
+                      element->green);
+    int i;
+    for (i = 0; i < MAX_SPECIALS; ++i)
+    {
+        offset += sprintf(&buffer[offset], "%d%d", element->specials[i], element->specialVals[i]);
+    }
+    for (i = 0; i < NUM_BASE_ELEMENTS; ++i)
+    {
+        offset += sprintf(&buffer[offset], "%d", element->collisions[i]);
+    }
+    offset += sprintf(&buffer[offset], "%c%c%c%c", element->base,
+                      element->density,
+                      element->fallVel,
+                      element->inertia);
+    buffer[offset] = 0;
+    return buffer;
+}
+// djb2 hash for strings
+// See: http://www.cse.yorku.ca/~oz/hash.html
+unsigned long hashStr(unsigned char *str)
+{
+    unsigned long hash = 5381;
+    int c;
+
+    while (c = *str++)
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+
+    return hash;
+}
+// Find an element based on the hash
+// For now, do it stupidly: iterate through customs and hash them,
+// looking for a match.
+unsigned char findElementFromHash(unsigned long hash)
+{
+    int i;
+    unsigned long tempHash;
+    for (i = NUM_BASE_ELEMENTS; i < numElements; ++i)
+    {
+        tempHash = hashElement(elements[i]);
+        if (tempHash == hash)
+        {
+            return i;
+        }
+    }
 }
