@@ -116,33 +116,37 @@ char loadState(char* loadLoc)
 {
     //Lock the mutex before loading so that we don't update frames while loading
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "Starting loadstate");
+    __android_log_write(ANDROID_LOG_INFO, "TheElements", loadLoc);
     pthread_mutex_lock(&update_mutex);
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "Got mutex lock");
 
     FILE* fp = fopen(loadLoc, "r");
 
-    char retVal = 0;
+    char retVal = FALSE;
     char buffer[100];
     int charsRead;
-    // Choose which load state logic to use based on the version tag
-    if ((charsRead = fscanf(fp, "%s\n\n", &buffer)) == EOF) { return FALSE; }
-    if (charsRead == 0 || strcmp(buffer, SAVELOAD_VERSION_CODE) != 0)
-    {
-        fseek(fp, 0, SEEK_SET);
-        retVal = loadStateLogicV0(fp);
-    }
-    else if (strcmp(buffer, SAVELOAD_VERSION_CODE) == 0)
-    {
-        fseek(fp, 0, SEEK_SET);
-        retVal = loadStateLogicV1(fp);
-    }
-
-    if (!retVal)
-    {
-        __android_log_write(ANDROID_LOG_ERROR, "TheElements", "Load file appears corrupted");
-    }
     if (fp)
     {
+        // Choose which load state logic to use based on the version tag
+        if ((charsRead = fscanf(fp, "%s\n\n", &buffer)) == EOF) { return FALSE; }
+        if (charsRead == 0 || strcmp(buffer, SAVELOAD_VERSION_CODE) != 0)
+        {
+            __android_log_write(ANDROID_LOG_INFO, "TheElements", "V0 Load");
+            fseek(fp, 0, SEEK_SET);
+            retVal = loadStateLogicV0(fp);
+        }
+        else if (strcmp(buffer, SAVELOAD_VERSION_CODE) == 0)
+        {
+            __android_log_write(ANDROID_LOG_INFO, "TheElements", "V1 Load");
+            fseek(fp, 0, SEEK_SET);
+            retVal = loadStateLogicV1(fp);
+        }
+
+        if (!retVal)
+        {
+            __android_log_write(ANDROID_LOG_ERROR, "TheElements", "Load file appears corrupted");
+        }
+
         fclose(fp);
     }
 
@@ -355,7 +359,6 @@ char loadStateLogicV0(FILE* fp)
             setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
         }
 
-        fclose(fp);
         return TRUE;
     }
     return FALSE;
@@ -406,7 +409,8 @@ char loadStateLogicV1(FILE* fp)
             if(loq <= 0) {return TRUE;}
 
             // Scan in the initial character
-            if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
+            // If there is nothing, we're done
+            if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return TRUE;}
 
             // Basic particle
             if(lookAhead == 'B')
@@ -513,7 +517,6 @@ char loadStateLogicV1(FILE* fp)
             }
         }
 
-        fclose(fp);
         return TRUE;
     }
     return FALSE;
