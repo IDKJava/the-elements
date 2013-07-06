@@ -121,11 +121,17 @@ char loadState(char* loadLoc)
 
     FILE* fp = fopen(loadLoc, "r");
     char retVal = loadStateLogic(fp);
-    play = FALSE;
+    if (!retVal)
+    {
+        __android_log_write(ANDROID_LOG_ERROR, "TheElements", "Load file appears corrupted");
+    }
     if (fp)
     {
         fclose(fp);
     }
+
+    // Set play to true on every load
+    play = TRUE;
 
     //Unlock the mutex before quitting
     pthread_mutex_unlock(&update_mutex);

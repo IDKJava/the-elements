@@ -255,9 +255,9 @@ public class MainActivity extends FlurryActivity
             //This is where I set the activity for Control so that I can call showDialog() from it
             control.setActivity(this);
                         
-            //start paused
-            play = false;
-            menu_bar.setPlayState(false);
+            //Start unpaused
+            play = true;
+            menu_bar.setPlayState(true);
         }
                 
 
