@@ -63,35 +63,35 @@ char saveStateLogic(FILE* fp)
                 tempParticle = allCoords[getIndex(counterX, counterY)];
                 if(tempParticle)
                 {
-                	// Normal element
-                	if(tempParticle->element->index < NUM_BASE_ELEMENTS)
-                	{
-						fprintf(fp, "B(%f %f %d %d %d %d)",
-								tempParticle->x,
-								tempParticle->y,
-								tempParticle->xVel,
-								tempParticle->yVel,
-								tempParticle->heat,
-								tempParticle->element->index);
-                	}
-                	// Custom element
-                	else
-                	{
-						fprintf(fp, "C(%f %f %d %d %d %lu)",
-								tempParticle->x,
-								tempParticle->y,
-								tempParticle->xVel,
-								tempParticle->yVel,
-								tempParticle->heat,
-								hashElement(tempParticle->element));
-                	}
+                    // Normal element
+                    if(tempParticle->element->index < NUM_BASE_ELEMENTS)
+                    {
+                        fprintf(fp, "B(%f %f %d %d %d %d)",
+                                tempParticle->x,
+                                tempParticle->y,
+                                tempParticle->xVel,
+                                tempParticle->yVel,
+                                tempParticle->heat,
+                                tempParticle->element->index);
+                    }
+                    // Custom element
+                    else
+                    {
+                        fprintf(fp, "C(%f %f %d %d %d %lu)",
+                                tempParticle->x,
+                                tempParticle->y,
+                                tempParticle->xVel,
+                                tempParticle->yVel,
+                                tempParticle->heat,
+                                hashElement(tempParticle->element));
+                    }
 
-					fprintf(fp, "[");
-					for (i = 0; i < MAX_SPECIALS; i++)
-					{
-						fprintf(fp, "%d ", tempParticle->specialVals[i]);
-					}
-					fprintf(fp, "]");
+                    fprintf(fp, "[");
+                    for (i = 0; i < MAX_SPECIALS; i++)
+                    {
+                        fprintf(fp, "%d ", tempParticle->specialVals[i]);
+                    }
+                    fprintf(fp, "]");
                 }
                 else
                 {
@@ -173,7 +173,7 @@ char loadStateLogic(FILE* fp)
 
         while(!feof(fp))
         {
-        	failed = FALSE;
+            failed = FALSE;
 
             // Check for all particles used
             if(loq <= 0) {return TRUE;}
@@ -181,57 +181,56 @@ char loadStateLogic(FILE* fp)
             // Scan in the initial character
             if((charsRead = fscanf(fp, "%c", &lookAhead)) == EOF || charsRead < 1) {return FALSE;}
 
-
             // Basic particle
             if(lookAhead == 'B')
             {
-				// Try to read in a particle
-				tempParticle = avail[loq-1];
-				if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
-									   &tempParticle->y,
-									   &tempParticle->xVel,
-									   &tempParticle->yVel,
-									   &tempParticle->heat,
-									   &elementIndex)) == EOF
-				   || charsRead < 6) {continue;}
-				tempParticle->element = elements[elementIndex];
+                // Try to read in a particle
+                tempParticle = avail[loq-1];
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
+                                       &tempParticle->y,
+                                       &tempParticle->xVel,
+                                       &tempParticle->yVel,
+                                       &tempParticle->heat,
+                                       &elementIndex)) == EOF
+                   || charsRead < 6) {continue;}
+                tempParticle->element = elements[elementIndex];
             }
             // Custom particle
             else if(lookAhead == 'C')
             {
-				// Try to read in a particle
-				tempParticle = avail[loq-1];
-				if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)", &tempParticle->x,
-									   &tempParticle->y,
-									   &tempParticle->xVel,
-									   &tempParticle->yVel,
-									   &tempParticle->heat,
-									   &elementHash)) == EOF
-				   || charsRead < 6) {continue;}
+                // Try to read in a particle
+                tempParticle = avail[loq-1];
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)", &tempParticle->x,
+                                       &tempParticle->y,
+                                       &tempParticle->xVel,
+                                       &tempParticle->yVel,
+                                       &tempParticle->heat,
+                                       &elementHash)) == EOF
+                   || charsRead < 6) {continue;}
 
-				// Find custom with that hash, and set the index
-				elementIndex = findElementFromHash(elementHash);
-				if (elementIndex)
-				{
-					tempParticle->element = elements[elementIndex];
-				}
-				else
-				{
-					// Don't fail now, we need to finish reading in all specials, etc. so that
-					// we don't corrupt the stream. Instead, finish reading in, then don't actually
-					// allocate the element.
-					failed = TRUE;
-				}
+                // Find custom with that hash, and set the index
+                elementIndex = findElementFromHash(elementHash);
+                if (elementIndex)
+                {
+                    tempParticle->element = elements[elementIndex];
+                }
+                else
+                {
+                    // Don't fail now, we need to finish reading in all specials, etc. so that
+                    // we don't corrupt the stream. Instead, finish reading in, then don't actually
+                    // allocate the element.
+                    failed = TRUE;
+                }
             }
             // Empty location
             else if(lookAhead == 'E')
             {
-            	continue;
+                continue;
             }
             else
             {
-            	// Ignore whitespace and other characters
-            	continue;
+                // Ignore whitespace and other characters
+                continue;
             }
 
             // Save the integral coordinates for writing to allCoords
@@ -275,15 +274,15 @@ char loadStateLogic(FILE* fp)
             // Only finish creating the particle if we succeed
             if (!failed)
             {
-            	// Remove the particle from avail
-            	loq--;
+                // Remove the particle from avail
+                loq--;
 
-				// Make the particle set
-				tempParticle->set = TRUE;
+                // Make the particle set
+                tempParticle->set = TRUE;
 
-				// Set the allCoords and bitmap color
-				allCoords[getIndex(i, j)] = tempParticle;
-				setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+                // Set the allCoords and bitmap color
+                allCoords[getIndex(i, j)] = tempParticle;
+                setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
             }
         }
 
@@ -568,41 +567,41 @@ char loadCustomElement(char* loadLoc)
 // Hash an element (usually a custom element), for the purposes of identifying later
 unsigned long hashElement(struct Element* element)
 {
-	//Stringify the element
-	char* stringified = stringifyElement(element);
-	unsigned long hash = hashStr(stringified);
-	free(stringified);
-	return hash;
+    //Stringify the element
+    char* stringified = stringifyElement(element);
+    unsigned long hash = hashStr(stringified);
+    free(stringified);
+    return hash;
 }
 char* stringifyElement(struct Element* element)
 {
-	char* buffer = (char*)malloc(sizeof(char)*1024);
-	int offset = 0;
-	offset += sprintf(&buffer[offset], "%d%s", element->index, element->name);
-	offset += sprintf(&buffer[offset], "%c%c%c%c%d%d", element->state,
-				element->startingTemp,
-				element->lowestTemp,
-				element->highestTemp,
-				element->lowerElement->index,
-				element->higherElement->index);
-	offset += sprintf(&buffer[offset], "%c%c%c", element->red,
-				element->blue,
-				element->green);
-	int i;
-	for (i = 0; i < MAX_SPECIALS; ++i)
-	{
-		offset += sprintf(&buffer[offset], "%d%d", element->specials[i], element->specialVals[i]);
-	}
-	for (i = 0; i < NUM_BASE_ELEMENTS; ++i)
-	{
-		offset += sprintf(&buffer[offset], "%d", element->collisions[i]);
-	}
-	offset += sprintf(&buffer[offset], "%c%c%c%c", element->base,
-			element->density,
-			element->fallVel,
-			element->inertia);
-	buffer[offset] = 0;
-	return buffer;
+    char* buffer = (char*)malloc(sizeof(char)*1024);
+    int offset = 0;
+    offset += sprintf(&buffer[offset], "%d%s", element->index, element->name);
+    offset += sprintf(&buffer[offset], "%c%c%c%c%d%d", element->state,
+                      element->startingTemp,
+                      element->lowestTemp,
+                      element->highestTemp,
+                      element->lowerElement->index,
+                      element->higherElement->index);
+    offset += sprintf(&buffer[offset], "%c%c%c", element->red,
+                      element->blue,
+                      element->green);
+    int i;
+    for (i = 0; i < MAX_SPECIALS; ++i)
+    {
+        offset += sprintf(&buffer[offset], "%d%d", element->specials[i], element->specialVals[i]);
+    }
+    for (i = 0; i < NUM_BASE_ELEMENTS; ++i)
+    {
+        offset += sprintf(&buffer[offset], "%d", element->collisions[i]);
+    }
+    offset += sprintf(&buffer[offset], "%c%c%c%c", element->base,
+                      element->density,
+                      element->fallVel,
+                      element->inertia);
+    buffer[offset] = 0;
+    return buffer;
 }
 // djb2 hash for strings
 // See: http://www.cse.yorku.ca/~oz/hash.html
@@ -621,14 +620,14 @@ unsigned long hashStr(unsigned char *str)
 // looking for a match.
 unsigned char findElementFromHash(unsigned long hash)
 {
-	int i;
-	unsigned long tempHash;
-	for (i = NUM_BASE_ELEMENTS; i < numElements; ++i)
-	{
-		tempHash = hashElement(elements[i]);
-		if (tempHash == hash)
-		{
-			return i;
-		}
-	}
+    int i;
+    unsigned long tempHash;
+    for (i = NUM_BASE_ELEMENTS; i < numElements; ++i)
+    {
+        tempHash = hashElement(elements[i]);
+        if (tempHash == hash)
+        {
+            return i;
+        }
+    }
 }
