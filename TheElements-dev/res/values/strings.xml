@@ -24,6 +24,7 @@
     <string name="CustomEle_prompt">How to react with custom element:</string>
     <string name="Mud_prompt">How to react with mud:</string>
     <string name="explonesstext">Explosiveness:</string>
+    <string name="colortext">Color:</string>
     <string name="redtext">Redness:</string>
     <string name="bluetext">Blueness:</string>
     <string name="greentext">Greeness:</string>
