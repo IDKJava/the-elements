@@ -90,6 +90,10 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* e
 //Save/load functions
 char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
 {
+    // Stop profiling
+    // This saves to /sdcard/gmon.out
+    moncleanup();
+
     jsize len = (*env)->GetArrayLength(env, saveLoc);
     jbyte* saveLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
     (*env)->GetByteArrayRegion(env, saveLoc, 0, len, saveLoc2);
@@ -180,6 +184,9 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
     atmosphereSetup();
     elementSetup();
     particleSetup();
+
+    // Profiling
+    monstartup("libthelements.so");
 }
 void Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
