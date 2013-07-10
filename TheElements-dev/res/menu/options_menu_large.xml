@@ -11,9 +11,7 @@
 	      android:icon="@android:drawable/ic_menu_delete"/>
 	<item android:id="@+id/play_pause"
 		  android:title="@string/play_pause" />
-	<item android:id="@+id/custom_element_editor" android:title="@string/custom_elements"></item><item android:id="@+id/toggle_size"
-	      android:title="@string/toggle_size"
-	      android:icon="@android:drawable/ic_menu_zoom"/>
+	<item android:id="@+id/custom_element_editor" android:title="@string/custom_elements"></item>
 	<item android:id="@+id/save"
 		  android:title="@string/save" />
 	<item android:id="@+id/load"

@@ -36,30 +36,18 @@ void UpdateView(void)
     }
 
     //Zoom
-    if(shouldZoom)
+    if(zoomChanged)
     {
-	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "zoom section of udpate");
-	if(zoomFactor > 1)
-	{
-	    zoomFactor = 1;
-	}
-	else
-	{
-	    zoomFactor = DEFAULT_ZOOM_FACTOR;
-	}
-	zoomChanged = TRUE;
-	//Update workWidth and workHeight
-	workWidth = screenWidth / zoomFactor;
-	workHeight = screenHeight / zoomFactor;
+        //Update workWidth and workHeight
+        workWidth = screenWidth / zoomFactor;
+        workHeight = screenHeight / zoomFactor;
 
-	//Finds nearest power of 2 to work Width
-	stupidTegra = 1;
-	while((stupidTegra = stupidTegra << 1) < workWidth);
+        //Finds nearest power of 2 to work Width
+        stupidTegra = 1;
+        while((stupidTegra = stupidTegra << 1) < workWidth);
 
-	arraySetup();
-	gameSetup();
-
-	shouldZoom = FALSE;
+        arraySetup();
+        gameSetup();
     }
 
     //Draw points

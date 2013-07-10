@@ -35,6 +35,7 @@ public class Preferences
 		setAtmosphereTemp((char) sharedPreferences.getInt("atmosphere_temp", 100));
 		setAtmosphereGravity(sharedPreferences.getFloat("atmosphere_gravity", 1));
 		setBorderState(sharedPreferences.getBoolean("border_left", true), sharedPreferences.getBoolean("border_top", true), sharedPreferences.getBoolean("border_right", true), sharedPreferences.getBoolean("border_bottom", true));
+		setZoom(Integer.parseInt(sharedPreferences.getString("screen_zoom", "4")));
 	}
 
 	public static void loadScreenState()
@@ -49,6 +50,7 @@ public class Preferences
 	public static native void setBackgroundColor(char red, char green, char blue);
 	public static native void setAtmosphereTemp(char temp);
 	public static native void setAtmosphereGravity(float gravity);
+    public static native void setZoom(int zoom);
 	//@formatter:on
 
 	static
