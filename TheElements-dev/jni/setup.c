@@ -39,9 +39,10 @@ void gameSetup()
             {
                 allCoords[getIndex(i, j)] = NULL;
             }
-            colors[3 * getColorIndex(i, j)] = backgroundRed;
-            colors[3 * getColorIndex(i, j) + 1] = backgroundGreen;
-            colors[3 * getColorIndex(i, j) + 2] = backgroundBlue;
+            colors[4 * getColorIndex(i, j)] = backgroundRed;
+            colors[4 * getColorIndex(i, j) + 1] = backgroundGreen;
+            colors[4 * getColorIndex(i, j) + 2] = backgroundBlue;
+            colors[4 * getColorIndex(i, j) + 3] = 255;
         }
     }
     /* Network stuff not needed
@@ -67,7 +68,7 @@ void arraySetup()
     free(allCoords);
 
     //Allocate memory
-    colors = malloc(3 * stupidTegra * workHeight * sizeof(char));
+    colors = malloc(4 * stupidTegra * workHeight * sizeof(char));
     allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 
 }
@@ -143,6 +144,7 @@ void elementSetup()
         }
     }
     loadCustomElements();
+//    clearBitmapColor(0, 10);
     __android_log_write(ANDROID_LOG_INFO, "LOG", "End element setup");
 }
 

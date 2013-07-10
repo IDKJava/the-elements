@@ -50,17 +50,23 @@ void glInit()
 	while((texWidth = texWidth << 1) < (screenWidth-screenWidth%zoomFactor));
 	while((texHeight = texHeight << 1) < (screenHeight-screenHeight%zoomFactor));
 
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable( GL_BLEND );
+
 
 	//Allocate the dummy array
-	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
+	char* emptyPixels = malloc(4 * texWidth*texHeight * sizeof(char));
 	//Generate the tex image
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texWidth, texHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, emptyPixels);
 	//Free the dummy array
 	free(emptyPixels);
 
-	//Set the pointers
+	//Set the pointers        
 	glVertexPointer(2, GL_FLOAT, 0, vertices);
 	glTexCoordPointer(2, GL_FLOAT, 0, texture);
+
+        //Change the clear color
+        glClearColor(0.5, 0, 0, 0);
 }
 
 /*void glRender()
@@ -128,11 +134,12 @@ void glInit()
 void glRender()
 {
 	//Clear the screen
-	glClear(GL_COLOR_BUFFER_BIT);
+    //glClear(GL_COLOR_BUFFER_BIT);
+
 
 	//Actually draw the rectangle with the text on it (~.015s -- Droid)
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-
+        
 	//Check for changes in screen dimensions or work dimensions and handle them
 	//char buffer[100];
 	//sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
@@ -185,6 +192,5 @@ void glRender()
 	//__android_log_write(ANDROID_LOG_INFO, "TheElements", "updateview end");
 
 	//Sub the work portion of the tex(~.025s -- Droid)
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colors);
-
+	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGBA, GL_UNSIGNED_BYTE, colors);
 }

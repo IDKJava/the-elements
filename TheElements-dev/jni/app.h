@@ -150,6 +150,8 @@ extern char shouldUpdateMouse;
 //Set when a zoom is requested, unset when zoom
 extern char shouldZoom;
 
+extern char backgroundAlpha;
+
 //Gravity values
 extern float xGravity;
 extern float yGravity;

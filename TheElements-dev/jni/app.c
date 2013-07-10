@@ -77,7 +77,7 @@ char shouldClear = FALSE;
 char shouldZoom = FALSE;
 char shouldUpdateMouse = FALSE;
 
-
+char backgroundAlpha = 125;
 
 //Gravity values
 float xGravity;
