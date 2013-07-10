@@ -16,7 +16,6 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
     //If there are points available
     if (loq > 0)
     {
-        int index;
         //Decrement number of points available
         loq--;
         //Get the pointer to the particle
