@@ -52,6 +52,12 @@
 				android:defaultValue="true"
 				android:summary="@string/border_bottom_summary" />
 		</PreferenceScreen>
+        <ListPreference
+            android:key="screen_zoom"
+            android:entries="@array/screen_zoom_entries"
+            android:entryValues="@array/screen_zoom_entry_values"
+            android:defaultValue="4"
+            android:title="@string/screen_zoom" />
 		<CheckBoxPreference
 			android:key="accel_state"
 			android:title="@string/accel_state"
