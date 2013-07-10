@@ -25,8 +25,8 @@ extern "C" {
  * FUNCTIONS
  */
 
-int getIndex(int x, int y);
-int getColorIndex(int x, int y);
+inline int getIndex(int x, int y);
+inline int getColorIndex(int x, int y);
 
 /*
  * STRUCTS
