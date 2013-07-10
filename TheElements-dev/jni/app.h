@@ -147,8 +147,6 @@ extern char reciprocals[NUM_COLLISIONS];
 extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
-//Set when a zoom is requested, unset when zoom
-extern char shouldZoom;
 
 //Gravity values
 extern float xGravity;

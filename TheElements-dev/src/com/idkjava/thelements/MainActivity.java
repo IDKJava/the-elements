@@ -49,10 +49,6 @@ import com.idkjava.thelements.preferences.PreferencesActivity;
 
 public class MainActivity extends FlurryActivity
 {
-    //Constants for zoom
-    public static final boolean ZOOMED_IN = true;
-    public static final boolean ZOOMED_OUT = false;
-
     //Constants for dialogue ids
     private static final int INTRO_MESSAGE = 1;
     public static final int ELEMENT_PICKER = 2;
@@ -79,7 +75,6 @@ public class MainActivity extends FlurryActivity
     private static final int COLOR_SQUARE_SIZE = 40;
 
     public static boolean play = false;
-    public static boolean zoomState = ZOOMED_IN; //Zoomed in or not
 
     private SensorManager mSensorManager;
 
@@ -385,12 +380,6 @@ public class MainActivity extends FlurryActivity
             setElement(ERASER_ELEMENT);
             return true;
         }
-        case R.id.toggle_size:
-        {
-            zoomState = !zoomState;
-            setZoomState(zoomState);
-            return true;
-        }
         case R.id.save:
         {
             saveState();
@@ -469,12 +458,6 @@ public class MainActivity extends FlurryActivity
         Intent tempIntent = new Intent(this, LoadStateActivity.class);
         startActivity(tempIntent);
     }
-
-    //Check whether or not the game is zoomed in
-    public static boolean isZoomedIn()
-    {
-        return zoomState;
-    }
         
         
     /**
@@ -546,7 +529,6 @@ public class MainActivity extends FlurryActivity
         
     //Setters
     public static native void setPlayState(boolean playState);
-    public static native void setZoomState(boolean zoomState);
     public static native void setElement(char element);
     public static native void setBrushSize(char brushSize);
         

@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:id="@+id/toggle_size"
-	      android:title="@string/toggle_size"
-	      android:icon="@android:drawable/ic_menu_zoom"/>
 	<item android:id="@+id/preferences"
 	      android:title="@string/preferences"
 	      android:icon="@android:drawable/ic_menu_preferences"/>

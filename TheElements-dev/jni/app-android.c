@@ -234,16 +234,17 @@ void Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JN
 {
     cAtmosphere->gravity = gravity;
 }
+void Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject this, jint zoom)
+{
+    if(zoom != zoomFactor)
+    {
+        zoomFactor = zoom;
+        zoomChanged = TRUE;
+    }
+}
 void Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
 {
     play = (char) playState;
-}
-void Java_com_idkjava_thelements_MainActivity_setZoomState(JNIEnv* env, jobject this, jboolean zoomState)
-{
-    if(zoomState != zoomFactor)
-    {
-	shouldZoom = TRUE;
-    }
 }
 void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
 {
