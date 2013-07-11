@@ -162,10 +162,12 @@ char fixHeat(int heat)
 //Function to check if a particle has a given special
 char hasSpecial(struct Particle* tempParticle, int special)
 {
-    int i;
-    for(i = 0; i < MAX_SPECIALS; i++)
+    char* specials;
+    long start = tempParticle->element->specials;
+    long end = start + MAX_SPECIALS;
+    for(specials = start; specials < end; ++specials)
     {
-        if (tempParticle->element->specials[i] == special) return TRUE;
+        if (*specials == special) return TRUE;
     }
     return FALSE;
 }
@@ -174,15 +176,14 @@ char hasSpecial(struct Particle* tempParticle, int special)
 //WARNING: Just gets the first special of that type it finds
 char getParticleSpecialVal(struct Particle* tempParticle, int special)
 {
-    struct Element* tempElement;
-    tempElement = tempParticle->element;
-
-    int i;
-    for (i = 0; i < MAX_SPECIALS; i++)
+    char * specials;
+    long start =  tempParticle->element->specials;
+    long end = start + MAX_SPECIALS;
+    for (specials = start; specials < end; ++specials)
     {
-        if (tempElement->specials[i] == special)
+        if (*specials == special)
         {
-            return tempParticle->specialVals[i];
+            return tempParticle->specialVals[(long)specials-start];
         }
     }
 
@@ -192,13 +193,14 @@ char getParticleSpecialVal(struct Particle* tempParticle, int special)
 //WARNING: Just sets the first special of that type it finds
 void setParticleSpecialVal(struct Particle* tempParticle, int special, char val)
 {
-    int i;
-    for (i = 0; i < MAX_SPECIALS; i++)
+    char * specials;
+    long start = tempParticle->element->specials;
+    long end = start + MAX_SPECIALS;
+    for (specials = start; specials < end; ++specials)
     {
-        if (tempParticle->element->specials[i] == special)
+        if (*specials == special)
         {
-            tempParticle->specialVals[i] = val;
-            return;
+            return tempParticle->specialVals[(long)specials-start] = val;
         }
     }
 }
@@ -206,23 +208,24 @@ void setParticleSpecialVal(struct Particle* tempParticle, int special, char val)
 //WARNING: Just gets the first special of that type it finds
 char getElementSpecialVal(struct Element* tempElement, int special)
 {
-    int i;
-    for (i = 0; i < MAX_SPECIALS; i++)
+    char * specials;
+    long start = tempElement->specials;
+    long end = start + MAX_SPECIALS;
+    for (specials = start; specials < end; ++specials)
     {
-        if (tempElement->specials[i] == special)
+        if (*specials == special)
         {
-            return tempElement->specialVals[i];
+            return tempElement->specialVals[(long)specials-start];
         }
     }
-
-    return SPECIAL_VAL_UNSET;
 }
 
 void clearSpecialVals(struct Particle* tempParticle)
 {
-    int i;
-    for (i = 0; i < MAX_SPECIALS; i++)
+    char* specialVals = tempParticle->specialVals;;
+    long end = (long)specialVals  + MAX_SPECIALS;
+    for ( ; specialVals < end; ++specialVals)
     {
-        tempParticle->specialVals[i] = SPECIAL_VAL_UNSET;
+        *specialVals = SPECIAL_VAL_UNSET;
     }
 }
