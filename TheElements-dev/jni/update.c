@@ -9,21 +9,21 @@
 #include "update.h"
 #include <android/log.h>
 
-static int dx, dy;
-//Used in for loops
-static int counter;
-//For speed we're going to create temp variables to store stuff
-static int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
-static char tempInertia;
-static struct Particle* tempParticle;
-static struct Particle* tempAllCoords;
-static struct Element* tempElement;
-static struct Element* tempElement2;
-//Used for heat
-static int heatChange;
-
 void UpdateView(void)
 {
+    int dx, dy;
+    //Used in for loops
+    unsigned int counter;
+    //For speed we're going to create temp variables to store stuff
+    int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
+    char tempInertia;
+    struct Particle* tempParticle;
+    struct Particle* tempAllCoords;
+    struct Element* tempElement;
+    struct Element* tempElement2;
+    //Used for heat
+    int heatChange;
+
     //Clear
     if(shouldClear)
     {
@@ -114,9 +114,9 @@ void UpdateView(void)
             randOffset = rand();
         }
         //Physics update
-        for (counter = 0; counter < MAX_POINTS; counter++)
+        for (counter = MAX_POINTS; counter != 0; counter--)
         {
-            tempParticle = particles[counter];
+            tempParticle = particles[MAX_POINTS-counter];
                         
 
             //If the particle is set and unfrozen
@@ -425,11 +425,11 @@ void UpdateView(void)
 
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "End update heat");
 
-                int i;
+                unsigned int i;
 
                 char specialLoopDone = FALSE;
                 char shouldResolveHeatChanges = TRUE;
-                for (i = 0; i < MAX_SPECIALS; i++)
+                for (i = MAX_SPECIALS; i != 0; i--)
                 {
                     if (!tempElement->specials)
                     {
@@ -441,9 +441,9 @@ void UpdateView(void)
                       sprintf(buffer, "Processing special: %d, val: %d", i, tempElement->specials[i]);
                       __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
                     */
-                    if(tempParticle->set && tempElement && tempElement->specials[i] != SPECIAL_NONE)
+                    if(tempParticle->set && tempElement && tempElement->specials[MAX_SPECIALS-i] != SPECIAL_NONE)
                     {
-                        switch((int)tempElement->specials[i])
+                        switch((int)tempElement->specials[MAX_SPECIALS-i])
                         {
                             //Spawn
                         case SPECIAL_SPAWN:
