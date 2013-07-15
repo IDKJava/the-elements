@@ -139,24 +139,30 @@ void unFreezeParticles(int xCoord, int yCoord)
 }
 
 //Change a particle's heat and fix it
-char changeHeat(struct Particle* tempParticle, int heatChange)
+void changeHeat(char *heat, int heatChange)
 {
-    tempParticle->heat = fixHeat(tempParticle->heat + heatChange);
-}
-
-//Function to fix heat to [0,255]
-char fixHeat(int heat)
-{
-    if (heat < 0)
+    if (heatChange < 0)
     {
-        heat = 0;
+        if (*heat + heatChange < 0)
+        {
+            *heat = 0;
+        }
+        else
+        {
+            *heat += heatChange;
+        }
     }
-    else if(heat > 255)
+    else
     {
-        heat = 255;
+        if (*heat + heatChange > 255)
+        {
+            *heat = 255;
+        }
+        else
+        {
+            *heat += heatChange;
+        }
     }
-
-    return heat;
 }
 
 //Function to check if a particle has a given special
@@ -200,7 +206,7 @@ void setParticleSpecialVal(struct Particle* tempParticle, int special, char val)
     {
         if (*specials == special)
         {
-            return tempParticle->specialVals[(long)specials-start] = val;
+            tempParticle->specialVals[(long)specials-start] = val;
         }
     }
 }
