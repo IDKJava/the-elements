@@ -143,8 +143,6 @@ extern int stupidTegra;
 extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 extern char reciprocals[NUM_COLLISIONS];
 
-//Set when a clear is requested, unset when cleared
-extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
 extern char shouldUpdateMouse;
 

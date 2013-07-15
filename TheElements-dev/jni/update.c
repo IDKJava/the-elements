@@ -24,17 +24,6 @@ void UpdateView(void)
     //Used for heat
     int heatChange;
 
-    //Clear
-    if(shouldClear)
-    {
-        //Clear and unset the flag
-        gameSetup();
-        shouldClear = FALSE;
-                
-        //No need to do the rest of the update
-        return;
-    }
-
     //Zoom
     if(zoomChanged)
     {
