@@ -1178,19 +1178,19 @@ void UpdateView(void)
                     //Reduce velocities
                     if(*tempXVel < 0)
                     {
-                        *tempXVel++;
+                        (*tempXVel)++;
                     }
                     else if(*tempXVel > 0)
                     {
-                        *tempXVel--;
+                        (*tempXVel)--;
                     }
                     if(*tempYVel < 0)
                     {
-                        *tempYVel++;
+                        (*tempYVel)++;
                     }
                     else if(*tempYVel > 0)
                     {
-                        *tempYVel--;
+                        (*tempYVel)--;
                     }
                 }
 
