@@ -41,7 +41,7 @@ void collide(struct Particle* firstParticle, struct Particle* secondParticle)
     }
     else
     {
-        type = collision[firstParticle->element->index][secondParticle->element->index];
+        type = collision[fs][ss];
     }
 
     switch(type)
