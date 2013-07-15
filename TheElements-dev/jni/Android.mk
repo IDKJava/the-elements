@@ -8,6 +8,10 @@ LOCAL_MODULE := thelements
 LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL \
 				-pg
+
+# optimization level = 3
+LOCAL_CFLAGS += -O3
+
 # compile with profiling
 LOCAL_STATIC_LIBRARIES := android-ndk-profiler
 
