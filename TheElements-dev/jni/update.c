@@ -9,13 +9,244 @@
 #include "update.h"
 #include <android/log.h>
 
-void UpdateView(void)
+void drawPoints(void)
 {
     int dx, dy;
+    for (dy = brushSize; dy >= -brushSize; dy--)
+    {
+        for (dx = -brushSize; dx <= brushSize; dx++)
+        {
+            if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
+            {
+                if ( dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 )
+                    //Normal drawing
+                {
+                    if (cElement->index >= NORMAL_ELEMENT)
+                    {
+                        //Draw it solid
+                        if(cElement->inertia == INERTIA_UNMOVABLE || cElement->index == ELECTRICITY_ELEMENT)
+                        {
+                            if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+                            {
+                                createPoint(mouseX + dx, mouseY + dy, cElement);
+                            }
+                        }
+                        //Draw it randomized
+                        else
+                        {
+                            if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+                            {
+                                createPoint(mouseX + dx, mouseY + dy, cElement);
+                            }
+                        }
+                    }
+                    //Special Drag case
+                    else if (cElement->index == DRAG_ELEMENT)
+                    {
+                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0)
+                        {
+                            allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
+                            allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
+                        }
+                    }
+                    //Special Eraser case
+                    else if (cElement->index == ERASER_ELEMENT)
+                    {
+                        if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))])
+                        {
+                            deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Update the positions based on the diffs
+// Returns: FALSE if the particle moved offscreen and needs to be deleted now.
+//          If FALSE is returned, the x and y coords will be left at the
+//          original values.
+int checkBoundariesAndMove(float *x, float *y, float diffx, float diffy)
+{
+    // Save the oldy, in case we need to roll back the change because
+    // the x causes deletion (rare occurrence).
+    float oldy = *y;
+    // Check upper boundary
+    if (diffy > 0)
+    {
+        if ((int)(*y + diffy) < workHeight)
+        {
+            *y += diffy;
+        }
+        else if (!cAtmosphere->borderBottom)
+        {
+            return FALSE;
+        }
+    }
+    // Check lower boundary
+    else
+    {
+        if ((int)(*y + diffy) >= 0)
+        {
+            *y += diffy;
+        }
+        else if (!cAtmosphere->borderTop)
+        {
+            return FALSE;
+        }
+    }
+
+    // Check right boundary
+    if (diffx > 0)
+    {
+        if ((int)(*x + diffx) < workWidth)
+        {
+            *x += diffx;
+        }
+        else if (!cAtmosphere->borderRight)
+        {
+            // Rollback y before returning
+            *y = oldy;
+            return FALSE;
+        }
+    }
+    // Check left boundary
+    else
+    {
+        if ((int)(*x + diffx) >= 0)
+        {
+            *x += diffx;
+        }
+        else if (!cAtmosphere->borderLeft)
+        {
+            // Rollback y before returning
+            *y = oldy;
+            return FALSE;
+        }
+    }
+
+    return TRUE;
+}
+
+// Update the velocities based on inertia
+void updateVelocities(short *xvel, short *yvel, int inertia)
+{
+    if(*xvel < 0)
+    {
+        if(inertia >= -(*xvel))
+        {
+            *xvel = 0;
+        }
+        else
+        {
+            *xvel += inertia;
+        }
+    }
+    else if(*xvel > 0)
+    {
+        if(inertia >= *xvel)
+        {
+            *xvel = 0;
+        }
+        else
+        {
+            *xvel -= inertia;
+        }
+    }
+    // Update y vel based on inertia, always approaching 0
+    if(*yvel < 0)
+    {
+        *yvel += inertia;
+
+        if (*yvel >= 0)
+        {
+            *yvel = 0;
+        }
+        else
+        {
+            *yvel++;
+        }
+    }
+    else if(*yvel > 0)
+    {
+        *yvel -= inertia;
+
+        if(*yvel <= 0)
+        {
+            *yvel = 0;
+        }
+        else
+        {
+            *yvel--;
+        }
+    }
+}
+
+// Update the positions of the particle
+// Returns: TRUE if we should continue with the particle,
+//          FALSE if we deleted it.
+int updateKinetic(struct Particle* tempParticle)
+{
+    float *x_ptr = &(tempParticle->x);
+    float *y_ptr = &(tempParticle->y);;
+    short *xvel_ptr = &(tempParticle->xVel);
+    short *yvel_ptr = &(tempParticle->yVel);
+    float diffx, diffy;
+
+    //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
+    //If accelOn, do tempYVel based on that
+    if (yGravity != 0 && accelOn)
+    {
+        diffy = ((yGravity / 9.8) * tempParticle->element->fallVel + *yvel_ptr);
+    }
+    //Otherwise, just do the fallvelocity
+    else if (!accelOn)
+    {
+        diffy = tempParticle->element->fallVel + *yvel_ptr;
+    }
+    //Accelerometer on, but no gravity (held horizontal)
+    else
+    {
+        diffy = *yvel_ptr;
+    }
+
+    //If accelOn, calculate new x using the gravity set
+    //X Gravity is REVERSED! (hence the "-")
+    if ((int) xGravity != 0 && accelOn == 1)
+    {
+        diffx = ((-xGravity / 9.8) * tempParticle->element->fallVel + *xvel_ptr);
+    }
+    //Otherwise, just add tempXVel
+    else
+    {
+        diffx = *xvel_ptr;
+    }
+
+    //Boundary checking
+    if (!checkBoundariesAndMove(x_ptr, y_ptr, diffx, diffy))
+    {
+        // Delete the particle
+        deletePoint(tempParticle);
+        return FALSE;
+    }
+    //Reduce velocities
+    updateVelocities(xvel_ptr, yvel_ptr, tempParticle->element->inertia);
+
+    //Indicate that the particle has moved
+    tempParticle->hasMoved = TRUE;
+
+    return TRUE;
+}
+
+
+void UpdateView(void)
+{
     //Used in for loops
     unsigned int counter;
     //For speed we're going to create temp variables to store stuff
-    int tempX, tempY, tempOldX, tempOldY, tempXVel, tempYVel;
+    int tempX, tempY, tempOldX, tempOldY;
+    short *tempXVel, *tempYVel;
     char tempInertia;
     struct Particle* tempParticle;
     struct Particle* tempAllCoords;
@@ -42,55 +273,7 @@ void UpdateView(void)
     //Draw points
     if (fingerDown)
     {
-        for (dy = brushSize; dy >= -brushSize; dy--)
-        {
-            for (dx = -brushSize; dx <= brushSize; dx++)
-            {
-                if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
-                {
-                    if ( dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 )
-                        //Normal drawing
-                    {
-                        if (cElement->index >= NORMAL_ELEMENT)
-                        {
-                            //Draw it solid
-                            if(cElement->inertia == INERTIA_UNMOVABLE || cElement->index == ELECTRICITY_ELEMENT)
-                            {
-                                if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
-                                {
-                                    createPoint(mouseX + dx, mouseY + dy, cElement);
-                                }
-                            }
-                            //Draw it randomized
-                            else
-                            {
-                                if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
-                                {
-                                    createPoint(mouseX + dx, mouseY + dy, cElement);
-                                }
-                            }
-                        }
-                        //Special Drag case
-                        else if (cElement->index == DRAG_ELEMENT)
-                        {
-                            if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0)
-                            {
-                                allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
-                                allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
-                            }
-                        }
-                        //Special Eraser case
-                        else if (cElement->index == ERASER_ELEMENT)
-                        {
-                            if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))])
-                            {
-                                deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        drawPoints();
     }
 
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
@@ -121,165 +304,17 @@ void UpdateView(void)
                 tempParticle->oldY = tempOldY;
                 tempElement = tempParticle->element;
                 tempInertia = tempElement->inertia;
-                tempXVel = tempParticle->xVel;
-                tempYVel = tempParticle->yVel;
+                tempXVel = &(tempParticle->xVel);
+                tempYVel = &(tempParticle->yVel);
 
                 //Update coords
                 if(tempInertia != INERTIA_UNMOVABLE)
                 {
-                    //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
-                    //If accelOn, do tempYVel based on that
-                    if (yGravity != 0 && accelOn)
+                    if (!updateKinetic(tempParticle))
                     {
-                        tempParticle->y += ((yGravity / 9.8) * tempElement->fallVel + tempYVel);
+                        // If we ended up deleting the particle, continue
+                        continue;
                     }
-                    //Otherwise, just do the fallvelocity
-                    else if (!accelOn)
-                    {
-                        tempParticle->y += tempElement->fallVel + tempYVel;
-                    }
-                    //Accelerometer on, but no gravity (held horizontal)
-                    else
-                    {
-                        tempParticle->y += tempYVel;
-                    }
-
-                    //If accelOn, calculate new x using the gravity set
-                    //X Gravity is REVERSED! (hence the "-")
-                    if ((int) xGravity != 0 && accelOn == 1)
-                    {
-                        tempParticle->x += ((-xGravity / 9.8) * tempElement->fallVel + tempXVel);
-                    }
-                    //Otherwise, just add tempXVel
-                    else
-                    {
-                        tempParticle->x += tempXVel;
-                    }
-
-                    //Boundary checking
-                    if ((int) tempParticle->x >= workWidth)
-                    {
-                        if(cAtmosphere->borderRight)
-                        {
-                            //Bounce the particle
-                            tempParticle->x = tempOldX;
-                        }
-                        else
-                        {
-                            //Move it back and delete it
-                            tempParticle->x = tempOldX;
-                            tempParticle->y = tempOldY;
-                            deletePoint(tempParticle);
-                            continue;
-                        }
-                    }
-                    else if((int) tempParticle->x < 0)
-                    {
-                        if(cAtmosphere->borderLeft)
-                        {
-                            //Bounce the particle
-                            tempParticle->x = tempOldX;
-                        }
-                        else
-                        {
-                            //Move it back and delete it
-                            tempParticle->x = tempOldX;
-                            tempParticle->y = tempOldY;
-                            deletePoint(tempParticle);
-                            continue;
-                        }
-                    }
-                    if((int) tempParticle->y >= workHeight)
-                    {
-                        if(cAtmosphere->borderBottom && !(tempParticle->element == elements[ELECTRICITY_ELEMENT]))
-                        {
-                            //Bounce the particle
-                            tempParticle->y = tempOldY;
-                        }
-                        else
-                        {
-                            //Move it back and delete it
-                            tempParticle->x = tempOldX;
-                            tempParticle->y = tempOldY;
-                            deletePoint(tempParticle);
-                            continue;
-                        }
-                    }
-                    else if((int) tempParticle->y < 0)
-                    {
-                        if(cAtmosphere->borderTop && !hasSpecial(tempParticle, SPECIAL_LIFE))
-                        {
-                            //Bounce the particle
-                            tempParticle->y = tempOldY;
-                        }
-                        else
-                        {
-                            //Move it back and delete it
-                            tempParticle->x = tempOldX;
-                            tempParticle->y = tempOldY;
-                            deletePoint(tempParticle);
-                            continue;
-                        }
-                    }
-
-                    //Reduce velocities
-                    if(tempXVel < 0)
-                    {
-                        if(tempInertia >= -tempXVel)
-                        {
-                            tempXVel = 0;
-                        }
-                        else
-                        {
-                            tempXVel += tempInertia;
-                        }
-                    }
-                    else if(tempXVel > 0)
-                    {
-                        if(tempInertia >= tempXVel)
-                        {
-                            tempXVel = 0;
-                        }
-                        else
-                        {
-                            tempXVel -= tempInertia;
-                        }
-                    }
-                    // Update y vel based on inertia, always approaching 0
-                    if(tempYVel < 0)
-                    {
-                        tempYVel += tempInertia;
-
-                        if (tempYVel >= 0)
-                        {
-                            tempYVel = 0;
-                        }
-                        else
-                        {
-                            tempYVel++;
-                        }
-                    }
-                    else if(tempYVel > 0)
-                    {
-                        tempYVel -= tempInertia;
-
-                        if(tempYVel <= 0)
-                        {
-                            tempYVel = 0;
-                        }
-                        else
-                        {
-                            tempYVel--;
-                        }
-                    }
-                    tempParticle->xVel = tempXVel;
-                    tempParticle->yVel = tempYVel;
-
-
-                    //__android_log_write(ANDROID_LOG_INFO, "LOG", "End update coords");
-
-                    //Indicate that the particle has moved
-                    tempParticle->hasMoved = TRUE;
 
                     //Set other temp variables
                     tempX = (int) tempParticle->x;
@@ -313,10 +348,6 @@ void UpdateView(void)
 
                         //Resolve the collision (this updates the state of the particle, but lets this function resolve later)
                         collide(tempParticle, tempAllCoords);
-
-                        //Reset tempXVel and tempYVel
-                        tempXVel = tempParticle->xVel;
-                        tempYVel = tempParticle->yVel;
 
                         //Update allCoords and the bitmap colors if the hasMoved flag is set
                         if(tempParticle->hasMoved)
@@ -374,25 +405,23 @@ void UpdateView(void)
                 else
                 {
                     //Reduce velocities
-                    if(tempXVel < 0)
+                    if(*tempXVel < 0)
                     {
-                        tempXVel += 1;
+                        *tempXVel++;
                     }
-                    else if(tempXVel > 0)
+                    else if(*tempXVel > 0)
                     {
-                        tempXVel -= 1;
+                        *tempXVel--;
                     }
-                    if(tempYVel < 0)
+                    if(*tempYVel < 0)
                     {
-                        tempYVel += 1;
+                        *tempYVel++;
                     }
-                    else if(tempYVel > 0)
+                    else if(*tempYVel > 0)
                     {
-                        tempYVel -= 1;
+                        *tempYVel--;
                     }
 
-                    tempParticle->xVel = tempXVel;
-                    tempParticle->yVel = tempYVel;
                     tempX = (int) tempParticle->x;
                     tempY = (int) tempParticle->y;
                 }
