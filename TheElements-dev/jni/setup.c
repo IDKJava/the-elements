@@ -26,11 +26,12 @@ void gameSetup()
     //Unset all the particles
     for(i = 0; i < MAX_POINTS; i++)
     {
-        avail[i] = particles[i];
-        particles[i]->set = FALSE;
+        avail[i] = i;
+        a_set[i] = FALSE;
     }
 
     //Clear allCoords and our pixels array
+    //TODO: This could be faster with pointers
     for(i = 0; i < stupidTegra; i++)
     {
         for(j = 0; j < workHeight; j++)
@@ -68,7 +69,7 @@ void arraySetup()
 
     //Allocate memory
     colors = malloc(3 * stupidTegra * workHeight * sizeof(char));
-    allCoords = malloc(workWidth * workHeight * sizeof(struct Particle*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+    allCoords = malloc(workWidth * workHeight * sizeof(int*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 
 }
 
@@ -149,10 +150,11 @@ void elementSetup()
 void particleSetup()
 {
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "particleSetup");
+    //TODO decrement instead
     int i;
     for(i = 0; i < MAX_POINTS; i++)
     {
-        particles[i] = (struct Particle*) malloc(sizeof(struct Particle));
-        particles[i]->specialVals = (char*) malloc(MAX_SPECIALS * sizeof(char));
+        
+        a_specialVals[i] = (char*) malloc(MAX_SPECIALS * sizeof(char));
     }
 }

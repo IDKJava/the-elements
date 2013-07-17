@@ -186,24 +186,24 @@ void updateVelocities(short *xvel, short *yvel, int inertia)
 // Update the positions of the particle
 // Returns: TRUE if we should continue with the particle,
 //          FALSE if we deleted it.
-int updateKinetic(struct Particle* tempParticle)
+int updateKinetic(int index)
 {
-    float *x_ptr = &(tempParticle->x);
-    float *y_ptr = &(tempParticle->y);;
-    short *xvel_ptr = &(tempParticle->xVel);
-    short *yvel_ptr = &(tempParticle->yVel);
+    float *x_ptr = &(a_x[index]);
+    float *y_ptr = &(a_y[index]);
+    short *xvel_ptr = &(a_xVel[index]);
+    short *yvel_ptr = &(a_yVel[index]);
     float diffx, diffy;
 
     //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
     //If accelOn, do tempYVel based on that
     if (yGravity != 0 && accelOn)
     {
-        diffy = ((yGravity / 9.8) * tempParticle->element->fallVel + *yvel_ptr);
+        diffy = ((yGravity / 9.8) * a_element[index]->fallVel + *yvel_ptr);
     }
     //Otherwise, just do the fallvelocity
     else if (!accelOn)
     {
-        diffy = tempParticle->element->fallVel + *yvel_ptr;
+        diffy = a_element[index]->fallVel + *yvel_ptr;
     }
     //Accelerometer on, but no gravity (held horizontal)
     else
@@ -215,7 +215,7 @@ int updateKinetic(struct Particle* tempParticle)
     //X Gravity is REVERSED! (hence the "-")
     if ((int) xGravity != 0 && accelOn == 1)
     {
-        diffx = ((-xGravity / 9.8) * tempParticle->element->fallVel + *xvel_ptr);
+        diffx = ((-xGravity / 9.8) * a_element[index]->fallVel + *xvel_ptr);
     }
     //Otherwise, just add tempXVel
     else
@@ -227,14 +227,14 @@ int updateKinetic(struct Particle* tempParticle)
     if (!checkBoundariesAndMove(x_ptr, y_ptr, diffx, diffy))
     {
         // Delete the particle
-        deletePoint(tempParticle);
+        deletePoint(index);
         return FALSE;
     }
     //Reduce velocities
-    updateVelocities(xvel_ptr, yvel_ptr, tempParticle->element->inertia);
+    updateVelocities(xvel_ptr, yvel_ptr, a_element[counter]->inertia);
 
     //Indicate that the particle has moved
-    tempParticle->hasMoved = TRUE;
+    a_hasMoved[index] = TRUE;
 
     return TRUE;
 }
@@ -242,36 +242,38 @@ int updateKinetic(struct Particle* tempParticle)
 // Update the heat when p1 collides into p2
 // Only updates the state for p2 right now. p1 state updates happen at the end
 // of the physics loop for p1.
-void updateCollisionHeat(struct Particle* p1, struct Particle* p2)
+void updateCollisionHeat(int index1, int index2)
 {
-    char *p1heat = &(p1->heat);
-    char *p2heat = &(p2->heat);
+    char *p1heat = &(a_heat[index1]);
+    char *p2heat = &(a_heat[index2]);
 
     int heatChange = (*p1heat - *p2heat)/5;
     //The hotter particle should be cooled, while the cooler particle is heated
     changeHeat(p1heat, -heatChange);
     changeHeat(p2heat, heatChange);
 
+    //TODO: probably a good idea to just save a_element[index2] and not access it so many times
+
     //Resolve second particle heat changes
-    if(*p2heat < p2->element->lowestTemp)
+    if(*p2heat < a_element[index2]->lowestTemp)
     {
         //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
-        setElement(p2, p2->element->lowerElement);
+        setElement(index2, a_element[index2]->lowerElement);
     }
-    else if(*p2heat > p2->element->highestTemp)
+    else if(*p2heat > a_element[index2]->highestTemp)
     {
         //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
-        setElement(p2, p2->element->higherElement);
+        setElement(index2, a_element[index2]->higherElement);
     }
 }
 
 // Perform specials actions
 // Returns: TRUE if we should resolve heat changes afterwards
-int updateSpecials(struct Particle* tempParticle)
+int updateSpecials(int index)
 {
-    struct Element* tempElement = tempParticle->element;
-    int tempX = (int) tempParticle->x;
-    int tempY = (int) tempParticle->y;
+    struct Element* tempElement = a_element[index];
+    int tempX = (int) a_x[index];
+    int tempY = (int) a_y[index];
     int shouldResolveHeatChanges = FALSE;
     unsigned int i;
 
@@ -288,7 +290,7 @@ int updateSpecials(struct Particle* tempParticle)
           sprintf(buffer, "Processing special: %d, val: %d", i, tempElement->specials[i]);
           __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
         */
-        if(tempParticle->set && tempElement && tempElement->specials[MAX_SPECIALS-i] != SPECIAL_NONE)
+        if(a_set[index] && tempElement && tempElement->specials[MAX_SPECIALS-i] != SPECIAL_NONE)
         {
             switch((int)tempElement->specials[MAX_SPECIALS-i])
             {
@@ -298,7 +300,7 @@ int updateSpecials(struct Particle* tempParticle)
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special spawn");
                 //frozen[counter] = 0;
                 int diffX, diffY;
-                struct Particle* tempAllCoords;
+                int tempAllCoords;
                 for (diffX = -2; diffX <= 2; diffX++)
                 {
                     for (diffY = -2; diffY <= 2; diffY++)
@@ -306,7 +308,7 @@ int updateSpecials(struct Particle* tempParticle)
                         if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
                         {
                             tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                            if (tempAllCoords && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+                            if (tempAllCoords < 0 && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
                             {
                                 setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
                                 setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(tempParticle, SPECIAL_SPAWN));
@@ -1053,6 +1055,9 @@ void UpdateView(void)
     struct Particle* tempAllCoords;
     struct Element* tempElement;
     struct Element* tempElement2;
+    
+    //current index
+    int ci;
     //Used for heat
     int heatChange;
 
@@ -1087,32 +1092,32 @@ void UpdateView(void)
             randOffset = rand();
         }
         //Physics update
-        for (counter = MAX_POINTS; counter != 0; counter--)
-        {
-            tempParticle = particles[MAX_POINTS-counter];
+        
 
+        for (counter = 0; counter < MAX_POINTS; ++counter)
+        {
             //If the particle is set and unfrozen
-            if (tempParticle->set)// && tempParticle->frozen < 4)
+            if (a_set[counter])// && tempParticle->frozen < 4)
             {
                 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
                 //TODO: Life property cycle
 
                 //Set the temp and old variables
-                tempX = &(tempParticle->x);
-                tempY = &(tempParticle->y);
-                tempOldX = (int) tempParticle->x;
-                tempOldY = (int) tempParticle->y;
-                tempParticle->oldX = tempOldX;
-                tempParticle->oldY = tempOldY;
-                tempElement = tempParticle->element;
+                tempX = &(a_x[counter]);
+                tempY = &(a_y[counter]);
+                tempOldX = (int) a_x[counter];
+                tempOldY = (int) a_y[counter];
+                a_oldX[counter] = tempOldX;
+                a_oldY[counter] = tempOldY;
+                tempElement = a_element[counter];
                 tempInertia = tempElement->inertia;
-                tempXVel = &(tempParticle->xVel);
-                tempYVel = &(tempParticle->yVel);
+                tempXVel = &(a_xVel[counter]);
+                tempYVel = &(a_yVel[counter]);
 
                 //Update coords
                 if(tempInertia != INERTIA_UNMOVABLE)
                 {
-                    if (!updateKinetic(tempParticle))
+                    if (!updateKinetic(counter))
                     {
                         // If we ended up deleting the particle, continue
                         continue;

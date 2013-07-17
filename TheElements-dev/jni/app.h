@@ -25,15 +25,15 @@ extern "C" {
  * FUNCTIONS
  */
 
-inline int getIndex(int x, int y);
-inline int getColorIndex(int x, int y);
+    inline int getIndex(int x, int y);
+    inline int getColorIndex(int x, int y);
 
 /*
  * STRUCTS
  */
  
-struct Element
-{
+    struct Element
+    {
 	//Index
 	unsigned char index;
 	//Name
@@ -56,10 +56,10 @@ struct Element
 	char density;
 	signed char fallVel;
 	char inertia;
-};
+    };
 
-struct Particle
-{
+    struct Particle
+    {
 	char set;
 	float x, y, oldX, oldY;
 	short xVel, yVel;
@@ -68,87 +68,104 @@ struct Particle
 	struct Element* element;
 	char frozen;
 	char hasMoved;
-};
+    };
 
-struct Atmosphere
-{
+    struct Atmosphere
+    {
 	char heat;
 	char gravity;
 
 	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
 
 	char borderLeft, borderTop, borderRight, borderBottom;
-};
+    };
 
 /*
  * VARIABLES
  */
 
 //Variables to track the user/app version
-extern char udid[];
-extern int versionCode;
+    extern char udid[];
+    extern int versionCode;
 
 //An array of all the elements
-extern struct Element** elements;
+    extern struct Element** elements;
 //The number of elements available
-extern unsigned char numElements;
-//An array of all the particles
-extern struct Particle* particles[];
+    extern unsigned char numElements;
+
+    extern char a_set[];
+    extern float a_x[];
+    extern float a_y[];
+    extern float a_oldX[];
+    extern float a_oldY[];
+    extern short a_xVel[];
+    extern short a_yVel[];
+    extern short a_heat[];
+    extern char* a_specialVals[];
+    extern struct Element* a_element[];
+    extern char a_frozen[];
+    extern char a_hasMoved[];
+
+ 
+
+
+    
+
 //A stack of available particles
-extern struct Particle* avail[];
+    extern int avail[];
 //Points to the index AFTER the top of the stack
-extern int loq;
+    extern int loq;
 //Current element selected
-extern struct Element* cElement;
+    extern struct Element* cElement;
 //Atmosphere in use
-extern struct Atmosphere* cAtmosphere;
+    extern struct Atmosphere* cAtmosphere;
 
 //State variables
-extern char play;
-extern char flipped;
-extern char fingerDown;
-extern char accelOn;
-extern char dimensionsChanged;
-extern char zoomChanged;
+    extern char play;
+    extern char flipped;
+    extern char fingerDown;
+    extern char accelOn;
+    extern char dimensionsChanged;
+    extern char zoomChanged;
 
-extern unsigned char brushSize;
-extern unsigned char zoomFactor;
+    extern unsigned char brushSize;
+    extern unsigned char zoomFactor;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern struct Particle** allCoords;
+    extern int** allCoords;
 
 //Mouse positions
-extern short mouseX;
-extern short mouseY;
+    extern short mouseX;
+    extern short mouseY;
 //Old mouse positions
-extern short lastMouseX;
-extern short lastMouseY;
+    extern short lastMouseX;
+    extern short lastMouseY;
 
-extern int randOffset;
+    extern int randOffset;
 
 //Array for bitmap drawing
-extern unsigned char* colors;
+    extern unsigned char* colors;
 
 //Screen dimensions
-extern int screenWidth;
-extern int screenHeight;
+    extern int screenWidth;
+    extern int screenHeight;
 //Workspace dimensions
-extern int workWidth;
-extern int workHeight;
+    extern int workWidth;
+    extern int workHeight;
 
 //Nearest power of 2 to workWidth - needed due to stupid Tegra 2.
-extern int stupidTegra;
+    extern int stupidTegra;
 
 //Collision matrix
-extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
-extern char reciprocals[NUM_COLLISIONS];
+    extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
+    extern char reciprocals[NUM_COLLISIONS];
 
 //Set when a mouse update is requested, unset when udpated
-extern char shouldUpdateMouse;
+    extern char shouldUpdateMouse;
 
 //Gravity values
-extern float xGravity;
-extern float yGravity;
+    extern float xGravity;
+    extern float yGravity;
 
 
 /*Network stuff taken out for now
@@ -174,7 +191,7 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
  * MUTEXES
  */
 
-extern pthread_mutex_t update_mutex;
+    extern pthread_mutex_t update_mutex;
 
 #ifdef __cplusplus
 }
