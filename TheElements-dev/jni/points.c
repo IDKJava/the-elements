@@ -73,7 +73,7 @@ void deletePoint(int particle)
     //Clear it in the pixels array
     clearBitmapColor(tempX, tempY);
     //Clear it in the points array
-    allCoords[getIndex(tempX, tempY)] = NULL;
+    allCoords[getIndex(tempX, tempY)] = -1;
 
     //Unset the particle
     a_set[particle] = FALSE;
@@ -126,7 +126,7 @@ void unFreezeParticles(int xCoord, int yCoord)
       {
       struct Particle* tempParticle = allCoords[getIndex(tempX, tempY)];
 
-      if (tempParticle != NULL)
+      if (tempParticle != -1)
       {
       //Unfreeze the particle
       tempParticle->frozen = FALSE;

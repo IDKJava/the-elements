@@ -26,7 +26,7 @@ void drawPoints(void)
                         //Draw it solid
                         if(cElement->inertia == INERTIA_UNMOVABLE || cElement->index == ELECTRICITY_ELEMENT)
                         {
-                            if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+                            if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == -1)
                             {
                                 createPoint(mouseX + dx, mouseY + dy, cElement);
                             }
@@ -34,7 +34,7 @@ void drawPoints(void)
                         //Draw it randomized
                         else
                         {
-                            if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == NULL)
+                            if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == -1)
                             {
                                 createPoint(mouseX + dx, mouseY + dy, cElement);
                             }
@@ -43,10 +43,10 @@ void drawPoints(void)
                     //Special Drag case
                     else if (cElement->index == DRAG_ELEMENT)
                     {
-                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->element->fallVel != 0)
+                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && a_element[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]]->fallVel != 0)
                         {
-                            allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->xVel += (mouseX - lastMouseX);
-                            allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]->yVel += (mouseY - lastMouseY);
+                            a_xVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseX - lastMouseX);
+                            a_yVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseY - lastMouseY);
                         }
                     }
                     //Special Eraser case
@@ -231,7 +231,7 @@ int updateKinetic(int index)
         return FALSE;
     }
     //Reduce velocities
-    updateVelocities(xvel_ptr, yvel_ptr, a_element[counter]->inertia);
+    updateVelocities(xvel_ptr, yvel_ptr, a_element[index]->inertia);
 
     //Indicate that the particle has moved
     a_hasMoved[index] = TRUE;
@@ -308,14 +308,14 @@ int updateSpecials(int index)
                         if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
                         {
                             tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                            if (tempAllCoords < 0 && tempAllCoords->element == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+                            if (tempAllCoords < 0 && a_element[index] == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
                             {
                                 setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
-                                setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(tempParticle, SPECIAL_SPAWN));
+                                setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(index, SPECIAL_SPAWN));
                             }
                             else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
                             {
-                                createPoint(tempX + diffX, tempY + diffY, elements[getParticleSpecialVal(tempParticle, SPECIAL_SPAWN)]);
+                                createPoint(tempX + diffX, tempY + diffY, elements[getParticleSpecialVal(index, SPECIAL_SPAWN)]);
                             }
                         }
                     }
@@ -326,9 +326,9 @@ int updateSpecials(int index)
             case SPECIAL_BREAK:
             {
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special break");
-                if (tempParticle->xVel > getElementSpecialVal(tempElement, SPECIAL_BREAK) || tempParticle->yVel > getElementSpecialVal(tempElement, SPECIAL_BREAK))
+                if (a_xVel[index] > getElementSpecialVal(tempElement, SPECIAL_BREAK) || a_yVel[index] > getElementSpecialVal(tempElement, SPECIAL_BREAK))
                 {
-                    setElement(tempParticle, elements[NORMAL_ELEMENT]);
+                    setElement(index, elements[NORMAL_ELEMENT]);
                 }
                 break;
             }
@@ -337,7 +337,7 @@ int updateSpecials(int index)
             {
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special grow");
                 int diffX, diffY;
-                struct Particle* tempAllCoords;
+                int tempAllCoords;
                 for (diffX = -1; diffX <= 1; diffX++)
                 {
                     for (diffY = -1; diffY <= 1; diffY++)
@@ -345,9 +345,9 @@ int updateSpecials(int index)
                         if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth)
                         {
                             tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                            if (tempAllCoords && tempAllCoords->element->index == getElementSpecialVal(tempElement, SPECIAL_GROW) && rand() % 10 == 0)
+                            if (tempAllCoords != -1 && a_element[tempAllCoords]->index == getElementSpecialVal(tempElement, SPECIAL_GROW) && rand() % 10 == 0)
                             {
-                                setElement(tempAllCoords, tempParticle->element);
+                                setElement(tempAllCoords, a_element[tempAllCoords]);
                             }
                         }
                     }
@@ -360,7 +360,7 @@ int updateSpecials(int index)
             {
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special heat");
                 int diffX, diffY;
-                struct Particle* tempAllCoords;
+                int tempAllCoords;
                 if (rand()%5 == 0)
                 {
                     for (diffX = -1; diffX <= 1; diffX++)
@@ -370,9 +370,9 @@ int updateSpecials(int index)
                             if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
                             {
                                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                                if(tempAllCoords)
+                                if(tempAllCoords != -1)
                                 {
-                                    changeHeat(&(tempAllCoords->heat), getElementSpecialVal(tempElement, SPECIAL_HEAT));
+                                    changeHeat(&(a_heat[tempAllCoords]), getElementSpecialVal(tempElement, SPECIAL_HEAT));
                                 }
                             }
                         }
@@ -384,11 +384,11 @@ int updateSpecials(int index)
             case SPECIAL_EXPLODE:
             {
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special explode");
-                if (tempParticle->heat >= tempParticle->element->highestTemp) //If the heat is above the threshold
+                if (a_heat[index] >= a_element[index]->highestTemp) //If the heat is above the threshold
                 {
                     int diffX, diffY;
                     int distance;
-                    struct Particle* tempAllCoords;
+                    int tempAllCoords;
 
                     //In radius of explosion, add velocity with a 5% chance
                     if(rand()%20 == 0)
@@ -403,13 +403,13 @@ int updateSpecials(int index)
                                     tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
                                     if (tempAllCoords)
                                     {
-                                        if(diffX != 0 && tempAllCoords->xVel < explosiveness)
+                                        if(diffX != 0 && a_xVel[tempAllCoords] < explosiveness)
                                         {
-                                            tempAllCoords->xVel += (2*(diffX > 0)-1);
+                                            a_xVel[tempAllCoords] += (2*(diffX > 0)-1);
                                         }
-                                        if(diffY != 0 && tempAllCoords->yVel < explosiveness)
+                                        if(diffY != 0 && a_yVel[tempAllCoords] < explosiveness)
                                         {
-                                            tempAllCoords->yVel += (2*(diffY > 0)-1);
+                                            a_yVel[tempAllCoords] += (2*(diffY > 0)-1);
                                         }
                                     }
                                 }
@@ -425,16 +425,16 @@ int updateSpecials(int index)
                             if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
                             {
                                 tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-                                if(tempAllCoords)
+                                if(tempAllCoords != -1)
                                 {
-                                    changeHeat(&(tempAllCoords->heat), 50);
+                                    changeHeat(&(a_heat[tempAllCoords]), 50);
                                 }
                             }
                         }
                     }
 
                     // Change this particle to fire, and quit the specials loop
-                    setElement(tempParticle, elements[10]);
+                    setElement(index, elements[10]);
                     specialLoopDone = TRUE;
                     break;
                 }
@@ -447,7 +447,7 @@ int updateSpecials(int index)
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special life");
                 if (rand()%getElementSpecialVal(tempElement, SPECIAL_LIFE) == 0)
                 {
-                    deletePoint(tempParticle);
+                    deletePoint(index);
                 }
                 break;
             }
@@ -456,7 +456,7 @@ int updateSpecials(int index)
             {
                 // Don't wander while tunneling
                 // FIXME: This is a hacky solution, come up with something more elegant
-                if (getParticleSpecialVal(tempParticle, SPECIAL_TUNNEL) != SPECIAL_VAL_UNSET)
+                if (getParticleSpecialVal(index, SPECIAL_TUNNEL) != SPECIAL_VAL_UNSET)
                 {
                     continue;
                 }
@@ -466,32 +466,32 @@ int updateSpecials(int index)
                 int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
                 if (randVal <= wanderVal)
                 {
-                    if (tempParticle->xVel <= 4)
+                    if (a_xVel[index] <= 4)
                     {
-                        tempParticle->xVel += 2;
+                        a_xVel[index] += 2;
                     }
                 }
                 else if (randVal >= wanderVal+1 && randVal <= wanderVal*2)
                 {
-                    if (tempParticle->xVel >= -4)
+                    if (a_xVel[index] >= -4)
                     {
-                        tempParticle->xVel -= 2;
+                        a_xVel[index] -= 2;
                     }
                 }
 
                 randVal = rand()%100;
-                if ( randVal <= wanderVal)
+                if (randVal <= wanderVal)
                 {
-                    if ( tempParticle->yVel >= -4)
+                    if (a_yVel[index] >= -4)
                     {
-                        tempParticle->yVel -= 2;
+                        a_yVel[index] -= 2;
                     }
                 }
-                if ( randVal >= wanderVal + 1 && randVal <= wanderVal*2)
+                if (randVal >= wanderVal + 1 && randVal <= wanderVal*2)
                 {
-                    if ( tempParticle->yVel <= 4)
+                    if (a_yVel[index] <= 4)
                     {
-                        tempParticle->yVel += 2;
+                        a_yVel[index] += 2;
                     }
                 }
 
@@ -500,13 +500,13 @@ int updateSpecials(int index)
             //Jump
             case SPECIAL_JUMP:
             {
-                if ((tempParticle->y+1 == workHeight) || (allCoords[getIndex(tempParticle->x, tempParticle->y+1)] != NULL))
+                if ((a_y[index]+1 == workHeight) || (allCoords[getIndex(a_x[index], a_y[index]+1)] != -1))
                 {
                     int randVal = rand()%100;
                     int jumpVal = getElementSpecialVal(tempElement, SPECIAL_JUMP);
                     if (randVal < jumpVal)
                     {
-                        tempParticle->yVel -= 5;
+                        a_yVel[index] -= 5;
                     }
                 }
                 break;
@@ -515,9 +515,9 @@ int updateSpecials(int index)
             case SPECIAL_TUNNEL:
             {
                 int targetElementIndex = getElementSpecialVal(tempElement, SPECIAL_TUNNEL);
-                int state = getParticleSpecialVal(tempParticle, SPECIAL_TUNNEL);
+                int state = getParticleSpecialVal(index, SPECIAL_TUNNEL);
 
-                int curX = tempParticle->x, curY = tempParticle->y;
+                int curX = a_x[index], curY = a_y[index];
                 int diffX, diffY;
 
                 // TODO: Break tunneling stuff out into its own function (make a specials.c file?)
@@ -531,34 +531,34 @@ int updateSpecials(int index)
                     {
                         continue;
                     }
-                    struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-                    if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+                    int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+                    if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
                     {
                         // Remove the tempAllCoords particle, and move this particle there
                         unSetPoint(tempAllCoords);
-                        allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+                        allCoords[getIndex(curX+diffX, curY+diffY)] = index;
                         setBitmapColor(curX+diffX, curY+diffY, tempElement);
-                        allCoords[getIndex(curX, curY)] = NULL;
+                        allCoords[getIndex(curX, curY)] = -1;
                         clearBitmapColor(curX, curY);
-                        tempParticle->x = curX + diffX;
-                        tempParticle->y = curY + diffY;
+                        a_x[index] = curX + diffX;
+                        a_y[index] = curY + diffY;
                         // Set the y velocity to the fall velocity to counteract movement
-                        tempParticle->yVel = tempParticle->element->fallVel;
-                        setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, randomDir);
+                        a_yVel[index] = a_element[index]->fallVel;
+                        setParticleSpecialVal(index, SPECIAL_TUNNEL, randomDir);
 
 
                         // Add particles around this point, forming a "tunnel"
                         if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
                         {
-                            if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+                            if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
                             {
                                 createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
                             }
-                            if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+                            if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
                             {
                                 createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
                             }
-                            if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+                            if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
                             {
                                 createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
                             }
@@ -570,15 +570,15 @@ int updateSpecials(int index)
                 {
                     // Move the particle back to it's old location, to avoid
                     // collision velocities messing up tunneling
-                    if (allCoords[getIndex(tempParticle->oldX, tempParticle->oldY)] == NULL)
+                    if (allCoords[getIndex(a_oldX[index], a_oldY[index])] == -1)
                     {
-                        allCoords[getIndex(curX, curY)] = NULL;
+                        allCoords[getIndex(curX, curY)] = -1;
                         clearBitmapColor(curX, curY);
-                        allCoords[getIndex(tempParticle->oldX, tempParticle->oldY)] = tempParticle;
-                        setBitmapColor(tempParticle->oldX, tempParticle->oldY, tempElement);
+                        allCoords[getIndex(a_oldX[index], a_oldY[index])] = index;
+                        setBitmapColor(a_oldX[index], a_oldY[index], tempElement);
 
-                        curX = tempParticle->x = tempParticle->oldX;
-                        curY = tempParticle->y = tempParticle->oldY;
+                        curX = a_x[index] = a_oldX[index];
+                        curY = a_y[index] = a_oldY[index];
                     }
 
                     diffX = 2*(state%2) - 1;
@@ -586,7 +586,7 @@ int updateSpecials(int index)
                     if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
                     {
                         // Go back to the unset state
-                        setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+                        setParticleSpecialVal(index, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
 
                         // Look in a random diagonal
                         int randomDir = rand()%4;
@@ -596,34 +596,34 @@ int updateSpecials(int index)
                         {
                             continue;
                         }
-                        struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-                        if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+                        int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+                        if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
                         {
                             // Remove the tempAllCoords particle, and move this particle there
                             unSetPoint(tempAllCoords);
-                            allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+                            allCoords[getIndex(curX+diffX, curY+diffY)] = index;
                             setBitmapColor(curX+diffX, curY+diffY, tempElement);
-                            allCoords[getIndex(curX, curY)] = NULL;
+                            allCoords[getIndex(curX, curY)] = -1;
                             clearBitmapColor(curX, curY);
-                            tempParticle->x = curX + diffX;
-                            tempParticle->y = curY + diffY;
+                            a_x[index] = curX + diffX;
+                            a_y[index] = curY + diffY;
                             // Set the y velocity to the fall velocity to counteract movement
-                            tempParticle->yVel = tempParticle->element->fallVel;
-                            setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, randomDir);
+                            a_yVel[index] = a_element[index]->fallVel;
+                            setParticleSpecialVal(index, SPECIAL_TUNNEL, randomDir);
 
 
                             // Add particles around this point, forming a "tunnel"
                             if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
                             {
-                                if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+                                if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
                                 {
                                     createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
                                 }
-                                if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+                                if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
                                 {
                                     createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
                                 }
-                                if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+                                if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
                                 {
                                     createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
                                 }
@@ -631,70 +631,70 @@ int updateSpecials(int index)
                         }
                     }
 
-                    struct Particle* tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-                    if (tempAllCoords == NULL || tempAllCoords->element->index != targetElementIndex)
+                    int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+                    if (tempAllCoords == -1 || a_element[tempAllCoords]->index != targetElementIndex)
                     {
                         // Go back to the unset state
-                        setParticleSpecialVal(tempParticle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+                        setParticleSpecialVal(index, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
                         // Look for any particle back the way we came and (if there is one)
                         // tunnel into it
                         tempAllCoords = allCoords[getIndex(curX, curY+diffY)];
-                        if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+                        if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
                         {
                             // Remove the tempAllCoords particle, and move this particle there
                             unSetPoint(tempAllCoords);
-                            allCoords[getIndex(curX, curY+diffY)] = tempParticle;
+                            allCoords[getIndex(curX, curY+diffY)] = index;
                             setBitmapColor(curX, curY+diffY, tempElement);
-                            allCoords[getIndex(curX, curY)] = NULL;
+                            allCoords[getIndex(curX, curY)] = -1;
                             clearBitmapColor(curX, curY);
-                            tempParticle->x = curX;
-                            tempParticle->y = curY + diffY;
+                            a_x[index] = curX;
+                            a_y[index] = curY + diffY;
                         }
                         else
                         {
                             tempAllCoords = allCoords[getIndex(curX+diffX, curY)];
-                            if (tempAllCoords != NULL && tempAllCoords->element->index == targetElementIndex)
+                            if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
                             {
                                 // Remove the tempAllCoords particle, and move this particle there
                                 unSetPoint(tempAllCoords);
-                                allCoords[getIndex(curX+diffX, curY)] = tempParticle;
+                                allCoords[getIndex(curX+diffX, curY)] = index;
                                 setBitmapColor(curX+diffX, curY, tempElement);
-                                allCoords[getIndex(curX, curY)] = NULL;
+                                allCoords[getIndex(curX, curY)] = -1;
                                 clearBitmapColor(curX, curY);
-                                tempParticle->x = curX + diffX;
-                                tempParticle->y = curY;
+                                a_x[index] = curX + diffX;
+                                a_y[index] = curY;
                             }
                         }
                         // Add velocity so that the particle stays still for one step
-                        tempParticle->yVel = tempParticle->element->fallVel;
+                        a_yVel[index] = a_element[index]->fallVel;
                         continue;
                     }
                     else
                     {
                         // Remove the tempAllCoords particle, and move this particle there
                         unSetPoint(tempAllCoords);
-                        allCoords[getIndex(curX+diffX, curY+diffY)] = tempParticle;
+                        allCoords[getIndex(curX+diffX, curY+diffY)] = index;
                         setBitmapColor(curX+diffX, curY+diffY, tempElement);
-                        allCoords[getIndex(curX, curY)] = NULL;
+                        allCoords[getIndex(curX, curY)] = -1;
                         clearBitmapColor(curX, curY);
-                        tempParticle->x = curX + diffX;
-                        tempParticle->y = curY + diffY;
+                        a_x[index] = curX + diffX;
+                        a_y[index] = curY + diffY;
                         // Set the y velocity to the fall velocity to counteract movement
-                        tempParticle->yVel = tempParticle->element->fallVel;
+                        a_yVel[index] = a_element[index]->fallVel;
 
 
                         // Add particles around this point, forming a "tunnel"
                         if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
                         {
-                            if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == NULL)
+                            if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
                             {
                                 createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
                             }
-                            if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == NULL)
+                            if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
                             {
                                 createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
                             }
-                            if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == NULL)
+                            if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
                             {
                                 createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
                             }
@@ -714,17 +714,17 @@ int updateSpecials(int index)
                     continue;
                 }
 
-                int state = getParticleSpecialVal(tempParticle, SPECIAL_BURN);
+                int state = getParticleSpecialVal(index, SPECIAL_BURN);
                 // Not burning yet
                 if (state == SPECIAL_VAL_UNSET)
                 {
                     //If the heat is above the threshold
-                    if (tempParticle->heat >= tempParticle->element->highestTemp)
+                    if (a_heat[index] >= a_element[index]->highestTemp)
                     {
                         int avgLife = getElementSpecialVal(tempElement, SPECIAL_BURN);
                         int life = avgLife + rand()%5 - 2;
                         if (life < 1) { life = 1; }
-                        setParticleSpecialVal(tempParticle, SPECIAL_BURN, life);
+                        setParticleSpecialVal(index, SPECIAL_BURN, life);
                         shouldResolveHeatChanges = FALSE;
                     }
                 }
@@ -736,7 +736,7 @@ int updateSpecials(int index)
 
                     // FIXME: This is identical to special heat, break this function out into specials.c
                     int diffX, diffY;
-                    struct Particle* tempAllCoords;
+                    int tempAllCoords;
                     for (diffX = -1; diffX <= 1; diffX++)
                     {
                         for(diffY = -1; diffY <=1; diffY++)
@@ -744,9 +744,9 @@ int updateSpecials(int index)
                             if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
                             {
                                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                                if(tempAllCoords)
+                                if(tempAllCoords != -1)
                                 {
-                                    changeHeat(&(tempAllCoords->heat),
+                                    changeHeat(&(a_heat[tempAllCoords]),
                                             1000/(state*getElementSpecialVal(tempElement, SPECIAL_BURN)));
                                 }
                             }
@@ -757,14 +757,14 @@ int updateSpecials(int index)
                     if (state <= 1)
                     {
                         // Change to fire
-                        setElement(tempParticle, elements[FIRE_ELEMENT]);
-                        //deletePoint(tempParticle);
+                        setElement(index, elements[FIRE_ELEMENT]);
+                        //deletePoint(index);
                         specialLoopDone = TRUE;
                     }
                     else
                     {
                         // Decrement life total left
-                        setParticleSpecialVal(tempParticle, SPECIAL_BURN, state-1);
+                        setParticleSpecialVal(index, SPECIAL_BURN, state-1);
 
                         // Set the color to fire
                         setBitmapColor(tempX, tempY, elements[FIRE_ELEMENT]);
@@ -777,20 +777,20 @@ int updateSpecials(int index)
             case SPECIAL_CONDUCTIVE:
             {
                 int property;
-                struct Particle* tempAllCoords;
-                int curX = tempParticle->x, curY = tempParticle->y;
-                property = getParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE);
-                if ( property != SPECIAL_VAL_UNSET )
+                int tempAllCoords;
+                int curX = a_x[index], curY = a_y[index];
+                property = getParticleSpecialVal(index, SPECIAL_CONDUCTIVE);
+                if (property != SPECIAL_VAL_UNSET)
                 {
                     // Wait one frame, remove the electric wait bit
                     if (property & ELECTRIC_WAIT)
                     {
                         setBitmapColor(curX,curY,elements[ELECTRICITY_ELEMENT]);
-                        setParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE, property & 15); //15 == 00001111
+                        setParticleSpecialVal(index, SPECIAL_CONDUCTIVE, property & 15); //15 == 00001111
                         break;
                     }
                     // If no direction, select a random direction
-                    if( property == ELECTRIC_NO_DIR )
+                    if (property == ELECTRIC_NO_DIR)
                     {
                         // 0 or 1 in XN, 1 in X1
                         property = (((rand()%2) << 2) & ELECTRIC_XN) | ELECTRIC_X1;
@@ -799,14 +799,14 @@ int updateSpecials(int index)
                     int j = ((property & ELECTRIC_Y1) >> 1) * ((ELECTRIC_YN & property) ? -1 : 1);
 
                     int tempI, k, transfered = FALSE;
-                    for ( k = 0; k < 4; k++)
+                    for (k = 0; k < 4; k++)
                     {
-                        if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                        if (curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
                         {
                             tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
-                            if ( tempAllCoords != NULL)
+                            if (tempAllCoords != -1)
                             {
-                                if( hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE) )
+                                if(hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE))
                                 {
                                     setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCTIVE,
                                                           (i ? ELECTRIC_X1 : 0) |
@@ -860,9 +860,9 @@ int updateSpecials(int index)
                             if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
                             {
                                 tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
-                                if ( tempAllCoords != NULL)
+                                if (tempAllCoords != -1)
                                 {
-                                    if( hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE) )
+                                    if(hasSpecial(tempAllCoords, SPECIAL_CONDUCTIVE))
                                     {
                                         setParticleSpecialVal(tempAllCoords, SPECIAL_CONDUCTIVE,
                                                               (i ? ELECTRIC_X1 : 0) |
@@ -911,7 +911,7 @@ int updateSpecials(int index)
                             if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
                             {
                                 tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
-                                if ( tempAllCoords == NULL)
+                                if (tempAllCoords == -1)
                                 {
                                     createPoint(curX + i, curY + j, elements[ELECTRICITY_ELEMENT]);
                                     transfered = TRUE;
@@ -958,7 +958,7 @@ int updateSpecials(int index)
                                 if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
                                 {
                                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
-                                    if ( tempAllCoords == NULL)
+                                    if (tempAllCoords == -1)
                                     {
                                         createPoint(curX + i, curY + j, elements[ELECTRICITY_ELEMENT]);
                                         transfered = TRUE;
@@ -994,8 +994,8 @@ int updateSpecials(int index)
                             }
                         }
                     }
-                    setParticleSpecialVal(tempParticle, SPECIAL_CONDUCTIVE, SPECIAL_VAL_UNSET);
-                    setBitmapColor(curX,curY,tempParticle->element);
+                    setParticleSpecialVal(index, SPECIAL_CONDUCTIVE, SPECIAL_VAL_UNSET);
+                    setBitmapColor(curX, curY, a_element[index]);
                 }
                 break;
             }
@@ -1013,13 +1013,13 @@ int updateSpecials(int index)
 
                 struct Particle* tempAllCoords;
                 int i, j,tempIndex, found = FALSE;
-                int curX = tempParticle->x, curY = tempParticle->y;
+                int curX = a_x[index], curY = a_y[index];
                 // Seed the rand function with the current location
                 // (plus a randomizer that doesn't change very often)
                 srand(curX*curY + randOffset);
                 // Add random velocity based on seed (so the same location
                 // will get the same velocity boost)
-                tempParticle->xVel += rand()%variability - variability/2;
+                a_xVel[index] += rand()%variability - variability/2;
 
                 break;
             }
@@ -1051,8 +1051,8 @@ void UpdateView(void)
     float *tempX, *tempY;
     short *tempXVel, *tempYVel;
     char tempInertia;
-    struct Particle* tempParticle;
-    struct Particle* tempAllCoords;
+    int tempParticle;
+    int tempAllCoords;
     struct Element* tempElement;
     struct Element* tempElement2;
     
@@ -1091,9 +1091,8 @@ void UpdateView(void)
         {
             randOffset = rand();
         }
-        //Physics update
-        
 
+        //Physics update
         for (counter = 0; counter < MAX_POINTS; ++counter)
         {
             //If the particle is set and unfrozen
@@ -1127,9 +1126,9 @@ void UpdateView(void)
                     tempAllCoords = allCoords[getIndex((int)(*tempX), (int)(*tempY))];
 
                     //If the space the particle is trying to move to is taken and isn't itself
-                    if (tempAllCoords != NULL && tempAllCoords != tempParticle)
+                    if (tempAllCoords != -1 && tempAllCoords != tempParticle)
                     {
-                        tempElement2 = tempAllCoords->element;
+                        tempElement2 = a_element[tempAllCoords];
 
                         //Update heat
                         updateCollisionHeat(tempParticle, tempAllCoords);
@@ -1138,41 +1137,41 @@ void UpdateView(void)
                         collide(tempParticle, tempAllCoords);
 
                         //Update the particles and the bitmap colors if the hasMoved flag is set
-                        if(tempParticle->hasMoved)
+                        if(a_hasMoved[tempParticle])
                         {
-                            allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+                            allCoords[getIndex(tempOldX, tempOldY)] = -1;
                             clearBitmapColor(tempOldX, tempOldY);
                             allCoords[getIndex((int)(*tempX), (int)(*tempY))] = tempParticle;
-                            setBitmapColor((int)(*tempX), (int)(*tempY), tempParticle->element);
+                            setBitmapColor((int)(*tempX), (int)(*tempY), a_element[tempParticle]);
 
                             //unFreezeParticles(tempOldX, tempOldY);
-                            tempParticle->hasMoved = FALSE;
+                            a_hasMoved[tempParticle] = FALSE;
                         }
-                        if(tempAllCoords->hasMoved)
+                        if(a_hasMoved[tempAllCoords])
                         {
-                            allCoords[getIndex(tempAllCoords->oldX, tempAllCoords->oldY)] = NULL;
-                            clearBitmapColor(tempAllCoords->oldX, tempAllCoords->oldY);
-                            allCoords[getIndex((int)tempAllCoords->x, (int)tempAllCoords->y)] = tempAllCoords;
-                            setBitmapColor(tempAllCoords->x, tempAllCoords->y, tempAllCoords->element);
+                            allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] = -1;
+                            clearBitmapColor(a_oldX[tempAllCoords], a_oldY[tempAllCoords]);
+                            allCoords[getIndex((int)a_x[tempAllCoords], (int)a_y[tempAllCoords])] = tempAllCoords;
+                            setBitmapColor(a_x[tempAllCoords], a_y[tempAllCoords], a_element[tempAllCoords]);
 
                             //unFreezeParticles(tempOldX, tempOldY);
-                            tempAllCoords->hasMoved = FALSE;
+                            a_hasMoved[tempAllCoords] = FALSE;
                         }
                     }
                     //Space particle is trying to move to is free
                     else if (tempAllCoords != tempParticle)
                     {
-                        allCoords[getIndex(tempOldX, tempOldY)] = NULL;
+                        allCoords[getIndex(tempOldX, tempOldY)] = -1;
                         clearBitmapColor(tempOldX, tempOldY);
                         allCoords[getIndex((int)(*tempX), (int)(*tempY))] = tempParticle;
-                        setBitmapColor((int)(*tempX), (int)(*tempY), tempParticle->element);
+                        setBitmapColor((int)(*tempX), (int)(*tempY), a_element[tempParticle]);
 
-                        tempParticle->hasMoved = FALSE;
+                        a_hasMoved[tempParticle] = FALSE;
                     }
                     //Space particle is trying to move to is itself
                     else
                     {
-                        tempParticle->hasMoved = FALSE;
+                        a_hasMoved[tempParticle] = FALSE;
                     }
 
                     //__android_log_write(ANDROID_LOG_INFO, "LOG", "End resolve collisions");
@@ -1200,7 +1199,7 @@ void UpdateView(void)
                 }
 
                 //Update heat
-                char *heat = &(tempParticle->heat);
+                char *heat = &(a_heat[tempParticle]);
                 if(*heat != cAtmosphere->heat)
                 {
                     if(rand() % ((3 - tempElement->state)*16)  != 0)
@@ -1224,13 +1223,13 @@ void UpdateView(void)
                 //Resolve heat changes
                 if (shouldResolveHeatChanges)
                 {
-                    if(*heat < tempParticle->element->lowestTemp)
+                    if(*heat < a_element[tempParticle]->lowestTemp)
                     {
-                        setElement(tempParticle, tempParticle->element->lowerElement);
+                        setElement(tempParticle, a_element[tempParticle]->lowerElement);
                     }
-                    else if(*heat > tempParticle->element->highestTemp)
+                    else if(*heat > a_element[tempParticle]->highestTemp)
                     {
-                        setElement(tempParticle, tempParticle->element->higherElement);
+                        setElement(tempParticle, a_element[tempParticle]->higherElement);
                     }
                 }
 

@@ -38,7 +38,7 @@ void gameSetup()
         {
             if(i < workWidth)
             {
-                allCoords[getIndex(i, j)] = NULL;
+                allCoords[getIndex(i, j)] = -1;
             }
             colors[3 * getColorIndex(i, j)] = backgroundRed;
             colors[3 * getColorIndex(i, j) + 1] = backgroundGreen;

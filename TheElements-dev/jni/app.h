@@ -120,7 +120,7 @@ extern "C" {
     extern unsigned char zoomFactor;
 
 //A map of all the points (a two-dimensional variable-size array)
-    extern int** allCoords;
+    extern int* allCoords;
 
 //Mouse positions
     extern short mouseX;
