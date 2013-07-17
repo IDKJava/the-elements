@@ -19,26 +19,26 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         //Decrement number of points available
         loq--;
         //Get the pointer to the particle
-        struct Particle* i = avail[loq];
+        int i = avail[loq];
         //Indicate that the particle is in use
-        i->set = TRUE;
+        a_set[i] = TRUE;
         
         //Set x and y
-        i->x = xCoord;
-        i->y = yCoord;
+        a_x[i] = xCoord;
+        a_y[i] = yCoord;
 
         //Put it in the allcoords array
         allCoords[getIndex(xCoord, yCoord)] = i;
 
         // Set the element of the point
-        i->element = element;
+        a_element[i] = element;
 
         //Set the velocities
-        i->xVel = 0;
-        i->yVel = 0;
+        a_xVel[i] = 0;
+        a_yVel[i] = 0;
 
         //Set the frozen state
-        i->frozen = FALSE;
+        a_frozen[i] = FALSE;
 
         //Clear all particle special vals
         clearSpecialVals(i);
@@ -47,12 +47,12 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         if(element->startingTemp == 0)
         {
             //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Atmosphere temp");
-            i->heat = cAtmosphere->heat; //To be a variable later on
+            a_heat[i] = cAtmosphere->heat; //To be a variable later on
         }
         else
         {
             //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Element temp");
-            i->heat = element->startingTemp;
+            a_heat[i] = element->startingTemp;
         }
 
         //Set the point in the pixels array
@@ -62,11 +62,11 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         //unFreezeParticles(xCoord, yCoord);
     }
 }
-void deletePoint(struct Particle* particle)
+void deletePoint(int particle)
 {
     //Store x and y in temporary variables for faster use
-    int tempX = particle->x;
-    int tempY = particle->y;
+    int tempX = a_x[particle];
+    int tempY = a_y[particle];
 
     //Unfreeze the particles around it
     //unFreezeParticles(tempX, tempY);
@@ -76,26 +76,26 @@ void deletePoint(struct Particle* particle)
     allCoords[getIndex(tempX, tempY)] = NULL;
 
     //Unset the particle
-    particle->set = FALSE;
+    a_set[particle] = FALSE;
     //Add it to the avail array
     avail[loq] = particle;
     loq++;
 }
-void unSetPoint(struct Particle* particle)
+void unSetPoint(int particle)
 {
     //Unset the particle
-    particle->set = FALSE;
+    a_set[particle] = FALSE;
     //Add it to the avail array
     avail[loq] = particle;
     loq++;
 }
 
-void setElement(struct Particle* particle, struct Element* newElement)
+void setElement(int particle, struct Element* newElement)
 {
     int i;
-    particle->element = newElement;
+    a_element[particle] = newElement;
     clearSpecialVals(particle);
-    setBitmapColor(particle->x, particle->y, newElement);
+    setBitmapColor(a_x[particle], a_y[particle], newElement);
 }
 
 void setBitmapColor(int xCoord, int yCoord, struct Element* element)
@@ -165,10 +165,10 @@ void changeHeat(char *heat, int heatChange)
 }
 
 //Function to check if a particle has a given special
-char hasSpecial(struct Particle* tempParticle, int special)
+char hasSpecial(int tempParticle, int special)
 {
     char* specials;
-    long start = tempParticle->element->specials;
+    long start = a_element[tempParticle]->specials;
     long end = start + MAX_SPECIALS;
     for(specials = start; specials < end; ++specials)
     {
@@ -179,16 +179,16 @@ char hasSpecial(struct Particle* tempParticle, int special)
 
 //Gets a particle's special value
 //WARNING: Just gets the first special of that type it finds
-char getParticleSpecialVal(struct Particle* tempParticle, int special)
+char getParticleSpecialVal(int tempParticle, int special)
 {
     char * specials;
-    long start =  tempParticle->element->specials;
+    long start =  a_element[tempParticle]->specials;
     long end = start + MAX_SPECIALS;
     for (specials = start; specials < end; ++specials)
     {
         if (*specials == special)
         {
-            return tempParticle->specialVals[(long)specials-start];
+            return a_specialVals[tempParticle][(long)specials-start];
         }
     }
 
@@ -196,16 +196,16 @@ char getParticleSpecialVal(struct Particle* tempParticle, int special)
 }
 //Sets a particle's special value
 //WARNING: Just sets the first special of that type it finds
-void setParticleSpecialVal(struct Particle* tempParticle, int special, char val)
+void setParticleSpecialVal(int tempParticle, int special, char val)
 {
     char * specials;
-    long start = tempParticle->element->specials;
+    long start = a_element[tempParticle]->specials;
     long end = start + MAX_SPECIALS;
     for (specials = start; specials < end; ++specials)
     {
         if (*specials == special)
         {
-            tempParticle->specialVals[(long)specials-start] = val;
+            a_specialVals[tempParticle][(long)specials-start] = val;
         }
     }
 }
@@ -225,9 +225,9 @@ char getElementSpecialVal(struct Element* tempElement, int special)
     }
 }
 
-void clearSpecialVals(struct Particle* tempParticle)
+void clearSpecialVals(int tempParticle)
 {
-    char* specialVals = tempParticle->specialVals;;
+    char* specialVals = a_specialVals[tempParticle];
     long end = (long)specialVals  + MAX_SPECIALS;
     for ( ; specialVals < end; ++specialVals)
     {

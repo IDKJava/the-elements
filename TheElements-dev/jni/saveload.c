@@ -38,7 +38,7 @@ char saveStateLogic(FILE* fp)
     if (fp != NULL)
     {
         int i, counterX, counterY;
-        struct Particle* tempParticle;
+        int tempParticle;
 
         //First write the version code for this saveload version
         fprintf(fp, "%s\n\n", SAVELOAD_VERSION_CODE);
@@ -61,35 +61,35 @@ char saveStateLogic(FILE* fp)
             for (counterX = 0; counterX < workWidth; counterX++)
             {
                 tempParticle = allCoords[getIndex(counterX, counterY)];
-                if(tempParticle)
+                if(tempParticle != -1)
                 {
                     // Normal element
-                    if(tempParticle->element->index < NUM_BASE_ELEMENTS)
+                    if(a_element[tempParticle]->index < NUM_BASE_ELEMENTS)
                     {
                         fprintf(fp, "B(%f %f %d %d %d %d)",
-                                tempParticle->x,
-                                tempParticle->y,
-                                tempParticle->xVel,
-                                tempParticle->yVel,
-                                tempParticle->heat,
-                                tempParticle->element->index);
+                                a_x[tempParticle],
+                                a_y[tempParticle],
+                                a_xVel[tempParticle],
+                                a_yVel[tempParticle],
+                                a_heat[tempParticle],
+                                a_element[tempParticle]->index);
                     }
                     // Custom element
                     else
                     {
                         fprintf(fp, "C(%f %f %d %d %d %lu)",
-                                tempParticle->x,
-                                tempParticle->y,
-                                tempParticle->xVel,
-                                tempParticle->yVel,
-                                tempParticle->heat,
-                                hashElement(tempParticle->element));
+                                a_x[tempParticle],
+                                a_y[tempParticle],
+                                a_xVel[tempParticle],
+                                a_yVel[tempParticle],
+                                a_heat[tempParticle],
+                                hashElement(a_element[tempParticle]));
                     }
 
                     fprintf(fp, "[");
                     for (i = 0; i < MAX_SPECIALS; i++)
                     {
-                        fprintf(fp, "%d ", tempParticle->specialVals[i]);
+                        fprintf(fp, "%d ", a_specialVals[tempParticle][i]);
                     }
                     fprintf(fp, "]");
                 }
@@ -169,7 +169,7 @@ char loadStateLogicV0(FILE* fp)
     int numElementsSaved, i, j, elementIndex, lowerElementIndex, higherElementIndex,
         sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead, failed;
     struct Element* tempElement;
-    struct Particle* tempParticle;
+    int tempParticle;
     char lookAhead;
 
     if(fp != NULL)
@@ -295,11 +295,12 @@ char loadStateLogicV0(FILE* fp)
             fseek(fp, -1, SEEK_CUR);
             // Try to read in a particle
             tempParticle = avail[loq-1];
-            if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
-                                   &tempParticle->y,
-                                   &tempParticle->xVel,
-                                   &tempParticle->yVel,
-                                   &tempParticle->heat,
+            if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)",
+                                   &(a_x[tempParticle]),
+                                   &(a_y[tempParticle]),
+                                   &(a_xVel[tempParticle]),
+                                   &(a_yVel[tempParticle]),
+                                   &(a_heat[tempParticle]),
                                    &elementIndex)) == EOF
                || charsRead < 6) {continue;}
 
@@ -307,8 +308,8 @@ char loadStateLogicV0(FILE* fp)
             loq--;
 
             // Save the integral coordinates for writing to allCoords
-            i = (int)tempParticle->x;
-            j = (int)tempParticle->y;
+            i = (int)(a_x[tempParticle]);
+            j = (int)(a_y[tempParticle]);
             if (i >= sizeX || j >= sizeY) { return FALSE; }
 
             // Keep the element handy
@@ -331,7 +332,7 @@ char loadStateLogicV0(FILE* fp)
 
                     if (k < MAX_SPECIALS)
                     {
-                        tempParticle->specialVals[k] = tempSpecialVal;
+                        a_specialVals[tempParticle][k] = tempSpecialVal;
                     }
                 }
 
@@ -351,12 +352,12 @@ char loadStateLogicV0(FILE* fp)
             }
 
             // Set the element and make the particle set
-            tempParticle->element = tempElement;
-            tempParticle->set = TRUE;
+            a_element[tempParticle] = tempElement;
+            a_set[tempParticle] = TRUE;
 
             // Set the allCoords and bitmap color
             allCoords[getIndex(i, j)] = tempParticle;
-            setBitmapColor(tempParticle->x, tempParticle->y, tempElement);
+            setBitmapColor(a_x[tempParticle], a_y[tempParticle], tempElement);
         }
 
         return TRUE;
@@ -373,7 +374,7 @@ char loadStateLogicV1(FILE* fp)
     int i, j, elementIndex, elementHash,
         sizeX, sizeY, fileMaxSpecials, tempSpecialVal, charsRead, failed;
     struct Element* tempElement;
-    struct Particle* tempParticle;
+    int tempParticle;
     char buffer[64];
     char lookAhead;
 
@@ -417,25 +418,27 @@ char loadStateLogicV1(FILE* fp)
             {
                 // Try to read in a particle
                 tempParticle = avail[loq-1];
-                if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)", &tempParticle->x,
-                                       &tempParticle->y,
-                                       &tempParticle->xVel,
-                                       &tempParticle->yVel,
-                                       &tempParticle->heat,
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)",
+                                       &(a_x[tempParticle]),
+                                       &(a_y[tempParticle]),
+                                       &(a_xVel[tempParticle]),
+                                       &(a_yVel[tempParticle]),
+                                       &(a_heat[tempParticle]),
                                        &elementIndex)) == EOF
                    || charsRead < 6) {continue;}
-                tempParticle->element = elements[elementIndex];
+                a_element[tempParticle] = elements[elementIndex];
             }
             // Custom particle
             else if(lookAhead == 'C')
             {
                 // Try to read in a particle
                 tempParticle = avail[loq-1];
-                if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)", &tempParticle->x,
-                                       &tempParticle->y,
-                                       &tempParticle->xVel,
-                                       &tempParticle->yVel,
-                                       &tempParticle->heat,
+                if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)",
+                                       &(a_x[tempParticle]),
+                                       &(a_y[tempParticle]),
+                                       &(a_xVel[tempParticle]),
+                                       &(a_yVel[tempParticle]),
+                                       &(a_heat[tempParticle]),
                                        &elementHash)) == EOF
                    || charsRead < 6) {continue;}
 
@@ -443,7 +446,7 @@ char loadStateLogicV1(FILE* fp)
                 elementIndex = findElementFromHash(elementHash);
                 if (elementIndex)
                 {
-                    tempParticle->element = elements[elementIndex];
+                    a_element[tempParticle] = elements[elementIndex];
                 }
                 else
                 {
@@ -465,8 +468,8 @@ char loadStateLogicV1(FILE* fp)
             }
 
             // Save the integral coordinates for writing to allCoords
-            i = (int)tempParticle->x;
-            j = (int)tempParticle->y;
+            i = (int)a_x[tempParticle];
+            j = (int)a_y[tempParticle];
             if (i >= sizeX || j >= sizeY) { return FALSE; }
 
             // Check that our lookahead is correct
@@ -483,7 +486,7 @@ char loadStateLogicV1(FILE* fp)
 
                     if (k < MAX_SPECIALS)
                     {
-                        tempParticle->specialVals[k] = tempSpecialVal;
+                        a_specialVals[tempParticle][k] = tempSpecialVal;
                     }
                 }
 
@@ -509,11 +512,11 @@ char loadStateLogicV1(FILE* fp)
                 loq--;
 
                 // Make the particle set
-                tempParticle->set = TRUE;
+                a_set[tempParticle] = TRUE;
 
                 // Set the allCoords and bitmap color
                 allCoords[getIndex(i, j)] = tempParticle;
-                setBitmapColor(tempParticle->x, tempParticle->y, tempParticle->element);
+                setBitmapColor(a_x[tempParticle], a_y[tempParticle], a_element[tempParticle]);
             }
         }
 

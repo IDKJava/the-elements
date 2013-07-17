@@ -63,7 +63,7 @@ char borderRight = TRUE;
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 
-struct Particle** allCoords;
+int** allCoords;
 
 short mouseX;
 short mouseY;

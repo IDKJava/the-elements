@@ -34,50 +34,38 @@ extern "C" {
  
     struct Element
     {
-	//Index
-	unsigned char index;
-	//Name
-	char* name;
+        //Index
+        unsigned char index;
+        //Name
+        char* name;
 
-	//Dealing with states
-	char state;
-	char startingTemp, lowestTemp, highestTemp;
-	struct Element* lowerElement;
-	struct Element* higherElement;
+        //Dealing with states
+        char state;
+        char startingTemp, lowestTemp, highestTemp;
+        struct Element* lowerElement;
+        struct Element* higherElement;
 
-	//Dealing with drawing
-	char red, green, blue;
+        //Dealing with drawing
+        char red, green, blue;
 
-	//Properties
-	char* specials;
-	char* specialVals;
-	char* collisions;  // Only for customs
-	char base; //Only for customs
-	char density;
-	signed char fallVel;
-	char inertia;
-    };
-
-    struct Particle
-    {
-	char set;
-	float x, y, oldX, oldY;
-	short xVel, yVel;
-	char heat;
-	char* specialVals;
-	struct Element* element;
-	char frozen;
-	char hasMoved;
+        //Properties
+        char* specials;
+        char* specialVals;
+        char* collisions;  // Only for customs
+        char base; //Only for customs
+        char density;
+        signed char fallVel;
+        char inertia;
     };
 
     struct Atmosphere
     {
-	char heat;
-	char gravity;
+        char heat;
+        char gravity;
 
-	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
+        unsigned char backgroundRed, backgroundGreen, backgroundBlue;
 
-	char borderLeft, borderTop, borderRight, borderBottom;
+        char borderLeft, borderTop, borderRight, borderBottom;
     };
 
 /*
