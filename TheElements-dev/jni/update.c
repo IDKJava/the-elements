@@ -298,7 +298,7 @@ int updateSpecials(int index)
             case SPECIAL_SPAWN:
             {
                 //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special spawn");
-                //frozen[counter] = 0;
+                //frozen[tempParticle] = 0;
                 int diffX, diffY;
                 int tempAllCoords;
                 for (diffX = -2; diffX <= 2; diffX++)
@@ -1044,8 +1044,6 @@ int updateSpecials(int index)
 
 void UpdateView(void)
 {
-    //Used in for loops
-    unsigned int counter;
     //For speed we're going to create temp variables to store stuff
     int tempOldX, tempOldY;
     float *tempX, *tempY;
@@ -1093,30 +1091,30 @@ void UpdateView(void)
         }
 
         //Physics update
-        for (counter = 0; counter < MAX_POINTS; ++counter)
+        for (tempParticle = 0; tempParticle < MAX_POINTS; ++tempParticle)
         {
             //If the particle is set and unfrozen
-            if (a_set[counter])// && tempParticle->frozen < 4)
+            if (a_set[tempParticle])// && tempParticle->frozen < 4)
             {
                 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
                 //TODO: Life property cycle
 
                 //Set the temp and old variables
-                tempX = &(a_x[counter]);
-                tempY = &(a_y[counter]);
-                tempOldX = (int) a_x[counter];
-                tempOldY = (int) a_y[counter];
-                a_oldX[counter] = tempOldX;
-                a_oldY[counter] = tempOldY;
-                tempElement = a_element[counter];
+                tempX = &(a_x[tempParticle]);
+                tempY = &(a_y[tempParticle]);
+                tempOldX = (int) a_x[tempParticle];
+                tempOldY = (int) a_y[tempParticle];
+                a_oldX[tempParticle] = tempOldX;
+                a_oldY[tempParticle] = tempOldY;
+                tempElement = a_element[tempParticle];
                 tempInertia = tempElement->inertia;
-                tempXVel = &(a_xVel[counter]);
-                tempYVel = &(a_yVel[counter]);
+                tempXVel = &(a_xVel[tempParticle]);
+                tempYVel = &(a_yVel[tempParticle]);
 
                 //Update coords
                 if(tempInertia != INERTIA_UNMOVABLE)
                 {
-                    if (!updateKinetic(counter))
+                    if (!updateKinetic(tempParticle))
                     {
                         // If we ended up deleting the particle, continue
                         continue;

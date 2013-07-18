@@ -88,7 +88,7 @@ extern "C" {
     extern float a_oldY[];
     extern short a_xVel[];
     extern short a_yVel[];
-    extern short a_heat[];
+    extern char a_heat[];
     extern char* a_specialVals[];
     extern struct Element* a_element[];
     extern char a_frozen[];
