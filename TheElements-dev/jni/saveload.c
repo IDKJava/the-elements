@@ -66,7 +66,7 @@ char saveStateLogic(FILE* fp)
                     // Normal element
                     if(a_element[tempParticle]->index < NUM_BASE_ELEMENTS)
                     {
-                        fprintf(fp, "B(%f %f %d %d %d %d)",
+                        fprintf(fp, "B(%f %f %d %d %c %d)",
                                 a_x[tempParticle],
                                 a_y[tempParticle],
                                 a_xVel[tempParticle],
@@ -77,7 +77,7 @@ char saveStateLogic(FILE* fp)
                     // Custom element
                     else
                     {
-                        fprintf(fp, "C(%f %f %d %d %d %lu)",
+                        fprintf(fp, "C(%f %f %d %d %c %lu)",
                                 a_x[tempParticle],
                                 a_y[tempParticle],
                                 a_xVel[tempParticle],
@@ -295,7 +295,7 @@ char loadStateLogicV0(FILE* fp)
             fseek(fp, -1, SEEK_CUR);
             // Try to read in a particle
             tempParticle = avail[loq-1];
-            if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)",
+            if((charsRead = fscanf(fp, "(%f %f %d %d %c %d)",
                                    &(a_x[tempParticle]),
                                    &(a_y[tempParticle]),
                                    &(a_xVel[tempParticle]),
@@ -418,7 +418,7 @@ char loadStateLogicV1(FILE* fp)
             {
                 // Try to read in a particle
                 tempParticle = avail[loq-1];
-                if((charsRead = fscanf(fp, "(%f %f %d %d %d %d)",
+                if((charsRead = fscanf(fp, "(%f %f %d %d %c %d)",
                                        &(a_x[tempParticle]),
                                        &(a_y[tempParticle]),
                                        &(a_xVel[tempParticle]),
@@ -433,7 +433,7 @@ char loadStateLogicV1(FILE* fp)
             {
                 // Try to read in a particle
                 tempParticle = avail[loq-1];
-                if((charsRead = fscanf(fp, "(%f %f %d %d %d %lu)",
+                if((charsRead = fscanf(fp, "(%f %f %d %d %c %lu)",
                                        &(a_x[tempParticle]),
                                        &(a_y[tempParticle]),
                                        &(a_xVel[tempParticle]),
