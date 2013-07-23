@@ -12,12 +12,12 @@
  */
 
 //Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
-int getIndex(int x, int y)
+inline int getIndex(int x, int y)
 {
     return y*workWidth + x;
 }
 //Used specifically for colors
-int getColorIndex( int x, int y )
+inline int getColorIndex( int x, int y )
 {
     return y*stupidTegra + x;
 }
@@ -31,8 +31,19 @@ int versionCode;
 
 struct Element** elements;
 unsigned char numElements;
-struct Particle* particles[MAX_POINTS];
-struct Particle* avail[MAX_POINTS];
+char a_set[MAX_POINTS];
+float a_x[MAX_POINTS];
+float a_y[MAX_POINTS];
+float a_oldX[MAX_POINTS];
+float a_oldY[MAX_POINTS];
+short a_xVel[MAX_POINTS];
+short a_yVel[MAX_POINTS];
+char a_heat[MAX_POINTS];
+char* a_specialVals[MAX_POINTS];
+struct Element* a_element[MAX_POINTS];
+char a_frozen[MAX_POINTS];
+char a_hasMoved[MAX_POINTS];
+int avail[MAX_POINTS];
 int loq;
 struct Element* cElement;
 struct Atmosphere* cAtmosphere;
@@ -52,7 +63,7 @@ char borderRight = TRUE;
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 
-struct Particle** allCoords;
+int* allCoords = NULL;
 
 short mouseX;
 short mouseY;
@@ -61,7 +72,8 @@ short lastMouseY;
 
 int randOffset = 0;
 
-unsigned char* colors;
+unsigned char* colors = NULL;
+unsigned char* colorsFrameBuffer = NULL;
 
 int screenWidth;
 int screenHeight;
@@ -73,7 +85,6 @@ int stupidTegra;
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
 char reciprocals[NUM_COLLISIONS];
 
-char shouldClear = FALSE;
 char shouldZoom = FALSE;
 char shouldUpdateMouse = FALSE;
 
@@ -103,7 +114,15 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
- * MUTEXES
+ * THREADS
  */
 
-pthread_mutex_t update_mutex;
+int threadsInitialized = FALSE;
+int bufferFree = TRUE;
+int frameReady = FALSE;
+
+pthread_mutex_t update_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t frame_ready_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t frame_ready_cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t buffer_free_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t buffer_free_cond = PTHREAD_COND_INITIALIZER;
