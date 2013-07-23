@@ -107,7 +107,7 @@ void setBitmapColor(int xCoord, int yCoord, struct Element* element)
 }
 void clearBitmapColor(int xCoord, int yCoord)
 {
-    unsigned char* pixel = colors +  (getColorIndex(xCoord, yCoord) *3 ); //shift faster than *4
+    unsigned char* pixel = colors +  (getColorIndex(xCoord, yCoord) * 3);
     pixel[0] = cAtmosphere->backgroundRed;
     pixel[1] = cAtmosphere->backgroundGreen;
     pixel[2] = cAtmosphere->backgroundBlue;
