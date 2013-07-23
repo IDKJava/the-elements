@@ -49,22 +49,9 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env,
     dimensionsChanged = TRUE;
 
     arraySetup();
-    char buffer[256];
-    gameSetup();
-    sprintf(buffer, "Available particles: %d", loq);
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
     glInit();
-    sprintf(buffer, "Available particles: %d", loq);
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
-
-    sprintf(buffer, "Available particles: %d", loq);
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
-}
-void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
-{
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender begin");
-    glRender();
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeRender end");
+    gameSetup();
+    startUpdateThread();
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
@@ -85,6 +72,10 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* e
     }
     strcat(loadLoc, SAVE_EXTENSION);
     loadState(loadLoc);
+}
+void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
+{
+    glRenderThreaded();
 }
 
 //Save/load functions
@@ -179,6 +170,7 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
     udid[jstringLen] = 0;
     versionCode = jversionCode;
 
+    // Initialization
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
     importGLInit();
     atmosphereSetup();

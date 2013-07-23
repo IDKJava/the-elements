@@ -133,6 +133,7 @@ extern "C" {
 
 //Array for bitmap drawing
     extern unsigned char* colors;
+    extern unsigned char* colorsFrameBuffer;
 
 //Screen dimensions
     extern int screenWidth;
@@ -176,10 +177,18 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
- * MUTEXES
+ * THREADS
  */
 
+    extern int threadsInitialized;
+    extern int bufferFree;
+    extern int frameReady;
+
     extern pthread_mutex_t update_mutex;
+    extern pthread_mutex_t frame_ready_mutex;
+    extern pthread_cond_t frame_ready_cond;
+    extern pthread_mutex_t buffer_free_mutex;
+    extern pthread_cond_t buffer_free_cond;
 
 #ifdef __cplusplus
 }

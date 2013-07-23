@@ -59,18 +59,16 @@ void gameSetup()
 //Set up all the variable sized arrays
 void arraySetup()
 {
-    //Set up the update_mutex
-    pthread_mutex_init(&update_mutex, NULL);
-
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
     //Make sure everything is deallocated
     free(colors);
+    free(colorsFrameBuffer);
     free(allCoords);
 
     //Allocate memory
     colors = malloc(3 * stupidTegra * workHeight * sizeof(char));
+    colorsFrameBuffer = malloc(3 * stupidTegra * workHeight * sizeof(char));
     allCoords = malloc(workWidth * workHeight * sizeof(int*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
-
 }
 
 void atmosphereSetup()

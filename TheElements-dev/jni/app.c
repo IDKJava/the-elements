@@ -63,7 +63,7 @@ char borderRight = TRUE;
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 
-int* allCoords;
+int* allCoords = NULL;
 
 short mouseX;
 short mouseY;
@@ -72,7 +72,8 @@ short lastMouseY;
 
 int randOffset = 0;
 
-unsigned char* colors;
+unsigned char* colors = NULL;
+unsigned char* colorsFrameBuffer = NULL;
 
 int screenWidth;
 int screenHeight;
@@ -113,7 +114,15 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
- * MUTEXES
+ * THREADS
  */
 
-pthread_mutex_t update_mutex;
+int threadsInitialized = FALSE;
+int bufferFree = TRUE;
+int frameReady = FALSE;
+
+pthread_mutex_t update_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t frame_ready_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t frame_ready_cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t buffer_free_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t buffer_free_cond = PTHREAD_COND_INITIALIZER;

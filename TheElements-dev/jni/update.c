@@ -9,6 +9,9 @@
 #include "update.h"
 #include <android/log.h>
 
+static int shouldKillUpdateThread = TRUE;
+pthread_t updateThread;
+
 void drawPoints(void)
 {
     int dx, dy;
@@ -1245,5 +1248,57 @@ void UpdateView(void)
             }
         }
         //__android_log_write(ANDROID_LOG_INFO, "TheElements", "All particles done");
+    }
+}
+
+void *updateThreadFunc(void *args)
+{
+    while (!shouldKillUpdateThread)
+    {
+        pthread_mutex_lock(&update_mutex);
+        UpdateView();
+        pthread_mutex_unlock(&update_mutex);
+
+        // Synchronization
+        pthread_mutex_lock(&buffer_free_mutex);
+        while (!bufferFree)
+        {
+            pthread_cond_wait(&buffer_free_cond, &buffer_free_mutex);
+        }
+        bufferFree = FALSE;
+        pthread_mutex_unlock(&buffer_free_mutex);
+
+        // Copy the frame into the colorsFrameBuffer
+        pthread_mutex_lock(&update_mutex);
+        memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
+        pthread_mutex_unlock(&update_mutex);
+
+        pthread_mutex_lock(&frame_ready_mutex);
+        if (!frameReady)
+        {
+            frameReady = TRUE;
+            pthread_cond_signal(&frame_ready_cond);
+        }
+        pthread_mutex_unlock(&frame_ready_mutex);
+    }
+}
+
+void startUpdateThread()
+{
+    // Only start the thread if one doesn't exist already
+    if (shouldKillUpdateThread)
+    {
+        shouldKillUpdateThread = FALSE;
+        pthread_create(&updateThread, NULL, &updateThreadFunc, NULL);
+    }
+}
+
+void killUpdateThread()
+{
+    // Only kill the thread if it's not already dead
+    if (!shouldKillUpdateThread)
+    {
+        shouldKillUpdateThread = TRUE;
+        pthread_join(updateThread, NULL);
     }
 }

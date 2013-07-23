@@ -32,6 +32,7 @@ extern "C" {
 
 
 #include <GLES/gl.h>
+#include <EGL/egl.h>
 #ifndef ANDROID_NDK
 #include <GLES/egl.h>
 #endif /* !ANDROID_NDK */
