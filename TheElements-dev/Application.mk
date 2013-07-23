@@ -1,1 +1,1 @@
-APP_MODULES      := thelements
+APP_MODULES := thelements

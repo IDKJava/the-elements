@@ -5,15 +5,24 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := thelements
 
+# Print whether this is a debug or release build
+ifeq ($(APP_OPTIM),debug)
+    $(warning DEBUG build)
+else
+    $(warning RELEASE build)
+endif
+
 LOCAL_CFLAGS := -DANDROID_NDK \
-                -DDISABLE_IMPORTGL \
-				-pg
+                -DDISABLE_IMPORTGL
 
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 
 # compile with profiling
-LOCAL_STATIC_LIBRARIES := android-ndk-profiler
+ifeq ($(APP_OPTIM),debug)
+    LOCAL_CFLAGS += -pg -fno-omit-frame-pointer -fno-function-sections
+    LOCAL_STATIC_LIBRARIES := android-ndk-profiler
+endif
 
 LOCAL_SRC_FILES := \
     app-android.c \
@@ -32,4 +41,6 @@ LOCAL_LDLIBS := -lGLESv1_CM -lEGL -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)
 
-$(call import-module,android-ndk-profiler)
+ifeq ($(APP_OPTIM),debug)
+    $(call import-module,android-ndk-profiler)
+endif

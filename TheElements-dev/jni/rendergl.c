@@ -7,7 +7,13 @@
 
 #include "rendergl.h"
 #include <android/log.h>
+
+#ifndef NDEBUG
+// Timing of frames
 #include <sys/time.h>
+
+static struct timeval time1;
+#endif
 
 unsigned int textureID;
 
@@ -18,8 +24,6 @@ float texture[] =
 unsigned char indices[] =
 {0, 1, 3, 0, 3, 2};
 int texWidth, texHeight, stupidTegra;
-
-static struct timeval time1;
 
 
 void glInit()
@@ -68,6 +72,7 @@ void glInit()
 
 void glRender()
 {
+#ifndef NDEBUG
     struct timeval time2;
     struct timeval time3;
     char buffer[20];
@@ -80,15 +85,7 @@ void glRender()
     __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
     time1.tv_sec = time2.tv_sec;
     time1.tv_usec = time2.tv_usec;
-
-
-	//Clear the screen
-	//glClear(GL_COLOR_BUFFER_BIT);
-
-	//Check for changes in screen dimensions or work dimensions and handle them
-	//char buffer[100];
-	//sprintf( buffer,"sw: %d, sh: %d, tw: %d, th: %d, wW: %d, wH: %d ",screenWidth, screenHeight,texWidth,texHeight, workWidth, workHeight );
-	//__android_log_write( ANDROID_LOG_INFO, "ThElements", buffer );
+#endif
 
 	if(dimensionsChanged)
 	{
@@ -131,21 +128,19 @@ void glRender()
 	}
 
 	//Sub the work portion of the tex(~.025s -- Droid)
+#ifndef NDEBUG
     gettimeofday(&time2, NULL);
+#endif
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
+#ifndef NDEBUG
     gettimeofday(&time3, NULL);
     useconds = (time3.tv_sec - time2.tv_sec)*1000000 + time3.tv_usec - time2.tv_usec;
     snprintf(buffer, 20, "tFPS: %f", 1000000/useconds);
     __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
+#endif
 
     //Actually draw the rectangle with the text on it (~.015s -- Droid)
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
-
-    // FPS from just this draw (no significant difference to aFPS)
-    //gettimeofday(&time2, NULL);
-    //useconds = (time2.tv_sec - time1.tv_sec)*1000000 + time2.tv_usec - time1.tv_usec;
-    //snprintf(buffer, 20, "cFPS: %f", 1000000/useconds);
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 }
 
 
