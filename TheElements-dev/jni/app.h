@@ -25,132 +25,136 @@ extern "C" {
  * FUNCTIONS
  */
 
-int getIndex(int x, int y);
-int getColorIndex(int x, int y);
+    inline int getIndex(int x, int y);
+    inline int getColorIndex(int x, int y);
 
 /*
  * STRUCTS
  */
  
-struct Element
-{
-	//Index
-	unsigned char index;
-	//Name
-	char* name;
+    struct Element
+    {
+        //Index
+        unsigned char index;
+        //Name
+        char* name;
 
-	//Dealing with states
-	char state;
-	char startingTemp, lowestTemp, highestTemp;
-	struct Element* lowerElement;
-	struct Element* higherElement;
+        //Dealing with states
+        char state;
+        char startingTemp, lowestTemp, highestTemp;
+        struct Element* lowerElement;
+        struct Element* higherElement;
 
-	//Dealing with drawing
-	char red, green, blue;
+        //Dealing with drawing
+        char red, green, blue;
 
-	//Properties
-	char* specials;
-	char* specialVals;
-	char* collisions;  // Only for customs
-	char base; //Only for customs
-	char density;
-	signed char fallVel;
-	char inertia;
-};
+        //Properties
+        char* specials;
+        char* specialVals;
+        char* collisions;  // Only for customs
+        char base; //Only for customs
+        char density;
+        signed char fallVel;
+        char inertia;
+    };
 
-struct Particle
-{
-	char set;
-	float x, y, oldX, oldY;
-	short xVel, yVel;
-	char heat;
-	char* specialVals;
-	struct Element* element;
-	char frozen;
-	char hasMoved;
-};
+    struct Atmosphere
+    {
+        char heat;
+        char gravity;
 
-struct Atmosphere
-{
-	char heat;
-	char gravity;
+        unsigned char backgroundRed, backgroundGreen, backgroundBlue;
 
-	unsigned char backgroundRed, backgroundGreen, backgroundBlue;
-
-	char borderLeft, borderTop, borderRight, borderBottom;
-};
+        char borderLeft, borderTop, borderRight, borderBottom;
+    };
 
 /*
  * VARIABLES
  */
 
 //Variables to track the user/app version
-extern char udid[];
-extern int versionCode;
+    extern char udid[];
+    extern int versionCode;
 
 //An array of all the elements
-extern struct Element** elements;
+    extern struct Element** elements;
 //The number of elements available
-extern unsigned char numElements;
-//An array of all the particles
-extern struct Particle* particles[];
+    extern unsigned char numElements;
+
+    extern char a_set[];
+    extern float a_x[];
+    extern float a_y[];
+    extern float a_oldX[];
+    extern float a_oldY[];
+    extern short a_xVel[];
+    extern short a_yVel[];
+    extern char a_heat[];
+    extern char* a_specialVals[];
+    extern struct Element* a_element[];
+    extern char a_frozen[];
+    extern char a_hasMoved[];
+
+ 
+
+
+    
+
 //A stack of available particles
-extern struct Particle* avail[];
+    extern int avail[];
 //Points to the index AFTER the top of the stack
-extern int loq;
+    extern int loq;
 //Current element selected
-extern struct Element* cElement;
+    extern struct Element* cElement;
 //Atmosphere in use
-extern struct Atmosphere* cAtmosphere;
+    extern struct Atmosphere* cAtmosphere;
 
 //State variables
-extern char play;
-extern char flipped;
-extern char fingerDown;
-extern char accelOn;
-extern char dimensionsChanged;
-extern char zoomChanged;
+    extern char play;
+    extern char flipped;
+    extern char fingerDown;
+    extern char accelOn;
+    extern char dimensionsChanged;
+    extern char zoomChanged;
 
-extern unsigned char brushSize;
-extern unsigned char zoomFactor;
+    extern unsigned char brushSize;
+    extern unsigned char zoomFactor;
 
 //A map of all the points (a two-dimensional variable-size array)
-extern struct Particle** allCoords;
+    extern int* allCoords;
 
 //Mouse positions
-extern short mouseX;
-extern short mouseY;
+    extern short mouseX;
+    extern short mouseY;
 //Old mouse positions
-extern short lastMouseX;
-extern short lastMouseY;
+    extern short lastMouseX;
+    extern short lastMouseY;
 
-extern int randOffset;
+    extern int randOffset;
 
 //Array for bitmap drawing
-extern unsigned char* colors;
+    extern unsigned char* colors;
+    extern unsigned char* colorsFrameBuffer;
 
 //Screen dimensions
-extern int screenWidth;
-extern int screenHeight;
+    extern int screenWidth;
+    extern int screenHeight;
 //Workspace dimensions
-extern int workWidth;
-extern int workHeight;
+    extern int workWidth;
+    extern int workHeight;
 
 //Nearest power of 2 to workWidth - needed due to stupid Tegra 2.
-extern int stupidTegra;
+    extern int stupidTegra;
 
 //Collision matrix
-extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
-extern char reciprocals[NUM_COLLISIONS];
+    extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
+    extern char reciprocals[NUM_COLLISIONS];
 
-//Set when a clear is requested, unset when cleared
-extern char shouldClear;
 //Set when a mouse update is requested, unset when udpated
-extern char shouldUpdateMouse;
+    extern char shouldUpdateMouse;
 
 //Gravity values
-extern float xGravity;
-extern float yGravity;
+    extern float xGravity;
+    extern float yGravity;
 
 
 /*Network stuff taken out for now
@@ -173,10 +177,18 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
- * MUTEXES
+ * THREADS
  */
 
-extern pthread_mutex_t update_mutex;
+    extern int threadsInitialized;
+    extern int bufferFree;
+    extern int frameReady;
+
+    extern pthread_mutex_t update_mutex;
+    extern pthread_mutex_t frame_ready_mutex;
+    extern pthread_cond_t frame_ready_cond;
+    extern pthread_mutex_t buffer_free_mutex;
+    extern pthread_cond_t buffer_free_cond;
 
 #ifdef __cplusplus
 }

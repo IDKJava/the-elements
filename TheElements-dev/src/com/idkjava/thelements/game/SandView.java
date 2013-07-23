@@ -74,13 +74,13 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onDrawFrame(GL10 gl)
 	{
-		nativeRender(); //Actual rendering - everything happens here
+	    nativeRender();
 	}
 
 	//@formatter:off
 	private static native void nativeResize(int width, int height); //Jni resize
-	private static native void nativeRender(); //Jni rendering function - everything happens here
 	private static native void nativeLoadState(boolean shouldLoadDemo); //Jni load initial state
+	private static native void nativeRender();
 	//@formatter:on
 
 	static

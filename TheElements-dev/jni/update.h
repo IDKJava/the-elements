@@ -22,6 +22,7 @@
 //Include the clear funtion (rsetup)
 #include "setup.h"
 
-void UpdateView(void);
+void startUpdateThread();
+void killUpdateThread();
 
 #endif //!UPDATE_H_INCLUDED

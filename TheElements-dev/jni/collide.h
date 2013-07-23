@@ -23,6 +23,6 @@
 //Include collision data
 //#include "collisions.h"
 
-void collide (struct Particle* firstParticle, struct Particle* secondParticle);
+void collide (int firstParticle, int secondParticle);
 
 #endif //!COLLIDE_H_INCLUDED
