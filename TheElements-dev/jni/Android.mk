@@ -37,7 +37,7 @@ LOCAL_SRC_FILES := \
     specials.c \
     update.c \
 
-LOCAL_LDLIBS := -lGLESv1_CM -lEGL -ldl -llog
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)
 
