@@ -11,6 +11,9 @@
 #ifndef MACROS_H_INCLUDED
 #define MACROS_H_INCLUDED
 
+/*
+ * CONSTANTS
+ */
 #define MAX_POINTS 100000
 #define NUM_BASE_ELEMENTS 32
 #define MAX_SPECIALS 6
@@ -103,7 +106,7 @@
 #define ELECTRIC_XN     4 // 0100
 #define ELECTRIC_YN     8 // 1000
 #define ELECTRIC_WAIT  16 //10000
-#define SPECIAL_VAL_UNSET 255
+#define SPECIAL_VAL_UNSET -1
 
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");

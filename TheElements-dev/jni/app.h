@@ -49,8 +49,8 @@ extern "C" {
         char red, green, blue;
 
         //Properties
-        char* specials;
-        char* specialVals;
+        int specials[MAX_SPECIALS];
+        int specialVals[MAX_SPECIALS];
         char* collisions;  // Only for customs
         char base; //Only for customs
         char density;
@@ -89,7 +89,7 @@ extern "C" {
     extern short a_xVel[];
     extern short a_yVel[];
     extern char a_heat[];
-    extern char* a_specialVals[];
+    extern int* a_specialVals[];
     extern struct Element* a_element[];
     extern char a_frozen[];
     extern char a_hasMoved[];

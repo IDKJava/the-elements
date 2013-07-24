@@ -23,10 +23,10 @@ void clearBitmapColor(int xCoord, int yCoord);
 void createBitmapFromPoints(void);
 void unFreezeParticles(int xCoord, int yCoord);
 void changeHeat(char *heat, int heatChange);
-char hasSpecial(int tempParticle, int special);
-char getParticleSpecialVal(int tempParticle, int special);
-void setParticleSpecialVal(int tempParticle, int special, char val);
-char getElementSpecialVal(struct Element* tempElement, int special);
+int hasSpecial(int tempParticle, int special);
+int getParticleSpecialVal(int tempParticle, int special);
+void setParticleSpecialVal(int tempParticle, int special, int val);
+int getElementSpecialVal(struct Element* tempElement, int special);
 void clearSpecialVals(int tempParticle);
 
 #endif //!POINTS_H_INCLUDED

@@ -120,7 +120,7 @@ char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 
  */
 //Defines the special for each base element
 
-signed char baseSpecial[][MAX_SPECIALS] =
+int baseSpecial[][MAX_SPECIALS] =
 {
     {SPECIAL_SPAWN, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Spawn
     {SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE, SPECIAL_NONE}, //Drag
@@ -158,7 +158,7 @@ signed char baseSpecial[][MAX_SPECIALS] =
 
 
 //Defines the special value for each base element
-char baseSpecialValue[][MAX_SPECIALS] =
+int baseSpecialValue[][MAX_SPECIALS] =
 {
     {0,0,0,0,0,0}, //TODO: Add the element names next to all of these columns
     {0,0,0,0,0,0},

@@ -78,9 +78,9 @@ extern char baseState[];
  *              4 = Explode; Explosiveness
  */
 //Defines the special for each base element
-extern signed char baseSpecial[][MAX_SPECIALS];
+extern int baseSpecial[][MAX_SPECIALS];
 //Defines the special value for each base element
-extern char baseSpecialValue[][MAX_SPECIALS];
+extern int baseSpecialValue[][MAX_SPECIALS];
 //Defines the inertia of each element
 extern char baseInertia[];
 //Defines the starting temp of the element (-1 = atmosphere)
