@@ -117,12 +117,8 @@ void elementSetup()
             tempElement->fallVel = baseFallVel[i];
             tempElement->density = baseDensity[i];
             tempElement->state = baseState[i];
-            tempElement->specials = baseSpecial[i];
-            tempElement->specialVals = (char*) malloc(MAX_SPECIALS * sizeof(char));
-            for(j = 0; j < MAX_SPECIALS; j++)
-            {
-                tempElement->specialVals[j] = baseSpecialValue[i][j];
-            }
+            memcpy(tempElement->specials, baseSpecial[i], MAX_SPECIALS * sizeof(int));
+            memcpy(tempElement->specialVals, baseSpecialValue[i], MAX_SPECIALS * sizeof(int));
             tempElement->inertia = baseInertia[i];
             tempElement->startingTemp = baseStartingTemp[i];
             tempElement->highestTemp = baseHighestTemp[i];
@@ -152,7 +148,6 @@ void particleSetup()
     int i;
     for(i = 0; i < MAX_POINTS; i++)
     {
-        
-        a_specialVals[i] = (char*) malloc(MAX_SPECIALS * sizeof(char));
+        a_specialVals[i] = (int*) malloc(MAX_SPECIALS * sizeof(int));
     }
 }

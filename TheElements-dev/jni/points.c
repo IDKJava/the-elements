@@ -165,12 +165,12 @@ void changeHeat(char *heat, int heatChange)
 }
 
 //Function to check if a particle has a given special
-char hasSpecial(int tempParticle, int special)
+int hasSpecial(int tempParticle, int special)
 {
-    char* specials;
-    long start = a_element[tempParticle]->specials;
-    long end = start + MAX_SPECIALS;
-    for(specials = start; specials < end; ++specials)
+    int* specials;
+    int* start = specials = a_element[tempParticle]->specials;
+    int* end = start + MAX_SPECIALS;
+    for(; specials < end; ++specials)
     {
         if (*specials == special) return TRUE;
     }
@@ -179,16 +179,16 @@ char hasSpecial(int tempParticle, int special)
 
 //Gets a particle's special value
 //WARNING: Just gets the first special of that type it finds
-char getParticleSpecialVal(int tempParticle, int special)
+int getParticleSpecialVal(int tempParticle, int special)
 {
-    char * specials;
-    long start =  a_element[tempParticle]->specials;
-    long end = start + MAX_SPECIALS;
-    for (specials = start; specials < end; ++specials)
+    int* specials;
+    int* start = specials = a_element[tempParticle]->specials;
+    int* end = start + MAX_SPECIALS;
+    for (; specials < end; ++specials)
     {
         if (*specials == special)
         {
-            return a_specialVals[tempParticle][(long)specials-start];
+            return a_specialVals[tempParticle][specials-start];
         }
     }
 
@@ -196,39 +196,41 @@ char getParticleSpecialVal(int tempParticle, int special)
 }
 //Sets a particle's special value
 //WARNING: Just sets the first special of that type it finds
-void setParticleSpecialVal(int tempParticle, int special, char val)
+void setParticleSpecialVal(int tempParticle, int special, int val)
 {
-    char * specials;
-    long start = a_element[tempParticle]->specials;
-    long end = start + MAX_SPECIALS;
-    for (specials = start; specials < end; ++specials)
+    int* specials;
+    int* start = specials = a_element[tempParticle]->specials;
+    int* end = start + MAX_SPECIALS;
+    for (; specials < end; ++specials)
     {
         if (*specials == special)
         {
-            a_specialVals[tempParticle][(long)specials-start] = val;
+            a_specialVals[tempParticle][specials-start] = val;
         }
     }
 }
 //Gets an element's special value
 //WARNING: Just gets the first special of that type it finds
-char getElementSpecialVal(struct Element* tempElement, int special)
+int getElementSpecialVal(struct Element* tempElement, int special)
 {
-    char * specials;
-    long start = tempElement->specials;
-    long end = start + MAX_SPECIALS;
-    for (specials = start; specials < end; ++specials)
+    int* specials;
+    int* start = specials = tempElement->specials;
+    int* end = start + MAX_SPECIALS;
+    for (; specials < end; ++specials)
     {
         if (*specials == special)
         {
-            return tempElement->specialVals[(long)specials-start];
+            return tempElement->specialVals[specials-start];
         }
     }
+
+    return SPECIAL_VAL_UNSET;
 }
 
 void clearSpecialVals(int tempParticle)
 {
-    char* specialVals = a_specialVals[tempParticle];
-    long end = (long)specialVals  + MAX_SPECIALS;
+    int* specialVals = a_specialVals[tempParticle];
+    int* end = specialVals + MAX_SPECIALS;
     for ( ; specialVals < end; ++specialVals)
     {
         *specialVals = SPECIAL_VAL_UNSET;

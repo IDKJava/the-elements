@@ -290,22 +290,11 @@ int updateSpecials(int index)
     char specialLoopDone = FALSE;
     for (i = MAX_SPECIALS; i != 0; i--)
     {
-        if (!tempElement->specials)
-        {
-            __android_log_write(ANDROID_LOG_ERROR, "LOG", "Null specials array!");
-            break;
-        }
-        /*
-          char buffer[256];
-          sprintf(buffer, "Processing special: %d, val: %d", i, tempElement->specials[i]);
-          __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
-        */
-
         if(tempElement->specials[MAX_SPECIALS-i] == SPECIAL_NONE)
         {
             return shouldResolveHeatChanges;
         }
-        switch((int)tempElement->specials[MAX_SPECIALS-i])
+        switch(tempElement->specials[MAX_SPECIALS-i])
         {
             //Spawn
         case SPECIAL_SPAWN:
