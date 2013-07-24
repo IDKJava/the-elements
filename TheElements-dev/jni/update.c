@@ -9,6 +9,13 @@
 #include "update.h"
 #include <android/log.h>
 
+// Per-file logging
+#ifndef NDEBUG
+#define LOGGING 0
+#else
+#define LOGGING 0
+#endif
+
 static int shouldKillUpdateThread = TRUE;
 pthread_t updateThread;
 
@@ -310,7 +317,7 @@ int updateSpecials(int index)
             //Spawn
         case SPECIAL_SPAWN:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special spawn");
+            LOGD("Special spawn");
             //frozen[tempParticle] = 0;
             int diffX, diffY;
             int tempAllCoords;
@@ -338,7 +345,7 @@ int updateSpecials(int index)
         //Breakable
         case SPECIAL_BREAK:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special break");
+            LOGD("Special break");
             if (a_xVel[index] > getElementSpecialVal(tempElement, SPECIAL_BREAK) || a_yVel[index] > getElementSpecialVal(tempElement, SPECIAL_BREAK))
             {
                 setElement(index, elements[NORMAL_ELEMENT]);
@@ -348,7 +355,7 @@ int updateSpecials(int index)
         //Growing
         case SPECIAL_GROW:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special grow");
+            LOGD("Special grow");
             int diffX, diffY;
             int tempAllCoords;
             for (diffX = -1; diffX <= 1; diffX++)
@@ -371,7 +378,7 @@ int updateSpecials(int index)
         //Heater
         case SPECIAL_HEAT:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special heat");
+            LOGD("Special heat");
             int diffX, diffY;
             int tempAllCoords;
             if (rand()%5 == 0)
@@ -396,7 +403,7 @@ int updateSpecials(int index)
         //Explosive
         case SPECIAL_EXPLODE:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special explode");
+            LOGD("Special explode");
             if (a_heat[index] >= a_element[index]->highestTemp) //If the heat is above the threshold
             {
                 int diffX, diffY;
@@ -457,7 +464,7 @@ int updateSpecials(int index)
         //Disappearing
         case SPECIAL_LIFE:
         {
-            //__android_log_write(ANDROID_LOG_INFO, "LOG", "Special life");
+            LOGD("Special life");
             if (rand()%getElementSpecialVal(tempElement, SPECIAL_LIFE) == 0)
             {
                 deletePoint(index);
@@ -467,6 +474,7 @@ int updateSpecials(int index)
         //Wander
         case SPECIAL_WANDER:
         {
+            LOGD("Special wander");
             // Don't wander while tunneling
             // FIXME: This is a hacky solution, come up with something more elegant
             if (getParticleSpecialVal(index, SPECIAL_TUNNEL) != SPECIAL_VAL_UNSET)
@@ -513,6 +521,7 @@ int updateSpecials(int index)
         //Jump
         case SPECIAL_JUMP:
         {
+            LOGD("Special jump");
             if ((a_y[index]+1 == workHeight) || (allCoords[getIndex(a_x[index], a_y[index]+1)] != -1))
             {
                 int randVal = rand()%100;
@@ -527,6 +536,7 @@ int updateSpecials(int index)
         // Tunnel
         case SPECIAL_TUNNEL:
         {
+            LOGD("Special tunnel");
             int targetElementIndex = getElementSpecialVal(tempElement, SPECIAL_TUNNEL);
             int state = getParticleSpecialVal(index, SPECIAL_TUNNEL);
 
@@ -721,6 +731,7 @@ int updateSpecials(int index)
         // FIXME: This very rarely causes stuck particles
         case SPECIAL_BURN:
         {
+            LOGD("Special burn");
             // Burn doesn't trigger when explode is set
             if (getElementSpecialVal(tempElement, SPECIAL_EXPLODE) != SPECIAL_VAL_UNSET)
             {
