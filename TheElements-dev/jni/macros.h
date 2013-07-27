@@ -108,6 +108,16 @@
 #define ELECTRIC_WAIT  16 //10000
 #define SPECIAL_VAL_UNSET -1
 
+/*
+ * LOGGING
+ */
+#define LOG_STR "TheElements"
+#define LOGI(msg) if (LOGGING) __android_log_write(ANDROID_LOG_INFO, LOG_STR, msg)
+#define LOGD(msg) if (LOGGING) __android_log_write(ANDROID_LOG_DEBUG, LOG_STR, msg)
+#define LOGW(msg) if (LOGGING) __android_log_write(ANDROID_LOG_WARNING, LOG_STR, msg)
+#define LOGE(msg) if (LOGGING) __android_log_write(ANDROID_LOG_ERROR, LOG_STR, msg)
+
+
 //Sample log call
 //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Hi!");
 
