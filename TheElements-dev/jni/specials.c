@@ -47,12 +47,12 @@ void specialSpawn(int particle)
             if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                if (tempAllCoords < 0 && a_element[particle] == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+                if (tempAllCoords != -1 && a_element[tempAllCoords] == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
                 {
                     setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
                     setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(particle, SPECIAL_SPAWN));
                 }
-                else if (!tempAllCoords && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
+                else if (tempAllCoords == -1 && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
                 {
                     createPoint(tempX + diffX, tempY + diffY, elements[getParticleSpecialVal(particle, SPECIAL_SPAWN)]);
                 }
@@ -140,7 +140,7 @@ void specialExplode(int particle)
                     if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
                     {
                         tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
-                        if (tempAllCoords)
+                        if (tempAllCoords != -1)
                         {
                             if(diffX != 0 && a_xVel[tempAllCoords] < explosiveness)
                             {

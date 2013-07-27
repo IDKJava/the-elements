@@ -53,7 +53,7 @@ void drawPoints(void)
                     //Special Drag case
                     else if (cElement->index == DRAG_ELEMENT)
                     {
-                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] && a_element[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]]->fallVel != 0)
+                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != -1 && a_element[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]]->fallVel != 0)
                         {
                             a_xVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseX - lastMouseX);
                             a_yVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseY - lastMouseY);
@@ -62,7 +62,7 @@ void drawPoints(void)
                     //Special Eraser case
                     else if (cElement->index == ERASER_ELEMENT)
                     {
-                        if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))])
+                        if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] != -1)
                         {
                             deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
                         }
