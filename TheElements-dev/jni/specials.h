@@ -11,7 +11,19 @@
 
 #include "app.h"
 #include "stdbool.h"
+#include <stdlib.h>
 
-bool collisionSpecials(struct Particle* firstParticle, struct Particle* secondParticle);
+bool collisionSpecials(int firstParticle, int secondParticle);
+void specialSpawn(int particle);
+void specialBreak(int particle);
+void specialGrow(int particle);
+void specialHeat(int particle);
+void specialExplode(int particle);
+void specialLife(int particle);
+void specialWander(int particle);
+void specialTunnel(int particle);
+int specialBurn(int particle);
+void specialConductive(int particle);
+void specialTrail(int particle);
 
 #endif
