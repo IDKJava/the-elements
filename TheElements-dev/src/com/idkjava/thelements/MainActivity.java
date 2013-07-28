@@ -37,6 +37,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.appbrain.AppBrain;
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
@@ -119,6 +120,9 @@ public class MainActivity extends FlurryActivity
         DisplayMetrics dm = new DisplayMetrics();
         ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
         mDPI = dm.densityDpi;
+
+        // Initialize AppBrain SDK
+        AppBrain.init(this);
     }
 
     private final SensorEventListener mySensorListener = new SensorEventListener()
@@ -260,6 +264,13 @@ public class MainActivity extends FlurryActivity
         // Log.v("TheElements", "sand_view.onResume()");
         sand_view.onResume();
         // Log.v("TheElements", "sand_view.onResume() done");
+    }
+
+    @Override
+    public void onBackPressed() {
+        // Show the AppBrain interstitial on exit occaisionally
+        AppBrain.getAds().maybeShowInterstitial(this);
+        finish();
     }
 
     protected Dialog onCreateDialog(int id) //This is called when showDialog is called
