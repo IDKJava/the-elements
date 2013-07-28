@@ -9,6 +9,12 @@
 #include <android/log.h>
 
 #ifndef NDEBUG
+#define LOGGING 0 // Debug
+#else
+#define LOGGING 0 // Release
+#endif
+
+#if LOGGING
 // Timing of frames
 #include <sys/time.h>
 
@@ -72,7 +78,7 @@ void glInit()
 
 void glRender()
 {
-#ifndef NDEBUG
+#if LOGGING
     struct timeval time2;
     struct timeval time3;
     char buffer[20];
@@ -128,11 +134,11 @@ void glRender()
 	}
 
 	//Sub the work portion of the tex(~.025s -- Droid)
-#ifndef NDEBUG
+#if LOGGING
     gettimeofday(&time2, NULL);
 #endif
 	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
-#ifndef NDEBUG
+#if LOGGING
     gettimeofday(&time3, NULL);
     useconds = (time3.tv_sec - time2.tv_sec)*1000000 + time3.tv_usec - time2.tv_usec;
     snprintf(buffer, 20, "tFPS: %f", 1000000/useconds);

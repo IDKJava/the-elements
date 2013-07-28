@@ -7,6 +7,13 @@
  */
 
 #include "points.h"
+#include <android/log.h>
+
+#ifndef NDEBUG // Debug
+#define LOGGING 0
+#else // Release
+#define LOGGING 0
+#endif
 
 static int dx;
 static int dy;
@@ -16,10 +23,8 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
     //If there are points available
     if (loq > 0)
     {
-        //Decrement number of points available
-        loq--;
-        //Get the pointer to the particle
-        int i = avail[loq];
+        //Get the pointer to the particle, decrement loq
+        int i = avail[--loq];
         //Indicate that the particle is in use
         a_set[i] = TRUE;
         
@@ -79,7 +84,7 @@ void deletePoint(int particle)
     a_set[particle] = FALSE;
     //Add it to the avail array
     avail[loq] = particle;
-    loq++;
+    ++loq;
 }
 void unSetPoint(int particle)
 {
@@ -87,7 +92,7 @@ void unSetPoint(int particle)
     a_set[particle] = FALSE;
     //Add it to the avail array
     avail[loq] = particle;
-    loq++;
+    ++loq;
 }
 
 void setElement(int particle, struct Element* newElement)
