@@ -587,7 +587,7 @@ void UpdateView(void)
                         {
                             //Don't go to more solid element if the particle is moving
                             if (*tempX == tempOldX && *tempY == tempOldY &&
-                                abs(*tempXVel) == 0 && abs(*tempYVel) == 0)
+                                *tempXVel == 0 && *tempYVel == 0)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
                                 {
@@ -608,7 +608,7 @@ void UpdateView(void)
                         {
                             //Don't go to more solid element if the particle is moving
                             if (*tempX == tempOldX && *tempY == tempOldY &&
-                                abs(*tempXVel) == 0 && abs(*tempYVel) == 0)
+                                *tempXVel == 0 && *tempYVel == 0)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
                                 {
