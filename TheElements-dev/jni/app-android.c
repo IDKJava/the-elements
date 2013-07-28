@@ -81,7 +81,7 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env,
 //Save/load functions
 char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
 {
-#ifndef NDEBUG
+#ifdef USE_PROFILING
     // Stop profiling
     // This saves to /sdcard/gmon.out
     moncleanup();
@@ -180,7 +180,7 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
     particleSetup();
 
     // Profiling
-#ifndef NDEBUG
+#ifdef USE_PROFILING
     monstartup("libthelements.so");
 #endif
 }

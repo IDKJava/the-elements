@@ -5,21 +5,36 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := thelements
 
-# Print whether this is a debug or release build
-ifeq ($(APP_OPTIM),debug)
-    $(warning DEBUG build)
-else
-    $(warning RELEASE build)
+# Use profiling or not?
+USE_PROFILING = yes
+ifneq ($(APP_OPTIM),debug)
+    USE_PROFILING = no
 endif
+TARGET_ARCH_PROFILING_OK = no
+ifeq ($(TARGET_ARCH_ABI),armeabi)
+    TARGET_ARCH_PROFILING_OK = yes
+endif
+ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
+    TARGET_ARCH_PROFILING_OK = yes
+endif
+ifneq ($(TARGET_ARCH_PROFILING_OK),yes)
+    USE_PROFILING = no
+endif
+
+# Print some build info
+$(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING))
 
 LOCAL_CFLAGS := -DANDROID_NDK \
                 -DDISABLE_IMPORTGL
+ifeq ($(USE_PROFILING),yes)
+    LOCAL_CFLAGS += -DUSE_PROFILING
+endif
 
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 
 # compile with profiling
-ifeq ($(APP_OPTIM),debug)
+ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -pg -fno-omit-frame-pointer -fno-function-sections
     LOCAL_STATIC_LIBRARIES := android-ndk-profiler
 endif
@@ -41,6 +56,6 @@ LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)
 
-ifeq ($(APP_OPTIM),debug)
+ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)
 endif
