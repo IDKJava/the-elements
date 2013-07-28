@@ -515,8 +515,8 @@ void UpdateView(void)
                         }
                         if(a_hasMoved[tempAllCoords])
                         {
-                            // Clear the old location only if it's not where tempParticle is currently
-                            if (allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] != tempParticle)
+                            // Clear the old location only if it's still this particle
+                            if (allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] == tempAllCoords)
                             {
                                 allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] = -1;
                                 clearBitmapColor(a_oldX[tempAllCoords], a_oldY[tempAllCoords]);
