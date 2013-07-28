@@ -582,14 +582,15 @@ void UpdateView(void)
                     if(*heat < a_element[tempParticle]->lowestTemp)
                     {
                         struct Element* tempLowerElement = a_element[tempParticle]->lowerElement;
-                        if (tempLowerElement->state <  a_element[tempParticle]->state ||
+                        if (tempLowerElement->state < a_element[tempParticle]->state ||
                                 tempLowerElement->inertia == INERTIA_UNMOVABLE)
                         {
                             //Don't go to more solid element if the particle is moving
                             if (*tempX == tempOldX && *tempY == tempOldY &&
                                 abs(*tempXVel) == 0 && abs(*tempYVel) == 0)
                             {
-                                if ( rand() % HEAT_CHANGE_PROB == 0 ) {
+                                if ( rand() % HEAT_CHANGE_PROB == 0 )
+                                {
                                     setElement(tempParticle, tempLowerElement);
                                 }
                             }
@@ -602,7 +603,7 @@ void UpdateView(void)
                     else if(*heat > a_element[tempParticle]->highestTemp)
                     {
                         struct Element* tempHigherElement = a_element[tempParticle]->higherElement;
-                        if (tempHigherElement->state <  a_element[tempParticle]->state ||
+                        if (tempHigherElement->state < a_element[tempParticle]->state ||
                                 tempHigherElement->inertia == INERTIA_UNMOVABLE)
                         {
                             //Don't go to more solid element if the particle is moving
