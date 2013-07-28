@@ -11,10 +11,14 @@
 
 // Per-file logging
 #ifndef NDEBUG
+//Debug
 #define LOGGING 0
 #else
+//Release
 #define LOGGING 0
 #endif
+
+#define HEAT_CHANGE_PROB 10 //Signifies 1/number
 
 static int shouldKillUpdateThread = TRUE;
 pthread_t updateThread;
@@ -261,20 +265,6 @@ void updateCollisionHeat(int index1, int index2)
     //The hotter particle should be cooled, while the cooler particle is heated
     changeHeat(p1heat, -heatChange);
     changeHeat(p2heat, heatChange);
-
-    //TODO: probably a good idea to just save a_element[index2] and not access it so many times
-
-    //Resolve second particle heat changes
-    if(*p2heat < a_element[index2]->lowestTemp)
-    {
-        //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Lower heat change");
-        setElement(index2, a_element[index2]->lowerElement);
-    }
-    else if(*p2heat > a_element[index2]->highestTemp)
-    {
-        //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Higher heat change");
-        setElement(index2, a_element[index2]->higherElement);
-    }
 }
 
 // Perform specials actions
@@ -591,11 +581,45 @@ void UpdateView(void)
                 {
                     if(*heat < a_element[tempParticle]->lowestTemp)
                     {
-                        setElement(tempParticle, a_element[tempParticle]->lowerElement);
+                        struct Element* tempLowerElement = a_element[tempParticle]->lowerElement;
+                        if (tempLowerElement->state < a_element[tempParticle]->state ||
+                                tempLowerElement->inertia == INERTIA_UNMOVABLE)
+                        {
+                            //Don't go to more solid element if the particle is moving
+                            if (*tempX == tempOldX && *tempY == tempOldY &&
+                                *tempXVel == 0 && *tempYVel == 0)
+                            {
+                                if ( rand() % HEAT_CHANGE_PROB == 0 )
+                                {
+                                    setElement(tempParticle, tempLowerElement);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            setElement(tempParticle, tempLowerElement);
+                        }
                     }
                     else if(*heat > a_element[tempParticle]->highestTemp)
                     {
-                        setElement(tempParticle, a_element[tempParticle]->higherElement);
+                        struct Element* tempHigherElement = a_element[tempParticle]->higherElement;
+                        if (tempHigherElement->state < a_element[tempParticle]->state ||
+                                tempHigherElement->inertia == INERTIA_UNMOVABLE)
+                        {
+                            //Don't go to more solid element if the particle is moving
+                            if (*tempX == tempOldX && *tempY == tempOldY &&
+                                *tempXVel == 0 && *tempYVel == 0)
+                            {
+                                if ( rand() % HEAT_CHANGE_PROB == 0 )
+                                {
+                                    setElement(tempParticle, tempHigherElement);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            setElement(tempParticle, tempHigherElement);
+                        }
                     }
                 }
             }
