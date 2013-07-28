@@ -59,7 +59,7 @@ void collide(int firstParticle, int secondParticle)
     case 1: //Density Based
     {
         //The denser element replaces the less dense element
-        if (a_element[firstParticle]->density > a_element[firstParticle]->density)
+        if (a_element[firstParticle]->density > a_element[secondParticle]->density)
         {
             a_x[secondParticle] = oldXFirst;
             a_y[secondParticle] = oldYFirst;

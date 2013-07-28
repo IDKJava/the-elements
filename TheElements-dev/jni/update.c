@@ -515,8 +515,12 @@ void UpdateView(void)
                         }
                         if(a_hasMoved[tempAllCoords])
                         {
-                            allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] = -1;
-                            clearBitmapColor(a_oldX[tempAllCoords], a_oldY[tempAllCoords]);
+                            // Clear the old location only if it's not where tempParticle is currently
+                            if (allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] != tempParticle)
+                            {
+                                allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] = -1;
+                                clearBitmapColor(a_oldX[tempAllCoords], a_oldY[tempAllCoords]);
+                            }
                             allCoords[getIndex((int)a_x[tempAllCoords], (int)a_y[tempAllCoords])] = tempAllCoords;
                             setBitmapColor(a_x[tempAllCoords], a_y[tempAllCoords], a_element[tempAllCoords]);
 
@@ -580,11 +584,10 @@ void UpdateView(void)
                     changeHeat(heat, -heatChange);
                 }
 
-                int prevHeat = *heat;
-                updateSpecials(tempParticle);
+                int shouldResolveHeatChanges = updateSpecials(tempParticle);
 
                 //Resolve heat changes
-                if (*heat != prevHeat)
+                if (shouldResolveHeatChanges)
                 {
                     if(*heat < a_element[tempParticle]->lowestTemp)
                     {

@@ -85,7 +85,7 @@ void specialGrow(int particle)
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                 if (tempAllCoords != -1 && a_element[tempAllCoords]->index == getElementSpecialVal(a_element[particle], SPECIAL_GROW) && rand() % 10 == 0)
                 {
-                    setElement(tempAllCoords, a_element[tempAllCoords]);
+                    setElement(tempAllCoords, a_element[particle]);
                 }
             }
         }
