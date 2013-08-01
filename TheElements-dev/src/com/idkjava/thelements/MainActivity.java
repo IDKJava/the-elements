@@ -48,7 +48,7 @@ import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
-public class MainActivity extends FlurryActivity
+public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
 {
     //Constants for dialogue ids
     private static final int INTRO_MESSAGE = 1;
@@ -75,7 +75,7 @@ public class MainActivity extends FlurryActivity
     
     private static final int COLOR_SQUARE_SIZE = 40;
 
-    public static boolean play = false;
+    public static boolean play;
 
     private SensorManager mSensorManager;
 
@@ -115,6 +115,10 @@ public class MainActivity extends FlurryActivity
         setUpViews();
 
         elementsList = new ArrayList<String>();
+
+        //Start unpaused
+        play = true;
+        menu_bar.setPlayState(play);
 
         // Get DPI from screen -- TODO: Sometimes this lies, add custom function to do this with hardcoded values
         DisplayMetrics dm = new DisplayMetrics();
@@ -251,14 +255,9 @@ public class MainActivity extends FlurryActivity
 
         if (ui)
         {
-            //This is where I set the activity for Control so that I can call showDialog() from it
+            //Set the activity for Control so that we can call showDialog() from it
             control.setActivity(this);
-                        
-            //Start unpaused
-            play = true;
-            menu_bar.setPlayState(true);
         }
-                
 
         //Call onResume() for view too
         // Log.v("TheElements", "sand_view.onResume()");
@@ -298,6 +297,7 @@ public class MainActivity extends FlurryActivity
             ListAdapter adapter = new ElementAdapter( this, (String[]) elementsList.toArray(new String[elementsList.size()]));
 
             builder.setTitle(R.string.element_picker); // Set the title
+            builder.setOnCancelListener(this);
             builder.setSingleChoiceItems( adapter, -1, new OnClickListener() {
                     
                 public void onClick(DialogInterface dialog, int item)
@@ -307,12 +307,11 @@ public class MainActivity extends FlurryActivity
                         MenuBar.setEraserOff();
                     }
                     setElement((char) (item + NORMAL_ELEMENT));
-                    setPlayState(true);
+                    setPlayState(play);
                     dialog.dismiss();
                 }
             });
 
-            setPlayState(false);
             AlertDialog alert = builder.create(); // Create the dialog
 
             return alert; // Return handle
@@ -321,6 +320,7 @@ public class MainActivity extends FlurryActivity
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare the object
             builder.setTitle(R.string.brush_size_picker);
+            builder.setOnCancelListener(this);
             builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener()
             {
                 public void onClick(DialogInterface dialog, int item)
@@ -333,6 +333,7 @@ public class MainActivity extends FlurryActivity
                     {
                         setBrushSize((char) java.lang.Math.pow(2, item - 1));
                     }
+                    setPlayState(play);
                 }
             });
             AlertDialog alert = builder.create(); // Create object
@@ -340,6 +341,15 @@ public class MainActivity extends FlurryActivity
         }
 
         return null; //Default case: return nothing
+    }
+
+    // Used by the Element Picker and Brush Size Picker dialogs to reset play state
+    // if the dialog is cancelled, instead of a selection being made.
+    @Override
+    public void onCancel(DialogInterface dialog)
+    {
+        // Reset native play state to whatever the ui believes the play state is
+        setPlayState(play);
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
@@ -367,11 +377,13 @@ public class MainActivity extends FlurryActivity
         {
         case R.id.element_picker:
         {
+            setPlayState(false);
             showDialog(ELEMENT_PICKER);
             return true;
         }
         case R.id.brush_size_picker:
         {
+            setPlayState(false);
             showDialog(BRUSH_SIZE_PICKER);
             return true;
         }

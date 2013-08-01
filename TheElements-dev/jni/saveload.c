@@ -150,9 +150,6 @@ char loadState(char* loadLoc)
         fclose(fp);
     }
 
-    // Set play to true on every load
-    play = TRUE;
-
     //Unlock the mutex before quitting
     pthread_mutex_unlock(&update_mutex);
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "Finishing loadstate");
