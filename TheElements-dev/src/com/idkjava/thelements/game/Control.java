@@ -51,6 +51,7 @@ public class Control extends LinearLayout
 			@Override
 			public void onClick(View v)
 			{
+			    activity.setPlayState(false);
 				activity.showDialog(MainActivity.ELEMENT_PICKER); //Run the element picker dialog
 			}
 		});
