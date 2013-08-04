@@ -186,9 +186,7 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
 }
 void Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
-    pthread_mutex_lock(&update_mutex);
-    gameSetup();
-    pthread_mutex_unlock(&update_mutex);
+    shouldClear = TRUE;
 }
 
 //Setter functions

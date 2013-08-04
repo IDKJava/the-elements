@@ -115,6 +115,7 @@ extern "C" {
     extern char accelOn;
     extern char dimensionsChanged;
     extern char zoomChanged;
+    extern int shouldClear;
 
     extern unsigned char brushSize;
     extern unsigned char zoomFactor;

@@ -54,6 +54,7 @@ char fingerDown = FALSE;
 char accelOn = FALSE;
 char dimensionsChanged = TRUE;
 char zoomChanged = TRUE;
+int shouldClear = FALSE;
 
 char borderTop = TRUE;
 char borderBottom = TRUE;

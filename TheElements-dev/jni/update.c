@@ -542,6 +542,14 @@ void UpdateView(void)
         gameSetup();
     }
 
+    // Clear screen if needed
+    if (shouldClear)
+    {
+        shouldClear = FALSE;
+        gameSetup();
+        return;
+    }
+
     // Draw update
     pthread_mutex_lock(&mouse_mutex);
     if (fingerDown)
