@@ -259,52 +259,28 @@ void Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject 
 {
     brushSize = brushSizeValue;
 }
-void Java_com_idkjava_thelements_game_SandView_setFingerState(JNIEnv* env, jobject this, jchar state)
+void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jchar state, jint x, jint y)
 {
-    fingerDown = state;
-    //To prevent drawing from the previous point, invalidate the mouse pointer
-    mouseX = -1;
-}
-void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jint x, jint y)
-{
+    pthread_mutex_lock(&mouse_mutex);
+
     // Translate x and y coords to zoomed coords
-    int zoomedX = x / zoomFactor;
-    int zoomedY = y / zoomFactor;
+    mouseX = x / zoomFactor;
+    mouseY = y / zoomFactor;
 
-    //Set the mouse position and draw lines if needed
-    if (mouseX != -1)
+    if (state != 2 && fingerDown != state)
     {
-	lastMouseX = mouseX;
-	lastMouseY = mouseY;
+        fingerDown = state;
 
-	int changeX = zoomedX - lastMouseX; //change in x (delta x)
-	int changeY = zoomedY - lastMouseY; //change in y (delta y)
-
-
-	int distance = sqrt(changeX * changeX + changeY * changeY); //distance between two points
-
-
-	if (distance > 0 && cElement->index != DRAG_ELEMENT) //if it's not the same place and not wind
-	{
-	    float dx = (float)changeX / (float)distance; // change divided by distance
-	    float dy = (float)changeY / (float)distance;
-	    int counter;
-	    int oldplay = play;
-
-	    pthread_mutex_lock(&update_mutex);
-	    play = FALSE;
-	    for (counter = 0; counter <= distance; counter++)
-	    {
-		mouseY = dy * counter + lastMouseY;
-		mouseX = dx * counter + lastMouseX;
-		UpdateView();
-	    }
-	    play = oldplay;
-	    pthread_mutex_unlock(&update_mutex);
-	}
+        // If we're got ACTION_DOWN, then we don't want to continue drawing
+        // from previous mouse location.
+        if (fingerDown)
+        {
+            lastMouseX = mouseX;
+            lastMouseY = mouseY;
+        }
     }
-    mouseX = zoomedX;
-    mouseY = zoomedY;
+
+    pthread_mutex_unlock(&mouse_mutex);
 }
 
 //Getter functions

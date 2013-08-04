@@ -190,6 +190,8 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
     extern pthread_mutex_t buffer_free_mutex;
     extern pthread_cond_t buffer_free_cond;
 
+    extern pthread_mutex_t mouse_mutex;
+
 #ifdef __cplusplus
 }
 #endif

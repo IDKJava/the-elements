@@ -23,16 +23,19 @@
 static int shouldKillUpdateThread = TRUE;
 pthread_t updateThread;
 
-void drawPoints(void)
+
+// Draws a circle of particles around (mx, my) using brushSize as the radius.
+void drawCircle(int mx, int my)
 {
     int dx, dy;
     for (dy = brushSize; dy >= -brushSize; dy--)
     {
         for (dx = -brushSize; dx <= brushSize; dx++)
         {
-            if (TRUE) //Taken out for drawing optimization (dx * dx) + (dy * dy) <= (brushSize * brushSize))
+            // Circle
+            if ((dx * dx) + (dy * dy) <= (brushSize * brushSize))
             {
-                if ( dx + mouseX < workWidth && dx + mouseX >= 0 && dy + mouseY < workHeight && dy + mouseY >= 0 )
+                if ( dx + mx < workWidth && dx + mx >= 0 && dy + my < workHeight && dy + my >= 0 )
                     //Normal drawing
                 {
                     if (cElement->index >= NORMAL_ELEMENT)
@@ -40,35 +43,26 @@ void drawPoints(void)
                         //Draw it solid
                         if(cElement->inertia == INERTIA_UNMOVABLE || cElement->index == ELECTRICITY_ELEMENT)
                         {
-                            if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == -1)
+                            if (allCoords[getIndex((int) (dx + mx), (int) (dy + my))] == -1)
                             {
-                                createPoint(mouseX + dx, mouseY + dy, cElement);
+                                createPoint(mx + dx, my + dy, cElement);
                             }
                         }
                         //Draw it randomized
                         else
                         {
-                            if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] == -1)
+                            if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mx), (int) (dy + my))] == -1)
                             {
-                                createPoint(mouseX + dx, mouseY + dy, cElement);
+                                createPoint(mx + dx, my + dy, cElement);
                             }
-                        }
-                    }
-                    //Special Drag case
-                    else if (cElement->index == DRAG_ELEMENT)
-                    {
-                        if (allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)] != -1 && a_element[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]]->fallVel != 0)
-                        {
-                            a_xVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseX - lastMouseX);
-                            a_yVel[allCoords[getIndex(lastMouseX + dx, lastMouseY + dy)]] += (mouseY - lastMouseY);
                         }
                     }
                     //Special Eraser case
                     else if (cElement->index == ERASER_ELEMENT)
                     {
-                        if (allCoords[getIndex((int) (dx + mouseX), (int) (dy + mouseY))] != -1)
+                        if (allCoords[getIndex((int) (dx + mx), (int) (dy + my))] != -1)
                         {
-                            deletePoint(allCoords[getIndex(mouseX + dx, mouseY + dy)]);
+                            deletePoint(allCoords[getIndex(mx + dx, my + dy)]);
                         }
                     }
                 }
@@ -76,6 +70,122 @@ void drawPoints(void)
         }
     }
 }
+
+
+// Draws a "circley" line from (startx, starty) to (endx, endy) using brushSize
+// as the radius.
+void drawCircleyLine(int startx, int starty, int endx, int endy)
+{
+    int x, y;
+    // First, draw a circle at the start and end
+    drawCircle(startx, starty);
+    drawCircle(endx, endy);
+
+    // Now iterate over points in the relevant rectangular space, and create points in
+    // unoccupied locations that fall in the right area.
+    if (startx == endx) // Handle vertical case specially, since we can't compute slope
+    {
+        int left = startx - brushSize;
+        int right = startx + brushSize;
+        int top = starty > endy ? endy : starty;
+        int bottom = starty > endy ? starty : endy;
+
+        for (y = bottom; y > top; --y)
+        {
+            for (x = left; x < right; ++x)
+            {
+                if (allCoords[getIndex(x, y)] == -1)
+                {
+                    createPoint(x, y, cElement);
+                }
+            }
+        }
+    }
+    else if (starty == endy) // Handle horizontal case specially
+    {
+        int left = startx > endx ? endx : startx;
+        int right = startx > endx ? startx : endx;
+        int top = starty - brushSize;
+        int bottom = starty + brushSize;
+
+        for (y = bottom; y > top; --y)
+        {
+            for (x = left; x < right; ++x)
+            {
+                if (allCoords[getIndex(x, y)] == -1)
+                {
+                    createPoint(x, y, cElement);
+                }
+            }
+        }
+    }
+    else
+    {
+        double slope = (endy - starty) / (double)(endx - startx);
+        double inv_slope = -1/slope;
+
+        double dx = brushSize / sqrt(1 + inv_slope*inv_slope);
+        double dy = dx * inv_slope;
+
+        // We need three points to constrain the rectangle
+        int start_top_x, start_top_y, start_bottom_x, start_bottom_y, end_bottom_x, end_bottom_y;
+
+        if (dy > 0)
+        {
+            start_top_x = startx + dx;
+            start_top_y = starty + dy;
+            start_bottom_x = startx - dx;
+            start_bottom_y = starty - dy;
+            end_bottom_x = endx - dx;
+            end_bottom_y = endy - dy;
+        }
+        else
+        {
+            start_top_x = startx - dx;
+            start_top_y = starty - dy;
+            start_bottom_x = startx + dx;
+            start_bottom_y = starty + dy;
+            end_bottom_x = endx + dx;
+            end_bottom_y = endy + dy;
+        }
+
+        int top = starty > endy ? endy - brushSize : starty - brushSize;
+        int bottom = starty > endy ? starty + brushSize : endy + brushSize;
+        int left = startx > endx ? endx - brushSize: startx - brushSize;
+        int right = startx > endx ? startx + brushSize : endx + brushSize;
+        for (y = bottom; y > top; --y)
+        {
+            for (x = left; x < right; ++x)
+            {
+                // Check top and bottom constraints
+                if (!((start_top_y + (x - start_top_x) * slope >= y)
+                        && (start_bottom_y + (x - start_bottom_x) * slope <= y)))
+                    continue;
+
+                // Check left and right constraints
+                if (startx > endx) // Start on the right
+                {
+                    if (!((start_top_x + (y - start_top_y) / inv_slope >= x)
+                            && (end_bottom_x + (y - end_bottom_y) / inv_slope <= x)))
+                        continue;
+                }
+                else // Start on the left
+                {
+                    if (!((start_top_x + (y - start_top_y) / inv_slope <= x)
+                            && (end_bottom_x + (y - end_bottom_y) / inv_slope >= x)))
+                        continue;
+                }
+
+                // We passed all constraints
+                if (allCoords[getIndex(x, y)] == -1)
+                {
+                    createPoint(x, y, cElement);
+                }
+            }
+        }
+    }
+}
+
 
 // Update the positions based on the diffs
 // Returns: FALSE if the particle moved offscreen and needs to be deleted now.
@@ -432,11 +542,22 @@ void UpdateView(void)
         gameSetup();
     }
 
-    //Draw points
+    // Draw update
+    pthread_mutex_lock(&mouse_mutex);
     if (fingerDown)
     {
-        drawPoints();
+        if (lastMouseX < 0 || (lastMouseX == mouseX && lastMouseY == mouseY))
+        {
+            drawCircle(mouseX, mouseY);
+        }
+        else
+        {
+            drawCircleyLine(lastMouseX, lastMouseY, mouseX, mouseY);
+        }
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
     }
+    pthread_mutex_unlock(&mouse_mutex);
 
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
     //Particles update

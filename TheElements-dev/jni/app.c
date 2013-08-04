@@ -67,8 +67,8 @@ int* allCoords = NULL;
 
 short mouseX;
 short mouseY;
-short lastMouseX;
-short lastMouseY;
+short lastMouseX = -1;
+short lastMouseY = -1;
 
 int randOffset = 0;
 
@@ -126,3 +126,5 @@ pthread_mutex_t frame_ready_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t frame_ready_cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t buffer_free_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t buffer_free_cond = PTHREAD_COND_INITIALIZER;
+
+pthread_mutex_t mouse_mutex = PTHREAD_MUTEX_INITIALIZER;
