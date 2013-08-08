@@ -4,15 +4,16 @@ package com.idkjava.thelements.game;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import com.idkjava.thelements.MainActivity;
-
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.idkjava.thelements.MainActivity;
+
 public class SandView extends GLSurfaceView
 {
+    private static final char FINGER_MOVE = 2;
 	private static final char FINGER_DOWN = 1;
 	private static final char FINGER_UP = 0;
 
@@ -31,24 +32,28 @@ public class SandView extends GLSurfaceView
 	public boolean onTouchEvent(final MotionEvent event)
 	{
 		//Set the touch state in JNI
+	    char fingerState;
 		if (event.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			setFingerState(FINGER_DOWN);
+            fingerState = FINGER_DOWN;
 		}
 		else if (event.getAction() == MotionEvent.ACTION_UP)
 		{
-			setFingerState(FINGER_UP);
+		    fingerState = FINGER_UP;
+		}
+		else
+		{
+		    fingerState = FINGER_MOVE;
 		}
 
-		//Pass raw touch coords into the native code
-		setMouseLocation((int) event.getX(), (int) event.getY());
+		//Pass raw mouse state into native code
+		setMouseLocation(fingerState, (int) event.getX(), (int) event.getY());
 
 		return true;
 	}
 
 	//@formatter:off
-	private static native void setFingerState(char state);
-	private static native void setMouseLocation(int x, int y);
+	private static native void setMouseLocation(char state, int x, int y);
 	//@formatter:on
 
 	static

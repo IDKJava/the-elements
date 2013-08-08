@@ -115,6 +115,7 @@ extern "C" {
     extern char accelOn;
     extern char dimensionsChanged;
     extern char zoomChanged;
+    extern int shouldClear;
 
     extern unsigned char brushSize;
     extern unsigned char zoomFactor;
@@ -189,6 +190,8 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
     extern pthread_cond_t frame_ready_cond;
     extern pthread_mutex_t buffer_free_mutex;
     extern pthread_cond_t buffer_free_cond;
+
+    extern pthread_mutex_t mouse_mutex;
 
 #ifdef __cplusplus
 }
