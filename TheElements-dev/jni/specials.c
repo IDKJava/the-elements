@@ -80,7 +80,7 @@ void specialGrow(int particle)
     {
         for (diffY = -1; diffY <= 1; diffY++)
         {
-            if (diffY + tempY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && diffX + diffX < workWidth)
+            if (tempY + diffY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && tempX + diffX < workWidth)
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                 if (tempAllCoords != -1 && a_element[tempAllCoords]->index == getElementSpecialVal(a_element[particle], SPECIAL_GROW) && rand() % 10 == 0)
