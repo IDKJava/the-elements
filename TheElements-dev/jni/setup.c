@@ -124,9 +124,9 @@ void elementSetup()
             tempElement->highestTemp = baseHighestTemp[i];
             tempElement->lowestTemp = baseLowestTemp[i];
         }
-
-        cElement = elements[NORMAL_ELEMENT];
     }
+
+    cElement = elements[NORMAL_ELEMENT];
 
     //Resolve heat pointers
     for(i = 0; i < numElements; i++)
