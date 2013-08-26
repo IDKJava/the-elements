@@ -112,10 +112,10 @@
  * LOGGING
  */
 #define LOG_STR "TheElements"
-#define LOGI(msg) if (LOGGING) __android_log_write(ANDROID_LOG_INFO, LOG_STR, msg)
-#define LOGD(msg) if (LOGGING) __android_log_write(ANDROID_LOG_DEBUG, LOG_STR, msg)
-#define LOGW(msg) if (LOGGING) __android_log_write(ANDROID_LOG_WARNING, LOG_STR, msg)
-#define LOGE(msg) if (LOGGING) __android_log_write(ANDROID_LOG_ERROR, LOG_STR, msg)
+#define LOGI(...) if (LOGGING) __android_log_print(ANDROID_LOG_INFO, LOG_STR, __VA_ARGS__)
+#define LOGD(...) if (LOGGING) __android_log_print(ANDROID_LOG_DEBUG, LOG_STR, __VA_ARGS__)
+#define LOGW(...) if (LOGGING) __android_log_print(ANDROID_LOG_WARNING, LOG_STR, __VA_ARGS__)
+#define LOGE(...) if (LOGGING) __android_log_print(ANDROID_LOG_ERROR, LOG_STR, __VA_ARGS__)
 
 
 //Sample log call
