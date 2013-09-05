@@ -94,6 +94,8 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
         // Boundary checks (only left and right needed)
         if (left < 0) left = 0;
         if (right >= workWidth) right = workWidth-1;
+        if (bottom >= workHeight) bottom = workHeight-1;
+        if (top < 0 ) top = 0;
 
         for (y = bottom; y >= top; --y)
         {
