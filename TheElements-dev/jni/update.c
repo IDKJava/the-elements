@@ -74,6 +74,7 @@ void drawCircle(int mx, int my)
 
 // Draws a "circley" line from (startx, starty) to (endx, endy) using brushSize
 // as the radius.
+// startx, starty, endx, endy are all assumed to be within screen boundaries
 void drawCircleyLine(int startx, int starty, int endx, int endy)
 {
     int x, y;
@@ -90,13 +91,21 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
         int top = starty > endy ? endy : starty;
         int bottom = starty > endy ? starty : endy;
 
-        for (y = bottom; y > top; --y)
+        // Boundary checks (only left and right needed)
+        if (left < 0) left = 0;
+        if (right >= workWidth) right = workWidth-1;
+
+        for (y = bottom; y >= top; --y)
         {
-            for (x = left; x < right; ++x)
+            for (x = left; x <= right; ++x)
             {
-                if (allCoords[getIndex(x, y)] == -1)
+                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
                     createPoint(x, y, cElement);
+                }
+                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
+                {
+                    deletePoint(allCoords[getIndex(x, y)]);
                 }
             }
         }
@@ -108,13 +117,21 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
         int top = starty - brushSize;
         int bottom = starty + brushSize;
 
-        for (y = bottom; y > top; --y)
+        // Boundary checks (only top and bottom needed)
+        if (top < 0) top = 0;
+        if (bottom >= workHeight) bottom = workHeight-1;
+
+        for (y = bottom; y >= top; --y)
         {
-            for (x = left; x < right; ++x)
+            for (x = left; x <= right; ++x)
             {
-                if (allCoords[getIndex(x, y)] == -1)
+                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
                     createPoint(x, y, cElement);
+                }
+                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
+                {
+                    deletePoint(allCoords[getIndex(x, y)]);
                 }
             }
         }
@@ -153,9 +170,16 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
         int bottom = starty > endy ? starty + brushSize : endy + brushSize;
         int left = startx > endx ? endx - brushSize: startx - brushSize;
         int right = startx > endx ? startx + brushSize : endx + brushSize;
-        for (y = bottom; y > top; --y)
+
+        // Boundary checks
+        if (top < 0) top = 0;
+        if (bottom >= workHeight) bottom = workHeight-1;
+        if (left < 0) left = 0;
+        if (right >= workWidth) right = workWidth-1;
+
+        for (y = bottom; y >= top; --y)
         {
-            for (x = left; x < right; ++x)
+            for (x = left; x <= right; ++x)
             {
                 // Check top and bottom constraints
                 if (!((start_top_y + (x - start_top_x) * slope >= y)
@@ -177,9 +201,13 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
                 }
 
                 // We passed all constraints
-                if (allCoords[getIndex(x, y)] == -1)
+                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
                     createPoint(x, y, cElement);
+                }
+                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
+                {
+                    deletePoint(allCoords[getIndex(x, y)]);
                 }
             }
         }
