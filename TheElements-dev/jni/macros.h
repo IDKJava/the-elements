@@ -108,6 +108,9 @@
 #define ELECTRIC_WAIT  16 //10000
 #define SPECIAL_VAL_UNSET -1
 
+#define FILTER_NONE 0
+#define FILTER_MOTION 1
+
 /*
  * LOGGING
  */

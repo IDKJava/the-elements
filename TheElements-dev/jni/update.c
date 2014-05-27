@@ -806,7 +806,24 @@ void *updateThreadFunc(void *args)
 
         // Copy the frame into the colorsFrameBuffer
         pthread_mutex_lock(&update_mutex);
-        memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
+
+        switch(filterType) {
+        case FILTER_NONE:
+          memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
+          break;
+        case FILTER_MOTION: ;
+          int i = 0;
+          for ( i = 0; i <  3 * stupidTegra * workHeight; i++) {
+            if ( colorsFrameBuffer[i] == 0 ) {
+              colorsFrameBuffer[i] = colors[i];
+            }
+            else {
+              colorsFrameBuffer[i] = ((float)colorsFrameBuffer[i] * 0.8)
+                                   + ((float)colors[i]*0.2);
+            }
+          }
+          break;
+        }
         pthread_mutex_unlock(&update_mutex);
 
         pthread_mutex_lock(&frame_ready_mutex);

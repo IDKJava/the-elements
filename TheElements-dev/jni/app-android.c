@@ -281,6 +281,11 @@ void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, job
     pthread_mutex_unlock(&mouse_mutex);
 }
 
+void Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject this, jchar mode)
+{
+  filterType = mode;
+}
+
 //Getter functions
 char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
 {
