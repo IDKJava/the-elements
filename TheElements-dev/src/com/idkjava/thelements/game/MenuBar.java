@@ -15,58 +15,81 @@ import android.widget.Toast;
 
 public class MenuBar extends LinearLayout
 {
-	private Context context;
+  private Context context;
 
-	private static ImageButton eraser_button;
-	private static ImageButton play_pause_button;
-	private static ImageButton save_button;
-	private static ImageButton load_button;
-	private static ImageButton clear_button;
+  private static ImageButton hand_button;
+  private static ImageButton eraser_button;
+  private static ImageButton play_pause_button;
+  private static ImageButton save_button;
+  private static ImageButton load_button;
+  private static ImageButton clear_button;
 
-	//Used for eraser
-	public static boolean eraserOn = false;
-	private static char tempElement = 0;
+  // Used for eraser
+  public static boolean eraserOn = false;
+  private static char tempElement = 0;
 
-	//Constructor
-	public MenuBar(Context context, AttributeSet attrs)
-	{
-		super(context, attrs);
-		this.context = context;
-		setGravity(Gravity.CENTER_HORIZONTAL);
-	}
+  private SandView m_sandView = null;
 
-	//Set the eraser to the off position
-	public static void setEraserOff()
-	{
-		eraserOn = false;
-		eraser_button.setImageResource(R.drawable.eraser);
+  // Constructor
+  public MenuBar(Context context, AttributeSet attrs)
+  {
+    super(context, attrs);
+    this.context = context;
+    setGravity(Gravity.CENTER_HORIZONTAL);
+  }
+  
+  public void setSandView(SandView sandView) { 
+    m_sandView = sandView;
+  }
 
-		MainActivity.setElement(tempElement);
-	}
-	//Set the eraser to the off position
-	public void setPlayState(boolean state)
-	{
-		
-		if (state)
-		{
-			play_pause_button.setImageResource(R.drawable.pause);
-		}
-		else
-		{
-			play_pause_button.setImageResource(R.drawable.play);
-		}
-	}	
+  // Set the eraser to the off position
+  public static void setEraserOff()
+  {
+    eraserOn = false;
+    eraser_button.setImageResource(R.drawable.eraser);
 
-	//Called when it's finished inflating the XML layout
-	@Override
+    MainActivity.setElement(tempElement);
+  }
+
+  // Set the eraser to the off position
+  public void setPlayState(boolean state)
+  {
+
+    if (state)
+    {
+      play_pause_button.setImageResource(R.drawable.pause);
+    }
+    else
+    {
+      play_pause_button.setImageResource(R.drawable.play);
+    }
+  }
+
+  // Called when it's finished inflating the XML layout
+  @Override
 	protected void onFinishInflate()
 	{
 		//Set up all the variables for the objects
+    hand_button = (ImageButton) findViewById(R.id.hand_button);
 		eraser_button = (ImageButton) findViewById(R.id.eraser_button);
 		play_pause_button = (ImageButton) findViewById(R.id.play_pause_button);
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
 		clear_button = (ImageButton) findViewById(R.id.clear_screen_button);
+
+		hand_button.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if ( hand_button.isSelected() ) {
+          hand_button.setSelected(false);
+          m_sandView.setIsDragging(false);
+        }
+        else {
+          hand_button.setSelected(true);
+          m_sandView.setIsDragging(true);
+        }
+      }
+    });
 
 		//Set up the OnClickListener for the eraser button
 		eraser_button.setOnClickListener(new OnClickListener()

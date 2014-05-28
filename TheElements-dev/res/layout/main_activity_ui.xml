@@ -30,6 +30,15 @@
 		android:layout_weight="0" 
 		android:background="@drawable/bg_ui_menubar" 
 		android:paddingTop="2dip">
+
+        <!-- Pan/Zoom button -->
+        <ImageButton
+            android:id="@+id/hand_button"
+            android:src="@drawable/hand_button"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:layout_marginRight="4dip"
+            android:background="@drawable/btn_mb" />
     	
     	<!-- Eraser button -->
     	<ImageButton 

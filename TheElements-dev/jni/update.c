@@ -584,18 +584,27 @@ void UpdateView(void)
     pthread_mutex_lock(&mouse_mutex);
     if (fingerDown)
     {
-        if (lastMouseX < 0 || (lastMouseX == mouseX && lastMouseY == mouseY))
-        {
-            drawCircle(mouseX, mouseY);
+        if ( isPanMode) {
+            if (!isPinch) {
+                centerX -= mouseX - lastMouseX;
+                centerY -= mouseY - lastMouseY;
+            }
         }
-        else
-        {
-            drawCircleyLine(lastMouseX, lastMouseY, mouseX, mouseY);
+        else {
+            if (lastMouseX < 0 || (lastMouseX == mouseX && lastMouseY == mouseY))
+            {
+                drawCircle(mouseX, mouseY);
+            }
+            else
+            {
+                drawCircleyLine(lastMouseX, lastMouseY, mouseX, mouseY);
+            }
         }
         lastMouseX = mouseX;
         lastMouseY = mouseY;
     }
     pthread_mutex_unlock(&mouse_mutex);
+
 
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
     //Particles update

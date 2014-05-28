@@ -90,6 +90,15 @@ char shouldZoom = FALSE;
 char shouldUpdateMouse = FALSE;
 
 
+//For pinch to zoom/ panning
+float zoomScale = 1.0;
+float centerX = -1;
+float centerY = -1;
+float viewWidth = -1;
+float viewHeight = -1;
+
+char isPinch = FALSE;
+char isPanMode = FALSE;
 
 //Gravity values
 float xGravity;

@@ -38,6 +38,13 @@
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
+    //These variable change from pinch to zoom
+    viewWidth = width;
+    viewHeight = height;
+    centerX = width/2;
+    centerY = height/2;
+
+    //These variables remain constant unless the screen size changes
     screenWidth = width;
     screenHeight = height;
     workWidth = screenWidth / zoomFactor;
@@ -260,10 +267,20 @@ void Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject 
 void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jchar state, jint x, jint y)
 {
     pthread_mutex_lock(&mouse_mutex);
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    if ( !isPanMode ) {
+        mouseX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+        mouseY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    }
+    else {
+        mouseX = x;
+        mouseY = y;
+    }
 
     // Translate x and y coords to zoomed coords
-    mouseX = x / zoomFactor;
-    mouseY = y / zoomFactor;
+    mouseX /= zoomFactor;
+    mouseY /= zoomFactor;
 
     if (state != 2 && fingerDown != state)
     {
@@ -280,6 +297,29 @@ void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, job
 
     pthread_mutex_unlock(&mouse_mutex);
 }
+
+void Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject this, jfloat scale)
+{
+  zoomScale = scale;
+}
+
+
+void Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobject this, jchar active)
+{
+    isPinch = active;
+    if (!active) 
+    {
+        viewWidth = viewWidth * zoomScale;
+        viewHeight = viewHeight * zoomScale;
+        zoomScale = 1.0;
+    }
+}
+
+void Java_com_idkjava_thelements_game_SandView_setIsPanMode(JNIEnv* env, jobject this, jchar isPan)
+{
+  isPanMode = isPan;
+}
+
 
 //Getter functions
 char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
