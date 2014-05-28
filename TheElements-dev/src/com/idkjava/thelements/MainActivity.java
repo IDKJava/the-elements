@@ -464,6 +464,8 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         sand_view = (SandView) findViewById(R.id.sand_view);
         control = (Control) findViewById(R.id.control);
 
+        menu_bar.setSandView(sand_view);
+
         //Set the screen state for sand_view now that it's defined
         Preferences.loadScreenState();
     }

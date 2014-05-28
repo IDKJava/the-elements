@@ -106,17 +106,6 @@ void glRender()
 		texture[6] = (float) workWidth/texWidth;
 		texture[7] = (float) workHeight/texHeight;
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		if (!flipped)
-		{
-			glOrthof(0, (float)screenWidth, (float)screenHeight, 0, -1.0f, 1.0f); //--Device
-		}
-		else
-		{
-			glOrthof(0, (float)screenWidth, 0, (float)-screenHeight, -1.0f, 1.0f); //--Emulator
-		}
-
 		dimensionsChanged = FALSE;
 		zoomChanged = FALSE;
 		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "Dimensions changed");
@@ -132,6 +121,26 @@ void glRender()
 		zoomChanged = FALSE;
 		//__android_log_write(ANDROID_LOG_INFO, "MainActivity", "zoom changed");
 	}
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    float modViewWidth = viewWidth/2 * zoomScale;
+    float modViewHeight = viewHeight/2 * zoomScale;
+    float left = centerX - modViewWidth;
+    float right = centerX + modViewWidth;
+    float top = centerY - modViewHeight;
+    float bottom = centerY + modViewHeight;
+    if (!flipped)
+    {
+        glOrthof(left, right, bottom, top, -1.0f, 1.0f); //--Device
+    }
+    else
+    {
+        glOrthof(left, right, bottom, -1*top, -1.0f, 1.0f); //--Emulator
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(1,1,1,1);
 
 	//Sub the work portion of the tex(~.025s -- Droid)
 #if LOGGING

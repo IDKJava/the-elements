@@ -155,6 +155,15 @@ extern "C" {
 //Set when a mouse update is requested, unset when udpated
     extern char shouldUpdateMouse;
 
+    //For pinch to zoom/ panning
+    extern float zoomScale;
+    extern float centerX;
+    extern float centerY;
+    extern float viewWidth;
+    extern float viewHeight;
+    extern char isPinch;
+    extern char isPanMode;
+
 //Gravity values
     extern float xGravity;
     extern float yGravity;
