@@ -40,7 +40,7 @@ public class SandView extends GLSurfaceView
 
 	public void setIsDragging(boolean isDrag) {
 	  m_isDragState = isDrag;
-	  setIsDragMode(isDrag ? (char) 1 : (char) 0);
+	  setIsPanMode(isDrag ? (char) 1 : (char) 0);
 	}
 
   // When a touch screen event occurs
@@ -50,7 +50,7 @@ public class SandView extends GLSurfaceView
       return handleNormalTouch(event);
     }
     else {
-      return handleDragTouch(event);
+      return handlePanTouch(event);
     }
   }
 
@@ -76,7 +76,7 @@ public class SandView extends GLSurfaceView
     return true;
   }
 
-  private boolean handleDragTouch(final MotionEvent event) {
+  private boolean handlePanTouch(final MotionEvent event) {
     float distx, disty;
 
     switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -124,7 +124,7 @@ public class SandView extends GLSurfaceView
 	private static native void setMouseLocation(char state, int x, int y);
 	private static native void setPinchScale(float scale);
 	private static native void setPinchActive(char active);
-	private static native void setIsDragMode(char isDrag);
+	private static native void setIsPanMode(char isDrag);
 	//@formatter:on
 
 	static

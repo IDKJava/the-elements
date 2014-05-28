@@ -23,7 +23,6 @@ public class MenuBar extends LinearLayout
   private static ImageButton save_button;
   private static ImageButton load_button;
   private static ImageButton clear_button;
-  private static ImageButton fade_button;
 
   // Used for eraser
   public static boolean eraserOn = false;

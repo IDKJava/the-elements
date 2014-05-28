@@ -315,7 +315,7 @@ void Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobje
     }
 }
 
-void Java_com_idkjava_thelements_game_SandView_setIsDragMode(JNIEnv* env, jobject this, jchar isPan)
+void Java_com_idkjava_thelements_game_SandView_setIsPanMode(JNIEnv* env, jobject this, jchar isPan)
 {
   isPanMode = isPan;
 }
