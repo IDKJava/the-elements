@@ -19,6 +19,7 @@ import android.widget.Button;
 
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
+import com.idkjava.thelements.preferences.PreferencesActivity;
 
 import com.pollfish.main.PollFish;
 import com.pollfish.constants.Position;
@@ -27,6 +28,7 @@ public class MenuActivity extends FlurryActivity
 {
 	public static Button start_game_button;
 	public static Button custom_elements_button;
+	public static Button preferences_button;
 	public static Button fix_me_button;
 	public static Button how_to_play_button;
 	public static Button about_button;
@@ -44,6 +46,7 @@ public class MenuActivity extends FlurryActivity
 		//Define all the objects
 		start_game_button = (Button) findViewById(R.id.start_game_button);
 		custom_elements_button = (Button) findViewById(R.id.custom_elements_button);
+		preferences_button = (Button) findViewById(R.id.preferences_button);
 		fix_me_button = (Button) findViewById(R.id.fix_me_button);
 		how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
 		about_button = (Button) findViewById(R.id.about_button);
@@ -54,6 +57,7 @@ public class MenuActivity extends FlurryActivity
 		(
 			new OnClickListener()
 			{
+			    @Override
 				public void onClick(View v)
 				{
 					FlurryAgent.logEvent("Start game button (main menu)");
@@ -67,6 +71,7 @@ public class MenuActivity extends FlurryActivity
 		(
 			new OnClickListener()
 			{
+			    @Override
 				public void onClick(View v)
 				{
 					FlurryAgent.logEvent("Custom elements button (main menu)");
@@ -75,6 +80,18 @@ public class MenuActivity extends FlurryActivity
 				}
 			}
 		);
+		
+		preferences_button.setOnClickListener
+		(
+	        new OnClickListener()
+	        {
+	            @Override
+	            public void onClick(View v)
+	            {
+	                startActivity(new Intent(MenuActivity.this, PreferencesActivity.class));
+	            }
+	        }
+        );
 		
 		fix_me_button.setOnClickListener(new OnClickListener()
 		{
@@ -90,6 +107,7 @@ public class MenuActivity extends FlurryActivity
 		(
 			new OnClickListener()
 			{
+			    @Override
 				public void onClick(View v)
 				{
 					//Show the instructions
@@ -102,6 +120,7 @@ public class MenuActivity extends FlurryActivity
 		(
 			new OnClickListener()
 			{
+			    @Override
 				public void onClick(View v)
 				{
 					//Show the about dialog

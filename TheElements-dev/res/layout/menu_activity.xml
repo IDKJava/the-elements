@@ -24,7 +24,17 @@
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
-
+	    
+	    <!-- Preferences button -->
+	    <Button
+	        android:id="@+id/preferences_button"
+	        android:text="@string/preferences_button"
+	        android:layout_width="200sp"
+	        android:gravity="center"
+	        android:background="@drawable/btn_mm"
+	        android:layout_height="34dip"
+	        android:textColor="#FFF"
+	        android:layout_marginTop="10dip" />
 	    
 	    <!-- Fix me button -->
 	    <Button

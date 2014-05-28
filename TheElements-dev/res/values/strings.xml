@@ -39,6 +39,7 @@
 <string name="how_to_play_button">How to Play</string>
 <string name="about_button">About</string>
 <string name="custom_elements_button">Custom Elements</string>
+<string name="preferences_button">Preferences</string>
 <string name="sdcard_not_found">Warning: SD Card inaccessible. You will not be able to save or load.</string>
 <string name="eraser">Eraser</string>
 <string name="clear_screen">Clear Screen</string>
