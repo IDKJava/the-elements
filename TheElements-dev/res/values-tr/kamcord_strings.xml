@@ -1,0 +1,195 @@
+<?xml version="1.0" ?>
+<resources>
+	<string name="kamcord">
+		Kamcord
+	</string>
+	<string name="kamcordShare">
+		Paylaş
+	</string>
+	<string name="kamcordWatch">
+		İzle
+	</string>
+	<string name="kamcordProfile">
+		Profil
+	</string>
+	<string name="kamcordClose">
+		Kapat
+	</string>
+	<string name="kamcordWatchVideo">
+		Video\'yu Ýzle
+	</string>
+	<string name="kamcordWriteATitle">
+		Başlık yaz
+	</string>
+	<string name="kamcordFacebook">
+		Facebook
+	</string>
+	<string name="kamcordYouTube">
+		Youtube
+	</string>
+	<string name="kamcordTwitter">
+		Twitter
+	</string>
+	<string name="kamcordEmail">
+		Email
+	</string>
+	<string name="kamcordShareReplay">
+		Videoları Paylaş
+	</string>
+	<string name="kamcordRetry">
+		Yeniden dene
+	</string>
+	<string name="kamcordPoweredByKamcord">
+		Kamcord
+	</string>
+	<string name="kamcordUploadFinished">
+		Yükleme Bitti!
+	</string>
+	<string name="kamcordUploadFailed">
+		Yükleme Başarısız
+	</string>
+	<string name="kamcordUploading">
+		Yükleniyor...
+	</string>
+	<string name="kamcordOk">
+		Tamam
+	</string>
+	<string name="kamcordYes">
+		Evet
+	</string>
+	<string name="kamcordNo">
+		Hayır
+	</string>
+	<string name="kamcordUsername">
+		Kullanıcı adı
+	</string>
+	<string name="kamcordPassword">
+		Şifre
+	</string>
+	<string name="kamcordImReady">
+		Hazırım!
+	</string>
+	<string name="kamcordCreateProfile">
+		Profil Oluştur
+	</string>
+	<string name="kamcordPrivacyPolicy">
+		Gizlilik Politikası
+	</string>
+	<string name="kamcordTermsOfService">
+		Hizmet Koşulları
+	</string>
+	<string name="kamcordAgreementBlurb">
+		Profil Oluştur tuşuna basarak Gizlilik Politikası ve Hizmet Koşullarını okuyup kabul ettiğini onaylıyorsun.
+	</string>
+	<string name="kamcordUsernameMinCharacters">
+		Kullanıcı adı en az 5 karakter olmalıdır
+	</string>
+	<string name="kamcordUsernameIllegalCharacters">
+		Kullanıcı adında uygunsuz karakterler
+	</string>
+	<string name="kamcordUsernameEnter">
+		Lütfen geçerli bir kullanıcı adı gir
+	</string>
+	<string name="kamcordPasswordMinCharacters">
+		Şifre en az 6 karakter olmalı
+	</string>
+	<string name="kamcordPasswordEnter">
+		Şifre girmelisin
+	</string>
+	<string name="kamcordEmailInvalid">
+		Geçersiz email
+	</string>
+	<string name="kamcordEmailEnter">
+		Email adresi girmelisin
+	</string>
+	<string name="kamcordProfileErrorTitle">
+		Profil Oluşturma Hatası
+	</string>
+	<string name="kamcordProfileErrorMessage">
+		Profil oluşturulamadı, lütfen daha sonra tekrar dene
+	</string>
+	<string name="kamcordEmailCorrect">
+		Email adresin doğru mu?
+	</string>
+	<string name="kamcordEmailEntered">
+		Girdiğin email adresi %@
+	</string>
+	<string name="kamcordUnclaimedVideos">
+		Sahipsiz Videolar
+	</string>
+	<string name="kamcordAnyUnclaimedVideos">
+		Tüm sahipsiz videolar profilinle ilişkilendirilecek.
+	</string>
+	<string name="kamcordUsernameEmail">
+		Kullanıcı adı veya Email
+	</string>
+	<string name="kamcordSignIn">
+		Giriş Yap
+	</string>
+	<string name="kamcordSignOut">
+		Çıkış Yap
+	</string>
+	<string name="kamcordForgotYourPassword">
+		Şifreni mi unuttun?
+	</string>
+	<string name="kamcordNoAccountFound">
+		Hesap Bulunamadı
+	</string>
+	<string name="kamcordSorryMatchingAccounts">
+		Üzgünüz, eşleşen hesap bulamadık.
+	</string>
+	<string name="kamcordEditProfile">
+		Profili Düzenle
+	</string>
+	<string name="kamcordNoAccountLinked">
+		Bağlı hesap yok
+	</string>
+	<string name="kamcordConfirmFacebookSignOut">
+		Facebook Çıkışını Onayla
+	</string>
+	<string name="kamcordConfirmTwitterSignOut">
+		Twitter Çıkışını Onayla
+	</string>
+	<string name="kamcordConfirmYouTubeSignOut">
+		Youtube Çıkışını Onayla
+	</string>
+	<string name="kamcordConfirmKamcordSignOut">
+		Kamcord Çıkışını Onayla
+	</string>
+	<string name="kamcordAreYouSure">
+		Çıkış yapmak istediğinden emin misin?
+	</string>
+	<string name="kamcordEnterUsernameOrEmail">
+		Kamcord profilinin kullanıcı adını veya email adresini gir.
+	</string>
+	<string name="kamcordResetPassword">
+		Şifreyi Sıfırla
+	</string>
+	<string name="kamcordEmailNotSent">
+		Email Gönderilmedi
+	</string>
+	<string name="kamcordAnotherPasswordReset">
+		Başka bir şifre sıfırlama isteği zaten gönderildi.
+	</string>
+	<string name="kamcordEmailSent">
+		Email gönderildi
+	</string>
+	<string name="kamcordWeveEmailedYou">
+		Şifreni sıfırlaman için sana email ile bir link yolladık!
+	</string>
+	<string name="kamcordChangePassword">
+		Şifreyi Değiştir
+	</string>
+	<string name="kamcordCurrentPassword">
+		Geçerli şifre
+	</string>
+	<string name="kamcordNewPassword">
+		Yeni şifre
+	</string>
+	<string name="kamcordNewPasswordAgain">
+		Yeni şifre (tekrar)
+	</string>
+	<string name="kamcordNewPasswordsDoNotMatch">
+		Yeni şifreler eşleşmiyor
+	</string>
+</resources>

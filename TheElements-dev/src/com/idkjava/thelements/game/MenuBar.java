@@ -3,6 +3,8 @@ package com.idkjava.thelements.game;
 import com.idkjava.thelements.MainActivity;
 
 import com.idkjava.thelements.R;
+import com.kamcord.android.Kamcord;
+
 import android.content.Context;
 import android.os.Environment;
 import android.util.AttributeSet;
@@ -142,10 +144,13 @@ public class MenuBar extends LinearLayout
 
 				if (MainActivity.play)
 				{
+				  Kamcord.startRecording();
 					play_pause_button.setImageResource(R.drawable.pause);
 				}
 				else
 				{
+				  Kamcord.stopRecording();
+				  Kamcord.showView();
 					play_pause_button.setImageResource(R.drawable.play);
 				}
 			}

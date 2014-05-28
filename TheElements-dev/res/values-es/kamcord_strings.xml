@@ -1,0 +1,195 @@
+<?xml version="1.0" ?>
+<resources>
+	<string name="kamcord">
+		Kamcord
+	</string>
+	<string name="kamcordShare">
+		Compartir
+	</string>
+	<string name="kamcordWatch">
+		Ver
+	</string>
+	<string name="kamcordProfile">
+		Perfil
+	</string>
+	<string name="kamcordClose">
+		Cerrar
+	</string>
+	<string name="kamcordWatchVideo">
+		Ver Video
+	</string>
+	<string name="kamcordWriteATitle">
+		Escribe un título...
+	</string>
+	<string name="kamcordFacebook">
+		Facebook
+	</string>
+	<string name="kamcordYouTube">
+		YouTube
+	</string>
+	<string name="kamcordTwitter">
+		Twitter
+	</string>
+	<string name="kamcordEmail">
+		Correo electrónico
+	</string>
+	<string name="kamcordShareReplay">
+		Compartir Replays
+	</string>
+	<string name="kamcordRetry">
+		Volver a intentar
+	</string>
+	<string name="kamcordPoweredByKamcord">
+		Con tecnología de Kamcord
+	</string>
+	<string name="kamcordUploadFinished">
+		¡Subida acabada!
+	</string>
+	<string name="kamcordUploadFailed">
+		La subida ha fallado
+	</string>
+	<string name="kamcordUploading">
+		Subiendo...
+	</string>
+	<string name="kamcordOk">
+		Ok
+	</string>
+	<string name="kamcordYes">
+		Sí
+	</string>
+	<string name="kamcordNo">
+		No
+	</string>
+	<string name="kamcordUsername">
+		Nombre de usuario
+	</string>
+	<string name="kamcordPassword">
+		Contraseña
+	</string>
+	<string name="kamcordImReady">
+		¡Estoy listo!
+	</string>
+	<string name="kamcordCreateProfile">
+		Crear Perfil
+	</string>
+	<string name="kamcordPrivacyPolicy">
+		Política de Privacidad
+	</string>
+	<string name="kamcordTermsOfService">
+		Condiciones del Servicio
+	</string>
+	<string name="kamcordAgreementBlurb">
+		Al hacer clic en Crear Perfil estás indicando que has leído y estás de acuerdo con la Política de Privacidad y las Condiciones del Servicio.
+	</string>
+	<string name="kamcordUsernameMinCharacters">
+		El nombre de usuario debe tener al menos 5 caracteres
+	</string>
+	<string name="kamcordUsernameIllegalCharacters">
+		Caracteres no válidos en el nombre de usuario
+	</string>
+	<string name="kamcordUsernameEnter">
+		Por favor, introduce un nombre de usuario válido
+	</string>
+	<string name="kamcordPasswordMinCharacters">
+		La contraseña tiene que tener al menos 6 caracteres
+	</string>
+	<string name="kamcordPasswordEnter">
+		Tienes que introducir una contraseña
+	</string>
+	<string name="kamcordEmailInvalid">
+		Correo electrónico no válido
+	</string>
+	<string name="kamcordEmailEnter">
+		Tienes que introducir un correo electrónico
+	</string>
+	<string name="kamcordProfileErrorTitle">
+		Error al crear el perfil
+	</string>
+	<string name="kamcordProfileErrorMessage">
+		Ha fallado la creación de perfil, por favor inténtalo de nuevo más tarde
+	</string>
+	<string name="kamcordEmailCorrect">
+		¿Es correcto tu correo electrónico?
+	</string>
+	<string name="kamcordEmailEntered">
+		El correo electrónico que has introducido es %@
+	</string>
+	<string name="kamcordUnclaimedVideos">
+		Vídeos no reclamados
+	</string>
+	<string name="kamcordAnyUnclaimedVideos">
+		Todos los videos no reclamados se asociarán a tu perfil.
+	</string>
+	<string name="kamcordUsernameEmail">
+		Nombre de usuario o correo electrónico
+	</string>
+	<string name="kamcordSignIn">
+		Acceder
+	</string>
+	<string name="kamcordSignOut">
+		Salir
+	</string>
+	<string name="kamcordForgotYourPassword">
+		¿Has olvidado tu contraseña?
+	</string>
+	<string name="kamcordNoAccountFound">
+		No se ha encontrado ninguna cuenta
+	</string>
+	<string name="kamcordSorryMatchingAccounts">
+		Lo sentimos, no hemos encontrado ninguna cuenta que coincida.
+	</string>
+	<string name="kamcordEditProfile">
+		Editar Perfil
+	</string>
+	<string name="kamcordNoAccountLinked">
+		Ninguna cuenta vinculada
+	</string>
+	<string name="kamcordConfirmFacebookSignOut">
+		Confirma que quieres salir de Facebook
+	</string>
+	<string name="kamcordConfirmTwitterSignOut">
+		Confirma que quieres salir de Twitter
+	</string>
+	<string name="kamcordConfirmYouTubeSignOut">
+		Confirma que quieres salir de YouTube
+	</string>
+	<string name="kamcordConfirmKamcordSignOut">
+		Confirma que quieres salir de Kamcord
+	</string>
+	<string name="kamcordAreYouSure">
+		¿Estás seguro de que quieres salir?
+	</string>
+	<string name="kamcordEnterUsernameOrEmail">
+		Introduce el nombre de usuario o correo electrónico de tu perfil Kamcord.
+	</string>
+	<string name="kamcordResetPassword">
+		Restablecer contraseña
+	</string>
+	<string name="kamcordEmailNotSent">
+		Correo electrónico no enviado
+	</string>
+	<string name="kamcordAnotherPasswordReset">
+		Aún hay pendiente una petición de restablecimiento de contraseña.
+	</string>
+	<string name="kamcordEmailSent">
+		Correo electrónico enviado
+	</string>
+	<string name="kamcordWeveEmailedYou">
+		¡Te hemos enviado un enlace para restablecer tu contraseña!
+	</string>
+	<string name="kamcordChangePassword">
+		Cambiar contraseña
+	</string>
+	<string name="kamcordCurrentPassword">
+		Contraseña actual
+	</string>
+	<string name="kamcordNewPassword">
+		Nueva contraseña
+	</string>
+	<string name="kamcordNewPasswordAgain">
+		Nueva contraseña (repetir)
+	</string>
+	<string name="kamcordNewPasswordsDoNotMatch">
+		Las contraseñas nuevas no coinciden
+	</string>
+</resources>
