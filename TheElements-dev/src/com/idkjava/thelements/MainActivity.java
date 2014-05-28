@@ -556,6 +556,13 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     public static native void setPlayState(boolean playState);
     public static native void setElement(char element);
     public static native void setBrushSize(char brushSize);
+    /**
+     * Sets a filter rendering mode
+     * @param mode 0 - none
+     *              1 - motion blur
+     */
+    public static native void setFilterMode(char mode);
+
         
     //Getters
     public static native char getElement();

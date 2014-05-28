@@ -298,6 +298,11 @@ void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, job
     pthread_mutex_unlock(&mouse_mutex);
 }
 
+void Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject this, jchar mode)
+{
+  filterType = mode;
+}
+
 void Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject this, jfloat scale)
 {
   zoomScale = scale;

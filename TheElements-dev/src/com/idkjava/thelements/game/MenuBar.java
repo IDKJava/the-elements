@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 public class MenuBar extends LinearLayout
 {
+
   private Context context;
 
   private static ImageButton hand_button;
@@ -23,6 +24,7 @@ public class MenuBar extends LinearLayout
   private static ImageButton save_button;
   private static ImageButton load_button;
   private static ImageButton clear_button;
+  private static ImageButton fade_button;
 
   // Used for eraser
   public static boolean eraserOn = false;
@@ -76,6 +78,7 @@ public class MenuBar extends LinearLayout
 		save_button = (ImageButton) findViewById(R.id.save_button);
 		load_button = (ImageButton) findViewById(R.id.load_button);
 		clear_button = (ImageButton) findViewById(R.id.clear_screen_button);
+		fade_button = (ImageButton) findViewById(R.id.fade_button);
 
 		hand_button.setOnClickListener(new OnClickListener() {
       @Override
@@ -203,5 +206,19 @@ public class MenuBar extends LinearLayout
 				((MainActivity) context).clearScreen();
 			}
 		});
+		
+		fade_button.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (fade_button.isSelected()){
+          fade_button.setSelected(false);
+          MainActivity.setFilterMode((char)0);
+        } else {
+          fade_button.setSelected(true);
+          MainActivity.setFilterMode((char)1);
+        }
+      }
+		});
 	}
 }
+  

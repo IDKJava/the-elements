@@ -120,6 +120,8 @@ extern "C" {
     extern unsigned char brushSize;
     extern unsigned char zoomFactor;
 
+    extern unsigned char filterType;
+
 //A map of all the points (a two-dimensional variable-size array)
     extern int* allCoords;
 

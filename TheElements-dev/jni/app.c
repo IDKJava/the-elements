@@ -64,6 +64,8 @@ char borderRight = TRUE;
 unsigned char brushSize = DEFAULT_BRUSH_SIZE;
 unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 
+unsigned char filterType = FILTER_NONE;
+
 int* allCoords = NULL;
 
 short mouseX;

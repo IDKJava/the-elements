@@ -815,7 +815,39 @@ void *updateThreadFunc(void *args)
 
         // Copy the frame into the colorsFrameBuffer
         pthread_mutex_lock(&update_mutex);
-        memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
+
+        switch(filterType) {
+        case FILTER_NONE:
+          memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
+          break;
+        case FILTER_MOTION:
+        {
+            /*
+             * This does a motion blur effect by composing previous value
+             * and new value together.  Checks for if current color is background
+             * color so that particles only fade out, not fade in.
+             */
+            int i = 0;
+            for ( i = 0; i < stupidTegra * workHeight; i++) {
+                if ( colorsFrameBuffer[3*i] == cAtmosphere->backgroundRed &&
+                     colorsFrameBuffer[3*i+1] == cAtmosphere->backgroundGreen &&
+                     colorsFrameBuffer[3*i+2] == cAtmosphere->backgroundBlue ) {
+                    colorsFrameBuffer[3*i] = colors[3*i];
+                    colorsFrameBuffer[3*i+1] = colors[3*i+1];
+                    colorsFrameBuffer[3*i+2] = colors[3*i+2];
+                }
+                else {
+                    colorsFrameBuffer[3*i] = ((float)colorsFrameBuffer[3*i] * 0.8)
+                        + ((float)colors[3*i]*0.2);
+                    colorsFrameBuffer[3*i+1] = ((float)colorsFrameBuffer[3*i+1] * 0.8)
+                        + ((float)colors[3*i+1]*0.2);
+                    colorsFrameBuffer[3*i+2] = ((float)colorsFrameBuffer[3*i+2] * 0.8)
+                        + ((float)colors[3*i+2]*0.2);
+                }
+            }
+            break;
+        }
+        }
         pthread_mutex_unlock(&update_mutex);
 
         pthread_mutex_lock(&frame_ready_mutex);
