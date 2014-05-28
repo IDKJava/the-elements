@@ -46,6 +46,9 @@ import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
+import com.pollfish.main.PollFish;
+import com.pollfish.constants.Position;
+
 public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
 {
     //Constants for dialogue ids
@@ -156,6 +159,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     {
         //Use the super onResume
         super.onResume();
+        PollFish.init(this, "e69d6078-9ead-4a88-bd57-71121724d4c3" , Position.BOTTOM_RIGHT, 0);
                 
         //Load the settings shared preferences which deals with if we're resuming from pause or not
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);

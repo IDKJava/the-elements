@@ -21,9 +21,6 @@ import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
-import com.pollfish.main.PollFish;
-import com.pollfish.constants.Position;
-
 public class MenuActivity extends FlurryActivity
 {
 	public static Button start_game_button;
@@ -178,11 +175,5 @@ public class MenuActivity extends FlurryActivity
 		}
 		
 		return null; //No need to return anything, just formality
-	}
-	
-	@Override
-	protected void onResume() {
-	  super.onResume();
-	  PollFish.init(this, "e69d6078-9ead-4a88-bd57-71121724d4c3" , Position.TOP_LEFT, 0);
 	}
 }
