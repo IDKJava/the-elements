@@ -344,7 +344,7 @@ char loadStateLogicV0(FILE* fp)
             // If reading in failed, initialize to cleared
             if (failed)
             {
-                clearSpecialVals(tempParticle);
+                clearSpecialValsToElementDefault(tempParticle);
             }
 
             // Set the element and make the particle set
@@ -498,7 +498,7 @@ char loadStateLogicV1(FILE* fp)
             // If reading in failed, initialize to cleared
             if (failed)
             {
-                clearSpecialVals(tempParticle);
+                clearSpecialValsToElementDefault(tempParticle);
             }
 
             // Only finish creating the particle if we succeed
