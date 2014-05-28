@@ -5,22 +5,6 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#333" >
-    
-    <!-- <com.google.ads.AdView
-		android:id="@+id/banner_adview"
-		android:layout_height="50dip"
-		android:layout_width="320dip"
-		android:gravity="top"
-		android:layout_gravity="center"
-		ads:adUnitId="a14e8547c18ab59"
-		ads:adSize="BANNER"
-        ads:loadAdOnCreate="true"/> -->
-    <!-- <TextView 
-    	android:text="The Elements"
-    	android:textSize="40sp"
-    	android:gravity="center"
-       	android:layout_width="fill_parent"
-       	android:layout_height="50dip"/> -->
         
     <!-- Top Menu Bar (Basically moves all menu items here)-->
 	<com.idkjava.thelements.game.MenuBar
@@ -134,6 +118,7 @@
 			android:id="@+id/brush_size_slider"
 			android:layout_weight="1"
 			android:progressDrawable="@drawable/bg_ui_progress"
+            android:layout_marginRight="50dp"
 			android:layout_height="wrap_content"
 			android:layout_width="wrap_content" />
 			
