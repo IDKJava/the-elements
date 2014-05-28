@@ -47,7 +47,9 @@ void specialSpawn(int particle)
             if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                if (tempAllCoords != -1 && a_element[tempAllCoords] == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+                if (tempAllCoords != -1 &&
+                        (a_element[tempAllCoords] == elements[GENERATOR_ELEMENT] ||
+                         a_element[tempAllCoords]->base == GENERATOR_ELEMENT)) //There's a generator adjacent
                 {
                     setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
                     setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(particle, SPECIAL_SPAWN));
