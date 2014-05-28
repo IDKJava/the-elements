@@ -18,13 +18,7 @@ public class Preferences
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	//Set the ui state in MainActivity based on sharedPreferences
-	public static void loadUIState()
-	{
-		MainActivity.ui = sharedPreferences.getBoolean("ui_state", true);
-	}
-
-	//Set everything except UI based on the preferences that are in existence
+	//Set everything based on the preferences that are in existence
 	public static void loadPreferences()
 	{
 		Log.v("TheElements", "setPreferences");

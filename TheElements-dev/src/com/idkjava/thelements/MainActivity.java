@@ -37,8 +37,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
-import com.appbrain.AppBrain;
-import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
@@ -82,8 +80,6 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     public static final String PREFS_NAME = "MyPrefsfile";
     public static boolean shouldLoadDemo = false;
 
-    public static boolean ui;
-
     public static MenuBar menu_bar;
     public static Control control;
     public static SandView sand_view;
@@ -104,9 +100,6 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
 
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
-        Preferences.loadUIState();
-                
-        FlurryAgent.logEvent("UI state: " + ui);
             
         //Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -124,19 +117,18 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         DisplayMetrics dm = new DisplayMetrics();
         ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
         mDPI = dm.densityDpi;
-
-        // Initialize AppBrain SDK
-        AppBrain.init(this);
     }
 
     private final SensorEventListener mySensorListener = new SensorEventListener()
     {
+        @Override
         public void onSensorChanged(SensorEvent event)
         {
             setXGravity(event.values[0]);
             setYGravity(event.values[1]);
         }
 
+        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy)
         {}
     };
@@ -222,16 +214,6 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         //If we're resuming from a pause (not when it starts)
         if (settings.getBoolean("paused", false))
         {
-            // Log.v("TheElements", "Resuming from pause");
-
-            //Check to see if UI changed
-            boolean oldui = ui;
-            Preferences.loadUIState();
-            if (ui != oldui)
-            {
-                setUpViews();
-            }
-
             //Set the preferences to indicate unpaused
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("paused", false);
@@ -252,24 +234,14 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
             //Finally, delete the temp save, in case there were save format changes
             SaveManager.deleteState("temp");
         }
-
-        if (ui)
-        {
-            //Set the activity for Control so that we can call showDialog() from it
-            control.setActivity(this);
-        }
+        
+        //Set the activity for Control so that we can call showDialog() from it
+        control.setActivity(this);
 
         //Call onResume() for view too
         // Log.v("TheElements", "sand_view.onResume()");
         sand_view.onResume();
         // Log.v("TheElements", "sand_view.onResume() done");
-    }
-
-    @Override
-    public void onBackPressed() {
-        // Show the AppBrain interstitial on exit occaisionally
-        AppBrain.getAds().maybeShowInterstitial(this);
-        finish();
     }
 
     protected Dialog onCreateDialog(int id) //This is called when showDialog is called
@@ -357,16 +329,8 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         // Create an inflater to inflate the menu already defined in res/menu/options_menu.xml
         // This seems to be a bit faster at loading the menu, and easier to modify
         MenuInflater inflater = getMenuInflater();
-        if (ui)
-        {
-            menu.clear();
-            inflater.inflate(R.menu.options_menu_small, menu);
-        }
-        else
-        {
-            menu.clear();
-            inflater.inflate(R.menu.options_menu_large, menu);
-        }
+        menu.clear();
+        inflater.inflate(R.menu.options_menu_small, menu);
 
         return true;
     }
@@ -450,14 +414,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         nativeInit(androidId, versionCode);
                 
         //Set the content view based on this variable
-        if (ui)
-        {
-            setContentView(R.layout.main_activity_ui);
-        }
-        else
-        {
-            setContentView(R.layout.main_activity_non_ui);
-        }
+        setContentView(R.layout.main_activity_ui);
 
         //Set the new view and control box and menu bar to the stuff defined in layout
         menu_bar = (MenuBar) findViewById(R.id.menu_bar);

@@ -16,12 +16,7 @@
 					android:title="@string/atmosphere_temp" />
 			</PreferenceCategory>
 		</PreferenceScreen>
-			
-		<CheckBoxPreference
-			android:key="ui_state"
-			android:title="@string/ui_state"
-			android:defaultValue="true"
-			android:summary="@string/ui_state_summary" />
+
 		<CheckBoxPreference
 			android:key="screen_sleep_state"
 			android:title="@string/screen_sleep_state"
