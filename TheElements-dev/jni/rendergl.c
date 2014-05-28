@@ -93,6 +93,8 @@ void glRender()
     time1.tv_usec = time2.tv_usec;
 #endif
 
+    Kamcord_BeginDraw();
+
 	if(dimensionsChanged)
 	{
 		__android_log_write( ANDROID_LOG_INFO, "TheElements", "dimensions changed" );
@@ -156,6 +158,7 @@ void glRender()
 
     //Actually draw the rectangle with the text on it (~.015s -- Droid)
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_BYTE, indices);
+    Kamcord_EndDraw();
 }
 
 

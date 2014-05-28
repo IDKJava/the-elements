@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="KamcordTheme" parent="android:Theme.Translucent.NoTitleBar.Fullscreen">
+        <item name="android:typeface">sans</item>
+    </style>
+
+    <style name="KamcordLoginTheme" parent="android:Theme.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+</resources>

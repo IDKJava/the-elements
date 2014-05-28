@@ -32,7 +32,9 @@ endif
 
 # optimization level = 3
 LOCAL_CFLAGS += -O3
-
+LOCAL_CFLAGS += -w
+LOCAL_SHARED_LIBRARIES := libkamcord
+LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
 # compile with profiling
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -pg -fno-omit-frame-pointer -fno-function-sections
@@ -55,6 +57,10 @@ LOCAL_SRC_FILES := \
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
 
 include $(BUILD_SHARED_LIBRARY)
+include $(CLEAR_VARS)
+LOCAL_MODULE := libkamcord
+LOCAL_SRC_FILES := libkamcord.so
+include $(PREBUILT_SHARED_LIBRARY)
 
 ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)

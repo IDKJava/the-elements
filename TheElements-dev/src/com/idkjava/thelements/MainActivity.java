@@ -45,9 +45,9 @@ import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
-
-import com.pollfish.main.PollFish;
+import com.kamcord.android.Kamcord;
 import com.pollfish.constants.Position;
+import com.pollfish.main.PollFish;
 
 public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
 {
@@ -100,10 +100,9 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     {
         //Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
-
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
-            
+        Kamcord.initActivity(this);
         //Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);

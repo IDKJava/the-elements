@@ -1,0 +1,195 @@
+<?xml version="1.0" ?>
+<resources>
+	<string name="kamcord">
+		Kamcord
+	</string>
+	<string name="kamcordShare">
+		Teilen
+	</string>
+	<string name="kamcordWatch">
+		Anschauen
+	</string>
+	<string name="kamcordProfile">
+		Profil
+	</string>
+	<string name="kamcordClose">
+		Schließen
+	</string>
+	<string name="kamcordWatchVideo">
+		Video Ansehen
+	</string>
+	<string name="kamcordWriteATitle">
+		Schreibe einen Titel...
+	</string>
+	<string name="kamcordFacebook">
+		Facebook
+	</string>
+	<string name="kamcordYouTube">
+		YouTube
+	</string>
+	<string name="kamcordTwitter">
+		Twitter
+	</string>
+	<string name="kamcordEmail">
+		Email
+	</string>
+	<string name="kamcordShareReplay">
+		Video teilen
+	</string>
+	<string name="kamcordRetry">
+		Wiederholen
+	</string>
+	<string name="kamcordPoweredByKamcord">
+		Unterstützt von Kamcord
+	</string>
+	<string name="kamcordUploadFinished">
+		Hochladen abgeschlossen!
+	</string>
+	<string name="kamcordUploadFailed">
+		Hochladen fehlgeschlagen
+	</string>
+	<string name="kamcordUploading">
+		Hochladen...
+	</string>
+	<string name="kamcordOk">
+		Ok
+	</string>
+	<string name="kamcordYes">
+		Ja
+	</string>
+	<string name="kamcordNo">
+		Nein
+	</string>
+	<string name="kamcordUsername">
+		Benutzername
+	</string>
+	<string name="kamcordPassword">
+		Passwort
+	</string>
+	<string name="kamcordImReady">
+		Ich bin fertig!
+	</string>
+	<string name="kamcordCreateProfile">
+		Profil erstellen
+	</string>
+	<string name="kamcordPrivacyPolicy">
+		Datenschutzrichtlinien
+	</string>
+	<string name="kamcordTermsOfService">
+		Nutzungsbedingungen
+	</string>
+	<string name="kamcordAgreementBlurb">
+		Wenn du auf \'Profil erstellen\' klickst, bestätigst du, dass du die Datenschutzrichtlinien und die Nutzungsbedingungen gelesen hast und ihnen zustimmst.
+	</string>
+	<string name="kamcordUsernameMinCharacters">
+		Benutzername muss mindestens 5 Zeichen lang sein.
+	</string>
+	<string name="kamcordUsernameIllegalCharacters">
+		Ungültige Zeichen im Benutzernamen 
+	</string>
+	<string name="kamcordUsernameEnter">
+		Bitte gib einen gültigen Benutzernamen ein
+	</string>
+	<string name="kamcordPasswordMinCharacters">
+		Passwort muss mindestens 6 Zeichen lang sein
+	</string>
+	<string name="kamcordPasswordEnter">
+		Du musst ein Passwort eingeben
+	</string>
+	<string name="kamcordEmailInvalid">
+		Ungültige Email
+	</string>
+	<string name="kamcordEmailEnter">
+		Du musst eine Email eingeben
+	</string>
+	<string name="kamcordProfileErrorTitle">
+		Fehler beim Erstellen des Profils
+	</string>
+	<string name="kamcordProfileErrorMessage">
+		Erstellung des Profils nicht möglich, bitte versuche es später noch einmal
+	</string>
+	<string name="kamcordEmailCorrect">
+		Ist deine Email korrekt?
+	</string>
+	<string name="kamcordEmailEntered">
+		Die Email, die du eingegeben hast, ist %@
+	</string>
+	<string name="kamcordUnclaimedVideos">
+		Nicht abgerufene Videos
+	</string>
+	<string name="kamcordAnyUnclaimedVideos">
+		Alle nicht abgerufenen Videos werden deinem Profil zugeordnet.
+	</string>
+	<string name="kamcordUsernameEmail">
+		Benutzername oder Email
+	</string>
+	<string name="kamcordSignIn">
+		Anmelden
+	</string>
+	<string name="kamcordSignOut">
+		Abmelden
+	</string>
+	<string name="kamcordForgotYourPassword">
+		Passwort vergessen?
+	</string>
+	<string name="kamcordNoAccountFound">
+		Kein Konto gefunden
+	</string>
+	<string name="kamcordSorryMatchingAccounts">
+		Leider konnten wir keine passenden Konten finden.
+	</string>
+	<string name="kamcordEditProfile">
+		Profil bearbeiten
+	</string>
+	<string name="kamcordNoAccountLinked">
+		Kein Konto verbunden
+	</string>
+	<string name="kamcordConfirmFacebookSignOut">
+		Facebook-Abmeldung bestätigen
+	</string>
+	<string name="kamcordConfirmTwitterSignOut">
+		Twitter-Abmeldung bestätigen
+	</string>
+	<string name="kamcordConfirmYouTubeSignOut">
+		YouTube-Abmeldung bestätigen
+	</string>
+	<string name="kamcordConfirmKamcordSignOut">
+		Kamcord-Abmeldung bestätigen
+	</string>
+	<string name="kamcordAreYouSure">
+		Bist du sicher, dass du dich abmelden willst?
+	</string>
+	<string name="kamcordEnterUsernameOrEmail">
+		Gib den Benutzernamen oder die Emailadresse für dein Kamcord-Profil ein.
+	</string>
+	<string name="kamcordResetPassword">
+		Passwort zurücksetzen
+	</string>
+	<string name="kamcordEmailNotSent">
+		Email nicht gesendet
+	</string>
+	<string name="kamcordAnotherPasswordReset">
+		Es gibt bereits eine Anfrage für ein anderes Passwort.
+	</string>
+	<string name="kamcordEmailSent">
+		Email gesendet
+	</string>
+	<string name="kamcordWeveEmailedYou">
+		Wir haben dir per Email einen Link geschickt, um dein Passwort zurückzusetzen!
+	</string>
+	<string name="kamcordChangePassword">
+		Passwort ändern
+	</string>
+	<string name="kamcordCurrentPassword">
+		Aktuelles Passwort
+	</string>
+	<string name="kamcordNewPassword">
+		Neues Passwort
+	</string>
+	<string name="kamcordNewPasswordAgain">
+		Neues Passwort (wiederholen)
+	</string>
+	<string name="kamcordNewPasswordsDoNotMatch">
+		Neue Passwörter stimmen nicht überein
+	</string>
+</resources>
