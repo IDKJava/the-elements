@@ -22,5 +22,5 @@
 <string name="border_bottom">Bottom Border</string>
 <string name="border_bottom_summary">Turn the bottom border on.</string>
 
-<string name="screen_zoom">Screen zoom</string>
+<string name="screen_zoom">Grid size</string>
 </resources>
