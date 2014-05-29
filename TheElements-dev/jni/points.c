@@ -46,7 +46,7 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         a_frozen[i] = FALSE;
 
         //Clear all particle special vals
-        clearSpecialVals(i);
+        clearSpecialValsToElementDefault(i);
 
         //Set the initial heat
         if(element->startingTemp == 0)
@@ -99,7 +99,7 @@ void setElement(int particle, struct Element* newElement)
 {
     int i;
     a_element[particle] = newElement;
-    clearSpecialVals(particle);
+    clearSpecialValsToElementDefault(particle);
     setBitmapColor(a_x[particle], a_y[particle], newElement);
 }
 
@@ -182,7 +182,7 @@ int hasSpecial(int tempParticle, int special)
     return FALSE;
 }
 
-//Gets a particle's special value
+//Gets a particle's special value, falling back to element special val if needed
 //WARNING: Just gets the first special of that type it finds
 int getParticleSpecialVal(int tempParticle, int special)
 {
@@ -197,7 +197,8 @@ int getParticleSpecialVal(int tempParticle, int special)
         }
     }
 
-    return SPECIAL_VAL_UNSET;
+    // Didn't find it in the particle, fall back to element
+    return getElementSpecialVal(a_element[tempParticle], special);
 }
 //Sets a particle's special value
 //WARNING: Just sets the first special of that type it finds
@@ -232,12 +233,12 @@ int getElementSpecialVal(struct Element* tempElement, int special)
     return SPECIAL_VAL_UNSET;
 }
 
-void clearSpecialVals(int tempParticle)
+// Clears all special vals to the element special val if any
+void clearSpecialValsToElementDefault(int tempParticle)
 {
-    int* specialVals = a_specialVals[tempParticle];
-    int* end = specialVals + MAX_SPECIALS;
-    for ( ; specialVals < end; ++specialVals)
+    int i;
+    for (i = 0 ; i < MAX_SPECIALS; ++i)
     {
-        *specialVals = SPECIAL_VAL_UNSET;
+        a_specialVals[tempParticle][i] = a_element[tempParticle]->specialVals[i];
     }
 }
