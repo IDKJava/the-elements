@@ -37,6 +37,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.ExceptionReporter;
+import com.google.analytics.tracking.android.GAServiceManager;
+import com.google.analytics.tracking.android.Tracker;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
@@ -45,9 +49,8 @@ import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
-
-import com.pollfish.main.PollFish;
 import com.pollfish.constants.Position;
+import com.pollfish.main.PollFish;
 
 public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
 {
@@ -95,11 +98,21 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
 
     private static float mDPI; 
 
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
         //Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
+
+        //Set up EasyTracker custom error reporting
+        EasyTracker curTracker = EasyTracker.getInstance(this);
+        ExceptionReporter handler = new ExceptionReporter(
+                curTracker, GAServiceManager.getInstance(),
+                Thread.getDefaultUncaughtExceptionHandler(), this);
+        handler.setExceptionParser(new CustomExceptionParser());
+        Thread.setDefaultUncaughtExceptionHandler(handler);
 
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
@@ -137,6 +150,20 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     };
 
     @Override
+    public void onStart()
+    {
+    	super.onStart();
+        EasyTracker.getInstance(this).activityStart(this);
+    }
+    
+    @Override
+    public void onStop()
+    {
+    	super.onStop();
+    	EasyTracker.getInstance(this).activityStop(this);
+    }
+
+    @Override
     protected void onPause()
     {
         // Log.v("TheElements", "MainActivity.onPause()");
@@ -159,7 +186,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     {
         //Use the super onResume
         super.onResume();
-        PollFish.init(this, Globals.pollfishAPIKEy , Position.BOTTOM_RIGHT, 0);
+        PollFish.init(this, Globals.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
                 
         //Load the settings shared preferences which deals with if we're resuming from pause or not
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
