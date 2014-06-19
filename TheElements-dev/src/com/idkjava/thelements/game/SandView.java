@@ -34,7 +34,8 @@ public class SandView extends GLSurfaceView
 	{
 		super(context, attrs);
 		mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
-		setEGLConfigChooser(false); //Set the EGLConfigChooser
+		setEGLConfigChooser(8, 8, 8, 8, // RGBA channel bits
+				16, 0); // depth and stencil channel min bits
 		setRenderer(mRenderer); //Associate it with this view
 	}
 
