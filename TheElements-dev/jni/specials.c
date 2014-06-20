@@ -756,4 +756,8 @@ void specialTrail(int particle)
     // Add random velocity based on seed (so the same location
     // will get the same velocity boost)
     a_xVel[particle] += rand()%variability - variability/2;
+    // "Unseed"
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    srand(time.tv_usec);
 }
