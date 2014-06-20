@@ -239,6 +239,9 @@ void clearSpecialValsToElementDefault(int tempParticle)
     int i;
     for (i = 0 ; i < MAX_SPECIALS; ++i)
     {
-        a_specialVals[tempParticle][i] = a_element[tempParticle]->specialVals[i];
+        if (a_set[tempParticle])
+            a_specialVals[tempParticle][i] = a_element[tempParticle]->specialVals[i];
+        else
+            a_specialVals[tempParticle][i] = SPECIAL_VAL_UNSET;
     }
 }
