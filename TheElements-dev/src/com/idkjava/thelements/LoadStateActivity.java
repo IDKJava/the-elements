@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.idkjava.thelements.game.SaveManager;
 
-public class LoadStateActivity extends FlurryActivity
+public class LoadStateActivity extends ReportingActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

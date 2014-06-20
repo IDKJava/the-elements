@@ -32,12 +32,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.game.FileManager;
 
-public class CustomElementBasicActivity extends FlurryActivity
+public class CustomElementBasicActivity extends ReportingActivity
 {
 
     private static final int COLOR_SQUARE_SIZE = 40;

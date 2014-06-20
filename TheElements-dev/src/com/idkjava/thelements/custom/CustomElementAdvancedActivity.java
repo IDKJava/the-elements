@@ -13,11 +13,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 
-public class CustomElementAdvancedActivity extends FlurryActivity
+public class CustomElementAdvancedActivity extends ReportingActivity
 {
 	private CustomElementActivity mParent;
 	private CustomElement mCustomElement;

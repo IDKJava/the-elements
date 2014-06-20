@@ -52,7 +52,7 @@ import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.pollfish.constants.Position;
 import com.pollfish.main.PollFish;
 
-public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
+public class MainActivity extends ReportingActivity implements DialogInterface.OnCancelListener
 {
     //Constants for dialogue ids
     private static final int INTRO_MESSAGE = 1;
@@ -148,20 +148,6 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         public void onAccuracyChanged(Sensor sensor, int accuracy)
         {}
     };
-
-    @Override
-    public void onStart()
-    {
-    	super.onStart();
-        EasyTracker.getInstance(this).activityStart(this);
-    }
-    
-    @Override
-    public void onStop()
-    {
-    	super.onStop();
-    	EasyTracker.getInstance(this).activityStop(this);
-    }
 
     @Override
     protected void onPause()

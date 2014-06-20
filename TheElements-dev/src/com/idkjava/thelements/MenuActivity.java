@@ -21,7 +21,7 @@ import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 
-public class MenuActivity extends FlurryActivity
+public class MenuActivity extends ReportingActivity
 {
 	public static Button start_game_button;
 	public static Button custom_elements_button;
