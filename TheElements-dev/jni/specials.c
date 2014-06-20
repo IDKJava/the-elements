@@ -536,7 +536,7 @@ void specialConductive(int particle)
         int tempI, k, transfered = FALSE;
         for (k = 0; k < 4; k++)
         {
-            if (curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+            if (curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
             {
                 tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                 if (tempAllCoords != -1)
@@ -592,7 +592,7 @@ void specialConductive(int particle)
             j = i + j;
             for (k = 0; k < 4; k++ )
             {
-                if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords != -1)
@@ -643,7 +643,7 @@ void specialConductive(int particle)
         {
             for ( k = 0; k < 4; k++)
             {
-                if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords == -1)
@@ -690,7 +690,7 @@ void specialConductive(int particle)
                 j = i + j;
                 for (k = 0; k < 4; k++ )
                 {
-                    if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                    if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                     {
                         tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                         if (tempAllCoords == -1)
