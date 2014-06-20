@@ -306,7 +306,7 @@ public class CustomElementBasicActivity extends ReportingActivity
                 else
                 {
                     Log.d("LOG", "Error: special vals array passed to save was not long enough");
-                    ce.specialVals.add(0);
+                    ce.specialVals.add(-1);
                 }
             }
         }

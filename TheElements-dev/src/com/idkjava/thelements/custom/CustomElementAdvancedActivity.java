@@ -352,7 +352,7 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		case 12:
 		{
 			// No special val
-			return 0;
+			return -1;
 		}
 		// Spawn, Grow, Tunnel
 		case 1:
@@ -379,7 +379,7 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		default:
 		{
 			Log.d("LOG", "Unrecognized special selected");
-			return 0;
+			return -1;
 		}
 		}
 	}
