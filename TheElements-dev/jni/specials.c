@@ -65,8 +65,8 @@ void specialSpawn(int particle)
 
 void specialBreak(int particle)
 {
-    if (a_xVel[particle] > getElementSpecialVal(a_element[particle], SPECIAL_BREAK)
-        || a_yVel[particle] > getElementSpecialVal(a_element[particle], SPECIAL_BREAK))
+    if (abs(a_xVel[particle]) > getElementSpecialVal(a_element[particle], SPECIAL_BREAK)
+        || abs(a_yVel[particle]) > getElementSpecialVal(a_element[particle], SPECIAL_BREAK))
     {
         setElement(particle, elements[NORMAL_ELEMENT]);
     }

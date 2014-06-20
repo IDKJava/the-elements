@@ -240,10 +240,9 @@ void clearSpecialValsToElementDefault(int tempParticle)
     for (i = 0 ; i < MAX_SPECIALS; ++i)
     {
         if (a_set[tempParticle] &&
-        		// Burn and break are treated specially, because they use the element
-        		// and particle special values distinctly.
-        		!(a_element[tempParticle]->specials[i] == SPECIAL_BURN ||
-				a_element[tempParticle]->specials[i] == SPECIAL_BREAK)) {
+        		// Burn is treated specially, because it uses the element
+        		// and particle special values simultaneously.
+        		!(a_element[tempParticle]->specials[i] == SPECIAL_BURN)) {
             a_specialVals[tempParticle][i] = a_element[tempParticle]->specialVals[i];
         }
         else {
