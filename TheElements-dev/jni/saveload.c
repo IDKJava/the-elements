@@ -440,7 +440,7 @@ char loadStateLogicV1(FILE* fp)
 
                 // Find custom with that hash, and set the index
                 elementIndex = findElementFromHash(elementHash);
-                if (elementIndex)
+                if (elementIndex >= 0)
                 {
                     a_element[tempParticle] = elements[elementIndex];
                 }
@@ -844,8 +844,8 @@ unsigned long hashStr(unsigned char *str)
 }
 // Find an element based on the hash
 // For now, do it stupidly: iterate through customs and hash them,
-// looking for a match.
-unsigned char findElementFromHash(unsigned long hash)
+// looking for a match. If not found, return -1.
+int findElementFromHash(unsigned long hash)
 {
     int i;
     unsigned long tempHash;
@@ -857,4 +857,5 @@ unsigned char findElementFromHash(unsigned long hash)
             return i;
         }
     }
+    return -1;
 }
