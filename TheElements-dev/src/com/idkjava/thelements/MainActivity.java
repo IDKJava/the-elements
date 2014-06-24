@@ -89,6 +89,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static MenuBar menu_bar;
     public static Control control;
     public static SandView sand_view;
+    
+    private ElementAdapter mElementAdapter;
         
     public static String last_state_loaded = null;
 
@@ -184,6 +186,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
                 
         //Set up the elements list
+        nativeRefreshElements();
         Resources res = getResources();
         baseElementsList = res.getTextArray(R.array.elements_list);
         elementsList.clear();
@@ -223,8 +226,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         {
             System.err.println("Error: " + e.getMessage());
         }
-                
-                
+        
+        // Refresh elements list
+        if (mElementAdapter != null) {
+        	mElementAdapter.notifyDataSetChanged();
+        }
+
         //Set up the file manager for saving and loading
         FileManager.intialize(this);
 
@@ -283,12 +290,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 
-            ListAdapter adapter = new ElementAdapter( this, (String[]) elementsList.toArray(new String[elementsList.size()]));
+            mElementAdapter = new ElementAdapter(this, elementsList);
 
             builder.setTitle(R.string.element_picker); // Set the title
             builder.setOnCancelListener(this);
-            builder.setSingleChoiceItems( adapter, -1, new OnClickListener() {
-                    
+            builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item)
                 {
                     if (MenuBar.eraserOn)
@@ -472,7 +478,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             TextView nameTxVw;
         }
 
-        public ElementAdapter(Context context, String[] elements)
+        public ElementAdapter(Context context, ArrayList<String> elements)
         {
             super(context, RESOURCE, elements);
             inflater = LayoutInflater.from(context);
@@ -524,6 +530,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         
     //General utility functions
     private static native void nativeInit(String udidString, int versionCode);
+    private static native void nativeRefreshElements();
     public native void clearScreen();
         
     //Setters
