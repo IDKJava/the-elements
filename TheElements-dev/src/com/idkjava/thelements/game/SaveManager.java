@@ -33,7 +33,10 @@ public class SaveManager
 		{
 			Toast.makeText(c.getApplicationContext(), R.string.sdcard_not_found, Toast.LENGTH_SHORT).show();
 		}
-		Log.v("TheElements", "SaveManager refreshed, files found: " + saveFiles.length);
+		else
+		{
+			Log.v("TheElements", "SaveManager refreshed, files found: " + saveFiles.length);
+		}
 		for(int i = 0; i < saveFiles.length; i++)
 		{
 			Log.v("TheElements", "..." + saveFiles[i]);
