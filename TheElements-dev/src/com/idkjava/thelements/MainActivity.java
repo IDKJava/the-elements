@@ -273,7 +273,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         if (id == INTRO_MESSAGE) // The first dialog - the intro message
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            WebView wv = new WebView(getBaseContext());
+            WebView wv = new WebView(this);
             wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
             wv.setBackgroundColor(Color.BLACK);
             builder.setView(wv).setCancelable(false).setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener()
