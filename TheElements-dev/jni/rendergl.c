@@ -223,8 +223,10 @@ static const char gFragmentShader[] =
     "varying vec2 v_TexCoordinate;\n"
     "uniform sampler2D u_Texture;\n"
     "void main() {\n"
-    "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);\n"
+    "  gl_FragColor = vec4(v_TexCoordinate.x, v_TexCoordinate.y, 0.0, 1.0);"
     "}\n";
+
+//    "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);\n"
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -338,7 +340,7 @@ void glInit() {
 	//Allocate the dummy array
 	char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
 	//Generate the tex image
-    LOGI("Running the teximage2d");
+    //LOGI("Running the teximage2d");
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
     checkGlError("glTexImage2D");
 	//Free the dummy array
@@ -368,14 +370,15 @@ void glRender() {
     
     char* emptyPixels = malloc(3 * stupidTegra*workHeight * sizeof(char));
 	//Generate the tex image
-    LOGI("Running the teximage2d");
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stupidTegra, workHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
-    checkGlError("glTexImage2D");
-	//Free the dummy array
-	free(emptyPixels);
 
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stupidTegra, workHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
+
+	//Free the dummy array
+    free(emptyPixels);
+    LOGI("Running the teximage2d");
     //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
-    LOGI("Running the tex sub image");
+    checkGlError("glTexImage2D");
+    //LOGI("Running the tex sub image");
     checkGlError("texsubimage2d");
 
     // Set the active texture unit to texture unit 0.
@@ -390,8 +393,14 @@ void glRender() {
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, vertices);
     checkGlError("glVertexAttribPointer");
     glEnableVertexAttribArray(gvPositionHandle);
+    LOGI("Running enable");
+    glEnableVertexAttribArray(mTextureCoordinateHandle);
+    LOGI("Running enable2");
+    glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, false, 0, texture);
+    
     checkGlError("glEnableVertexAttribArray");
     glDrawArrays(GL_TRIANGLES, 0, 6);
+
     checkGlError("glDrawArrays");
 }
 
