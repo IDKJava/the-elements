@@ -32,6 +32,8 @@ ifeq ($(USE_PROFILING),yes)
 endif
 ifeq ($(KAMCORD),yes)
     LOCAL_CFLAGS += -DUSE_KAMCORD
+    LOCAL_SHARED_LIBRARIES := libkamcord
+    LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
 endif
 
 # optimization level = 3
@@ -39,8 +41,7 @@ LOCAL_CFLAGS += -O3
 LOCAL_CFLAGS += -w
 LOCAL_CFLAGS += -Wall -Wextra
 LOCAL_LDLIBS :=  -llog -ldl -landroid -lEGL -lGLESv2
-LOCAL_SHARED_LIBRARIES := libkamcord
-LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
+
 # compile with profiling
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -pg -fno-omit-frame-pointer -fno-function-sections
