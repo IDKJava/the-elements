@@ -33,6 +33,10 @@ public class MenuBar extends LinearLayout
   private static char tempElement = 0;
 
   private SandView m_sandView = null;
+  
+
+  private static boolean hitOnce = false;
+  
 
   // Constructor
   public MenuBar(Context context, AttributeSet attrs)
@@ -143,14 +147,19 @@ public class MenuBar extends LinearLayout
 				MainActivity.setPlayState(MainActivity.play);
 
 				if (MainActivity.play)
-				{
+				{				  
 				  Kamcord.startRecording();
 					play_pause_button.setImageResource(R.drawable.pause);
 				}
 				else
 				{
-				  Kamcord.stopRecording();
-				  Kamcord.showView();
+				  if (!hitOnce) {
+				    hitOnce = true;
+				  }
+				  else {
+				    Kamcord.stopRecording();
+            Kamcord.showView();
+				  }
 					play_pause_button.setImageResource(R.drawable.play);
 				}
 			}

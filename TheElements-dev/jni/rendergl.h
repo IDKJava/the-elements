@@ -9,7 +9,7 @@
 #define GL_H_INCLUDED
 
 //Include the Gl importation functions
-#include "importgl.h"
+#include "glwrapper.h"
 //Include the global variables
 #include "app.h"
 //Include the update function

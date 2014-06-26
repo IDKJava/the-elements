@@ -24,8 +24,7 @@ endif
 # Print some build info
 $(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING))
 
-LOCAL_CFLAGS := -DANDROID_NDK \
-                -DDISABLE_IMPORTGL
+LOCAL_CFLAGS := -DANDROID_NDK
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
@@ -33,6 +32,8 @@ endif
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 LOCAL_CFLAGS += -w
+LOCAL_CFLAGS += -Wall -Wextra
+LOCAL_LDLIBS :=  -llog -ldl -landroid -lEGL -lGLESv2
 LOCAL_SHARED_LIBRARIES := libkamcord
 LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
 # compile with profiling
@@ -46,7 +47,6 @@ LOCAL_SRC_FILES := \
 	app.c \
 	collide.c \
 	elementproperties.c \
-    importgl.c \
     points.c \
     rendergl.c \
     saveload.c \
@@ -54,14 +54,11 @@ LOCAL_SRC_FILES := \
     specials.c \
     update.c \
 
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog
-
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
 LOCAL_MODULE := libkamcord
 LOCAL_SRC_FILES := libkamcord.so
 include $(PREBUILT_SHARED_LIBRARY)
-
 ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)
 endif
