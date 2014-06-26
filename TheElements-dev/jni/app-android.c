@@ -38,12 +38,14 @@
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
+#ifdef USE_KAMCORD
     KamcordAndroid_InitJVMWithEnv(env);
     Kamcord_Init(
         "w3kuuG5YiWLecPuyu07VBU7VsT2QppXyI06CMRsErFO",
         "SkoZXBUWJqz2f1nQo8itN5bFhqMEjOhXcBeV3YDg4x9",
         "TheElements",
         KC_STANDARD_VIDEO_QUALITY);
+#endif
 
     //These variable change from pinch to zoom
     viewWidth = width;

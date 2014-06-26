@@ -11,11 +11,13 @@ ifneq ($(APP_OPTIM),debug)
     USE_PROFILING = no
 endif
 TARGET_ARCH_PROFILING_OK = no
+KAMCORD = no
 ifeq ($(TARGET_ARCH_ABI),armeabi)
     TARGET_ARCH_PROFILING_OK = yes
 endif
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     TARGET_ARCH_PROFILING_OK = yes
+    KAMCORD = yes
 endif
 ifneq ($(TARGET_ARCH_PROFILING_OK),yes)
     USE_PROFILING = no
@@ -27,6 +29,9 @@ $(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING)
 LOCAL_CFLAGS := -DANDROID_NDK
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
+endif
+ifeq ($(KAMCORD),yes)
+    LOCAL_CFLAGS += -DUSE_KAMCORD
 endif
 
 # optimization level = 3
@@ -56,9 +61,13 @@ LOCAL_SRC_FILES := \
 
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
-LOCAL_MODULE := libkamcord
-LOCAL_SRC_FILES := libkamcord.so
-include $(PREBUILT_SHARED_LIBRARY)
+
+ifeq ($(KAMCORD),yes)
+    LOCAL_MODULE := libkamcord
+    LOCAL_SRC_FILES := libkamcord.so
+    include $(PREBUILT_SHARED_LIBRARY)
+endif
+
 ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)
 endif
