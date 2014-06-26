@@ -32,15 +32,19 @@ int mTextureUniformHandle;
 //{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
 float vertices[] = {0.0f,0.0f,
-                    1.0f,0.0f,
-                    1.0f,1.0f,
+                    0.5f,0.0f,
+                    0.5f,0.5f,
                     0.0f,0.0f,
-                    1.0f,1.0f,
-                    0.0f,1.0f};
-float texture[] =
-{0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f};
-unsigned char indices[] =
-{0, 1, 3, 0, 3, 2};
+                    0.5f,0.5f,
+                    0.0f,0.5f};
+float texture[] = {0.0f, 0.0f,
+		           1.0f, 0.0f,
+		           1.0f, 1.0f,
+		           0.0f, 0.0f,
+		           1.0f, 1.0f,
+                   0.0f, 1.0f};
+//unsigned char indices[] =
+//{0, 1, 3, 0, 3, 2};
 int texWidth, texHeight, stupidTegra;
 /*
 
@@ -223,7 +227,7 @@ static const char gFragmentShader[] =
     "varying vec2 v_TexCoordinate;\n"
     "uniform sampler2D u_Texture;\n"
     "void main() {\n"
-    "  gl_FragColor = vec4(v_TexCoordinate.x, v_TexCoordinate.y, 0.0, 1.0);"
+    "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);"
     "}\n";
 
 //    "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);\n"
@@ -357,32 +361,41 @@ void glRender() {
     if (grey > 1.0f) {
         grey = 0.0f;
     }
+
+    // Update dimensions
+	texture[3] = (float) workWidth/texWidth;
+	texture[5] = (float) workWidth/texWidth;
+	texture[9] = (float) workWidth/texWidth;
+	texture[6] = (float) workHeight/texHeight;
+	texture[10] = (float) workHeight/texHeight;
+	texture[12] = (float) workHeight/texHeight;
+
     glClearColor(grey, grey, grey, 1.0f);
     checkGlError("glClearColor");
     glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-    checkGlError("glClear");        
+    checkGlError("glClear");
 
     glUseProgram(gProgram);
     checkGlError("glUseProgram");
 
-    //glBindTexture(GL_TEXTURE_2D, textureID);
     checkGlError("gl binding");
     
-    char* emptyPixels = malloc(3 * stupidTegra*workHeight * sizeof(char));
+    //char* emptyPixels = malloc(3 * stupidTegra*workHeight * sizeof(char));
 	//Generate the tex image
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, textureID);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stupidTegra, workHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, stupidTegra, workHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
 
 	//Free the dummy array
-    free(emptyPixels);
-    LOGI("Running the teximage2d");
-    //glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
+    //free(emptyPixels);
+    //LOGI("Running the teximage2d");
+    LOGI("Tex width: %d, tex height: %d, screen width: %d, screen height: %d",
+    		texWidth, texHeight, screenWidth, screenHeight);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
     checkGlError("glTexImage2D");
     //LOGI("Running the tex sub image");
     checkGlError("texsubimage2d");
-
-    // Set the active texture unit to texture unit 0.
-    glActiveTexture(GL_TEXTURE0);
  
     // Bind the texture to this unit.
 
@@ -390,12 +403,12 @@ void glRender() {
     // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
     glUniform1i(mTextureUniformHandle, 0);
 
+    glEnableVertexAttribArray(gvPositionHandle);
+    //LOGI("Running enable");
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, vertices);
     checkGlError("glVertexAttribPointer");
-    glEnableVertexAttribArray(gvPositionHandle);
-    LOGI("Running enable");
     glEnableVertexAttribArray(mTextureCoordinateHandle);
-    LOGI("Running enable2");
+    //LOGI("Running enable2");
     glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, false, 0, texture);
     
     checkGlError("glEnableVertexAttribArray");

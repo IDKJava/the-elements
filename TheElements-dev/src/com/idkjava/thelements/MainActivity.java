@@ -25,6 +25,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -545,6 +546,11 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
 
     static
     {
+    	try {
+    		System.loadLibrary("kamcord");
+    	} catch (UnsatisfiedLinkError e) {
+    		Log.d("TheElements", "Kamcord not supported");
+    	}
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }
 }
