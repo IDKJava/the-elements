@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class SplashActivity extends FlurryActivity
+public class SplashActivity extends ReportingActivity
 {
 	@Override
 	protected void onCreate (Bundle savedInstanceState)

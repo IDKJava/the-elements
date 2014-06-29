@@ -47,7 +47,9 @@ void specialSpawn(int particle)
             if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
-                if (tempAllCoords != -1 && a_element[tempAllCoords] == elements[GENERATOR_ELEMENT]) //There's a generator adjacent
+                if (tempAllCoords != -1 &&
+                        (a_element[tempAllCoords] == elements[GENERATOR_ELEMENT] ||
+                         a_element[tempAllCoords]->base == GENERATOR_ELEMENT)) //There's a generator adjacent
                 {
                     setElement(tempAllCoords, elements[SPAWN_ELEMENT]);
                     setParticleSpecialVal(tempAllCoords, SPECIAL_SPAWN, getParticleSpecialVal(particle, SPECIAL_SPAWN));
@@ -63,8 +65,8 @@ void specialSpawn(int particle)
 
 void specialBreak(int particle)
 {
-    if (a_xVel[particle] > getElementSpecialVal(a_element[particle], SPECIAL_BREAK)
-        || a_yVel[particle] > getElementSpecialVal(a_element[particle], SPECIAL_BREAK))
+    if (abs(a_xVel[particle]) > getElementSpecialVal(a_element[particle], SPECIAL_BREAK)
+        || abs(a_yVel[particle]) > getElementSpecialVal(a_element[particle], SPECIAL_BREAK))
     {
         setElement(particle, elements[NORMAL_ELEMENT]);
     }
@@ -534,7 +536,7 @@ void specialConductive(int particle)
         int tempI, k, transfered = FALSE;
         for (k = 0; k < 4; k++)
         {
-            if (curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+            if (curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
             {
                 tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                 if (tempAllCoords != -1)
@@ -590,7 +592,7 @@ void specialConductive(int particle)
             j = i + j;
             for (k = 0; k < 4; k++ )
             {
-                if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords != -1)
@@ -641,7 +643,7 @@ void specialConductive(int particle)
         {
             for ( k = 0; k < 4; k++)
             {
-                if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords == -1)
@@ -688,7 +690,7 @@ void specialConductive(int particle)
                 j = i + j;
                 for (k = 0; k < 4; k++ )
                 {
-                    if ( curX + i <= workWidth && curX + i > 0 && curY + j <= workHeight && curY + j > 0)
+                    if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
                     {
                         tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                         if (tempAllCoords == -1)
@@ -754,4 +756,8 @@ void specialTrail(int particle)
     // Add random velocity based on seed (so the same location
     // will get the same velocity boost)
     a_xVel[particle] += rand()%variability - variability/2;
+    // "Unseed"
+    struct timeval time;
+    gettimeofday(&time, NULL);
+    srand(time.tv_usec);
 }

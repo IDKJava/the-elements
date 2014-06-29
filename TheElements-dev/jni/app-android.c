@@ -200,6 +200,12 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
     monstartup("libthelements.so");
 #endif
 }
+void Java_com_idkjava_thelements_MainActivity_nativeRefreshElements(JNIEnv* env, jobject this)
+{
+	// Reload all elements, recreate eleList.lst
+	elementSetup();
+}
+
 void Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
 {
     shouldClear = TRUE;
@@ -267,7 +273,9 @@ void Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject 
 }
 void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
 {
-    cElement = elements[element];
+	if (element >= 0 && element < numElements) {
+		cElement = elements[element];
+	}
 }
 void Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this, jchar brushSizeValue)
 {
@@ -341,16 +349,31 @@ char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject th
     return cElement->index;
 }
 char Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject this, int i)
-{    
-    return elements[i]->red;
+{
+	if (i >= 0 && i < numElements) {
+		return elements[i]->red;
+	}
+	else {
+		return 0;
+	}
 }
 char Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject this, int i)
 {
-    return elements[i]->green;
+	if (i >= 0 && i < numElements) {
+		return elements[i]->green;
+	}
+	else {
+		return 0;
+	}
 }
 char Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject this, int i)
 {
-    return elements[i]->blue;
+	if (i >= 0 && i < numElements) {
+		return elements[i]->blue;
+	}
+	else {
+		return 0;
+	}
 }
 jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject this, int i)
 {

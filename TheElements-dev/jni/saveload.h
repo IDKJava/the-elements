@@ -57,6 +57,6 @@ char loadCustomElement(char* loadLoc);
 unsigned long hashElement(struct Element* element);
 char* stringifyElement(struct Element* element);
 unsigned long hashStr(unsigned char* str);
-unsigned char findElementFromHash(unsigned long hash);
+int findElementFromHash(unsigned long hash);
 
 #endif //!SAVELOAD_H_INCLUDED

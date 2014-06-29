@@ -18,7 +18,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.game.FileManager;
 
@@ -28,7 +28,7 @@ import com.idkjava.thelements.game.FileManager;
  * COLLISION ARRAY (space separated)\n
  * SPECIALS ARRAY (space separated)
  */
-public class CustomElementManagerActivity extends FlurryActivity
+public class CustomElementManagerActivity extends ReportingActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

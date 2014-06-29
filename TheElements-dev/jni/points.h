@@ -27,6 +27,6 @@ int hasSpecial(int tempParticle, int special);
 int getParticleSpecialVal(int tempParticle, int special);
 void setParticleSpecialVal(int tempParticle, int special, int val);
 int getElementSpecialVal(struct Element* tempElement, int special);
-void clearSpecialVals(int tempParticle);
+void clearSpecialValsToElementDefault(int tempParticle);
 
 #endif //!POINTS_H_INCLUDED

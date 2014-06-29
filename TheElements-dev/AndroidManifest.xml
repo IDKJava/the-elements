@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     package="com.idkjava.thelements"
     android:installLocation="auto"
     android:versionCode="86"
@@ -190,6 +191,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <service android:name="com.google.android.gms.analytics.service.AnalyticsService"/>
     </application>
 
 </manifest>

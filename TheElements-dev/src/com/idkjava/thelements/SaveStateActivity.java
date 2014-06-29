@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.idkjava.thelements.game.SaveManager;
 
-public class SaveStateActivity extends FlurryActivity
+public class SaveStateActivity extends ReportingActivity
 {
 	public static Button saveButton;
 	public static EditText statename;

@@ -13,11 +13,11 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.idkjava.thelements.FlurryActivity;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 
-public class CustomElementAdvancedActivity extends FlurryActivity
+public class CustomElementAdvancedActivity extends ReportingActivity
 {
 	private CustomElementActivity mParent;
 	private CustomElement mCustomElement;
@@ -352,7 +352,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		case 12:
 		{
 			// No special val
-			return 0;
+			return -1;
 		}
 		// Spawn, Grow, Tunnel
 		case 1:
@@ -379,7 +379,7 @@ public class CustomElementAdvancedActivity extends FlurryActivity
 		default:
 		{
 			Log.d("LOG", "Unrecognized special selected");
-			return 0;
+			return -1;
 		}
 		}
 	}

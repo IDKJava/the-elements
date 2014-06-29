@@ -12,6 +12,7 @@
 #include "app.h"
 #include "stdbool.h"
 #include <stdlib.h>
+#include <sys/time.h>
 
 bool collisionSpecials(int firstParticle, int secondParticle);
 void specialSpawn(int particle);

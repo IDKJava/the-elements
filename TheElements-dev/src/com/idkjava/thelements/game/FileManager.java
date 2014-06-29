@@ -23,8 +23,17 @@ public class FileManager
 	public static final String ATMOSPHERE_EXT = ".atm";
 	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
+	public static final String TEMP_SAVE = "temp";
 	public static final String ELEMENT_LIST_NAME = "eleList";
 	public static final String LIST_EXT = ".lst";
+	
+	public static String getTempSaveName() {
+	    return ROOT_DIR + SAVES_DIR + TEMP_SAVE + SAVE_EXT;
+	}
+	
+	public static String getDemoSaveName() {
+	    return ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT;
+	}
 	
 	public static void intialize(Context context)
 	{		
@@ -39,7 +48,7 @@ public class FileManager
 			//Set the input stream to the demo save resource
 			InputStream in = context.getResources().openRawResource(R.raw.demo);
 			//Set the output stream to the demo save file location
-			OutputStream out = new FileOutputStream(ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT);
+			OutputStream out = new FileOutputStream(getDemoSaveName());
 			//Create a 256 byte buffer
 			byte[] buf = new byte[256];
 			//Read in 256 byte chunks from in and output to out

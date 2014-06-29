@@ -38,6 +38,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.ExceptionReporter;
+import com.google.analytics.tracking.android.GAServiceManager;
+import com.google.analytics.tracking.android.Tracker;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
@@ -50,7 +54,7 @@ import com.kamcord.android.Kamcord;
 import com.pollfish.constants.Position;
 import com.pollfish.main.PollFish;
 
-public class MainActivity extends FlurryActivity implements DialogInterface.OnCancelListener
+public class MainActivity extends ReportingActivity implements DialogInterface.OnCancelListener
 {
     //Constants for dialogue ids
     private static final int INTRO_MESSAGE = 1;
@@ -87,6 +91,8 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     public static MenuBar menu_bar;
     public static Control control;
     public static SandView sand_view;
+    
+    private ElementAdapter mElementAdapter;
         
     public static String last_state_loaded = null;
 
@@ -96,11 +102,22 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
 
     private static float mDPI; 
 
+    private Tracker mTracker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) 
     {
         //Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
+
+        //Set up EasyTracker custom error reporting
+        EasyTracker curTracker = EasyTracker.getInstance(this);
+        ExceptionReporter handler = new ExceptionReporter(
+                curTracker, GAServiceManager.getInstance(),
+                Thread.getDefaultUncaughtExceptionHandler(), this);
+        handler.setExceptionParser(new CustomExceptionParser());
+        Thread.setDefaultUncaughtExceptionHandler(handler);
+
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
         Kamcord.initActivity(this);
@@ -159,7 +176,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
     {
         //Use the super onResume
         super.onResume();
-        PollFish.init(this, Globals.pollfishAPIKEy , Position.BOTTOM_RIGHT, 0);
+        PollFish.init(this, Globals.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
                 
         //Load the settings shared preferences which deals with if we're resuming from pause or not
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -171,6 +188,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         myManager.registerListener(mySensorListener, accSensor, SensorManager.SENSOR_DELAY_GAME);
                 
         //Set up the elements list
+        nativeRefreshElements();
         Resources res = getResources();
         baseElementsList = res.getTextArray(R.array.elements_list);
         elementsList.clear();
@@ -210,8 +228,12 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         {
             System.err.println("Error: " + e.getMessage());
         }
-                
-                
+        
+        // Refresh elements list
+        if (mElementAdapter != null) {
+        	mElementAdapter.notifyDataSetChanged();
+        }
+
         //Set up the file manager for saving and loading
         FileManager.intialize(this);
 
@@ -253,7 +275,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         if (id == INTRO_MESSAGE) // The first dialog - the intro message
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            WebView wv = new WebView(getBaseContext());
+            WebView wv = new WebView(this);
             wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
             wv.setBackgroundColor(Color.BLACK);
             builder.setView(wv).setCancelable(false).setPositiveButton(R.string.proceed, new DialogInterface.OnClickListener()
@@ -270,12 +292,11 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create a new one
 
-            ListAdapter adapter = new ElementAdapter( this, (String[]) elementsList.toArray(new String[elementsList.size()]));
+            mElementAdapter = new ElementAdapter(this, elementsList);
 
             builder.setTitle(R.string.element_picker); // Set the title
             builder.setOnCancelListener(this);
-            builder.setSingleChoiceItems( adapter, -1, new OnClickListener() {
-                    
+            builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item)
                 {
                     if (MenuBar.eraserOn)
@@ -459,7 +480,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
             TextView nameTxVw;
         }
 
-        public ElementAdapter(Context context, String[] elements)
+        public ElementAdapter(Context context, ArrayList<String> elements)
         {
             super(context, RESOURCE, elements);
             inflater = LayoutInflater.from(context);
@@ -511,6 +532,7 @@ public class MainActivity extends FlurryActivity implements DialogInterface.OnCa
         
     //General utility functions
     private static native void nativeInit(String udidString, int versionCode);
+    private static native void nativeRefreshElements();
     public native void clearScreen();
         
     //Setters

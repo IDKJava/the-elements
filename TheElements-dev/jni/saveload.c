@@ -344,7 +344,7 @@ char loadStateLogicV0(FILE* fp)
             // If reading in failed, initialize to cleared
             if (failed)
             {
-                clearSpecialVals(tempParticle);
+                clearSpecialValsToElementDefault(tempParticle);
             }
 
             // Set the element and make the particle set
@@ -440,7 +440,7 @@ char loadStateLogicV1(FILE* fp)
 
                 // Find custom with that hash, and set the index
                 elementIndex = findElementFromHash(elementHash);
-                if (elementIndex)
+                if (elementIndex >= 0)
                 {
                     a_element[tempParticle] = elements[elementIndex];
                 }
@@ -498,7 +498,7 @@ char loadStateLogicV1(FILE* fp)
             // If reading in failed, initialize to cleared
             if (failed)
             {
-                clearSpecialVals(tempParticle);
+                clearSpecialValsToElementDefault(tempParticle);
             }
 
             // Only finish creating the particle if we succeed
@@ -844,8 +844,8 @@ unsigned long hashStr(unsigned char *str)
 }
 // Find an element based on the hash
 // For now, do it stupidly: iterate through customs and hash them,
-// looking for a match.
-unsigned char findElementFromHash(unsigned long hash)
+// looking for a match. If not found, return -1.
+int findElementFromHash(unsigned long hash)
 {
     int i;
     unsigned long tempHash;
@@ -857,4 +857,5 @@ unsigned char findElementFromHash(unsigned long hash)
             return i;
         }
     }
+    return -1;
 }
