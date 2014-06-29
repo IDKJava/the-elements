@@ -222,6 +222,7 @@ void glInit() {
 
 void glRender() {
 
+Kamcord_BeginDraw();
     // Update dimensions
     texture[2] = (float) workWidth/texWidth;
     texture[4] = (float) workWidth/texWidth;
@@ -269,6 +270,7 @@ void glRender() {
     glUniformMatrix4fv(mProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
+Kamcord_EndDraw();
 }
 
 
