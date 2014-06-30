@@ -299,9 +299,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item)
                 {
-                    if (MenuBar.eraserOn)
+                	//lol this code is kinda bad, these methods probably shouldn't be static  
+                    if (Control.eraserOn)
                     {
-                        MenuBar.setEraserOff();
+                        Control.setEraserOff();
                     }
                     setElement((char) (item + NORMAL_ELEMENT));
                     setPlayState(play);
