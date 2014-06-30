@@ -1,0 +1,3 @@
+[submodule "kamcord-android-sdk"]
+	path = kamcord-android-sdk
+	url = https://github.com/kamcord/kamcord-android-sdk.git
