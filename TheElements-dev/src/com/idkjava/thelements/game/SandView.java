@@ -11,6 +11,7 @@ import android.util.FloatMath;
 import android.view.MotionEvent;
 
 import com.idkjava.thelements.MainActivity;
+import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
@@ -152,7 +153,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onDrawFrame(GL10 gl)
 	{
+	    Kamcord.beginDraw();
 	    nativeRender();
+	    Kamcord.endDraw();
 	}
 
 	//@formatter:off

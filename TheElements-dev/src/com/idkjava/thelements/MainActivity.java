@@ -120,6 +120,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
+        //TODO: remove these keys from the source code before release and get new ones
+        Kamcord.initKeyAndSecret("w3kuuG5YiWLecPuyu07VBU7VsT2QppXyI06CMRsErFO", "SkoZXBUWJqz2f1nQo8itN5bFhqMEjOhXcBeV3YDg4x9", "TheElements");
         Kamcord.initActivity(this);
         //Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

@@ -11,13 +11,12 @@ ifneq ($(APP_OPTIM),debug)
     USE_PROFILING = no
 endif
 TARGET_ARCH_PROFILING_OK = no
-KAMCORD = no
+KAMCORD = yes
 ifeq ($(TARGET_ARCH_ABI),armeabi)
     TARGET_ARCH_PROFILING_OK = yes
 endif
 ifeq ($(TARGET_ARCH_ABI),armeabi-v7a)
     TARGET_ARCH_PROFILING_OK = yes
-    KAMCORD = yes
 endif
 ifneq ($(TARGET_ARCH_PROFILING_OK),yes)
     USE_PROFILING = no
@@ -27,20 +26,23 @@ endif
 $(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING))
 
 LOCAL_CFLAGS := -DANDROID_NDK
+LOCAL_LDLIBS :=  -llog -ldl -landroid -lEGL -lGLESv2
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
 ifeq ($(KAMCORD),yes)
     LOCAL_CFLAGS += -DUSE_KAMCORD
+    LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
     LOCAL_SHARED_LIBRARIES := libkamcord
-    LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
+    LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
+    LOCAL_LD_LIBS += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
 endif
 
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 LOCAL_CFLAGS += -w
 LOCAL_CFLAGS += -Wall -Wextra
-LOCAL_LDLIBS :=  -llog -ldl -landroid -lEGL -lGLESv2
+
 
 # compile with profiling
 ifeq ($(USE_PROFILING),yes)
@@ -62,12 +64,6 @@ LOCAL_SRC_FILES := \
 
 include $(BUILD_SHARED_LIBRARY)
 include $(CLEAR_VARS)
-
-ifeq ($(KAMCORD),yes)
-    LOCAL_MODULE := libkamcord
-    LOCAL_SRC_FILES := libkamcord.so
-    include $(PREBUILT_SHARED_LIBRARY)
-endif
 
 ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)
