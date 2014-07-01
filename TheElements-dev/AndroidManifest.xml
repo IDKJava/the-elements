@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.idkjava.thelements"
     android:installLocation="auto"
-    android:versionCode="86"
-    android:versionName="6.5" >
+    android:versionCode="89"
+    android:versionName="6.6.2" >
 
     <uses-sdk
         android:minSdkVersion="10"
