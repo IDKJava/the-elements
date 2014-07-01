@@ -64,7 +64,6 @@ LOCAL_SRC_FILES := \
     update.c \
 
 include $(BUILD_SHARED_LIBRARY)
-include $(CLEAR_VARS)
 
 ifeq ($(USE_PROFILING),yes)
     $(call import-module,android-ndk-profiler)

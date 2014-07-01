@@ -29,34 +29,30 @@ int mTextureUniformHandle;
 int mProjMatrixUniformHandle;
 
 float vertices[] = {0.0f,2.0f,
-		    2.0f,2.0f,
+                    2.0f,2.0f,
                     2.0f,0.0f,
                     0.0f,2.0f,
                     2.0f,0.0f,
                     0.0f,0.0f};
 
 float texture[] = {0.0f, 0.0f,
-		   1.0f, 0.0f,
-		   1.0f, 1.0f,
-		   0.0f, 0.0f,
-		   1.0f, 1.0f,
+                   1.0f, 0.0f,
+                   1.0f, 1.0f,
+                   0.0f, 0.0f,
+                   1.0f, 1.0f,
                    0.0f, 1.0f};
 
 int texWidth, texHeight, stupidTegra;
 
-#define  LOG_TAG    "NativeGL"
-#define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
-#define  LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
-
-static void printGLString(const char *name, GLenum s) {
+void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
     LOGI("GL %s = %s\n", name, v);
 }
 
-static void checkGlError(const char* op) {
+void checkGlError(const char* op) {
     GLint error = glGetError();
     for (; error; error = glGetError()) {
-	LOGI("after %s() glError (0x%x)\n", op, error);
+        LOGI("after %s() glError (0x%x)\n", op, error);
     }
 }
 
@@ -82,25 +78,25 @@ static const char gFragmentShader[] =
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
     if (shader) {
-	glShaderSource(shader, 1, &pSource, NULL);
-	glCompileShader(shader);
-	GLint compiled = 0;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
-	if (!compiled) {
-	    GLint infoLen = 0;
-	    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
-	    if (infoLen) {
-		char* buf = (char*) malloc(infoLen);
-		if (buf) {
-		    glGetShaderInfoLog(shader, infoLen, NULL, buf);
-		    LOGE("Could not compile shader %d:\n%s\n",
-			 shaderType, buf);
-		    free(buf);
-		}
-		glDeleteShader(shader);
-		shader = 0;
-	    }
-	}
+        glShaderSource(shader, 1, &pSource, NULL);
+        glCompileShader(shader);
+        GLint compiled = 0;
+        glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+        if (!compiled) {
+            GLint infoLen = 0;
+            glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
+            if (infoLen) {
+                char* buf = (char*) malloc(infoLen);
+                if (buf) {
+                    glGetShaderInfoLog(shader, infoLen, NULL, buf);
+                    LOGE("Could not compile shader %d:\n%s\n",
+                         shaderType, buf);
+                    free(buf);
+                }
+                glDeleteShader(shader);
+                shader = 0;
+            }
+        }
     }
     return shader;
 }
@@ -108,39 +104,39 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
 GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
     GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
     if (!vertexShader) {
-	return 0;
+        return 0;
     }
 
     GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
     if (!pixelShader) {
-	return 0;
+        return 0;
     }
 
     GLuint program = glCreateProgram();
     if (program) {
-	glAttachShader(program, vertexShader);
-	glAttachShader(program, pixelShader);
-	glLinkProgram(program);
-	GLint linkStatus = GL_FALSE;
-	glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
-	if (linkStatus != GL_TRUE) {
-	    GLint bufLength = 0;
-	    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
-	    if (bufLength) {
-		char* buf = (char*) malloc(bufLength);
-		if (buf) {
-		    glGetProgramInfoLog(program, bufLength, NULL, buf);
-		    LOGE("Could not link program:\n%s\n", buf);
-		    free(buf);
-		}
-	    }
-	    glDeleteProgram(program);
-	    program = 0;
-	}
+        glAttachShader(program, vertexShader);
+        glAttachShader(program, pixelShader);
+        glLinkProgram(program);
+        GLint linkStatus = GL_FALSE;
+        glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+        if (linkStatus != GL_TRUE) {
+            GLint bufLength = 0;
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
+            if (bufLength) {
+                char* buf = (char*) malloc(bufLength);
+                if (buf) {
+                    glGetProgramInfoLog(program, bufLength, NULL, buf);
+                    LOGE("Could not link program:\n%s\n", buf);
+                    free(buf);
+                }
+            }
+            glDeleteProgram(program);
+            program = 0;
+        }
 
-	mTextureCoordinateHandle = glGetAttribLocation(program, "a_TexCoordinate");
-	mTextureUniformHandle = glGetUniformLocation(program, "u_Texture");
-	mProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
+        mTextureCoordinateHandle = glGetAttribLocation(program, "a_TexCoordinate");
+        mTextureUniformHandle = glGetUniformLocation(program, "u_Texture");
+        mProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
     }
     return program;
 }
@@ -183,8 +179,8 @@ void glInit() {
     LOGI("setupGraphics(%d, %d)", screenWidth, screenHeight);
     gProgram = createProgram(gVertexShader, gFragmentShader);
     if (!gProgram) {
-	LOGE("Could not create program.");
-	return;
+        LOGE("Could not create program.");
+        return;
     }
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
 

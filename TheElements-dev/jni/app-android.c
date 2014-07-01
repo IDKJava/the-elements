@@ -182,7 +182,6 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
 
     // Initialization
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
-    //importGLInit();
     atmosphereSetup();
     elementSetup();
     particleSetup();
