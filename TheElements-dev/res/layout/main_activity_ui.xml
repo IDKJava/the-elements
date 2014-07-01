@@ -26,7 +26,7 @@
             android:background="@drawable/btn_mb"
             android:src="@drawable/hand_button" />
 
-        <!-- Eraser button -->
+        <!-- Kamcord button -->
 
         <ImageButton
             android:id="@+id/kamcord_button"

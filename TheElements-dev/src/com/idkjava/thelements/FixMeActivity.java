@@ -18,7 +18,7 @@ public class FixMeActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.fix_me_activity); 
+		setContentView(R.layout.fix_me_activity);
 		
 		logOutput = (TextView) findViewById(R.id.fix_me_textview);
 		

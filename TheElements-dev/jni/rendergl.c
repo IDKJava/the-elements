@@ -145,6 +145,8 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
 //Makes an orthographic projection matrix
 void setOthographicMat(float l, float r, float t, float b, float n, float f,  float mat[])
 {
+    // Matrix is derived from the glOrtho matrix:
+    // https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml
     mat[0] = 2.0 / (r - l);
     mat[1] = 0;
     mat[2] = 0;
@@ -225,7 +227,7 @@ void glRender() {
     texture[9] = (float) workHeight/texHeight;
     texture[11] = (float) workHeight/texHeight;
 
-    glClear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
     glUseProgram(gProgram);
 
@@ -238,10 +240,8 @@ void glRender() {
     glUniform1i(mTextureUniformHandle, 0);
 
     glEnableVertexAttribArray(gvPositionHandle);
-
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_TRUE, 0, vertices);
     glEnableVertexAttribArray(mTextureCoordinateHandle);
-
     glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_TRUE, 0, texture);
 
 

@@ -570,7 +570,7 @@ void UpdateView(void)
 
         arraySetup();
         gameSetup();
-	zoomChanged = FALSE;
+        zoomChanged = FALSE;
     }
 
     // Clear screen if needed
