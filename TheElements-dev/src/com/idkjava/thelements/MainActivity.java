@@ -35,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -48,6 +47,7 @@ import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
 import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
+import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.kamcord.android.Kamcord;
@@ -120,8 +120,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
-        //TODO: remove these keys from the source code before release and get new ones
-        Kamcord.initKeyAndSecret("w3kuuG5YiWLecPuyu07VBU7VsT2QppXyI06CMRsErFO", "SkoZXBUWJqz2f1nQo8itN5bFhqMEjOhXcBeV3YDg4x9", "TheElements");
+        //Init kamcord recording framework
+        Kamcord.initKeyAndSecret(APIKeys.kamcordAPIKey, APIKeys.kamcordAPISecret, "TheElements");
         Kamcord.initActivity(this);
         //Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -178,7 +178,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     {
         //Use the super onResume
         super.onResume();
-        PollFish.init(this, Globals.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
+        PollFish.init(this, APIKeys.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
                 
         //Load the settings shared preferences which deals with if we're resuming from pause or not
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);

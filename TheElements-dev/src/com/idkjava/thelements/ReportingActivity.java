@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.idkjava.thelements.keys.APIKeys;
 
 public class ReportingActivity extends Activity
 {
@@ -12,7 +13,7 @@ public class ReportingActivity extends Activity
 	{
 		super.onStart();
 		// Flurry
-		FlurryAgent.onStartSession(this, Globals.flurryAPIKey);
+		FlurryAgent.onStartSession(this, APIKeys.flurryAPIKey);
 		// Google Analytics
 		EasyTracker.getInstance(this).activityStart(this);
 	}
