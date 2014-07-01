@@ -58,6 +58,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kamcord.android.KamcordActivity" />
         </activity>
+        <service android:name="com.kamcord.android.UploadService" />
+
         <activity
             android:name=".MenuActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"

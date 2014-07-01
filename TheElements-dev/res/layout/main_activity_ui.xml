@@ -15,75 +15,88 @@
         android:layout_weight="0"
         android:background="@drawable/bg_ui_menubar"
         android:paddingTop="2dip" >
-
-        <!-- Pan/Zoom button -->
-
-        <ImageButton
-            android:id="@+id/hand_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:src="@drawable/hand_button" />
-
-        <!-- Kamcord button -->
-
-        <ImageButton
-            android:id="@+id/kamcord_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:src="@+drawable/kamcord_icon_button" />
-
-        <!-- Play/Pause button -->
-
-        <ImageButton
-            android:id="@+id/play_pause_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:gravity="center" />
-
-        <!-- Save button -->
-
-        <ImageButton
-            android:id="@+id/save_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:src="@+drawable/save" />
-
-        <!-- Load button -->
-
-        <ImageButton
-            android:id="@+id/load_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:src="@+drawable/load" />
-
-        <!-- Clear button -->
-
-        <ImageButton
-            android:id="@+id/clear_screen_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:layout_marginRight="4dip"
-            android:background="@drawable/btn_mb"
-            android:src="@+drawable/clear_icon_normal" />
-
-        <!-- Fade button -->
-
-        <ImageButton
-            android:id="@+id/fade_button"
-            android:layout_width="42dip"
-            android:layout_height="42dip"
-            android:background="@drawable/btn_mb"
-            android:src="@+drawable/fade_icon_select" />
+        
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip">
+            
+	        <!-- Pan/Zoom button -->
+	        <ImageButton
+	            android:id="@+id/hand_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@drawable/hand_button" />
+	
+	        <!-- Kamcord button -->
+	        <ImageButton
+	            android:id="@+id/kamcord_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/kamcord_icon_button" />
+	        
+	        <!-- Kamcord view button -->
+	        <ImageButton
+	            android:id="@+id/kamcord_view_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/kamcord_view_button" />
+	
+	        <!-- Play/Pause button -->
+	        <ImageButton
+	            android:id="@+id/play_pause_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:gravity="center" />
+	
+	        <!-- Save button -->
+	        <ImageButton
+	            android:id="@+id/save_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/save" />
+	
+	        <!-- Load button -->
+	        <ImageButton
+	            android:id="@+id/load_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/load" />
+	
+	        <!-- Clear button -->
+	        <ImageButton
+	            android:id="@+id/clear_screen_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:layout_marginRight="4dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/clear_icon_normal" />
+	
+	        <!-- Fade button -->
+	        <ImageButton
+	            android:id="@+id/fade_button"
+	            android:layout_width="42dip"
+	            android:layout_height="42dip"
+	            android:background="@drawable/btn_mb"
+	            android:src="@+drawable/fade_icon_select" />
+        </LinearLayout>
+        </HorizontalScrollView>
     </com.idkjava.thelements.game.MenuBar>
 
     <!-- Main viewing section -->

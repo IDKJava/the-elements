@@ -26,6 +26,7 @@ public class MenuBar extends LinearLayout {
     private static ImageButton clear_button;
     private static ImageButton fade_button;
     private static ImageButton kamcord_button;
+    private static ImageButton kamcord_view_button;
 
     private SandView m_sandView = null;
 
@@ -61,6 +62,7 @@ public class MenuBar extends LinearLayout {
         clear_button = (ImageButton) findViewById(R.id.clear_screen_button);
         fade_button = (ImageButton) findViewById(R.id.fade_button);
         kamcord_button = (ImageButton) findViewById(R.id.kamcord_button);
+        kamcord_view_button = (ImageButton) findViewById(R.id.kamcord_view_button);
 
         hand_button.setOnClickListener(new OnClickListener() {
             @Override
@@ -151,6 +153,7 @@ public class MenuBar extends LinearLayout {
         });
         if (!Kamcord.isWhitelisted()) {
             kamcord_button.setVisibility(View.GONE);
+            kamcord_view_button.setVisibility(View.GONE);
         } else {
             kamcord_button.setOnClickListener(new OnClickListener() {
                 @Override
@@ -164,6 +167,12 @@ public class MenuBar extends LinearLayout {
                         Kamcord.startRecording();
                     }
                 }
+            });
+            kamcord_view_button.setOnClickListener(new OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   Kamcord.showWatchView();
+               }
             });
         }
     }
