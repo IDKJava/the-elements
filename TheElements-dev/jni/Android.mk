@@ -11,7 +11,6 @@ ifneq ($(APP_OPTIM),debug)
     USE_PROFILING = no
 endif
 TARGET_ARCH_PROFILING_OK = no
-KAMCORD = yes
 ifeq ($(TARGET_ARCH_ABI),armeabi)
     TARGET_ARCH_PROFILING_OK = yes
 endif
@@ -30,6 +29,8 @@ LOCAL_LDLIBS :=  -llog -ldl -landroid -lEGL -lGLESv2
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
+
+KAMCORD = yes
 ifeq ($(KAMCORD),yes)
     LOCAL_CFLAGS += -DUSE_KAMCORD
     LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
