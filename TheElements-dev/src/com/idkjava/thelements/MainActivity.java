@@ -25,6 +25,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +35,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.google.analytics.tracking.android.EasyTracker;
@@ -47,8 +47,10 @@ import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
 import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
+import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
+import com.kamcord.android.Kamcord;
 import com.pollfish.constants.Position;
 import com.pollfish.main.PollFish;
 
@@ -118,7 +120,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         //Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
-            
+        //Init kamcord recording framework
+        Kamcord.initKeyAndSecret(APIKeys.kamcordAPIKey, APIKeys.kamcordAPISecret, "TheElements");
+        Kamcord.initActivity(this);
         //Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -174,7 +178,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     {
         //Use the super onResume
         super.onResume();
-        PollFish.init(this, Globals.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
+        PollFish.init(this, APIKeys.pollfishAPIKey , Position.BOTTOM_RIGHT, 0);
                 
         //Load the settings shared preferences which deals with if we're resuming from pause or not
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -297,9 +301,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item)
                 {
-                    if (MenuBar.eraserOn)
+                	//lol this code is kinda bad, these methods probably shouldn't be static  
+                    if (Control.eraserOn)
                     {
-                        MenuBar.setEraserOff();
+                        Control.setEraserOff();
                     }
                     setElement((char) (item + NORMAL_ELEMENT));
                     setPlayState(play);
@@ -566,6 +571,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     static
     {
+    	try {
+    		System.loadLibrary("kamcord");
+    	} catch (UnsatisfiedLinkError e) {
+    		Log.d("TheElements", "Kamcord not supported");
+    	}
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }
 }

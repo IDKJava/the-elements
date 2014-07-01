@@ -8,14 +8,15 @@
 #ifndef GL_H_INCLUDED
 #define GL_H_INCLUDED
 
-//Include the Gl importation functions
-#include "importgl.h"
+//Include the GLES 2.0 functions
+#include <GLES2/gl2.h>
+//Include pthread functions
+#include <pthread.h>
+
 //Include the global variables
 #include "app.h"
 //Include the update function
 #include "update.h"
-//Include pthread functions
-#include <pthread.h>
 
 void glInit(void);
 void glRender(void);

@@ -11,6 +11,7 @@ import android.util.FloatMath;
 import android.view.MotionEvent;
 
 import com.idkjava.thelements.MainActivity;
+import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
@@ -33,6 +34,7 @@ public class SandView extends GLSurfaceView
 	public SandView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
+		setEGLContextClientVersion(2);
 		mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
 		setEGLConfigChooser(8, 8, 8, 8, // RGBA channel bits
 				16, 0); // depth and stencil channel min bits
@@ -151,7 +153,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onDrawFrame(GL10 gl)
 	{
+	    Kamcord.beginDraw();
 	    nativeRender();
+	    Kamcord.endDraw();
 	}
 
 	//@formatter:off

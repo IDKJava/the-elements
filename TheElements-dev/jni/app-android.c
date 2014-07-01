@@ -38,6 +38,7 @@
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
+
     //These variable change from pinch to zoom
     viewWidth = width;
     viewHeight = height;
@@ -181,7 +182,6 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
 
     // Initialization
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
-    importGLInit();
     atmosphereSetup();
     elementSetup();
     particleSetup();
