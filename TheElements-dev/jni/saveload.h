@@ -24,7 +24,9 @@
 #define ELEMENT_EXTENSION ".ele"
 #define ATMOSPHERE_EXTENSION ".atm"
 //Saveload version code (update this when a change occurs, so we can identify old formats)
-#define SAVELOAD_VERSION_CODE "$$VC1$$"
+#define SAVELOAD_VERSION_CODE_V1 "$$VC1$$"
+#define SAVELOAD_VERSION_CODE_V2 "$$VC2$$"
+#define SAVELOAD_VERSION_CODE SAVELOAD_VERSION_CODE_V1
 
 //Include the FILE type
 #include <stdio.h>
@@ -46,6 +48,10 @@
 //Include error reporting functions
 #include <errno.h>
 
+#if __cplusplus
+extern "C" {
+#endif
+
 char saveState(char* saveLoc);
 char saveStateLogic(FILE* fp);
 char loadState(char* loadLoc);
@@ -53,10 +59,15 @@ char loadStateLogicV0(FILE* fp);
 char loadStateLogicV1(FILE* fp);
 char removeTempSave(void);
 char saveCustomElement(struct Element* createdCustomElement);
+char loadCustomElements(void);
 char loadCustomElement(char* loadLoc);
 unsigned long hashElement(struct Element* element);
 char* stringifyElement(struct Element* element);
 unsigned long hashStr(unsigned char* str);
 int findElementFromHash(unsigned long hash);
+
+#if __cplusplus
+}
+#endif
 
 #endif //!SAVELOAD_H_INCLUDED

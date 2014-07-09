@@ -8,6 +8,15 @@
 #include "saveload.h"
 #include <android/log.h>
 
+// Per-file logging
+#ifndef NDEBUG
+//Debug
+#define LOGGING 1
+#else
+//Release
+#define LOGGING 1
+#endif
+
 const char *get_filename_ext(const char *filename) {
     const char *dot = strrchr(filename, '.');
     if(!dot || dot == filename) return "";
@@ -202,6 +211,11 @@ char loadStateLogicV0(FILE* fp)
             if((charsRead = fscanf(fp, "%d", &tempElement->density)) == EOF || charsRead < 1) {return FALSE;}
             if((charsRead = fscanf(fp, "%d", &tempElement->fallVel)) == EOF || charsRead < 1) {return FALSE;}
             if((charsRead = fscanf(fp, "%d", &tempElement->inertia)) == EOF || charsRead < 1) {return FALSE;}
+
+            // Old versions did not save movingPhaseChange
+            tempElement->allowMovingTransition = 1;
+            // Old versions did not save base
+            tempElement->base = SAND_ELEMENT;
 
             int j;
             char collision;
@@ -703,7 +717,7 @@ char loadCustomElement(char* loadLoc)
 
     // Create the struct and read in basic properties
     struct Element* tempCustom = (struct Element*) malloc(sizeof(struct Element));
-    tempCustom->name = malloc(MAX_CE_NAME_LENGTH * sizeof(char));
+    tempCustom->name = (char*)malloc(MAX_CE_NAME_LENGTH * sizeof(char));
     if(fgets(tempCustom->name, MAX_CE_NAME_LENGTH, fp) == NULL) {return FALSE;}
     if(fscanf(fp, "%d", &tempCustom->base) == EOF) {return FALSE;}
     if(fscanf(fp, "%d", &tempCustom->state) == EOF) {return FALSE;}
@@ -718,6 +732,8 @@ char loadCustomElement(char* loadLoc)
     if(fscanf(fp, "%d", &tempCustom->density) == EOF) {return FALSE;}
     if(fscanf(fp, "%d", &tempCustom->fallVel) == EOF) {return FALSE;}
     if(fscanf(fp, "%d", &tempCustom->inertia) == EOF) {return FALSE;}
+
+    tempCustom->allowMovingTransition = FALSE;
 
     // Allocate collisions and specials related arrays
     tempCustom->collisions = malloc(NUM_BASE_ELEMENTS * sizeof(char));
@@ -770,6 +786,7 @@ char loadCustomElement(char* loadLoc)
     {
         elements[i] = tempElementArray[i];
     }
+    free(tempElementArray);
 
     // Resolve index-based values
     tempCustom->index = numElements;

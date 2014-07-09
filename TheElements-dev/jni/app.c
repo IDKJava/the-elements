@@ -29,7 +29,7 @@ inline int getColorIndex( int x, int y )
 char udid[MAX_UDID_LENGTH];
 int versionCode;
 
-struct Element** elements;
+struct Element** elements = NULL;
 unsigned char numElements;
 char a_set[MAX_POINTS];
 float a_x[MAX_POINTS];

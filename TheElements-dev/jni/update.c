@@ -394,8 +394,6 @@ int updateKinetic(int index)
 }
 
 // Update the heat when p1 collides into p2
-// Only updates the state for p2 right now. p1 state updates happen at the end
-// of the physics loop for p1.
 void updateCollisionHeat(int index1, int index2)
 {
     char *p1heat = &(a_heat[index1]);

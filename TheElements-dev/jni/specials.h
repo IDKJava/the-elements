@@ -14,6 +14,10 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+#if __cplusplus
+extern "C" {
+#endif
+
 bool collisionSpecials(int firstParticle, int secondParticle);
 void specialSpawn(int particle);
 void specialBreak(int particle);
@@ -26,5 +30,9 @@ void specialTunnel(int particle);
 int specialBurn(int particle);
 void specialConductive(int particle);
 void specialTrail(int particle);
+
+#if __cplusplus
+}
+#endif
 
 #endif

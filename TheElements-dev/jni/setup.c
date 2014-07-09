@@ -90,19 +90,26 @@ void atmosphereSetup()
 void elementSetup()
 {
     __android_log_write(ANDROID_LOG_INFO, "LOG", "Element setup");
+    int i, j;
     //Calculate numElements
     //Calculate special size
     //Calculate special value size
     numElements = NUM_BASE_ELEMENTS; //Changed later
 
     //Free and reallocate the elements array
-    free(elements);
+    if (elements != NULL)
+    {
+        for(i = 0; i < numElements; ++i)
+        {
+            free(elements[i]);
+        }
+        free(elements);
+    }
 
     elements = malloc(numElements * sizeof(struct Element*)); // we  will realloc later for custom elements if neede
 
     //Allocate and initialize all the elements
     struct Element* tempElement;
-    int i, j;
     for(i = 0; i < numElements; i++)
     {
         if(i < NUM_BASE_ELEMENTS)

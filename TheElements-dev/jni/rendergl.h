@@ -18,7 +18,15 @@
 //Include the update function
 #include "update.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
 void glInit(void);
 void glRender(void);
+
+#if __cplusplus
+}
+#endif
 
 #endif //!GL_H_INCLUDED

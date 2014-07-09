@@ -14,6 +14,10 @@
 //Include macros
 #include "macros.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
 void createPoint(int xCoord, int yCoord, struct Element* element);
 void deletePoint(int particle);
 void unSetPoint(int particle);
@@ -28,5 +32,9 @@ int getParticleSpecialVal(int tempParticle, int special);
 void setParticleSpecialVal(int tempParticle, int special, int val);
 int getElementSpecialVal(struct Element* tempElement, int special);
 void clearSpecialValsToElementDefault(int tempParticle);
+
+#if __cplusplus
+}
+#endif
 
 #endif //!POINTS_H_INCLUDED

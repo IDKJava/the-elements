@@ -23,6 +23,14 @@
 //Include collision data
 //#include "collisions.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
 void collide (int firstParticle, int secondParticle);
+
+#if __cplusplus
+}
+#endif
 
 #endif //!COLLIDE_H_INCLUDED

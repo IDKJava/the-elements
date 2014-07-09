@@ -32,7 +32,14 @@
 //Include pthread functions
 #include <pthread.h>
 
-
+// Per-file logging
+#ifndef NDEBUG
+//Debug
+#define LOGGING 1
+#else
+//Release
+#define LOGGING 1
+#endif
 
 //Called from SandViewRenderer
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
@@ -70,16 +77,17 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* e
     strcat(loadLoc, SAVES_FOLDER);
     if(shouldLoadDemo)
     {
-        __android_log_write(ANDROID_LOG_INFO, "TheElements", "Loading demo");
+        LOGI("Loading demo");
         strcat(loadLoc, DEMO_SAVE);
     }
     else
     {
-        __android_log_write(ANDROID_LOG_INFO, "TheElements", "loadTempState");
+        LOGI("loadTempState");
         strcat(loadLoc, TEMP_SAVE);
     }
     strcat(loadLoc, SAVE_EXTENSION);
-    loadState(loadLoc);
+    LOGI("Calling loadstate2");
+    loadState2(loadLoc);
 }
 void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
 {
@@ -151,7 +159,7 @@ char Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject
     strcat(saveLoc, SAVES_FOLDER);
     strcat(saveLoc, TEMP_SAVE);
     strcat(saveLoc, SAVE_EXTENSION);
-    return saveState(saveLoc);
+    return saveState2(saveLoc);
 }
 char Java_com_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
 {
@@ -164,7 +172,7 @@ char Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject
     strcat(loadLoc, SAVES_FOLDER);
     strcat(loadLoc, DEMO_SAVE);
     strcat(loadLoc, SAVE_EXTENSION);
-    return loadState(loadLoc);
+    return loadState2(loadLoc);
 }
 
 //General utility functions

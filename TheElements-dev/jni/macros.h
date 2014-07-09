@@ -117,7 +117,7 @@
 #define LOG_STR "TheElements"
 #define LOGI(...) if (LOGGING) __android_log_print(ANDROID_LOG_INFO, LOG_STR, __VA_ARGS__)
 #define LOGD(...) if (LOGGING) __android_log_print(ANDROID_LOG_DEBUG, LOG_STR, __VA_ARGS__)
-#define LOGW(...) if (LOGGING) __android_log_print(ANDROID_LOG_WARNING, LOG_STR, __VA_ARGS__)
+#define LOGW(...) if (LOGGING) __android_log_print(ANDROID_LOG_WARN, LOG_STR, __VA_ARGS__)
 #define LOGE(...) if (LOGGING) __android_log_print(ANDROID_LOG_ERROR, LOG_STR, __VA_ARGS__)
 
 

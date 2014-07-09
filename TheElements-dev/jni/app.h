@@ -10,10 +10,6 @@
 #ifndef APP_H_INCLUDED
 #define APP_H_INCLUDED
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //Include the global macros
 #include "macros.h"
 //Include the server functions
@@ -22,6 +18,10 @@ extern "C" {
 #include <pthread.h>
 //Include KamCord stuff
 #include <Kamcord-C-Interface.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * FUNCTIONS
@@ -41,7 +41,8 @@ extern "C" {
         //Name
         char* name;
 
-        //Dealing with states
+        //Dealing with phases
+        char allowMovingTransition;
         char state;
         char startingTemp, lowestTemp, highestTemp;
         struct Element* lowerElement;
@@ -56,7 +57,7 @@ extern "C" {
         char* collisions;  // Only for customs
         char base; //Only for customs
         char density;
-        signed char fallVel;
+        int fallVel;
         char inertia;
     };
 

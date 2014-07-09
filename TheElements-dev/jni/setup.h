@@ -20,6 +20,10 @@
 //Include saveload for custom element loading
 #include "saveload.h"
 
+#if __cplusplus
+extern "C" {
+#endif
+
 //Set up the workspace
 void gameSetup(void);
 //Set up the variable sized arrays
@@ -28,5 +32,9 @@ void arraySetup(void);
 void elementSetup(void);
 //Create all the particle structs
 void particleSetup(void);
+
+#if __cplusplus
+}
+#endif
 
 #endif //!SETUP_H_INCLUDED
