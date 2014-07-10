@@ -8,9 +8,17 @@
 #include "setup.h"
 #include <android/log.h>
 
+// Per-file logging
+#ifndef NDEBUG
+//Debug
+#define LOGGING 1
+#else
+//Release
+#define LOGGING 1
+#endif
+
 void gameSetup()
 {
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "gameSetup");
     int i, j;
     loq = MAX_POINTS;
     unsigned char backgroundRed = cAtmosphere->backgroundRed;
@@ -45,21 +53,11 @@ void gameSetup()
             colors[3 * getColorIndex(i, j) + 2] = backgroundBlue;
         }
     }
-    /* Network stuff not needed
-       for (j = 0; j < 8; j++)
-       {
-       username[j] = 0;
-       password[j] = 0;
-       }
-       userlength = 0;
-       passlength = 0;
-    */
 }
 
 //Set up all the variable sized arrays
 void arraySetup()
 {
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "arraySetup");
     //Make sure everything is deallocated
     free(colors);
     free(colorsFrameBuffer);
@@ -89,12 +87,7 @@ void atmosphereSetup()
 
 void elementSetup()
 {
-    __android_log_write(ANDROID_LOG_INFO, "LOG", "Element setup");
     int i, j;
-    //Calculate numElements
-    //Calculate special size
-    //Calculate special value size
-    numElements = NUM_BASE_ELEMENTS; //Changed later
 
     //Free and reallocate the elements array
     if (elements != NULL)
@@ -106,6 +99,7 @@ void elementSetup()
         free(elements);
     }
 
+    numElements = NUM_BASE_ELEMENTS; //Changed later
     elements = malloc(numElements * sizeof(struct Element*)); // we  will realloc later for custom elements if neede
 
     //Allocate and initialize all the elements
@@ -150,7 +144,6 @@ void elementSetup()
 
 void particleSetup()
 {
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "particleSetup");
     //TODO decrement instead
     int i;
     for(i = 0; i < MAX_POINTS; i++)

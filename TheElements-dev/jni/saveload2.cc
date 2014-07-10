@@ -84,8 +84,8 @@ char loadCustomElements2(void)
     struct dirent* entry;
     while ((entry = readdir(elementsDir)))
     {
-        string filename (entry->d_name);
-        string ext = filename.substr(filename.find_last_of(".")+1);
+        string filename = loadLoc + string(entry->d_name);
+        string ext = filename.substr(filename.find_last_of("."));
         if (ext != string(ELEMENT_EXTENSION))
         {
             LOGW("Skipping non-element file: %s", filename.c_str());
@@ -274,7 +274,8 @@ bool loadCustomElement2(ifstream& in)
 
     struct Element* custom = (struct Element*) malloc(sizeof(struct Element));
     custom->index = numElements;
-    custom->name = (char*) malloc(customProto.name().length() * sizeof(char));
+    custom->name = (char*) malloc((customProto.name().length()+1) * sizeof(char));
+    strcpy(custom->name, customProto.name().c_str());
     custom->allowMovingTransition = customProto.allow_moving_transition();
     custom->state = customProto.state();
     custom->startingTemp = customProto.starting_temp();
@@ -359,7 +360,7 @@ bool loadCustomElement2(ifstream& in)
         }
     }
 
-    elements = (struct Element**) realloc(elements, numElements+1);
+    elements = (struct Element**) realloc(elements, (numElements+1)*sizeof(struct Element*));
     elements[numElements] = custom;
     numElements++;
 
