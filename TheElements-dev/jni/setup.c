@@ -144,7 +144,7 @@ void elementSetup()
             elements[i]->higherElement = elements[baseHigherElement[i]];
         }
     }
-    loadCustomElements();
+    loadCustomElements2();
     __android_log_write(ANDROID_LOG_INFO, "LOG", "End element setup");
 }
 

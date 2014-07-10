@@ -13,23 +13,19 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.ReportingActivity;
 
 public class CustomElementAdvancedActivity extends ReportingActivity
 {
 	private CustomElementActivity mParent;
-	private CustomElement mCustomElement;
-	private boolean newElement;
 	//private Button saveButton;
 	private ArrayList<Spinner> collisionsSpinnerList;
 	private String[] elementsList;
 	private ArrayList<Spinner> specialsSpinnerList;
 	private ArrayList<LinearLayout> specialsLayoutList;
-	
-	private int numListenerSkips;
-	
+		
 	private int maxSpecials;
 	
 	@Override
@@ -42,10 +38,6 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		
 		// Save a pointer to the parent activity
 		mParent = ((CustomElementActivity) getParent());
-		
-	    // Load data from the parent activity
-		mCustomElement = mParent.mCustomElement;
-		newElement = mParent.newElement;
 		
 		// Create an arraylist to save the spinners we make
 		collisionsSpinnerList = new ArrayList<Spinner>();
@@ -170,11 +162,11 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 				// If we're selecting the special initially, we already have a special val that we can initialize to
 				int i = ((LinearLayout)parent.getParent().getParent()).indexOfChild((View) parent.getParent());
 				Log.d("LOG", "Checking special val: " + pos + ", " + i);
-				Log.d("LOG", "..." + CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
-				if (pos != 0 && i < mParent.specials.size() && pos == CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)))
+				Log.d("LOG", "..." + CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)));
+				if (pos != 0 && i < mParent.specials.size() && pos == CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)))
 				{
 					Log.d("LOG", "Initializing special val: " + pos);
-					setSpecialVal(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)), child, mParent.specialVals.get(i));
+					setSpecialVal(CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)), child, mParent.specialVals.get(i));
 				}
 			}
 			@Override
@@ -200,23 +192,6 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 			specialsLayoutList.add(container);
 			specialsSpinnerList.add(spinner);
 		}
-		
-		/* The save button is too complicated for now -- finish this up later
-		saveButton.setOnClickListener(new OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				for (int i = 0; i < spinnerList.size(); i++)
-				{
-					Spinner s = spinnerList.get(i);
-					int collision = s.getSelectedItemPosition();
-					
-					mCustomElement = 
-				}
-			}
-		});
-		*/
 	}
 	
 	@Override
@@ -239,7 +214,7 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 			if (mParent.specials != null && i < mParent.specials.size())
 			{
 				Log.d("LOG", "Initializing special from parent saved values: " + mParent.specials.get(i) + ", " + mParent.specialVals.get(i));
-				specialsSpinnerList.get(i).setSelection(CustomElement.getSpecialPosFromIndex(mParent.specials.get(i)));
+				specialsSpinnerList.get(i).setSelection(CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)));
 			}
 		}
 	}

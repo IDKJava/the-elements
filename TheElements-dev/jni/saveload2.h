@@ -13,6 +13,7 @@ extern "C" {
 
 char saveState2(char* saveLoc);
 char loadState2(char* loadLoc);
+char loadCustomElements2(void);
 
 #ifdef __cplusplus
 }
@@ -21,6 +22,7 @@ char loadState2(char* loadLoc);
 // Private C++ helper functions
 bool saveStateLogic2(ofstream& out);
 bool loadStateLogic2(ifstream& in);
+bool loadCustomElement2(ifstream& in);
 unsigned long hashElement2(struct Element* element);
 char* stringifyElement2(struct Element* element);
 unsigned long hashStr2(char* str);

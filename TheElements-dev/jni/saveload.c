@@ -220,7 +220,6 @@ char loadStateLogicV0(FILE* fp)
             int j;
             char collision;
             int special, specialVal;
-            tempElement->collisions = malloc (NUM_BASE_ELEMENTS * sizeof(char));
             // Load collisions
             for (j = 0; j < NUM_BASE_ELEMENTS; j++)
             {
@@ -734,9 +733,6 @@ char loadCustomElement(char* loadLoc)
     if(fscanf(fp, "%d", &tempCustom->inertia) == EOF) {return FALSE;}
 
     tempCustom->allowMovingTransition = FALSE;
-
-    // Allocate collisions and specials related arrays
-    tempCustom->collisions = malloc(NUM_BASE_ELEMENTS * sizeof(char));
 
     // Read in the collisions header, with a reasonable fallback
     int numCollisionsToRead;

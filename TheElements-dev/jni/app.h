@@ -54,7 +54,7 @@ extern "C" {
         //Properties
         int specials[MAX_SPECIALS];
         int specialVals[MAX_SPECIALS];
-        char* collisions;  // Only for customs
+        char collisions[NUM_BASE_ELEMENTS];  // Only for customs
         char base; //Only for customs
         char density;
         int fallVel;

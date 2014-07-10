@@ -1,15 +1,19 @@
 package com.idkjava.thelements.custom;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-import com.idkjava.thelements.R;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
-import android.widget.Toast;
 import android.widget.TabHost.TabSpec;
+import android.widget.Toast;
+
+import com.idkjava.thelements.R;
+import com.idkjava.thelements.proto.Messages.CustomElement;
 
 public class CustomElementActivity extends TabActivity
 {
@@ -19,9 +23,9 @@ public class CustomElementActivity extends TabActivity
 	/*
 	 * All elements held in same file, accessed by name.
 	 */
-	private String filename;
+	public String oldFilename;
 	public boolean newElement;
-	public CustomElement mCustomElement;
+	public CustomElement.Builder mCustomElementBuilder;
 	
 	// Variables for passing data to basic activity
 	public ArrayList<Integer> collisions;
@@ -34,13 +38,15 @@ public class CustomElementActivity extends TabActivity
 		super.onCreate(savedInstanceState);
 
 		// Try loading the element
-		filename = getIntent().getStringExtra("filename");
-		if(filename != null)
+		oldFilename = getIntent().getStringExtra("filename");
+		if(oldFilename != null)
 		{
-			newElement = false;
-			mCustomElement = new CustomElement(filename);
-			if(!mCustomElement.loadPropertiesFromFile())
-			{
+		    newElement = true;
+		    try {
+		        mCustomElementBuilder = CustomElement.newBuilder(
+		                CustomElement.parseFrom(new FileInputStream(oldFilename)));
+		    }
+		    catch (IOException e) {
 				// If loading fails, we need to quit and show a message
 				Toast.makeText(getApplicationContext(), R.string.ce_load_failed_msg, Toast.LENGTH_LONG).show();
 				finish();
@@ -48,8 +54,8 @@ public class CustomElementActivity extends TabActivity
 		}
 		else
 		{
-			newElement = true;
-			mCustomElement = new CustomElement();
+		    newElement = false;
+			mCustomElementBuilder = CustomElement.newBuilder();
 		}
 		
 		// Set the content view

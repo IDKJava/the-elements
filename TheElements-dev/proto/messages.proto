@@ -1,5 +1,8 @@
 // Don't make anything required in case we need to change our format later on.
 
+option java_package = "com.idkjava.thelements.proto";
+option java_outer_classname = "Messages";
+
 message SaveFile {
     // Dimensions
     optional uint32 size_x = 1;
@@ -43,22 +46,24 @@ message Special {
 
 message CustomElement {
     optional uint32 base_element_index = 1;
+    optional string name = 2;
     
-    optional bool allow_moving_transition = 2;
-    optional uint32 starting_temp = 3;
-    optional uint32 lowest_temp = 4;
-    optional uint32 highest_temp = 5;
-    optional uint32 lower_element_index = 6;
-    optional uint32 higher_element_index = 7;
+    optional bool allow_moving_transition = 3;
+    optional uint32 state = 4;
+    optional uint32 starting_temp = 5;
+    optional uint32 lowest_temp = 6;
+    optional uint32 highest_temp = 7;
+    optional uint32 lower_element_index = 8;
+    optional uint32 higher_element_index = 9;
     
-    optional uint32 red = 8;
-    optional uint32 green = 9;
-    optional uint32 blue = 10;
+    optional uint32 red = 10;
+    optional uint32 green = 11;
+    optional uint32 blue = 12;
     
-    optional uint32 density = 11;
-    optional sint32 fallvel = 12;
-    optional uint32 inertia = 13;
+    optional uint32 density = 13;
+    optional sint32 fallvel = 14;
+    optional uint32 inertia = 15;
     
-    repeated Collision collision = 14;
-    repeated Special special = 15;
+    repeated Collision collision = 16;
+    repeated Special special = 17;
 }

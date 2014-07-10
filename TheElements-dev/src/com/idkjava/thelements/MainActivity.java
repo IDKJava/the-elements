@@ -41,6 +41,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.ExceptionReporter;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.Tracker;
+import com.idkjava.thelements.custom.CustomElementManager;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
@@ -50,6 +51,7 @@ import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
+import com.idkjava.thelements.proto.Messages.CustomElement;
 import com.kamcord.android.Kamcord;
 import com.pollfish.constants.Position;
 import com.pollfish.main.PollFish;
@@ -201,34 +203,20 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             elementsList.add(baseElementsList[i].toString());
         }
                 
-        // Load the custom elements
+        // Load the custom elements list
         try
         {
-            // Open the file that is the first command line parameter
-            FileInputStream fstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
-            // Get the object of DataInputStream
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            //Read file line by line
-            while ((strLine = br.readLine()) != null)
+            CustomElementManager.refresh(getApplicationContext());
+            for (CustomElement c : CustomElementManager.getElementList())
             {
-                FileInputStream tstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + strLine);
-                DataInputStream in2 = new DataInputStream(tstream);
-                BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-                if ((strLine = br2.readLine()) != null)
-                {
-                    elementsList.add(strLine);
-                }
+                elementsList.add(c.getName());
             }
             baseElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
-            //Close the input stream
-            in.close();
         }
         //Catch any exceptions
         catch (Exception e)
         {
-            System.err.println("Error: " + e.getMessage());
+            Log.e("TheElements", "Error: " + e.getMessage());
         }
         
         // Refresh elements list
@@ -571,11 +559,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     static
     {
+        System.loadLibrary("stlport_shared");
     	try {
     		System.loadLibrary("kamcord");
     	} catch (UnsatisfiedLinkError e) {
     		Log.d("TheElements", "Kamcord not supported");
     	}
+    	System.loadLibrary("protobuf");
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }
 }

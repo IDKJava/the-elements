@@ -24,8 +24,6 @@ public class FileManager
 	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
 	public static final String TEMP_SAVE = "temp";
-	public static final String ELEMENT_LIST_NAME = "eleList";
-	public static final String LIST_EXT = ".lst";
 	
 	public static String getTempSaveName() {
 	    return ROOT_DIR + SAVES_DIR + TEMP_SAVE + SAVE_EXT;

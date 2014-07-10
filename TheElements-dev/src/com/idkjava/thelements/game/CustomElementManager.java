@@ -40,6 +40,8 @@ public class CustomElementManager
 	
 	static
 	{
-		System.loadLibrary("libthelements.so");
+	    System.loadLibrary("stlport_shared");
+	    System.loadLibrary("protobuf");
+		System.loadLibrary("thelements");
 	}
 }

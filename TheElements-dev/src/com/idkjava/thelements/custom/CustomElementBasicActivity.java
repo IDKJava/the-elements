@@ -1,6 +1,9 @@
 package com.idkjava.thelements.custom;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -8,7 +11,6 @@ import java.util.Hashtable;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
-
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,24 +27,27 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
-import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.game.FileManager;
+import com.idkjava.thelements.proto.Messages.Collision;
+import com.idkjava.thelements.proto.Messages.CustomElement;
+import com.idkjava.thelements.proto.Messages.Special;
 
 public class CustomElementBasicActivity extends ReportingActivity
 {
-
     private static final int COLOR_SQUARE_SIZE = 40;
 
-    private CustomElement mCustomElement;
+    private CustomElement.Builder mCustomElementBuilder;
+    private String oldFilename;
     private boolean newElement;
     private boolean shouldIgnoreSelection;
     private CustomElementActivity mParent;
@@ -61,7 +66,7 @@ public class CustomElementBasicActivity extends ReportingActivity
     private SeekBar inertiaNormalField;
     private Button saveButton;
 
-    private RelativeLayout mColorArea;
+    private LinearLayout mColorArea;
     private ImageView mColorImage;
     private int mChosenColor;
     private AmbilWarnaDialog mColorPickerDialog;
@@ -93,7 +98,7 @@ public class CustomElementBasicActivity extends ReportingActivity
         inertiaNormalField = (SeekBar) findViewById(R.id.ce_inertia_normal);
         saveButton = (Button) findViewById(R.id.ce_save_button);
         mColorImage = (ImageView) findViewById(R.id.custom_color_image);
-        mColorArea = (RelativeLayout) findViewById(R.id.color_text_and_image);
+        mColorArea = (LinearLayout) findViewById(R.id.color_text_and_image);
 
         // Make the elements adapter, and assign it to the appropriate field
         elementAdapter = ArrayAdapter.createFromResource(this, R.array.elements_list, android.R.layout.simple_spinner_item);
@@ -103,7 +108,8 @@ public class CustomElementBasicActivity extends ReportingActivity
         higherElementField.setAdapter(elementAdapter);
 
         // Load data from the parent activity
-        mCustomElement = mParent.mCustomElement;
+        mCustomElementBuilder = mParent.mCustomElementBuilder;
+        oldFilename = mParent.oldFilename;
         newElement = mParent.newElement;
         shouldIgnoreSelection = false;
         if (!newElement)
@@ -112,9 +118,9 @@ public class CustomElementBasicActivity extends ReportingActivity
             // Fill in the basic view info
             fillInfo();
             // Also save the special and custom data in the parent activity
-            mParent.collisions = mCustomElement.collisions;
-            mParent.specials = mCustomElement.specials;
-            mParent.specialVals = mCustomElement.specialVals;
+            mParent.collisions = CustomElementManager.getCollisionIndexList(mCustomElementBuilder);
+            mParent.specials = CustomElementManager.getSpecialsIndexList(mCustomElementBuilder);
+            mParent.specialVals = CustomElementManager.getSpecialValsIndexList(mCustomElementBuilder);
         }
 
         baseElementField.setOnItemSelectedListener(new OnItemSelectedListener ()
@@ -184,56 +190,69 @@ public class CustomElementBasicActivity extends ReportingActivity
     private boolean saveElement()
     {
         writePropertiesToCustom();
-
-        if (mCustomElement.writeToFile())
+        
+        CustomElement custom = mCustomElementBuilder.build();
+        String filename = CustomElementManager.getFilename(custom);
+        if (!filename.equals(oldFilename) && !newElement)
         {
-            Toast.makeText(getApplicationContext(),
-                    getResources().getString(R.string.ce_save_success) + " "
-                    + mCustomElement.getFilename() + FileManager.ELEMENT_EXT,
-                    Toast.LENGTH_LONG).show();
-            // Log the custom element name
-            Hashtable<String, String> params = new Hashtable<String, String>();
-            params.put("Name", mCustomElement.getFilename());
-            FlurryAgent.logEvent("Element saved", params);
-            return true;
+            if (oldFilename != null)
+            {
+                new File(oldFilename).delete();
+            }
         }
-        else
+        try
+        {
+            custom.writeTo(new FileOutputStream(filename));
+        }
+        catch (FileNotFoundException e)
         {
             Toast.makeText(getApplicationContext(), R.string.ce_save_failed, Toast.LENGTH_LONG).show();
             return false;
         }
+        catch (IOException e)
+        {
+            Toast.makeText(getApplicationContext(), R.string.ce_save_failed, Toast.LENGTH_LONG).show();
+            return false;
+        }
+        
+        Toast.makeText(getApplicationContext(),
+                getResources().getString(R.string.ce_save_success)
+                + " " + filename,
+                Toast.LENGTH_LONG).show();
+        // Log the custom element name
+        Hashtable<String, String> params = new Hashtable<String, String>();
+        params.put("Name", filename);
+        FlurryAgent.logEvent("Element saved", params);
+        return true;
     }
+    
     public void writePropertiesToCustom()
     {
-        // If this is a new element, we need to set the filename, otherwise we use the previous one
-        if (newElement)
-        {
-            mCustomElement.setFilename(nameField.getText().toString().toLowerCase());
-        }
-
         // Write all the normal properties to the custom element from the fields in basic
-        CustomElement ce = mCustomElement;
-        ce.name = nameField.getText().toString();
-        ce.baseElementIndex = (int) baseElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT;
+        mCustomElementBuilder.setName(nameField.getText().toString());
+        mCustomElementBuilder.setBaseElementIndex(
+                (int)baseElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT);
         int stateRadioId = stateField.getCheckedRadioButtonId();
-        ce.state = getStateValFromId(stateRadioId);
-        ce.startingTemp = startingTempField.getProgress();
-        ce.lowestTemp = lowestTempField.getProgress();
-        ce.highestTemp = highestTempField.getProgress();
-        ce.lowerElementIndex = (int) (lowerElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT);
-        ce.higherElementIndex = (int) (higherElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT);
-        ce.red = Color.red(mChosenColor);
-        ce.green = Color.green(mChosenColor);
-        ce.blue = Color.blue(mChosenColor);
-        ce.density = densityField.getProgress();
-        ce.fallVel = fallvelField.getProgress();
+        mCustomElementBuilder.setState(getStateValFromId(stateRadioId));
+        mCustomElementBuilder.setStartingTemp(startingTempField.getProgress());
+        mCustomElementBuilder.setLowestTemp(lowestTempField.getProgress());
+        mCustomElementBuilder.setHighestTemp(highestTempField.getProgress());
+        mCustomElementBuilder.setLowerElementIndex(
+                (int) (lowerElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT));
+        mCustomElementBuilder.setHigherElementIndex(
+                (int) (higherElementField.getSelectedItemId() + MainActivity.NORMAL_ELEMENT));
+        mCustomElementBuilder.setRed(Color.red(mChosenColor));
+        mCustomElementBuilder.setGreen(Color.green(mChosenColor));
+        mCustomElementBuilder.setBlue(Color.blue(mChosenColor));
+        mCustomElementBuilder.setDensity(densityField.getProgress());
+        mCustomElementBuilder.setFallvel(fallvelField.getProgress());
         if (inertiaUnmovableField.isChecked())
         {
-            ce.inertia = 255;
+            mCustomElementBuilder.setInertia(255);
         }
         else
         {
-            ce.inertia = inertiaNormalField.getProgress();
+            mCustomElementBuilder.setInertia(inertiaNormalField.getProgress());
         }
 
         // Get the list of collisions from the parent activity (the method of transferring from Advanced)
@@ -247,21 +266,23 @@ public class CustomElementBasicActivity extends ReportingActivity
                 collisions = new ArrayList<Integer>();
             }
 
-            // Clear the previous collisions
-            ce.collisions = new ArrayList<Integer>();
+            // Clear previously set collisions
+            mCustomElementBuilder.clearCollision();
             // Walk through the collisions we got from Advanced and set it
             // (use 0 as the default if there was an error transferring)
             int numElements = getResources().getStringArray(R.array.elements_list).length;
             for (int i = 0; i < numElements; i++)
             {
-                if (collisions.size() >= i+1)
+                if (i < collisions.size())
                 {
-                    ce.collisions.add(collisions.get(i));
+                    mCustomElementBuilder.addCollision(
+                            Collision.newBuilder().setType(collisions.get(i)));
                 }
                 else
                 {
                     Log.d("LOG", "Error: collisions array passed to save was not long enough");
-                    ce.collisions.add(0);
+                    mCustomElementBuilder.addCollision(
+                            Collision.newBuilder().setType(0));
                 }
             }
         }
@@ -280,50 +301,67 @@ public class CustomElementBasicActivity extends ReportingActivity
                 specialVals = new ArrayList<Integer>();
             }
 
-            // Overwrite the previous arraylists in the custom
-            ce.specials = new ArrayList<Integer>();
-            ce.specialVals = new ArrayList<Integer>();
+            // Clear the previous specials in custom
+            mCustomElementBuilder.clearSpecial();
 
             // Walk through the specials, and write both the index and val
             // (using sane defaults and logging if issues occur)
             int numSpecials = MainActivity.MAX_SPECIALS;
             for (int i = 0; i < numSpecials; i++)
             {
-                if (specials.size() >= i+1)
+                int special;
+                int specialVal;
+                
+                if (i < specials.size())
                 {
-                    ce.specials.add(specials.get(i));
+                    special = specials.get(i);
                 }
                 else
                 {
-                    Log.d("LOG", "Error: specials array passed to save was not long enough");
-                    ce.specials.add(-1);
+                    Log.e("TheElements", "Error: specials array passed to save was not long enough");
+                    special = -1;
                 }
-
-                if (specialVals.size() >= i+1)
+                
+                if (i < specialVals.size())
                 {
-                    ce.specialVals.add(specialVals.get(i));
+                    specialVal = specialVals.get(i);
                 }
                 else
                 {
-                    Log.d("LOG", "Error: special vals array passed to save was not long enough");
-                    ce.specialVals.add(-1);
+                    Log.e("TheElements", "Error: special vals array passed to save was not long enough");
+                    specialVal = -1;
                 }
+                
+                mCustomElementBuilder.addSpecial(
+                        Special.newBuilder()
+                        .setType(special)
+                        .setVal(specialVal));
             }
         }
     }
 
     private void fillInfo()
     {
-        CustomElement ce = mCustomElement;
-        nameField.setText(ce.name);
-        baseElementField.setSelection(ce.baseElementIndex - MainActivity.NORMAL_ELEMENT);
-        stateField.check(getStateRadioId(ce.state));
-        startingTempField.setProgress(ce.startingTemp);
-        lowestTempField.setProgress(ce.lowestTemp);
-        highestTempField.setProgress(ce.highestTemp);
-        lowerElementField.setSelection(ce.lowerElementIndex - MainActivity.NORMAL_ELEMENT);
-        higherElementField.setSelection(ce.higherElementIndex - MainActivity.NORMAL_ELEMENT);
-        final int color = Color.rgb(ce.red, ce.green, ce.blue);
+        nameField.setText(
+                mCustomElementBuilder.getName());
+        baseElementField.setSelection(CustomElementManager.getElementSelectionFromIndex(
+                mCustomElementBuilder.getBaseElementIndex()));
+        stateField.check(getStateRadioId(
+                mCustomElementBuilder.getState()));
+        startingTempField.setProgress(
+                mCustomElementBuilder.getStartingTemp());
+        lowestTempField.setProgress(
+                mCustomElementBuilder.getLowestTemp());
+        highestTempField.setProgress(
+                mCustomElementBuilder.getHighestTemp());
+        lowerElementField.setSelection(CustomElementManager.getElementSelectionFromIndex(
+                mCustomElementBuilder.getLowerElementIndex()));
+        higherElementField.setSelection(CustomElementManager.getElementSelectionFromIndex(
+                mCustomElementBuilder.getHigherElementIndex()));
+        final int color = Color.rgb(
+                mCustomElementBuilder.getRed(),
+                mCustomElementBuilder.getGreen(),
+                mCustomElementBuilder.getBlue());
         setElementColorColor(color);
         mColorPickerDialog = makeColorPickerDialog(color);
         mColorArea.setOnClickListener(new OnClickListener() {
@@ -332,9 +370,9 @@ public class CustomElementBasicActivity extends ReportingActivity
                 mColorPickerDialog.show();
             }
         });
-        densityField.setProgress(ce.density);
-        fallvelField.setProgress(ce.fallVel);
-        if (ce.inertia == 255)
+        densityField.setProgress(mCustomElementBuilder.getDensity());
+        fallvelField.setProgress(mCustomElementBuilder.getFallvel());
+        if (mCustomElementBuilder.getInertia() == 255)
         {
             inertiaUnmovableField.setChecked(true);
             inertiaNormalField.setVisibility(View.GONE);
@@ -343,7 +381,7 @@ public class CustomElementBasicActivity extends ReportingActivity
         {
             inertiaUnmovableField.setChecked(false);
             inertiaNormalField.setVisibility(View.VISIBLE);
-            inertiaNormalField.setProgress(ce.inertia);
+            inertiaNormalField.setProgress(mCustomElementBuilder.getInertia());
         }
     }
     private void fillInfoFromBase(int pos)
