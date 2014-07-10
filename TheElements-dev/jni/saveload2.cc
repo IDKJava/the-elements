@@ -281,39 +281,41 @@ bool loadCustomElement2(ifstream& in)
     custom->startingTemp = customProto.starting_temp();
     custom->lowestTemp = customProto.lowest_temp();
     custom->highestTemp = customProto.highest_temp();
+    // Base element gets validated
+    if (!customProto.has_base_element_index() ||
+            customProto.base_element_index() < 0 ||
+            customProto.base_element_index() >= NUM_BASE_ELEMENTS)
+    {
+        LOGW("Custom base element corrupt: %d", customProto.base_element_index());
+        custom->base = SAND_ELEMENT;
+    }
+    else
+    {
+        custom->base = customProto.base_element_index();
+    }
     // Lower element and higher element get validated
     // using sand as the default if not read properly
-    if (customProto.has_lower_element_index())
+    if (!customProto.has_lower_element_index() ||
+            customProto.lower_element_index() < 0 ||
+            customProto.lower_element_index() >= numElements)
     {
-        int lowerElementIndex = customProto.lower_element_index();
-        if (lowerElementIndex >= 0 && lowerElementIndex < numElements)
-        {
-            custom->lowerElement = elements[lowerElementIndex];
-        }
-        else
-        {
-            custom->lowerElement = elements[SAND_ELEMENT];
-        }
-    }
-    else
-    {
+        LOGW("Lower element index corrupt: %d", customProto.lower_element_index());
         custom->lowerElement = elements[SAND_ELEMENT];
     }
-    if (customProto.has_higher_element_index())
+    else
     {
-        int higherElementIndex = customProto.higher_element_index();
-        if (higherElementIndex >= 0 && higherElementIndex < numElements)
-        {
-            custom->higherElement = elements[higherElementIndex];
-        }
-        else
-        {
-            custom->higherElement = elements[SAND_ELEMENT];
-        }
+        custom->lowerElement = elements[customProto.lower_element_index()];
+    }
+    if (!customProto.has_higher_element_index() ||
+            customProto.higher_element_index() < 0 ||
+            customProto.higher_element_index() >= numElements)
+    {
+        LOGW("Higher element index corrupt: %d", customProto.higher_element_index());
+        custom->higherElement = elements[SAND_ELEMENT];
     }
     else
     {
-        custom->higherElement = elements[SAND_ELEMENT];
+        custom->higherElement = elements[customProto.higher_element_index()];
     }
 
     custom->red = customProto.red();
@@ -341,9 +343,15 @@ bool loadCustomElement2(ifstream& in)
     // Collisions, default is solid-solid
     for (int i = 0; i < NUM_BASE_ELEMENTS; ++i)
     {
-        if (i < customProto.collision_size())
+        if (i < NORMAL_ELEMENT)
         {
-            int collision = customProto.collision(i).type();
+            // Special elements use solid-solid
+            custom->collisions[i] = 0;
+        }
+        else if (i < customProto.collision_size())
+        {
+            // Normal elements are stored in the proto
+            int collision = customProto.collision(i-NORMAL_ELEMENT).type();
             if (collision >= 0 && collision < NUM_COLLISIONS)
             {
                 custom->collisions[i] = collision;

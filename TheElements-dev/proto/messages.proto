@@ -64,6 +64,8 @@ message CustomElement {
     optional sint32 fallvel = 14;
     optional uint32 inertia = 15;
     
+    // Set of collisions with non-special, non-custom elements
+    // (i.e. should be NUM_BASE_ELEMENTS - NORMAL_ELEMENT collisions)
     repeated Collision collision = 16;
     repeated Special special = 17;
 }
