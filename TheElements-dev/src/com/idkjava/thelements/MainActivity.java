@@ -295,7 +295,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         Control.setEraserOff();
                     }
                     setElement((char) (item + NORMAL_ELEMENT));
-                    setPlayState(play);
+                    setPlaying(play);
                     dialog.dismiss();
                 }
             });
@@ -321,7 +321,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     {
                         setBrushSize((char) java.lang.Math.pow(2, item - 1));
                     }
-                    setPlayState(play);
+                    setPlaying(play);
                 }
             });
             AlertDialog alert = builder.create(); // Create object
@@ -337,7 +337,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public void onCancel(DialogInterface dialog)
     {
         // Reset native play state to whatever the ui believes the play state is
-        setPlayState(play);
+        setPlaying(play);
     }
 
     public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
@@ -357,13 +357,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         {
         case R.id.element_picker:
         {
-            setPlayState(false);
+            setPlaying(false);
             showDialog(ELEMENT_PICKER);
             return true;
         }
         case R.id.brush_size_picker:
         {
-            setPlayState(false);
+            setPlaying(false);
             showDialog(BRUSH_SIZE_PICKER);
             return true;
         }
@@ -375,7 +375,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         case R.id.play_pause:
         {
             play = !play;
-            setPlayState(play);
+            setPlaying(play);
             return true;
         }
         case R.id.eraser:
@@ -512,7 +512,19 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     //Converts dp to pixels
     public static int toPx(int dp) {
         return (int)((dp*mDPI)/160f);
-    }        
+    }
+
+    public static void setPlaying(boolean playState) {
+        if ( Kamcord.isPaused() || Kamcord.isRecording()) {
+            if (playState) {
+                Kamcord.resumeRecording();
+            }
+            else {
+                Kamcord.pauseRecording();
+            }
+        }
+        setPlayState(playState);
+    }
 
     //@formatter:off
     //JNI Functions
