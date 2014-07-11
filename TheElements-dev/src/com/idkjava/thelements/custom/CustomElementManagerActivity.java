@@ -65,7 +65,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 			for(int i = 0; i < length; i++)
 			{
 				addEntity(elements.get(i).getName(),
-				        CustomElementManager.getFilename(elements.get(i)));
+				        elements.get(i).getFilename());
 			}
 		}
 		else

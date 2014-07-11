@@ -60,10 +60,24 @@ public class CustomElementManager
 		return sCustomElements;
 	}
 	
-	public static String getFilename(CustomElement custom)
+	public static void generateUniqueFilename(CustomElement.Builder custom)
 	{
-	    return FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
-	            custom.getName().toLowerCase() + FileManager.ELEMENT_EXT;
+	    String name = custom.getName().toLowerCase();
+	    File test = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
+	            name + FileManager.ELEMENT_EXT);
+	    if (!test.exists())
+	    {
+	        custom.setFilename(test.getAbsolutePath());
+	    }
+	    
+	    // Loop through and try adding copy numbers
+	    int copy = 1;
+	    while (test.exists())
+	    {
+	        test = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
+	                name + "(" + copy + ")" + FileManager.ELEMENT_EXT);
+	    }
+	    custom.setFilename(test.getAbsolutePath());
 	}
 	
 	public static ArrayList<Integer> getCollisionIndexList(CustomElement.Builder custom)

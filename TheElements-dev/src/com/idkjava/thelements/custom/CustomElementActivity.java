@@ -41,7 +41,7 @@ public class CustomElementActivity extends TabActivity
 		oldFilename = getIntent().getStringExtra("filename");
 		if(oldFilename != null)
 		{
-		    newElement = true;
+		    newElement = false;
 		    try {
 		        mCustomElementBuilder = CustomElement.newBuilder(
 		                CustomElement.parseFrom(new FileInputStream(oldFilename)));
@@ -54,7 +54,7 @@ public class CustomElementActivity extends TabActivity
 		}
 		else
 		{
-		    newElement = false;
+            newElement = true;
 			mCustomElementBuilder = CustomElement.newBuilder();
 		}
 		

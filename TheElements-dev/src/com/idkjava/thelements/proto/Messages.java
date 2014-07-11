@@ -1055,9 +1055,9 @@ public final class Messages {
     boolean hasElementIndex();
     long getElementIndex();
     
-    // optional uint64 element_hash = 8;
-    boolean hasElementHash();
-    long getElementHash();
+    // optional string element_filename = 8;
+    boolean hasElementFilename();
+    String getElementFilename();
   }
   public static final class Particle extends
       com.google.protobuf.GeneratedMessage
@@ -1248,14 +1248,36 @@ public final class Messages {
       return elementIndex_;
     }
     
-    // optional uint64 element_hash = 8;
-    public static final int ELEMENT_HASH_FIELD_NUMBER = 8;
-    private long elementHash_;
-    public boolean hasElementHash() {
+    // optional string element_filename = 8;
+    public static final int ELEMENT_FILENAME_FIELD_NUMBER = 8;
+    private java.lang.Object elementFilename_;
+    public boolean hasElementFilename() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
-    public long getElementHash() {
-      return elementHash_;
+    public String getElementFilename() {
+      java.lang.Object ref = elementFilename_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          elementFilename_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getElementFilenameBytes() {
+      java.lang.Object ref = elementFilename_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        elementFilename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
     
     private void initFields() {
@@ -1267,7 +1289,7 @@ public final class Messages {
       special_ = java.util.Collections.emptyList();
       elementType_ = com.idkjava.thelements.proto.Messages.Particle.Type.BASIC;
       elementIndex_ = 0L;
-      elementHash_ = 0L;
+      elementFilename_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1303,7 +1325,7 @@ public final class Messages {
         output.writeUInt64(7, elementIndex_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeUInt64(8, elementHash_);
+        output.writeBytes(8, getElementFilenameBytes());
       }
       for (int i = 0; i < special_.size(); i++) {
         output.writeMessage(9, special_.get(i));
@@ -1347,7 +1369,7 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt64Size(8, elementHash_);
+          .computeBytesSize(8, getElementFilenameBytes());
       }
       for (int i = 0; i < special_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -1498,7 +1520,7 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000040);
         elementIndex_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000080);
-        elementHash_ = 0L;
+        elementFilename_ = "";
         bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
@@ -1578,7 +1600,7 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.elementHash_ = elementHash_;
+        result.elementFilename_ = elementFilename_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1642,8 +1664,8 @@ public final class Messages {
         if (other.hasElementIndex()) {
           setElementIndex(other.getElementIndex());
         }
-        if (other.hasElementHash()) {
-          setElementHash(other.getElementHash());
+        if (other.hasElementFilename()) {
+          setElementFilename(other.getElementFilename());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1717,9 +1739,9 @@ public final class Messages {
               elementIndex_ = input.readUInt64();
               break;
             }
-            case 64: {
+            case 66: {
               bitField0_ |= 0x00000100;
-              elementHash_ = input.readUInt64();
+              elementFilename_ = input.readBytes();
               break;
             }
             case 74: {
@@ -2070,25 +2092,40 @@ public final class Messages {
         return this;
       }
       
-      // optional uint64 element_hash = 8;
-      private long elementHash_ ;
-      public boolean hasElementHash() {
+      // optional string element_filename = 8;
+      private java.lang.Object elementFilename_ = "";
+      public boolean hasElementFilename() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
-      public long getElementHash() {
-        return elementHash_;
+      public String getElementFilename() {
+        java.lang.Object ref = elementFilename_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          elementFilename_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public Builder setElementHash(long value) {
-        bitField0_ |= 0x00000100;
-        elementHash_ = value;
+      public Builder setElementFilename(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        elementFilename_ = value;
         onChanged();
         return this;
       }
-      public Builder clearElementHash() {
+      public Builder clearElementFilename() {
         bitField0_ = (bitField0_ & ~0x00000100);
-        elementHash_ = 0L;
+        elementFilename_ = getDefaultInstance().getElementFilename();
         onChanged();
         return this;
+      }
+      void setElementFilename(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000100;
+        elementFilename_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:Particle)
@@ -2846,6 +2883,10 @@ public final class Messages {
     boolean hasName();
     String getName();
     
+    // optional string filename = 18;
+    boolean hasFilename();
+    String getFilename();
+    
     // optional bool allow_moving_transition = 3;
     boolean hasAllowMovingTransition();
     boolean getAllowMovingTransition();
@@ -2989,11 +3030,43 @@ public final class Messages {
       }
     }
     
+    // optional string filename = 18;
+    public static final int FILENAME_FIELD_NUMBER = 18;
+    private java.lang.Object filename_;
+    public boolean hasFilename() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          filename_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     // optional bool allow_moving_transition = 3;
     public static final int ALLOW_MOVING_TRANSITION_FIELD_NUMBER = 3;
     private boolean allowMovingTransition_;
     public boolean hasAllowMovingTransition() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     public boolean getAllowMovingTransition() {
       return allowMovingTransition_;
@@ -3003,7 +3076,7 @@ public final class Messages {
     public static final int STATE_FIELD_NUMBER = 4;
     private int state_;
     public boolean hasState() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     public int getState() {
       return state_;
@@ -3013,7 +3086,7 @@ public final class Messages {
     public static final int STARTING_TEMP_FIELD_NUMBER = 5;
     private int startingTemp_;
     public boolean hasStartingTemp() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     public int getStartingTemp() {
       return startingTemp_;
@@ -3023,7 +3096,7 @@ public final class Messages {
     public static final int LOWEST_TEMP_FIELD_NUMBER = 6;
     private int lowestTemp_;
     public boolean hasLowestTemp() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     public int getLowestTemp() {
       return lowestTemp_;
@@ -3033,7 +3106,7 @@ public final class Messages {
     public static final int HIGHEST_TEMP_FIELD_NUMBER = 7;
     private int highestTemp_;
     public boolean hasHighestTemp() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     public int getHighestTemp() {
       return highestTemp_;
@@ -3043,7 +3116,7 @@ public final class Messages {
     public static final int LOWER_ELEMENT_INDEX_FIELD_NUMBER = 8;
     private int lowerElementIndex_;
     public boolean hasLowerElementIndex() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     public int getLowerElementIndex() {
       return lowerElementIndex_;
@@ -3053,7 +3126,7 @@ public final class Messages {
     public static final int HIGHER_ELEMENT_INDEX_FIELD_NUMBER = 9;
     private int higherElementIndex_;
     public boolean hasHigherElementIndex() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     public int getHigherElementIndex() {
       return higherElementIndex_;
@@ -3063,7 +3136,7 @@ public final class Messages {
     public static final int RED_FIELD_NUMBER = 10;
     private int red_;
     public boolean hasRed() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     public int getRed() {
       return red_;
@@ -3073,7 +3146,7 @@ public final class Messages {
     public static final int GREEN_FIELD_NUMBER = 11;
     private int green_;
     public boolean hasGreen() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     public int getGreen() {
       return green_;
@@ -3083,7 +3156,7 @@ public final class Messages {
     public static final int BLUE_FIELD_NUMBER = 12;
     private int blue_;
     public boolean hasBlue() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     public int getBlue() {
       return blue_;
@@ -3093,7 +3166,7 @@ public final class Messages {
     public static final int DENSITY_FIELD_NUMBER = 13;
     private int density_;
     public boolean hasDensity() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     public int getDensity() {
       return density_;
@@ -3103,7 +3176,7 @@ public final class Messages {
     public static final int FALLVEL_FIELD_NUMBER = 14;
     private int fallvel_;
     public boolean hasFallvel() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     public int getFallvel() {
       return fallvel_;
@@ -3113,7 +3186,7 @@ public final class Messages {
     public static final int INERTIA_FIELD_NUMBER = 15;
     private int inertia_;
     public boolean hasInertia() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00008000) == 0x00008000);
     }
     public int getInertia() {
       return inertia_;
@@ -3164,6 +3237,7 @@ public final class Messages {
     private void initFields() {
       baseElementIndex_ = 0;
       name_ = "";
+      filename_ = "";
       allowMovingTransition_ = false;
       state_ = 0;
       startingTemp_ = 0;
@@ -3198,43 +3272,43 @@ public final class Messages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getNameBytes());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBool(3, allowMovingTransition_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeUInt32(4, state_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeUInt32(5, startingTemp_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeUInt32(6, lowestTemp_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeUInt32(7, highestTemp_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeUInt32(8, lowerElementIndex_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeUInt32(9, higherElementIndex_);
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeUInt32(10, red_);
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeUInt32(11, green_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
         output.writeUInt32(12, blue_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeUInt32(13, density_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeSInt32(14, fallvel_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
         output.writeUInt32(15, inertia_);
       }
       for (int i = 0; i < collision_.size(); i++) {
@@ -3242,6 +3316,9 @@ public final class Messages {
       }
       for (int i = 0; i < special_.size(); i++) {
         output.writeMessage(17, special_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(18, getFilenameBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -3260,55 +3337,55 @@ public final class Messages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(2, getNameBytes());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(3, allowMovingTransition_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, state_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(5, startingTemp_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(6, lowestTemp_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(7, highestTemp_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(8, lowerElementIndex_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(9, higherElementIndex_);
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(10, red_);
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(11, green_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(12, blue_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(13, density_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeSInt32Size(14, fallvel_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(15, inertia_);
       }
@@ -3319,6 +3396,10 @@ public final class Messages {
       for (int i = 0; i < special_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(17, special_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(18, getFilenameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3450,41 +3531,43 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000001);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        allowMovingTransition_ = false;
+        filename_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        state_ = 0;
+        allowMovingTransition_ = false;
         bitField0_ = (bitField0_ & ~0x00000008);
-        startingTemp_ = 0;
+        state_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
-        lowestTemp_ = 0;
+        startingTemp_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
-        highestTemp_ = 0;
+        lowestTemp_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
-        lowerElementIndex_ = 0;
+        highestTemp_ = 0;
         bitField0_ = (bitField0_ & ~0x00000080);
-        higherElementIndex_ = 0;
+        lowerElementIndex_ = 0;
         bitField0_ = (bitField0_ & ~0x00000100);
-        red_ = 0;
+        higherElementIndex_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
-        green_ = 0;
+        red_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
-        blue_ = 0;
+        green_ = 0;
         bitField0_ = (bitField0_ & ~0x00000800);
-        density_ = 0;
+        blue_ = 0;
         bitField0_ = (bitField0_ & ~0x00001000);
-        fallvel_ = 0;
+        density_ = 0;
         bitField0_ = (bitField0_ & ~0x00002000);
-        inertia_ = 0;
+        fallvel_ = 0;
         bitField0_ = (bitField0_ & ~0x00004000);
+        inertia_ = 0;
+        bitField0_ = (bitField0_ & ~0x00008000);
         if (collisionBuilder_ == null) {
           collision_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00008000);
+          bitField0_ = (bitField0_ & ~0x00010000);
         } else {
           collisionBuilder_.clear();
         }
         if (specialBuilder_ == null) {
           special_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00010000);
+          bitField0_ = (bitField0_ & ~0x00020000);
         } else {
           specialBuilder_.clear();
         }
@@ -3537,68 +3620,72 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.allowMovingTransition_ = allowMovingTransition_;
+        result.filename_ = filename_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.state_ = state_;
+        result.allowMovingTransition_ = allowMovingTransition_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.startingTemp_ = startingTemp_;
+        result.state_ = state_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.lowestTemp_ = lowestTemp_;
+        result.startingTemp_ = startingTemp_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.highestTemp_ = highestTemp_;
+        result.lowestTemp_ = lowestTemp_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.lowerElementIndex_ = lowerElementIndex_;
+        result.highestTemp_ = highestTemp_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
         }
-        result.higherElementIndex_ = higherElementIndex_;
+        result.lowerElementIndex_ = lowerElementIndex_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.red_ = red_;
+        result.higherElementIndex_ = higherElementIndex_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000400;
         }
-        result.green_ = green_;
+        result.red_ = red_;
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.blue_ = blue_;
+        result.green_ = green_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00001000;
         }
-        result.density_ = density_;
+        result.blue_ = blue_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00002000;
         }
-        result.fallvel_ = fallvel_;
+        result.density_ = density_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00004000;
         }
+        result.fallvel_ = fallvel_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00008000;
+        }
         result.inertia_ = inertia_;
         if (collisionBuilder_ == null) {
-          if (((bitField0_ & 0x00008000) == 0x00008000)) {
+          if (((bitField0_ & 0x00010000) == 0x00010000)) {
             collision_ = java.util.Collections.unmodifiableList(collision_);
-            bitField0_ = (bitField0_ & ~0x00008000);
+            bitField0_ = (bitField0_ & ~0x00010000);
           }
           result.collision_ = collision_;
         } else {
           result.collision_ = collisionBuilder_.build();
         }
         if (specialBuilder_ == null) {
-          if (((bitField0_ & 0x00010000) == 0x00010000)) {
+          if (((bitField0_ & 0x00020000) == 0x00020000)) {
             special_ = java.util.Collections.unmodifiableList(special_);
-            bitField0_ = (bitField0_ & ~0x00010000);
+            bitField0_ = (bitField0_ & ~0x00020000);
           }
           result.special_ = special_;
         } else {
@@ -3625,6 +3712,9 @@ public final class Messages {
         }
         if (other.hasName()) {
           setName(other.getName());
+        }
+        if (other.hasFilename()) {
+          setFilename(other.getFilename());
         }
         if (other.hasAllowMovingTransition()) {
           setAllowMovingTransition(other.getAllowMovingTransition());
@@ -3669,7 +3759,7 @@ public final class Messages {
           if (!other.collision_.isEmpty()) {
             if (collision_.isEmpty()) {
               collision_ = other.collision_;
-              bitField0_ = (bitField0_ & ~0x00008000);
+              bitField0_ = (bitField0_ & ~0x00010000);
             } else {
               ensureCollisionIsMutable();
               collision_.addAll(other.collision_);
@@ -3682,7 +3772,7 @@ public final class Messages {
               collisionBuilder_.dispose();
               collisionBuilder_ = null;
               collision_ = other.collision_;
-              bitField0_ = (bitField0_ & ~0x00008000);
+              bitField0_ = (bitField0_ & ~0x00010000);
               collisionBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getCollisionFieldBuilder() : null;
@@ -3695,7 +3785,7 @@ public final class Messages {
           if (!other.special_.isEmpty()) {
             if (special_.isEmpty()) {
               special_ = other.special_;
-              bitField0_ = (bitField0_ & ~0x00010000);
+              bitField0_ = (bitField0_ & ~0x00020000);
             } else {
               ensureSpecialIsMutable();
               special_.addAll(other.special_);
@@ -3708,7 +3798,7 @@ public final class Messages {
               specialBuilder_.dispose();
               specialBuilder_ = null;
               special_ = other.special_;
-              bitField0_ = (bitField0_ & ~0x00010000);
+              bitField0_ = (bitField0_ & ~0x00020000);
               specialBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getSpecialFieldBuilder() : null;
@@ -3759,67 +3849,67 @@ public final class Messages {
               break;
             }
             case 24: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               allowMovingTransition_ = input.readBool();
               break;
             }
             case 32: {
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000010;
               state_ = input.readUInt32();
               break;
             }
             case 40: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000020;
               startingTemp_ = input.readUInt32();
               break;
             }
             case 48: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000040;
               lowestTemp_ = input.readUInt32();
               break;
             }
             case 56: {
-              bitField0_ |= 0x00000040;
+              bitField0_ |= 0x00000080;
               highestTemp_ = input.readUInt32();
               break;
             }
             case 64: {
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000100;
               lowerElementIndex_ = input.readUInt32();
               break;
             }
             case 72: {
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000200;
               higherElementIndex_ = input.readUInt32();
               break;
             }
             case 80: {
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000400;
               red_ = input.readUInt32();
               break;
             }
             case 88: {
-              bitField0_ |= 0x00000400;
+              bitField0_ |= 0x00000800;
               green_ = input.readUInt32();
               break;
             }
             case 96: {
-              bitField0_ |= 0x00000800;
+              bitField0_ |= 0x00001000;
               blue_ = input.readUInt32();
               break;
             }
             case 104: {
-              bitField0_ |= 0x00001000;
+              bitField0_ |= 0x00002000;
               density_ = input.readUInt32();
               break;
             }
             case 112: {
-              bitField0_ |= 0x00002000;
+              bitField0_ |= 0x00004000;
               fallvel_ = input.readSInt32();
               break;
             }
             case 120: {
-              bitField0_ |= 0x00004000;
+              bitField0_ |= 0x00008000;
               inertia_ = input.readUInt32();
               break;
             }
@@ -3833,6 +3923,11 @@ public final class Messages {
               com.idkjava.thelements.proto.Messages.Special.Builder subBuilder = com.idkjava.thelements.proto.Messages.Special.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addSpecial(subBuilder.buildPartial());
+              break;
+            }
+            case 146: {
+              bitField0_ |= 0x00000004;
+              filename_ = input.readBytes();
               break;
             }
           }
@@ -3898,22 +3993,58 @@ public final class Messages {
         onChanged();
       }
       
+      // optional string filename = 18;
+      private java.lang.Object filename_ = "";
+      public boolean hasFilename() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setFilename(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearFilename() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
+        return this;
+      }
+      void setFilename(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        filename_ = value;
+        onChanged();
+      }
+      
       // optional bool allow_moving_transition = 3;
       private boolean allowMovingTransition_ ;
       public boolean hasAllowMovingTransition() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public boolean getAllowMovingTransition() {
         return allowMovingTransition_;
       }
       public Builder setAllowMovingTransition(boolean value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         allowMovingTransition_ = value;
         onChanged();
         return this;
       }
       public Builder clearAllowMovingTransition() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         allowMovingTransition_ = false;
         onChanged();
         return this;
@@ -3922,19 +4053,19 @@ public final class Messages {
       // optional uint32 state = 4;
       private int state_ ;
       public boolean hasState() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public int getState() {
         return state_;
       }
       public Builder setState(int value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         state_ = value;
         onChanged();
         return this;
       }
       public Builder clearState() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         state_ = 0;
         onChanged();
         return this;
@@ -3943,19 +4074,19 @@ public final class Messages {
       // optional uint32 starting_temp = 5;
       private int startingTemp_ ;
       public boolean hasStartingTemp() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       public int getStartingTemp() {
         return startingTemp_;
       }
       public Builder setStartingTemp(int value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         startingTemp_ = value;
         onChanged();
         return this;
       }
       public Builder clearStartingTemp() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         startingTemp_ = 0;
         onChanged();
         return this;
@@ -3964,19 +4095,19 @@ public final class Messages {
       // optional uint32 lowest_temp = 6;
       private int lowestTemp_ ;
       public boolean hasLowestTemp() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       public int getLowestTemp() {
         return lowestTemp_;
       }
       public Builder setLowestTemp(int value) {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         lowestTemp_ = value;
         onChanged();
         return this;
       }
       public Builder clearLowestTemp() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         lowestTemp_ = 0;
         onChanged();
         return this;
@@ -3985,19 +4116,19 @@ public final class Messages {
       // optional uint32 highest_temp = 7;
       private int highestTemp_ ;
       public boolean hasHighestTemp() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       public int getHighestTemp() {
         return highestTemp_;
       }
       public Builder setHighestTemp(int value) {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000080;
         highestTemp_ = value;
         onChanged();
         return this;
       }
       public Builder clearHighestTemp() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000080);
         highestTemp_ = 0;
         onChanged();
         return this;
@@ -4006,19 +4137,19 @@ public final class Messages {
       // optional uint32 lower_element_index = 8;
       private int lowerElementIndex_ ;
       public boolean hasLowerElementIndex() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public int getLowerElementIndex() {
         return lowerElementIndex_;
       }
       public Builder setLowerElementIndex(int value) {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000100;
         lowerElementIndex_ = value;
         onChanged();
         return this;
       }
       public Builder clearLowerElementIndex() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000100);
         lowerElementIndex_ = 0;
         onChanged();
         return this;
@@ -4027,19 +4158,19 @@ public final class Messages {
       // optional uint32 higher_element_index = 9;
       private int higherElementIndex_ ;
       public boolean hasHigherElementIndex() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       public int getHigherElementIndex() {
         return higherElementIndex_;
       }
       public Builder setHigherElementIndex(int value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         higherElementIndex_ = value;
         onChanged();
         return this;
       }
       public Builder clearHigherElementIndex() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         higherElementIndex_ = 0;
         onChanged();
         return this;
@@ -4048,19 +4179,19 @@ public final class Messages {
       // optional uint32 red = 10;
       private int red_ ;
       public boolean hasRed() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       public int getRed() {
         return red_;
       }
       public Builder setRed(int value) {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000400;
         red_ = value;
         onChanged();
         return this;
       }
       public Builder clearRed() {
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000400);
         red_ = 0;
         onChanged();
         return this;
@@ -4069,19 +4200,19 @@ public final class Messages {
       // optional uint32 green = 11;
       private int green_ ;
       public boolean hasGreen() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       public int getGreen() {
         return green_;
       }
       public Builder setGreen(int value) {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000800;
         green_ = value;
         onChanged();
         return this;
       }
       public Builder clearGreen() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000800);
         green_ = 0;
         onChanged();
         return this;
@@ -4090,19 +4221,19 @@ public final class Messages {
       // optional uint32 blue = 12;
       private int blue_ ;
       public boolean hasBlue() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       public int getBlue() {
         return blue_;
       }
       public Builder setBlue(int value) {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         blue_ = value;
         onChanged();
         return this;
       }
       public Builder clearBlue() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00001000);
         blue_ = 0;
         onChanged();
         return this;
@@ -4111,19 +4242,19 @@ public final class Messages {
       // optional uint32 density = 13;
       private int density_ ;
       public boolean hasDensity() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       public int getDensity() {
         return density_;
       }
       public Builder setDensity(int value) {
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00002000;
         density_ = value;
         onChanged();
         return this;
       }
       public Builder clearDensity() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         density_ = 0;
         onChanged();
         return this;
@@ -4132,19 +4263,19 @@ public final class Messages {
       // optional sint32 fallvel = 14;
       private int fallvel_ ;
       public boolean hasFallvel() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       public int getFallvel() {
         return fallvel_;
       }
       public Builder setFallvel(int value) {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         fallvel_ = value;
         onChanged();
         return this;
       }
       public Builder clearFallvel() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         fallvel_ = 0;
         onChanged();
         return this;
@@ -4153,19 +4284,19 @@ public final class Messages {
       // optional uint32 inertia = 15;
       private int inertia_ ;
       public boolean hasInertia() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       public int getInertia() {
         return inertia_;
       }
       public Builder setInertia(int value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         inertia_ = value;
         onChanged();
         return this;
       }
       public Builder clearInertia() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         inertia_ = 0;
         onChanged();
         return this;
@@ -4175,9 +4306,9 @@ public final class Messages {
       private java.util.List<com.idkjava.thelements.proto.Messages.Collision> collision_ =
         java.util.Collections.emptyList();
       private void ensureCollisionIsMutable() {
-        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
+        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
           collision_ = new java.util.ArrayList<com.idkjava.thelements.proto.Messages.Collision>(collision_);
-          bitField0_ |= 0x00008000;
+          bitField0_ |= 0x00010000;
          }
       }
       
@@ -4293,7 +4424,7 @@ public final class Messages {
       public Builder clearCollision() {
         if (collisionBuilder_ == null) {
           collision_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00008000);
+          bitField0_ = (bitField0_ & ~0x00010000);
           onChanged();
         } else {
           collisionBuilder_.clear();
@@ -4349,7 +4480,7 @@ public final class Messages {
           collisionBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.idkjava.thelements.proto.Messages.Collision, com.idkjava.thelements.proto.Messages.Collision.Builder, com.idkjava.thelements.proto.Messages.CollisionOrBuilder>(
                   collision_,
-                  ((bitField0_ & 0x00008000) == 0x00008000),
+                  ((bitField0_ & 0x00010000) == 0x00010000),
                   getParentForChildren(),
                   isClean());
           collision_ = null;
@@ -4361,9 +4492,9 @@ public final class Messages {
       private java.util.List<com.idkjava.thelements.proto.Messages.Special> special_ =
         java.util.Collections.emptyList();
       private void ensureSpecialIsMutable() {
-        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
           special_ = new java.util.ArrayList<com.idkjava.thelements.proto.Messages.Special>(special_);
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00020000;
          }
       }
       
@@ -4479,7 +4610,7 @@ public final class Messages {
       public Builder clearSpecial() {
         if (specialBuilder_ == null) {
           special_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00010000);
+          bitField0_ = (bitField0_ & ~0x00020000);
           onChanged();
         } else {
           specialBuilder_.clear();
@@ -4535,7 +4666,7 @@ public final class Messages {
           specialBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.idkjava.thelements.proto.Messages.Special, com.idkjava.thelements.proto.Messages.Special.Builder, com.idkjava.thelements.proto.Messages.SpecialOrBuilder>(
                   special_,
-                  ((bitField0_ & 0x00010000) == 0x00010000),
+                  ((bitField0_ & 0x00020000) == 0x00020000),
                   getParentForChildren(),
                   isClean());
           special_ = null;
@@ -4596,25 +4727,25 @@ public final class Messages {
       "\n\024proto/messages.proto\"G\n\010SaveFile\022\016\n\006si" +
       "ze_x\030\001 \001(\r\022\016\n\006size_y\030\002 \001(\r\022\033\n\010particle\030\003" +
       " \003(\0132\t.Particle\"\036\n\017ParticleSpecial\022\013\n\003va" +
-      "l\030\001 \001(\r\"\341\001\n\010Particle\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001" +
+      "l\030\001 \001(\r\"\345\001\n\010Particle\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001" +
       "(\002\022\r\n\005x_vel\030\003 \001(\021\022\r\n\005y_vel\030\004 \001(\021\022\014\n\004heat" +
       "\030\005 \001(\r\022!\n\007special\030\t \003(\0132\020.ParticleSpecia" +
       "l\022$\n\014element_type\030\006 \001(\0162\016.Particle.Type\022" +
-      "\025\n\relement_index\030\007 \001(\004\022\024\n\014element_hash\030\010" +
-      " \001(\004\"\035\n\004Type\022\t\n\005BASIC\020\000\022\n\n\006CUSTOM\020\001\"\031\n\tC" +
-      "ollision\022\014\n\004type\030\001 \001(\004\"$\n\007Special\022\014\n\004typ",
-      "e\030\001 \001(\r\022\013\n\003val\030\002 \001(\r\"\375\002\n\rCustomElement\022\032" +
-      "\n\022base_element_index\030\001 \001(\r\022\014\n\004name\030\002 \001(\t" +
-      "\022\037\n\027allow_moving_transition\030\003 \001(\010\022\r\n\005sta" +
-      "te\030\004 \001(\r\022\025\n\rstarting_temp\030\005 \001(\r\022\023\n\013lowes" +
-      "t_temp\030\006 \001(\r\022\024\n\014highest_temp\030\007 \001(\r\022\033\n\023lo" +
-      "wer_element_index\030\010 \001(\r\022\034\n\024higher_elemen" +
-      "t_index\030\t \001(\r\022\013\n\003red\030\n \001(\r\022\r\n\005green\030\013 \001(" +
-      "\r\022\014\n\004blue\030\014 \001(\r\022\017\n\007density\030\r \001(\r\022\017\n\007fall" +
-      "vel\030\016 \001(\021\022\017\n\007inertia\030\017 \001(\r\022\035\n\tcollision\030" +
-      "\020 \003(\0132\n.Collision\022\031\n\007special\030\021 \003(\0132\010.Spe",
-      "cialB(\n\034com.idkjava.thelements.protoB\010Me" +
-      "ssages"
+      "\025\n\relement_index\030\007 \001(\004\022\030\n\020element_filena" +
+      "me\030\010 \001(\t\"\035\n\004Type\022\t\n\005BASIC\020\000\022\n\n\006CUSTOM\020\001\"" +
+      "\031\n\tCollision\022\014\n\004type\030\001 \001(\004\"$\n\007Special\022\014\n",
+      "\004type\030\001 \001(\r\022\013\n\003val\030\002 \001(\r\"\217\003\n\rCustomEleme" +
+      "nt\022\032\n\022base_element_index\030\001 \001(\r\022\014\n\004name\030\002" +
+      " \001(\t\022\020\n\010filename\030\022 \001(\t\022\037\n\027allow_moving_t" +
+      "ransition\030\003 \001(\010\022\r\n\005state\030\004 \001(\r\022\025\n\rstarti" +
+      "ng_temp\030\005 \001(\r\022\023\n\013lowest_temp\030\006 \001(\r\022\024\n\014hi" +
+      "ghest_temp\030\007 \001(\r\022\033\n\023lower_element_index\030" +
+      "\010 \001(\r\022\034\n\024higher_element_index\030\t \001(\r\022\013\n\003r" +
+      "ed\030\n \001(\r\022\r\n\005green\030\013 \001(\r\022\014\n\004blue\030\014 \001(\r\022\017\n" +
+      "\007density\030\r \001(\r\022\017\n\007fallvel\030\016 \001(\021\022\017\n\007inert" +
+      "ia\030\017 \001(\r\022\035\n\tcollision\030\020 \003(\0132\n.Collision\022",
+      "\031\n\007special\030\021 \003(\0132\010.SpecialB(\n\034com.idkjav" +
+      "a.thelements.protoB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4642,7 +4773,7 @@ public final class Messages {
           internal_static_Particle_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Particle_descriptor,
-              new java.lang.String[] { "X", "Y", "XVel", "YVel", "Heat", "Special", "ElementType", "ElementIndex", "ElementHash", },
+              new java.lang.String[] { "X", "Y", "XVel", "YVel", "Heat", "Special", "ElementType", "ElementIndex", "ElementFilename", },
               com.idkjava.thelements.proto.Messages.Particle.class,
               com.idkjava.thelements.proto.Messages.Particle.Builder.class);
           internal_static_Collision_descriptor =
@@ -4666,7 +4797,7 @@ public final class Messages {
           internal_static_CustomElement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_CustomElement_descriptor,
-              new java.lang.String[] { "BaseElementIndex", "Name", "AllowMovingTransition", "State", "StartingTemp", "LowestTemp", "HighestTemp", "LowerElementIndex", "HigherElementIndex", "Red", "Green", "Blue", "Density", "Fallvel", "Inertia", "Collision", "Special", },
+              new java.lang.String[] { "BaseElementIndex", "Name", "Filename", "AllowMovingTransition", "State", "StartingTemp", "LowestTemp", "HighestTemp", "LowerElementIndex", "HigherElementIndex", "Red", "Green", "Blue", "Density", "Fallvel", "Inertia", "Collision", "Special", },
               com.idkjava.thelements.proto.Messages.CustomElement.class,
               com.idkjava.thelements.proto.Messages.CustomElement.Builder.class);
           return null;

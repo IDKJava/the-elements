@@ -32,7 +32,7 @@ message Particle {
     // Basic
     optional uint64 element_index = 7;
     // Custom
-    optional uint64 element_hash = 8;
+    optional string element_filename = 8;
 }
 
 message Collision {
@@ -47,6 +47,7 @@ message Special {
 message CustomElement {
     optional uint32 base_element_index = 1;
     optional string name = 2;
+    optional string filename = 18;
     
     optional bool allow_moving_transition = 3;
     optional uint32 state = 4;

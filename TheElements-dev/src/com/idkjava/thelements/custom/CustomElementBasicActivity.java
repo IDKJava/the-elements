@@ -191,18 +191,14 @@ public class CustomElementBasicActivity extends ReportingActivity
     {
         writePropertiesToCustom();
         
-        CustomElement custom = mCustomElementBuilder.build();
-        String filename = CustomElementManager.getFilename(custom);
-        if (!filename.equals(oldFilename) && !newElement)
+        if (newElement)
         {
-            if (oldFilename != null)
-            {
-                new File(oldFilename).delete();
-            }
+            CustomElementManager.generateUniqueFilename(mCustomElementBuilder);
         }
+        CustomElement custom = mCustomElementBuilder.build();
         try
         {
-            custom.writeTo(new FileOutputStream(filename));
+            custom.writeTo(new FileOutputStream(custom.getFilename()));
         }
         catch (FileNotFoundException e)
         {
@@ -217,11 +213,11 @@ public class CustomElementBasicActivity extends ReportingActivity
         
         Toast.makeText(getApplicationContext(),
                 getResources().getString(R.string.ce_save_success)
-                + " " + filename,
+                + " " + custom.getFilename(),
                 Toast.LENGTH_LONG).show();
         // Log the custom element name
         Hashtable<String, String> params = new Hashtable<String, String>();
-        params.put("Name", filename);
+        params.put("Name", custom.getFilename());
         FlurryAgent.logEvent("Element saved", params);
         return true;
     }

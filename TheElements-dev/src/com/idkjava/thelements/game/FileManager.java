@@ -18,8 +18,8 @@ public class FileManager
 	public static final String SAVES_DIR = "saves/";
 	public static final String ELEMENTS_DIR = "elements/";
 	public static final String ATMOSPHERES_DIR = "atmospheres/";
-	public static final String SAVE_EXT = ".sav";
-	public static final String ELEMENT_EXT = ".ele";
+	public static final String SAVE_EXT = ".sav2";
+	public static final String ELEMENT_EXT = ".ele2";
 	public static final String ATMOSPHERE_EXT = ".atm";
 	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
