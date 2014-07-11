@@ -2,7 +2,6 @@ package com.idkjava.thelements.game;
 
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.MainActivity;
-
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 
@@ -53,7 +52,7 @@ public class Control extends LinearLayout {
         element_picker_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                activity.setPlayState(false);
+                activity.setPlaying(false);
                 // Run the element picker dialog
                 activity.showDialog(MainActivity.ELEMENT_PICKER);
             }

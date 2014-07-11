@@ -1,9 +1,6 @@
 package com.idkjava.thelements.game;
 
-import com.idkjava.thelements.MainActivity;
-
-import com.idkjava.thelements.R;
-import com.kamcord.android.Kamcord;
+import java.util.Hashtable;
 
 import android.content.Context;
 import android.os.Environment;
@@ -14,6 +11,11 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import com.flurry.android.FlurryAgent;
+import com.idkjava.thelements.MainActivity;
+import com.idkjava.thelements.R;
+import com.kamcord.android.Kamcord;
 
 public class MenuBar extends LinearLayout {
 
@@ -82,7 +84,7 @@ public class MenuBar extends LinearLayout {
             @Override
             public void onClick(View v) {
                 MainActivity.play = !MainActivity.play;
-                MainActivity.setPlayState(MainActivity.play);
+                MainActivity.setPlaying(MainActivity.play);
 
                 if (MainActivity.play) {
                     play_pause_button.setImageResource(R.drawable.pause);
@@ -145,13 +147,20 @@ public class MenuBar extends LinearLayout {
                 if (fade_button.isSelected()) {
                     fade_button.setSelected(false);
                     MainActivity.setFilterMode((char) 0);
+                    Hashtable<String, String> params = new Hashtable<String, String>();
+                    FlurryAgent.logEvent("Kamcord disable fade", params);
                 } else {
                     fade_button.setSelected(true);
                     MainActivity.setFilterMode((char) 1);
+                    Hashtable<String, String> params = new Hashtable<String, String>();
+                    FlurryAgent.logEvent("Kamcord enable fade", params);
                 }
             }
         });
         if (!Kamcord.isWhitelisted()) {
+            Hashtable<String, String> params = new Hashtable<String, String>();
+            params.put("Device", android.os.Build.DEVICE);
+            FlurryAgent.logEvent("Kamcord Disabled", params);
             kamcord_button.setVisibility(View.GONE);
             kamcord_view_button.setVisibility(View.GONE);
         } else {
@@ -162,15 +171,24 @@ public class MenuBar extends LinearLayout {
                         kamcord_button.setSelected(false);
                         Kamcord.stopRecording();
                         Kamcord.showView();
+                        Hashtable<String, String> params = new Hashtable<String, String>();
+                        params.put("Device", android.os.Build.DEVICE);
+                        FlurryAgent.logEvent("Kamcord End Record", params);
                     } else {
                         kamcord_button.setSelected(true);
                         Kamcord.startRecording();
+                        Hashtable<String, String> params = new Hashtable<String, String>();
+                        params.put("Device", android.os.Build.DEVICE);
+                        FlurryAgent.logEvent("Kamcord Start Record", params);
                     }
                 }
             });
             kamcord_view_button.setOnClickListener(new OnClickListener() {
                @Override
                public void onClick(View v) {
+                   Hashtable<String, String> params = new Hashtable<String, String>();
+                   params.put("Device", android.os.Build.DEVICE);
+                   FlurryAgent.logEvent("Kamcord Show View", params);
                    Kamcord.showWatchView();
                }
             });

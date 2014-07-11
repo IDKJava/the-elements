@@ -26,13 +26,14 @@ unsigned int textureID;
 
 int mTextureCoordinateHandle;
 int mTextureUniformHandle;
+int mScreenSizeHandle;
 int mProjMatrixUniformHandle;
 
-float vertices[] = {0.0f,2.0f,
-                    2.0f,2.0f,
-                    2.0f,0.0f,
-                    0.0f,2.0f,
-                    2.0f,0.0f,
+float vertices[] = {0.0f,1.0f,
+                    1.0f,1.0f,
+                    1.0f,0.0f,
+                    0.0f,1.0f,
+                    1.0f,0.0f,
                     0.0f,0.0f};
 
 float texture[] = {0.0f, 0.0f,
@@ -70,10 +71,37 @@ static const char gVertexShader[] =
 static const char gFragmentShader[] =
     "precision mediump float;\n"
     "varying vec2 v_TexCoordinate;\n"
+    "uniform vec2 u_screenSize;\n"
     "uniform sampler2D u_Texture;\n"
     "void main() {\n"
     "  gl_FragColor = texture2D(u_Texture, v_TexCoordinate);\n"
+//    "  float myI, myJ;\n"
+//    "  float diff = 0.0;\n"
+//    "  for (myI = -3.0; myI <= 3.0; myI++) { \n"
+//    "      for ( myJ = -3.0; myJ <= 3.0; myJ++) { \n"
+//    "      float modX = min(max(v_TexCoordinate.x + (myI/u_screenSize.x),0.0),1.0);\n"
+//    "      float modY = min(max(v_TexCoordinate.y + (myJ/u_screenSize.y),0.0),1.0);\n"
+//    "      vec4 foundColor = texture2D(u_Texture, vec2(modX, modY));\n"
+//    "      if ( foundColor.x != gl_FragColor.x ||"
+//    "           foundColor.y != gl_FragColor.y || foundColor.z != gl_FragColor.z) {\n"
+//    "         diff += (3.0-abs(myI)) + (3.0-abs(myJ));\n"
+//    "      }\n"
+//    "}\n"
+//    "}\n"
+//    " float boundDiff = min(diff*0.02, 0.5);"
+//    " gl_FragColor *= (1.0 - boundDiff);\n"
     "}\n";
+
+/*
+    "  vec2 bottom = vec2(v_TexCoordinate.x, "
+    "  min(v_TexCoordinate.y + 1.0f/u_screenSize.y,1.0));"
+    "  vec2 top = vec2(v_TexCoordinate.x, "
+    "  max(v_TexCoordinate.y - 1.0f/u_screenSize.y,0.0));"
+    "  vec2 left = vec2(max(v_TexCoordinate.x - 1.0f/u_screenSize.x,0.0), "
+    "  v_TexCoordinate.y);"
+    "  vec2 right = vec2(min(v_TexCoordinate.x + 1.0f/u_screenSize.x,1.0), "
+    "  v_TexCoordinate.y);"
+*/
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -135,6 +163,7 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
         }
 
         mTextureCoordinateHandle = glGetAttribLocation(program, "a_TexCoordinate");
+        mScreenSizeHandle = glGetUniformLocation(program, "u_screenSize");
         mTextureUniformHandle = glGetUniformLocation(program, "u_Texture");
         mProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
     }
@@ -241,6 +270,7 @@ void glRender() {
 
     glEnableVertexAttribArray(gvPositionHandle);
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_TRUE, 0, vertices);
+
     glEnableVertexAttribArray(mTextureCoordinateHandle);
     glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_TRUE, 0, texture);
 
@@ -259,9 +289,15 @@ void glRender() {
 
 
     //TODO: Figure out why everything here is multiplied by 0.5 (probaly should reverse the verticies being 2.0 o something)
-    setOthographicMat(left/(0.5*screenWidth), right/(0.5*screenWidth), top/(0.5*screenHeight), bottom/(0.5*screenHeight), 1, -1, proj);
+    setOthographicMat(left/(screenWidth), right/(screenWidth), top/(screenHeight), bottom/(screenHeight), 1, -1, proj);
 
     glUniformMatrix4fv(mProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+
+    float screenSizeV[2];
+    screenSizeV[0] = texWidth;
+    screenSizeV[1] = texHeight;
+
+    glUniform2fv(mScreenSizeHandle, 1, &screenSizeV[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
