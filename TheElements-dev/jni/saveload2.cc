@@ -70,6 +70,14 @@ char loadState2(char* loadLoc)
     return retVal;
 }
 
+void copyFile(char* srcLoc, char* dstLoc)
+{
+    ifstream src(srcLoc, ios::in | ios::binary);
+    ofstream dst(dstLoc, ios::out | ios::binary | ios::trunc);
+
+    dst << src.rdbuf();
+}
+
 char loadCustomElements2(void)
 {
     string loadLoc = string(ROOT_FOLDER) + string(ELEMENTS_FOLDER);
@@ -208,6 +216,7 @@ bool loadStateLogic2(ifstream& in)
         // Velocities have reasonable defaults (0), so no need to check
         a_xVel[tempParticle] = particle.x_vel();
         a_yVel[tempParticle] = particle.y_vel();
+
         // Make sure heat has a reasonable default
         if (particle.has_heat())
         {
@@ -238,18 +247,24 @@ bool loadStateLogic2(ifstream& in)
         }
         else if (particle.element_type() == Particle::CUSTOM)
         {
-            int elementIndex = findElementFromFilename(particle.element_filename());
-            if (elementIndex < 0  || elementIndex >= numElements)
+            if (!particle.has_element_filename())
             {
-                LOGW("Invalid element index %d for filename %s",
-                        elementIndex, particle.element_filename());
+                LOGW("Particle without filename.");
                 a_element[tempParticle] = elements[SAND_ELEMENT];
             }
             else
             {
-                LOGI("Element index %d for filename %s",
-                        elementIndex, particle.element_filename());
-                a_element[tempParticle] = elements[elementIndex];
+                int elementIndex = findElementFromFilename(particle.element_filename());
+                if (elementIndex < 0  || elementIndex >= numElements)
+                {
+                    LOGW("Invalid element index %d for filename %s",
+                            elementIndex, particle.element_filename().c_str());
+                    a_element[tempParticle] = elements[SAND_ELEMENT];
+                }
+                else
+                {
+                    a_element[tempParticle] = elements[elementIndex];
+                }
             }
         }
         else
@@ -279,7 +294,6 @@ bool loadStateLogic2(ifstream& in)
         setBitmapColor(i, j, a_element[tempParticle]);
     }
 
-    LOGI("End load state logic 2");
     return true;
 }
 
@@ -395,14 +409,15 @@ bool loadCustomElement2(ifstream& in)
     elements[numElements] = custom;
     numElements++;
 
-    LOGI("Loaded custom element %s, index: %d", custom->name, custom->index);
+    LOGI("Loaded custom element %s, index: %d, file: %s",
+            custom->name, custom->index, custom->filename);
 
     return true;
 }
 
-int findElementFromFilename(string filename)
+int findElementFromFilename(const string& filename)
 {
-    for (int i = 0; i < numElements; ++i)
+    for (int i = NUM_BASE_ELEMENTS; i < numElements; ++i)
     {
         if (string(elements[i]->filename) == filename)
         {

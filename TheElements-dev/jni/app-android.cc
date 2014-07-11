@@ -42,6 +42,11 @@
 #define LOGGING 1
 #endif
 
+// JNI expect C names, not mangled C++ names
+#if __cplusplus
+extern "C" {
+#endif
+
 //Called from SandViewRenderer
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height)
@@ -122,14 +127,15 @@ Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz
 
     __android_log_write(ANDROID_LOG_INFO, "TheElements", saveLoc3);
 
-    if(saveTempToFile(saveLoc3))
-    {
-        __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveState: success!");
-        return TRUE;
-    }
+    char tempLoc[256];
+    strcpy(tempLoc, ROOT_FOLDER);
+    strcat(tempLoc, SAVES_FOLDER);
+    strcat(tempLoc, TEMP_SAVE);
+    strcat(tempLoc, SAVE2_EXTENSION);
 
-    __android_log_write(ANDROID_LOG_ERROR, "TheElements", "saveState: failed!");
-    return FALSE;
+    // Copy the temp file into save
+    copyFile(tempLoc, saveLoc3);
+    return TRUE;
 }
 JNIEXPORT char JNICALL
 Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz, jbyteArray loadLoc)
@@ -148,14 +154,15 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
 
     __android_log_write(ANDROID_LOG_INFO, "TheElements", loadLoc3);
 
-    if(loadFileToTemp(loadLoc3))
-    {
-        __android_log_write(ANDROID_LOG_INFO, "TheElements", "loadLoc: success!");
-        return TRUE;
-    }
+    char tempLoc[256];
+    strcpy(tempLoc, ROOT_FOLDER);
+    strcat(tempLoc, SAVES_FOLDER);
+    strcat(tempLoc, TEMP_SAVE);
+    strcat(tempLoc, SAVE2_EXTENSION);
 
-    __android_log_write(ANDROID_LOG_ERROR, "TheElements", "loadLoc: failed!");
-    return FALSE;
+    // Copy the load file into temp, so that we resume into it
+    copyFile(loadLoc3, tempLoc);
+    return TRUE;
 }
 JNIEXPORT char JNICALL
 Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz)
@@ -477,5 +484,7 @@ Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, 
     yGravity = yGravityIn;
 }
 
-
-
+// extern "C"
+#if __cplusplus
+}
+#endif

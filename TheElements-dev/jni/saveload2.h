@@ -14,11 +14,12 @@ using namespace std;
 char saveState2(char* saveLoc);
 char loadState2(char* loadLoc);
 char loadCustomElements2(void);
+void copyFile(char* srcLoc, char* dstLoc);
 
 // Private helper functions
 bool saveStateLogic2(ofstream& out);
 bool loadStateLogic2(ifstream& in);
 bool loadCustomElement2(ifstream& in);
-int findElementFromFilename(string filename);
+int findElementFromFilename(const string& filename);
 
 #endif  // SAVELOAD_2_H_INCLUDED
