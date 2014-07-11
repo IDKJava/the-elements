@@ -9,6 +9,7 @@
 
 #include "collide.h"
 
+#include "collisions.h"
 #include "specials.h"
 
 void collide(int firstParticle, int secondParticle)

@@ -1,7 +1,6 @@
 package com.idkjava.thelements.custom;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -30,14 +29,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.ReportingActivity;
-import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.proto.Messages.Collision;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 import com.idkjava.thelements.proto.Messages.Special;
@@ -56,14 +58,21 @@ public class CustomElementBasicActivity extends ReportingActivity
     private Spinner baseElementField;
     private RadioGroup stateField;
     private SeekBar startingTempField;
+    private TextView startingTempText;
     private SeekBar lowestTempField;
+    private TextView lowestTempText;
     private SeekBar highestTempField;
+    private TextView highestTempText;
     private Spinner lowerElementField;
     private Spinner higherElementField;
     private SeekBar densityField;
+    private TextView densityText;
     private SeekBar fallvelField;
+    private TextView fallvelText;
     private CheckBox inertiaUnmovableField;
+    private LinearLayout inertiaContainer;
     private SeekBar inertiaNormalField;
+    private TextView inertiaNormalText;
     private Button saveButton;
 
     private LinearLayout mColorArea;
@@ -88,14 +97,21 @@ public class CustomElementBasicActivity extends ReportingActivity
         baseElementField = (Spinner) findViewById(R.id.ce_base_element);
         stateField = (RadioGroup) findViewById(R.id.ce_state);
         startingTempField = (SeekBar) findViewById(R.id.ce_starting_temp);
+        startingTempText = (TextView) findViewById(R.id.ce_starting_temp_num);
         lowestTempField = (SeekBar) findViewById(R.id.ce_lowest_temp);
+        lowestTempText = (TextView) findViewById(R.id.ce_lowest_temp_num);
         highestTempField = (SeekBar) findViewById(R.id.ce_highest_temp);
+        highestTempText = (TextView) findViewById(R.id.ce_highest_temp_num);
         lowerElementField = (Spinner) findViewById(R.id.ce_lower_element);
         higherElementField = (Spinner) findViewById(R.id.ce_higher_element);
         densityField = (SeekBar) findViewById(R.id.ce_density);
+        densityText = (TextView) findViewById(R.id.ce_density_num);
         fallvelField = (SeekBar) findViewById(R.id.ce_fallvel);
+        fallvelText = (TextView) findViewById(R.id.ce_fallvel_num);
         inertiaUnmovableField = (CheckBox) findViewById(R.id.ce_inertia_unmovable);
+        inertiaContainer = (LinearLayout) findViewById(R.id.ce_inertia_container);
         inertiaNormalField = (SeekBar) findViewById(R.id.ce_inertia_normal);
+        inertiaNormalText = (TextView) findViewById(R.id.ce_inertia_num);
         saveButton = (Button) findViewById(R.id.ce_save_button);
         mColorImage = (ImageView) findViewById(R.id.custom_color_image);
         mColorArea = (LinearLayout) findViewById(R.id.color_text_and_image);
@@ -106,22 +122,6 @@ public class CustomElementBasicActivity extends ReportingActivity
         baseElementField.setAdapter(elementAdapter);
         lowerElementField.setAdapter(elementAdapter);
         higherElementField.setAdapter(elementAdapter);
-
-        // Load data from the parent activity
-        mCustomElementBuilder = mParent.mCustomElementBuilder;
-        oldFilename = mParent.oldFilename;
-        newElement = mParent.newElement;
-        shouldIgnoreSelection = false;
-        if (!newElement)
-        {
-            shouldIgnoreSelection = true;
-            // Fill in the basic view info
-            fillInfo();
-            // Also save the special and custom data in the parent activity
-            mParent.collisions = CustomElementManager.getCollisionIndexList(mCustomElementBuilder);
-            mParent.specials = CustomElementManager.getSpecialsIndexList(mCustomElementBuilder);
-            mParent.specialVals = CustomElementManager.getSpecialValsIndexList(mCustomElementBuilder);
-        }
 
         baseElementField.setOnItemSelectedListener(new OnItemSelectedListener ()
         {
@@ -142,6 +142,84 @@ public class CustomElementBasicActivity extends ReportingActivity
                 // TODO: Clear the properties
             }
         });
+        
+        startingTempField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                startingTempText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        
+        lowestTempField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                lowestTempText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        
+        highestTempField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                highestTempText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        
+        densityField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                densityText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        
+        inertiaNormalField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                inertiaNormalText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+        
+        fallvelField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                fallvelText.setText(String.valueOf(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
 
         inertiaUnmovableField.setOnCheckedChangeListener(new OnCheckedChangeListener()
         {
@@ -150,10 +228,14 @@ public class CustomElementBasicActivity extends ReportingActivity
             {
                 if (checked)
                 {
+                    //TODO(gkanwar): For some reason this does weird stuff with
+                    //displaying the inner stuff once it is visible again
+                    //inertiaContainer.setVisibility(View.GONE);
                     inertiaNormalField.setVisibility(View.GONE);
                 }
                 else
                 {
+                    //inertiaContainer.setVisibility(View.VISIBLE);
                     inertiaNormalField.setVisibility(View.VISIBLE);
                 }
             }
@@ -185,6 +267,18 @@ public class CustomElementBasicActivity extends ReportingActivity
                 }
             }
         });
+        
+        // Load data from the parent activity
+        mCustomElementBuilder = mParent.mCustomElementBuilder;
+        oldFilename = mParent.oldFilename;
+        newElement = mParent.newElement;
+        shouldIgnoreSelection = false;
+        if (!newElement)
+        {
+            shouldIgnoreSelection = true;
+            // Fill in all info from the custom element builder
+            fillInfo();
+        }
     }
 
     private boolean saveElement()
@@ -336,6 +430,7 @@ public class CustomElementBasicActivity extends ReportingActivity
         }
     }
 
+    // Fill in all info from the current custom element builder
     private void fillInfo()
     {
         nameField.setText(
@@ -379,93 +474,35 @@ public class CustomElementBasicActivity extends ReportingActivity
             inertiaNormalField.setVisibility(View.VISIBLE);
             inertiaNormalField.setProgress(mCustomElementBuilder.getInertia());
         }
+        
+        // Also save the special and custom data in the parent activity
+        mParent.collisions = CustomElementManager.getCollisionIndexList(mCustomElementBuilder);
+        mParent.specials = CustomElementManager.getSpecialsIndexList(mCustomElementBuilder);
+        mParent.specialVals = CustomElementManager.getSpecialValsIndexList(mCustomElementBuilder);
     }
+    
     private void fillInfoFromBase(int pos)
     {
         int elementIndex = pos + MainActivity.NORMAL_ELEMENT;
-        String elementInfo = MainActivity.getElementInfo(elementIndex);
-        Log.d("LOG", "Element info: " + elementInfo);
-        BufferedReader reader = new BufferedReader(new StringReader(elementInfo));
-
-        try
-        {
-            // Now fill in the actual values
-            //nameField.setText(reader.readLine());
-            // Ignore the name
-            reader.readLine();
-            int stateVal = Integer.parseInt(reader.readLine());
-            stateField.check(getStateRadioId(stateVal));
-            startingTempField.setProgress(Integer.parseInt(reader.readLine()));
-            lowestTempField.setProgress(Integer.parseInt(reader.readLine()));
-            highestTempField.setProgress(Integer.parseInt(reader.readLine()));
-            lowerElementField.setSelection(Integer.parseInt(reader.readLine()) - MainActivity.NORMAL_ELEMENT);
-            higherElementField.setSelection(Integer.parseInt(reader.readLine()) - MainActivity.NORMAL_ELEMENT);
-            final int color = Color.rgb(Integer.parseInt(reader.readLine()), //red
-                        Integer.parseInt(reader.readLine()), //green
-                        Integer.parseInt(reader.readLine())); //blue
-            setElementColorColor(color);
-            mColorPickerDialog = makeColorPickerDialog(color);
-            mColorArea.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mColorPickerDialog.show();
-                }
-            });
-
-
-            densityField.setProgress(Integer.parseInt(reader.readLine()));
-            fallvelField.setProgress(Integer.parseInt(reader.readLine()));
-            int inertia = Integer.parseInt(reader.readLine());
-            if (inertia == 255)
-            {
-                inertiaUnmovableField.setChecked(true);
-                inertiaNormalField.setVisibility(View.GONE);
-            }
-            else
-            {
-                inertiaUnmovableField.setChecked(false);
-                inertiaNormalField.setVisibility(View.VISIBLE);
-                inertiaNormalField.setProgress(inertia);
-            }
-
-            // Save collisions and specials for the advanced activity
-            mParent.collisions = new ArrayList<Integer>();
-            String line;
-            for (int i = 0; i < MainActivity.NUM_BASE_ELEMENTS-MainActivity.NORMAL_ELEMENT; i++)
-            {
-                line = reader.readLine();
-                if (line == null)
-                {
-                    return;
-                }
-
-                mParent.collisions.add(Integer.parseInt(line));
-            }
-            mParent.specials = new ArrayList<Integer>();
-            mParent.specialVals = new ArrayList<Integer>();
-            String[] tempVals;
-            for (int i = 0; i < MainActivity.MAX_SPECIALS; i++)
-            {
-                line = reader.readLine();
-                if (line == null)
-                {
-                    return;
-                }
-
-                tempVals = line.split("\\s+", 2);
-                if (tempVals.length < 2)
-                {
-                    return;
-                }
-                mParent.specials.add(Integer.parseInt(tempVals[0]));
-                mParent.specialVals.add(Integer.parseInt(tempVals[1]));
-            }
+        ByteString elementInfo = ByteString.copyFrom(MainActivity.getElementInfo(elementIndex));
+        CustomElement baseElement;
+        try {
+            baseElement = CustomElement.parseFrom(elementInfo);
         }
-        catch (IOException e)
-        {
-            // TODO: Maybe do something here?
-            e.printStackTrace();
+        catch (InvalidProtocolBufferException e) {
+            throw new RuntimeException("Could not parse base element proto message");
         }
+        
+        // Treat name and filename specially, since they should persist
+        // Unfortunately, we cannot just use mergeFrom here, since that would just mash
+        // the collision lists together.
+        String name = mCustomElementBuilder.getName();
+        String filename = mCustomElementBuilder.getFilename();
+        mCustomElementBuilder = CustomElement.newBuilder(baseElement);
+        mCustomElementBuilder.setName(name);
+        mCustomElementBuilder.setFilename(filename);
+                
+        fillInfo();
     }
 
     private int getStateRadioId(int state)

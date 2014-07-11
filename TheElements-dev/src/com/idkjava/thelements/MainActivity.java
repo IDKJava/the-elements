@@ -552,7 +552,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         
     //Getters
     public static native char getElement();
-    public static native String getElementInfo(int index);
+    public static native byte[] getElementInfo(int index);
     public static native int getElementRed(int index);
     public static native int getElementGreen(int index);
     public static native int getElementBlue(int index);

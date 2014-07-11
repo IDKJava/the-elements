@@ -23,6 +23,8 @@
 #include "elementproperties.h"
 //Include the collisions data file
 #include "collisions.h"
+//Include proto messages
+#include "messages.pb.h"
 //Include the saving and loading functions
 #include "saveload.h"
 #include "saveload2.h"
@@ -412,59 +414,48 @@ Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject thi
 		return 0;
 	}
 }
-JNIEXPORT jstring JNICALL
+JNIEXPORT jbyteArray JNICALL
 Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject thiz, int i)
 {
-#define BUFFER_SIZE 1000
-    char buffer[BUFFER_SIZE];
-    int length = snprintf(buffer, BUFFER_SIZE,
-                          "%s\n" // Name
-                          "%d\n" // State
-                          "%d\n" // Starting temp
-                          "%d\n" // Lowest temp
-                          "%d\n" // Highest temp
-                          "%d\n" // Lower element index
-                          "%d\n" // Highest element index
-                          "%d\n" // Red
-                          "%d\n" // Green
-                          "%d\n" // Blue
-                          "%d\n" // Density
-                          "%d\n" // fallVel
-                          "%d\n", // inertia
-                          baseName[i],
-                          (int)baseState[i],
-                          (int)baseStartingTemp[i],
-                          (int)baseLowestTemp[i],
-                          (int)baseHighestTemp[i],
-                          (int)baseLowerElement[i],
-                          (int)baseHigherElement[i],
-                          (int)baseRed[i],
-                          (int)baseGreen[i],
-                          (int)baseBlue[i],
-                          (int)baseDensity[i],
-                          (int)baseFallVel[i],
-                          (int)baseInertia[i]);
-    int j;
-    for (j = 0; j < NUM_BASE_ELEMENTS-NORMAL_ELEMENT; j++)
+    // TODO(gkanwar): Rename CustomElement message to ElementInfo,
+    // since this is not actually a custom.
+    CustomElement custom;
+    custom.set_name(baseName[i]);
+    custom.set_state(baseState[i]);
+    custom.set_starting_temp(baseStartingTemp[i]);
+    custom.set_lowest_temp(baseLowestTemp[i]);
+    custom.set_highest_temp(baseHighestTemp[i]);
+    custom.set_lower_element_index(baseLowerElement[i]);
+    custom.set_higher_element_index(baseHigherElement[i]);
+    custom.set_red(baseRed[i]);
+    custom.set_green(baseGreen[i]);
+    custom.set_blue(baseBlue[i]);
+    custom.set_density(baseDensity[i]);
+    custom.set_fallvel(baseFallVel[i]);
+    custom.set_inertia(baseInertia[i]);
+
+    for (int j = NORMAL_ELEMENT; j < NUM_BASE_ELEMENTS; j++)
     {
-        length += snprintf(&(buffer[length]), BUFFER_SIZE-length,
-                           "%d\n", // Collision number j
-                           collision[i][j+NORMAL_ELEMENT]);
+        custom.add_collision()->set_type(collision[i][j]);
     }
 
-    for (j = 0; j < MAX_SPECIALS; j++)
+    for (int j = 0; j < MAX_SPECIALS; j++)
     {
-        length += snprintf(&(buffer[length]), BUFFER_SIZE-length,
-                           "%d %d\n", // Special number j
-                           baseSpecial[i][j],
-                           baseSpecialValue[i][j]);
+        Special* special = custom.add_special();
+        special->set_type(baseSpecial[i][j]);
+        special->set_val(baseSpecialValue[i][j]);
     }
 
-    __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
+    string out;
+    if (!custom.SerializeToString(&out))
+    {
+        LOGE("Could not serialize element info");
+        return env->NewByteArray(0);
+    }
 
-    jstring retVal;
-    retVal = env->NewStringUTF(buffer);
-    return retVal;
+    jbyteArray arr = env->NewByteArray(out.size());
+    env->SetByteArrayRegion(arr, 0, out.size(), (jbyte*)out.c_str());
+    return arr;
 }
 JNIEXPORT int JNICALL
 Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject thiz)

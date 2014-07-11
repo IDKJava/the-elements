@@ -1,4 +1,5 @@
 
     <resources>
         <color name="black">#000000</color>
+        <color name="custom_property_desc">#666</color>
     </resources>

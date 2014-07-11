@@ -205,6 +205,7 @@ LOCAL_SRC_FILES := \
     app-android.cc \
 	app.cc \
 	collide.cc \
+	collisions.cc \
 	elementproperties.cc \
 	messages.pb.cc \
     points.cc \
