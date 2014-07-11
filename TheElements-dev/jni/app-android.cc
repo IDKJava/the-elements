@@ -25,6 +25,7 @@
 #include "collisions.h"
 //Include the saving and loading functions
 #include "saveload.h"
+#include "saveload2.h"
 //Include the server access functions
 //#include "server.h"
 //Include the rendering functions
@@ -42,7 +43,8 @@
 #endif
 
 //Called from SandViewRenderer
-void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject this, jint width, jint height)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
 
@@ -69,7 +71,8 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env,
     startUpdateThread();
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now
-void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject this, jboolean shouldLoadDemo)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject thiz, jboolean shouldLoadDemo)
 {
     char loadLoc[256];
 
@@ -85,27 +88,29 @@ void Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* e
         LOGI("loadTempState");
         strcat(loadLoc, TEMP_SAVE);
     }
-    strcat(loadLoc, SAVE_EXTENSION);
+    strcat(loadLoc, SAVE2_EXTENSION);
     LOGI("Calling loadstate2");
     loadState2(loadLoc);
 }
-void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject this)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject thiz)
 {
     glRenderThreaded();
 }
 
 //Save/load functions
-char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject this, jbyteArray saveLoc)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz, jbyteArray saveLoc)
 {
 #ifdef USE_PROFILING
     // Stop profiling
-    // This saves to /sdcard/gmon.out
+    // this saves to /sdcard/gmon.out
     moncleanup();
 #endif
 
-    jsize len = (*env)->GetArrayLength(env, saveLoc);
+    jsize len = env->GetArrayLength(saveLoc);
     jbyte* saveLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
-    (*env)->GetByteArrayRegion(env, saveLoc, 0, len, saveLoc2);
+    env->GetByteArrayRegion(saveLoc, 0, len, saveLoc2);
     char* saveLoc3 = (char*) malloc((len+1) * sizeof(char));
     int i;
     char buffer[100];
@@ -126,11 +131,12 @@ char Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject
     __android_log_write(ANDROID_LOG_ERROR, "TheElements", "saveState: failed!");
     return FALSE;
 }
-char Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject this, jbyteArray loadLoc)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz, jbyteArray loadLoc)
 {
-    jsize len = (*env)->GetArrayLength(env, loadLoc);
+    jsize len = env->GetArrayLength(loadLoc);
     jbyte* loadLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
-    (*env)->GetByteArrayRegion(env, loadLoc, 0, len, loadLoc2);
+    env->GetByteArrayRegion(loadLoc, 0, len, loadLoc2);
     char* loadLoc3 = (char*) malloc((len+1) * sizeof(char));
     int i;
     char buffer[100];
@@ -151,40 +157,44 @@ char Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject
     __android_log_write(ANDROID_LOG_ERROR, "TheElements", "loadLoc: failed!");
     return FALSE;
 }
-char Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject this)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz)
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempState");
     char saveLoc[256];
     strcpy(saveLoc, ROOT_FOLDER);
     strcat(saveLoc, SAVES_FOLDER);
     strcat(saveLoc, TEMP_SAVE);
-    strcat(saveLoc, SAVE_EXTENSION);
+    strcat(saveLoc, SAVE2_EXTENSION);
     return saveState2(saveLoc);
 }
-char Java_com_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject this)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject thiz)
 {
     return removeTempSave();
 }
-char Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject this)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thiz)
 {
     char loadLoc[256];
     strcpy(loadLoc, ROOT_FOLDER);
     strcat(loadLoc, SAVES_FOLDER);
     strcat(loadLoc, DEMO_SAVE);
-    strcat(loadLoc, SAVE_EXTENSION);
+    strcat(loadLoc, SAVE2_EXTENSION);
     return loadState2(loadLoc);
 }
 
 //General utility functions
-void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject this, jstring udidString, jint jversionCode)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz, jstring udidString, jint jversionCode)
 {
     // Set some global variables
-    int jstringLen = (*env)->GetStringUTFLength(env, udidString);
+    int jstringLen = env->GetStringUTFLength(udidString);
     if (jstringLen > MAX_UDID_LENGTH-1)
     {
         jstringLen = MAX_UDID_LENGTH-1;
     }
-    (*env)->GetStringUTFRegion(env, udidString, 0, jstringLen, udid);
+    env->GetStringUTFRegion(udidString, 0, jstringLen, udid);
     udid[jstringLen] = 0;
     versionCode = jversionCode;
 
@@ -199,34 +209,40 @@ void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject th
     monstartup("libthelements.so");
 #endif
 }
-void Java_com_idkjava_thelements_MainActivity_nativeRefreshElements(JNIEnv* env, jobject this)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_nativeRefreshElements(JNIEnv* env, jobject thiz)
 {
 	// Reload all elements, recreate eleList.lst
 	elementSetup();
 }
 
-void Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject this)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
 {
     shouldClear = TRUE;
 }
 
 //Setter functions
-void Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject this, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject thiz, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
 {
     cAtmosphere->borderLeft = leftBorderState;
     cAtmosphere->borderTop = topBorderState;
     cAtmosphere->borderRight = rightBorderState;
     cAtmosphere->borderBottom = bottomBorderState;
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject this, jboolean accelState)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject thiz, jboolean accelState)
 {
     accelOn = (char) accelState;
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject this, jboolean flippedState)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject thiz, jboolean flippedState)
 {
     flipped = (char) flippedState;
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject this, jchar redValue, jchar greenValue, jchar blueValue)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject thiz, jchar redValue, jchar greenValue, jchar blueValue)
 {
     //Set the eraser color to the background color, used as the reference whenever background color is needed
     cAtmosphere->backgroundRed = redValue;
@@ -246,19 +262,22 @@ void Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIE
       strcpy(loadLoc, ROOT_FOLDER);
       strcat(loadLoc, SAVES_FOLDER);
       strcat(loadLoc, TEMP_SAVE);
-      strcat(loadLoc, SAVE_EXTENSION);
+      strcat(loadLoc, SAVE2_EXTENSION);
       loadState(loadLoc);
     */
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject this, jchar temp)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject thiz, jchar temp)
 {
     cAtmosphere->heat = temp;
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject this, jfloat gravity)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject thiz, jfloat gravity)
 {
     cAtmosphere->gravity = gravity;
 }
-void Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject this, jint zoom)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject thiz, jint zoom)
 {
     if(zoom != zoomFactor)
     {
@@ -266,21 +285,25 @@ void Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jo
         zoomChanged = TRUE;
     }
 }
-void Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject this, jboolean playState)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject thiz, jboolean playState)
 {
     play = (char) playState;
 }
-void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject this, jchar element)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar element)
 {
 	if (element >= 0 && element < numElements) {
 		cElement = elements[element];
 	}
 }
-void Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject this, jchar brushSizeValue)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar brushSizeValue)
 {
     brushSize = brushSizeValue;
 }
-void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject this, jchar state, jint x, jint y)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject thiz, jchar state, jint x, jint y)
 {
     pthread_mutex_lock(&mouse_mutex);
     float modViewWidth = viewWidth * zoomScale;
@@ -314,18 +337,21 @@ void Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, job
     pthread_mutex_unlock(&mouse_mutex);
 }
 
-void Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject this, jchar mode)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
 {
   filterType = mode;
 }
 
-void Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject this, jfloat scale)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject thiz, jfloat scale)
 {
   zoomScale = scale;
 }
 
 
-void Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobject this, jchar active)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobject thiz, jchar active)
 {
     isPinch = active;
     if (!active) 
@@ -336,18 +362,21 @@ void Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobje
     }
 }
 
-void Java_com_idkjava_thelements_game_SandView_setIsPanMode(JNIEnv* env, jobject this, jchar isPan)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setIsPanMode(JNIEnv* env, jobject thiz, jchar isPan)
 {
   isPanMode = isPan;
 }
 
 
 //Getter functions
-char Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject this)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject thiz)
 {
     return cElement->index;
 }
-char Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject this, int i)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->red;
@@ -356,7 +385,8 @@ char Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject
 		return 0;
 	}
 }
-char Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject this, int i)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->green;
@@ -365,7 +395,8 @@ char Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobje
 		return 0;
 	}
 }
-char Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject this, int i)
+JNIEXPORT char JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->blue;
@@ -374,7 +405,8 @@ char Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobjec
 		return 0;
 	}
 }
-jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject this, int i)
+JNIEXPORT jstring JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject thiz, int i)
 {
 #define BUFFER_SIZE 1000
     char buffer[BUFFER_SIZE];
@@ -424,20 +456,23 @@ jstring Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, job
     __android_log_write(ANDROID_LOG_INFO, "LOG", buffer);
 
     jstring retVal;
-    retVal = (*env)->NewStringUTF(env, buffer);
+    retVal = env->NewStringUTF(buffer);
     return retVal;
 }
-int Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject this)
+JNIEXPORT int JNICALL
+Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject thiz)
 {
     return MAX_SPECIALS;
 }
 
 //Accelerometer related
-void Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject this, float xGravityIn)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject thiz, float xGravityIn)
 {
     xGravity = xGravityIn;
 }
-void Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject this, float yGravityIn)
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, float yGravityIn)
 {
     yGravity = yGravityIn;
 }

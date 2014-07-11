@@ -8,21 +8,6 @@
 #include "app.h"
 
 /*
- * FUNCTIONS
- */
-
-//Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
-inline int getIndex(int x, int y)
-{
-    return y*workWidth + x;
-}
-//Used specifically for colors
-inline int getColorIndex( int x, int y )
-{
-    return y*stupidTegra + x;
-}
-
-/*
  * VARIABLES
  */
 

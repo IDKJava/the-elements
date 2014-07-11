@@ -191,7 +191,7 @@ char loadStateLogicV0(FILE* fp)
         int* tempElMap;
         tempElMap = (int*)malloc ( MAX_ELEMENTS * sizeof(int) );
         tempMap = (int*)malloc( numElementsSaved * 3 * sizeof(int) );
-        elements = realloc( elements, (numElements + numElementsSaved) * sizeof( struct Element* ) );
+        elements = (struct Element**)realloc( elements, (numElements + numElementsSaved) * sizeof( struct Element* ) );
 
         for(i = 0; i < numElementsSaved; i++)
         {
@@ -771,13 +771,13 @@ char loadCustomElement(char* loadLoc)
     // Effectively a realloc
     // TODO: Replace with realloc
     struct Element** tempElementArray;
-    tempElementArray = malloc(numElements*sizeof( struct Element*));
+    tempElementArray = (struct Element**)malloc(numElements*sizeof(struct Element*));
     for (i = 0; i < numElements; i++)
     {
         tempElementArray[i] = elements[i];
     }
     free(elements);
-    elements = malloc((numElements+1)*sizeof( struct Element*));
+    elements = (struct Element**)malloc((numElements+1)*sizeof(struct Element*));
     for (i = 0; i < numElements; i++)
     {
         elements[i] = tempElementArray[i];
@@ -845,7 +845,7 @@ char* stringifyElement(struct Element* element)
 }
 // djb2 hash for strings
 // See: http://www.cse.yorku.ca/~oz/hash.html
-unsigned long hashStr(unsigned char *str)
+unsigned long hashStr(char *str)
 {
     unsigned long hash = 5381;
     int c;

@@ -202,18 +202,18 @@ ifeq ($(USE_PROFILING),yes)
 endif
 
 LOCAL_SRC_FILES := \
-    app-android.c \
-	app.c \
-	collide.c \
-	elementproperties.c \
+    app-android.cc \
+	app.cc \
+	collide.cc \
+	elementproperties.cc \
 	messages.pb.cc \
-    points.c \
-    rendergl.c \
-    saveload.c \
+    points.cc \
+    rendergl.cc \
+    saveload.cc \
     saveload2.cc \
-    setup.c \
-    specials.c \
-    update.c
+    setup.cc \
+    specials.cc \
+    update.cc	
 
 $(LOCAL_PATH)/messages.pb.h: $(LOCAL_PATH)/../proto/messages.proto
 	echo "Build messages.pb.h"

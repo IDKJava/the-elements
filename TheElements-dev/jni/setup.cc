@@ -6,7 +6,10 @@
  */
 
 #include "setup.h"
+
 #include <android/log.h>
+
+#include "saveload2.h"
 
 // Per-file logging
 #ifndef NDEBUG
@@ -64,9 +67,9 @@ void arraySetup()
     free(allCoords);
 
     //Allocate memory
-    colors = malloc(3 * stupidTegra * workHeight * sizeof(char));
-    colorsFrameBuffer = malloc(3 * stupidTegra * workHeight * sizeof(char));
-    allCoords = malloc(workWidth * workHeight * sizeof(int*)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+    colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
+    colorsFrameBuffer = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
+    allCoords = (int*)malloc(workWidth * workHeight * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
 }
 
 void atmosphereSetup()
@@ -87,6 +90,7 @@ void atmosphereSetup()
 
 void elementSetup()
 {
+    LOGI("Element setup");
     int i, j;
 
     //Free and reallocate the elements array
@@ -94,13 +98,15 @@ void elementSetup()
     {
         for(i = 0; i < numElements; ++i)
         {
+            LOGI("Free: %d", i);
             free(elements[i]);
         }
         free(elements);
     }
+    LOGI("Elements free done");
 
     numElements = NUM_BASE_ELEMENTS; //Changed later
-    elements = malloc(numElements * sizeof(struct Element*)); // we  will realloc later for custom elements if neede
+    elements = (struct Element**)malloc(numElements * sizeof(struct Element*)); // we  will realloc later for custom elements if neede
 
     //Allocate and initialize all the elements
     struct Element* tempElement;

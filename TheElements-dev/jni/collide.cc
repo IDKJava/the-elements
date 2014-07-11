@@ -9,7 +9,7 @@
 
 #include "collide.h"
 
-#include "stdbool.h"
+#include "specials.h"
 
 void collide(int firstParticle, int secondParticle)
 {

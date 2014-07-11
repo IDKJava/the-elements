@@ -42,7 +42,7 @@ float texture[] = {0.0f, 0.0f,
                    1.0f, 1.0f,
                    0.0f, 1.0f};
 
-int texWidth, texHeight, stupidTegra;
+int texWidth, texHeight;
 
 void printGLString(const char *name, GLenum s) {
     const char *v = (const char *) glGetString(s);
@@ -207,7 +207,7 @@ void glInit() {
 
 
     //Allocate the dummy array
-    char* emptyPixels = malloc(3 * texWidth*texHeight * sizeof(char));
+    char* emptyPixels = (char*)malloc(3 * texWidth*texHeight * sizeof(char));
     //Generate the tex image
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texWidth, texHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, emptyPixels);
     checkGlError("glTexImage2D");

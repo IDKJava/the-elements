@@ -4,28 +4,21 @@
 
 #include <fstream>
 
+//File extensions
+#define SAVE2_EXTENSION ".sav2"
+#define ELEMENT2_EXTENSION ".ele2"
+
 using namespace std;
 
-// Public C API
-#ifdef __cplusplus
-extern "C" {
-#endif
-
+// Public API
 char saveState2(char* saveLoc);
 char loadState2(char* loadLoc);
 char loadCustomElements2(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-// Private C++ helper functions
+// Private helper functions
 bool saveStateLogic2(ofstream& out);
 bool loadStateLogic2(ifstream& in);
 bool loadCustomElement2(ifstream& in);
-unsigned long hashElement2(struct Element* element);
-char* stringifyElement2(struct Element* element);
-unsigned long hashStr2(char* str);
-int findElementFromHash2(unsigned long hash);
+int findElementFromFilename(string filename);
 
 #endif  // SAVELOAD_2_H_INCLUDED

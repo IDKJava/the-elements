@@ -86,7 +86,7 @@ char loadCustomElements2(void)
     {
         string filename = loadLoc + string(entry->d_name);
         string ext = filename.substr(filename.find_last_of("."));
-        if (ext != string(ELEMENT_EXTENSION))
+        if (ext != string(ELEMENT2_EXTENSION))
         {
             LOGW("Skipping non-element file: %s", filename.c_str());
             continue;
@@ -148,7 +148,7 @@ bool saveStateLogic2(ofstream& out)
         else
         {
             particle->set_element_type(Particle::CUSTOM);
-            particle->set_element_hash(hashElement2(a_element[i]));
+            particle->set_element_filename(a_element[i]->filename);
         }
     }
 
@@ -224,14 +224,33 @@ bool loadStateLogic2(ifstream& in)
         // Element
         if (particle.element_type() == Particle::BASIC)
         {
-            a_element[tempParticle] = particle.has_element_index() ?
-                    elements[particle.element_index()] : elements[SAND_ELEMENT];
+            if (!particle.has_element_index() ||
+                    particle.element_index() < 0 ||
+                    particle.element_index() >= numElements)
+            {
+                LOGW("Invalid basic element index %d, defaulting to sand");
+                a_element[tempParticle] = elements[SAND_ELEMENT];
+            }
+            else
+            {
+                a_element[tempParticle] = elements[particle.element_index()];
+            }
         }
         else if (particle.element_type() == Particle::CUSTOM)
         {
-            int elementIndex = findElementFromHash2(particle.element_hash());
-            a_element[tempParticle] = elementIndex >= 0 ?
-                    elements[elementIndex] : elements[SAND_ELEMENT];
+            int elementIndex = findElementFromFilename(particle.element_filename());
+            if (elementIndex < 0  || elementIndex >= numElements)
+            {
+                LOGW("Invalid element index %d for filename %s",
+                        elementIndex, particle.element_filename());
+                a_element[tempParticle] = elements[SAND_ELEMENT];
+            }
+            else
+            {
+                LOGI("Element index %d for filename %s",
+                        elementIndex, particle.element_filename());
+                a_element[tempParticle] = elements[elementIndex];
+            }
         }
         else
         {
@@ -260,11 +279,13 @@ bool loadStateLogic2(ifstream& in)
         setBitmapColor(i, j, a_element[tempParticle]);
     }
 
+    LOGI("End load state logic 2");
     return true;
 }
 
 bool loadCustomElement2(ifstream& in)
 {
+    LOGI("loadCustomElement2");
     CustomElement customProto;
     if (!customProto.ParseFromIstream(&in))
     {
@@ -276,6 +297,8 @@ bool loadCustomElement2(ifstream& in)
     custom->index = numElements;
     custom->name = (char*) malloc((customProto.name().length()+1) * sizeof(char));
     strcpy(custom->name, customProto.name().c_str());
+    custom->filename = (char*) malloc((customProto.filename().length()+1) * sizeof(char));
+    strcpy(custom->filename, customProto.filename().c_str());
     custom->allowMovingTransition = customProto.allow_moving_transition();
     custom->state = customProto.state();
     custom->startingTemp = customProto.starting_temp();
@@ -377,71 +400,11 @@ bool loadCustomElement2(ifstream& in)
     return true;
 }
 
-// Hash an element (usually a custom element), for the purposes of identifying later
-unsigned long hashElement2(struct Element* element)
+int findElementFromFilename(string filename)
 {
-    //Stringify the element
-    char* stringified = stringifyElement2(element);
-    unsigned long hash = hashStr2(stringified);
-    free(stringified);
-    return hash;
-}
-
-char* stringifyElement2(struct Element* element)
-{
-    char* buffer = (char*)malloc(sizeof(char)*1024);
-    int offset = 0;
-    offset += sprintf(&buffer[offset], "%d%s", element->index, element->name);
-    offset += sprintf(&buffer[offset], "%c%c%c%c%d%d", element->state,
-                      element->startingTemp,
-                      element->lowestTemp,
-                      element->highestTemp,
-                      element->lowerElement->index,
-                      element->higherElement->index);
-    offset += sprintf(&buffer[offset], "%c%c%c", element->red,
-                      element->blue,
-                      element->green);
-    int i;
-    for (i = 0; i < MAX_SPECIALS; ++i)
+    for (int i = 0; i < numElements; ++i)
     {
-        offset += sprintf(&buffer[offset], "%d%d", element->specials[i], element->specialVals[i]);
-    }
-    for (i = 0; i < NUM_BASE_ELEMENTS; ++i)
-    {
-        offset += sprintf(&buffer[offset], "%d", element->collisions[i]);
-    }
-    offset += sprintf(&buffer[offset], "%c%c%c%c", element->base,
-                      element->density,
-                      element->fallVel,
-                      element->inertia);
-    buffer[offset] = 0;
-    return buffer;
-}
-
-// djb2 hash for strings
-// See: http://www.cse.yorku.ca/~oz/hash.html
-unsigned long hashStr2(char *str)
-{
-    unsigned long hash = 5381;
-    int c;
-
-    while (c = *str++)
-        hash = ((hash << 5) + hash) + c; // hash * 33 + c
-
-    return hash;
-}
-
-// Find an element based on the hash
-// For now, do it stupidly: iterate through customs and hash them,
-// looking for a match. If not found, return -1.
-int findElementFromHash2(unsigned long hash)
-{
-    int i;
-    unsigned long tempHash;
-    for (i = NUM_BASE_ELEMENTS; i < numElements; ++i)
-    {
-        tempHash = hashElement2(elements[i]);
-        if (tempHash == hash)
+        if (string(elements[i]->filename) == filename)
         {
             return i;
         }

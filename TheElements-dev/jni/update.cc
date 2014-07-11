@@ -7,7 +7,10 @@
  */
 
 #include "update.h"
+
 #include <android/log.h>
+
+#include "specials.h"
 
 // Per-file logging
 #ifndef NDEBUG

@@ -19,17 +19,6 @@
 //Include KamCord stuff
 #include <Kamcord-C-Interface.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/*
- * FUNCTIONS
- */
-
-    inline int getIndex(int x, int y);
-    inline int getColorIndex(int x, int y);
-
 /*
  * STRUCTS
  */
@@ -40,6 +29,8 @@ extern "C" {
         unsigned char index;
         //Name
         char* name;
+        //Filename, only for customs
+        char* filename;
 
         //Dealing with phases
         char allowMovingTransition;
@@ -192,6 +183,21 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
+ * FUNCTIONS
+ */
+
+//Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
+inline int getIndex(int x, int y)
+{
+    return y*workWidth + x;
+}
+//Used specifically for colors
+inline int getColorIndex( int x, int y )
+{
+    return y*stupidTegra + x;
+}
+
+/*
  * THREADS
  */
 
@@ -206,10 +212,5 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
     extern pthread_cond_t buffer_free_cond;
 
     extern pthread_mutex_t mouse_mutex;
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif // !APP_H_INCLUDED

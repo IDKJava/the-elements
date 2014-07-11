@@ -24,16 +24,8 @@
 //For bcopy and bzero
 #include <strings.h>
 
-#if __cplusplus
-extern "C" {
-#endif
-
 void adduserpass(void);
 void buildbuffer(int type);
 int sendbuffer(void);
-
-#if __cplusplus
-}
-#endif
 
 #endif //!SERVER_H_INCLUDED

@@ -22,15 +22,7 @@
 //Include the clear funtion (rsetup)
 #include "setup.h"
 
-#if __cplusplus
-extern "C" {
-#endif
-
 void startUpdateThread();
 void killUpdateThread();
-
-#if __cplusplus
-}
-#endif
 
 #endif //!UPDATE_H_INCLUDED

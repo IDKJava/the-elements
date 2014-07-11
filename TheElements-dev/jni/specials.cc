@@ -449,7 +449,7 @@ int specialBurn(int particle)
     // Burn doesn't trigger when explode is set
     if (getElementSpecialVal(tempElement, SPECIAL_EXPLODE) != SPECIAL_VAL_UNSET)
     {
-        return;
+        return shouldResolveHeatChanges;
     }
 
     int state = getParticleSpecialVal(particle, SPECIAL_BURN);

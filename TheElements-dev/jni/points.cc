@@ -7,6 +7,7 @@
  */
 
 #include "points.h"
+
 #include <android/log.h>
 
 #ifndef NDEBUG // Debug
