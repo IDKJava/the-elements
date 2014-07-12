@@ -4,7 +4,6 @@ import java.io.File;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -21,28 +20,41 @@ public class SplashActivity extends ReportingActivity
 		
 		setContentView(R.layout.splash_activity);
 		mLoadingText = (TextView) findViewById(R.id.loading_text);
-		
-		// Upgrade files if needed
-		maybeUpgradeFiles();
-		
-		new Handler().postDelayed(
-				new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						//Create an Intent to start MainActivity
-						Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
-						startActivity(mainIntent);
-						finish();
-					}
-				}, 1000);
+		new Thread()
+		{
+		    @Override
+		    public void run()
+		    {
+		        maybeUpgradeFiles();
+		        
+		        try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {}
+		        
+                //Create an Intent to start MainActivity
+                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(mainIntent);
+                finish();
+		    }
+		}.start();
 	}
 	
+	private void setTextOnUiThread(final String text) {
+	    runOnUiThread(new Runnable() {
+	        @Override
+	        public void run() {
+	            mLoadingText.setText(text);
+	        }
+	    });
+	}
+
 	private void maybeUpgradeFiles()
 	{
 	    String oldText = mLoadingText.getText().toString();
-	    mLoadingText.setText("Upgrading save files...");
+	    setTextOnUiThread("Upgrading save files...");
+	    try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {}
 	    
 	    File elementDir = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR);
 	    File[] elementFiles = elementDir.listFiles();
@@ -53,8 +65,13 @@ public class SplashActivity extends ReportingActivity
 	            if (elementFile.getAbsolutePath().endsWith(FileManager.ELEMENT_EXT))
 	            {
 	                Log.i("TheElements", "Upgrading " + elementFile.getAbsolutePath());
-	                mLoadingText.setText("Upgrading " + elementFile.getAbsolutePath());
+	                setTextOnUiThread("Upgrading " + elementFile.getAbsolutePath());
 	                upgradeCustomElement(elementFile.getAbsolutePath());
+	                File elementFileBak = new File(elementFile.getAbsolutePath() + FileManager.BACKUP_EXT);
+	                elementFile.renameTo(elementFileBak);
+	                try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {}
 	            }
 	        }
 	    }
@@ -68,13 +85,18 @@ public class SplashActivity extends ReportingActivity
 	            if (saveFile.getAbsolutePath().endsWith(FileManager.SAVE_EXT))
 	            {
 	                Log.i("TheElements", "Upgrading " + saveFile.getAbsolutePath());
-	                mLoadingText.setText("Upgrading " + saveFile.getAbsolutePath());
+	                setTextOnUiThread("Upgrading " + saveFile.getAbsolutePath());
 	                upgradeSaveFile(saveFile.getAbsolutePath());
+	                File saveFileBak = new File(saveFile.getAbsolutePath() + FileManager.BACKUP_EXT);
+	                saveFile.renameTo(saveFileBak);
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {}
 	            }
 	        }
 	    }
 	    
-	    mLoadingText.setText(oldText);
+	    setTextOnUiThread(oldText);
 	}
     
     private static native boolean upgradeCustomElement(String filename);
