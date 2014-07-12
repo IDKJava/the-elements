@@ -36,7 +36,7 @@ public class CustomElementManager
 		Log.v("TheElements", "CustomElementManager refreshed, files found: " + elementFiles.length);
 		for(int i = 0; i < elementFiles.length; i++)
 		{
-			if (elementFiles[i].endsWith(FileManager.ELEMENT_EXT))
+			if (elementFiles[i].endsWith(FileManager.ELEMENT2_EXT))
 			{
 				Log.v("TheElements", "..." + elementFiles[i]);
 				// Cut off the element extension when saving the filename
@@ -64,7 +64,7 @@ public class CustomElementManager
 	{
 	    String name = custom.getName().toLowerCase();
 	    File test = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
-	            name + FileManager.ELEMENT_EXT);
+	            name + FileManager.ELEMENT2_EXT);
 	    if (!test.exists())
 	    {
 	        custom.setFilename(test.getAbsolutePath());
@@ -75,7 +75,7 @@ public class CustomElementManager
 	    while (test.exists())
 	    {
 	        test = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
-	                name + "(" + copy + ")" + FileManager.ELEMENT_EXT);
+	                name + "(" + copy + ")" + FileManager.ELEMENT2_EXT);
 	    }
 	    custom.setFilename(test.getAbsolutePath());
 	}

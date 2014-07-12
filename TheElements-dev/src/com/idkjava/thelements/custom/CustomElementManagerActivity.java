@@ -146,7 +146,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 				public void onClick(View v)
 				{
 					// Delete the custom element file
-					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT_EXT)).delete();
+					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT2_EXT)).delete();
 					
 					// Update the view accordingly
 					ViewGroup parent = (ViewGroup) v.getParent().getParent();

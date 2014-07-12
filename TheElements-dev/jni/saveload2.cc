@@ -10,9 +10,11 @@
 #include "app.h"
 #include "macros.h"
 #include "messages.pb.h"
+#include "points.h"
 #include "saveload.h"
 
 #include <android/log.h>
+#include <dirent.h>
 #include <pthread.h>
 
 // Per-file logging
@@ -161,9 +163,7 @@ bool saveStateLogic2(ofstream& out)
     }
 
     // Write the file itself
-    save.SerializeToOstream(&out);
-
-    LOGE("End save state logic");
+    return save.SerializeToOstream(&out);
 }
 
 bool loadStateLogic2(ifstream& in)

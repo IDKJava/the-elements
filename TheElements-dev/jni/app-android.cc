@@ -146,9 +146,7 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
     jbyte* loadLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
     env->GetByteArrayRegion(loadLoc, 0, len, loadLoc2);
     char* loadLoc3 = (char*) malloc((len+1) * sizeof(char));
-    int i;
-    char buffer[100];
-    for(i = 0; i < len; i++)
+    for(int i = 0; i < len; i++)
     {
         loadLoc3[i] = loadLoc2[i];
     }
@@ -164,6 +162,9 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
 
     // Copy the load file into temp, so that we resume into it
     copyFile(loadLoc3, tempLoc);
+
+    free(loadLoc2);
+    free(loadLoc3);
     return TRUE;
 }
 JNIEXPORT char JNICALL
@@ -178,11 +179,6 @@ Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz
     return saveState2(saveLoc);
 }
 JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_removeTempSave(JNIEnv* env, jobject thiz)
-{
-    return removeTempSave();
-}
-JNIEXPORT char JNICALL
 Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thiz)
 {
     char loadLoc[256];
@@ -195,18 +191,8 @@ Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thiz
 
 //General utility functions
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz, jstring udidString, jint jversionCode)
+Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
 {
-    // Set some global variables
-    int jstringLen = env->GetStringUTFLength(udidString);
-    if (jstringLen > MAX_UDID_LENGTH-1)
-    {
-        jstringLen = MAX_UDID_LENGTH-1;
-    }
-    env->GetStringUTFRegion(udidString, 0, jstringLen, udid);
-    udid[jstringLen] = 0;
-    versionCode = jversionCode;
-
     // Initialization
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
     atmosphereSetup();
@@ -473,6 +459,65 @@ JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, float yGravityIn)
 {
     yGravity = yGravityIn;
+}
+
+//Upgrading save files (for backwards compatibility)
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_SplashActivity_upgradeCustomElement(JNIEnv* env, jobject thiz, jstring filename)
+{
+    jboolean success = (jboolean) true;
+    const char* nativeFilename = env->GetStringUTFChars(filename, NULL);
+    // Get the new save location
+    string newFilename = string(nativeFilename);
+    newFilename.replace(newFilename.find(ELEMENT_EXTENSION),
+            string(ELEMENT2_EXTENSION).length(), ELEMENT2_EXTENSION);
+
+    CustomElement custom;
+    FILE* customFile = fopen(nativeFilename, "r");
+    upgradeCustomElementV1(customFile, &custom, newFilename);
+
+    ofstream out(newFilename.c_str(), ios::out | ios::binary | ios::trunc);
+    if (!out.fail())
+    {
+        success = (jboolean) custom.SerializeToOstream(&out);
+    }
+    else
+    {
+        success = (jboolean) false;
+    }
+
+    env->ReleaseStringUTFChars(filename, nativeFilename);
+    return success;
+}
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject thiz, jstring filename)
+{
+    jboolean success = (jboolean) true;
+    const char* nativeFilename = env->GetStringUTFChars(filename, NULL);
+
+    SaveFile save;
+    FILE* saveFile = fopen(nativeFilename, "r");
+    upgradeStateV1(saveFile, &save);
+    LOGI("Upgraded dims: %d %d", save.size_x(), save.size_y());
+    LOGI("Upgraded particles: %d", save.particle_size());
+
+    // Get the new save location
+    string newFilename = string(nativeFilename);
+    newFilename.replace(newFilename.find(SAVE_EXTENSION),
+            string(SAVE2_EXTENSION).length(), SAVE2_EXTENSION);
+
+    ofstream out(newFilename.c_str(), ios::out | ios::binary | ios::trunc);
+    if (!out.fail())
+    {
+        success = (jboolean) save.SerializeToOstream(&out);
+    }
+    else
+    {
+        success = (jboolean) false;
+    }
+
+    env->ReleaseStringUTFChars(filename, nativeFilename);
+    return success;
 }
 
 // extern "C"

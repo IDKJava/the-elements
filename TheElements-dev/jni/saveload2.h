@@ -4,9 +4,21 @@
 
 #include <fstream>
 
+//File/folder locations
+#define ROOT_FOLDER "/sdcard/thelements/"
+#define SAVES_FOLDER "saves/"
+#define ELEMENTS_FOLDER "elements/"
+#define ATMOSPHERES_FOLDER "atmospheres/"
+#define TEMP_SAVE "temp"
+#define DEMO_SAVE "demo"
+#define LIST_SAVE "eleList"
 //File extensions
+#define ATMOSPHERE_EXTENSION ".atm"
 #define SAVE2_EXTENSION ".sav2"
 #define ELEMENT2_EXTENSION ".ele2"
+//Deprecated
+#define SAVE_EXTENSION ".sav"
+#define ELEMENT_EXTENSION ".ele"
 
 using namespace std;
 

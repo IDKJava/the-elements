@@ -1,67 +1,33 @@
 /*
  * saveload.h
  * --------------------------
- * Declares the function definitions for saver
- * and loader, the two functions which save and
- * load an element setup. Also defines macros
- * for file locations, and includes needed headers.
+ * Declares functions relating to saving and loading from files.
+ * This file is around for backwards compatibility, as we now use
+ * proto saving and loading instead.
  */
 
 #ifndef SAVELOAD_H_INCLUDED
 #define SAVELOAD_H_INCLUDED
 
-//File/folder locations
-#define ROOT_FOLDER "/sdcard/thelements/"
-#define SAVES_FOLDER "saves/"
-#define ELEMENTS_FOLDER "elements/"
-#define ATMOSPHERES_FOLDER "atmospheres/"
-#define TEMP_SAVE "temp"
-#define DEMO_SAVE "demo"
-#define LIST_SAVE "eleList"
-//File extensions
-#define LIST_EXTENSION ".lst"
-#define SAVE_EXTENSION ".sav"
-#define ELEMENT_EXTENSION ".ele"
-#define ATMOSPHERE_EXTENSION ".atm"
-//Saveload version code (update this when a change occurs, so we can identify old formats)
-#define SAVELOAD_VERSION_CODE_V1 "$$VC1$$"
-#define SAVELOAD_VERSION_CODE_V2 "$$VC2$$"
-#define SAVELOAD_VERSION_CODE SAVELOAD_VERSION_CODE_V1
+#include <string>
 
-//Include the FILE type
-#include <stdio.h>
-//Include the date and time functions
-#include <time.h>
-//Include the global variables
 #include "app.h"
-//Include the global macros
-#include "macros.h"
-//Include points functions
-#include "points.h"
-//Include the initializer function
-#include "setup.h"
-//Include the string functions
-#include <string.h>
-//Include the directory functions
-#include <dirent.h>
-#include <sys/stat.h>
-//Include error reporting functions
-#include <errno.h>
+#include "messages.pb.h"
 
-char saveState(char* saveLoc);
-char saveStateLogic(FILE* fp);
-char loadState(char* loadLoc);
-char loadStateLogicV0(FILE* fp);
-char loadStateLogicV1(FILE* fp);
-char saveTempToFile(char* saveLoc);
-char loadFileToTemp(char* loadLoc);
-char removeTempSave(void);
-char saveCustomElement(struct Element* createdCustomElement);
-char loadCustomElements(void);
-char loadCustomElement(char* loadLoc);
-unsigned long hashElement(struct Element* element);
-char* stringifyElement(struct Element* element);
+using namespace std;
+
+// NOTE(gkanwar): Ensure that these stay up to date by setting good
+// defaults for any future properties we add, but do NOT change the file
+// formats being read in, since the whole point is backwards compatibility.
+char upgradeStateV1(FILE* fp, SaveFile* saveProto);
+char upgradeCustomElementV1(FILE* fp, CustomElement* customProto,
+                            const string& newFilename);
+
+// WARNING: Do NOT change these hash functions to be up-to-date with new element
+// properties. At some point we'll phase out backwards support, but for now these
+// are needed for upgrading old save files.
+unsigned long hashElement(const CustomElement& customProto, int index);
+char* stringifyElement(const CustomElement& customProto, int index);
 unsigned long hashStr(char* str);
-int findElementFromHash(unsigned long hash);
 
 #endif //!SAVELOAD_H_INCLUDED
