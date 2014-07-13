@@ -57,6 +57,10 @@
  *      * = Should not happen, something messed up
  */
 
+// Reciprocals of each collision type (i.e. which type to use if switching
+// the first and second particles). This is used when a non-custom collides
+// with a custom, since the user only specifies the collisions for the other
+// direction.
 char reciprocals[NUM_COLLISIONS] =
 {
         0,
@@ -74,6 +78,8 @@ char reciprocals[NUM_COLLISIONS] =
         11
 };
 
+// Collision grid describing which collision type to use between each pair
+// of base elements.
 char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
 {
     //Spawn 0
