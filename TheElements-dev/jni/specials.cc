@@ -13,7 +13,7 @@
 #ifndef NDEBUG // Debug
 #define LOGGING 1
 #else // Release
-#define LOGGING 1
+#define LOGGING 0
 #endif
 
 // Called before a collision happens, and can override the collision
