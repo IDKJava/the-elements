@@ -190,7 +190,10 @@ bool loadStateLogic2(ifstream& in)
 
         // Check for out of particles
         // End the input immediately
-        if (loq <= 0) return true;
+        if (loq <= 0)
+        {
+            return true;
+        }
         int tempParticle = avail[loq-1];
 
         // Unload the protobuf
@@ -209,6 +212,7 @@ bool loadStateLogic2(ifstream& in)
         // Check that coords are not already taken
         if (allCoords[getIndex(i, j)] != -1)
         {
+            // TODO(gkanwar): Put in a Flurry log here
             LOGE("Particle space already occupied. Skipping");
             continue;
         }
@@ -309,8 +313,10 @@ bool loadCustomElement2(ifstream& in)
 
     struct Element* custom = (struct Element*) malloc(sizeof(struct Element));
     custom->index = numElements;
+    // Malloc size of string + 1 for NUL byte
     custom->name = (char*) malloc((customProto.name().length()+1) * sizeof(char));
     strcpy(custom->name, customProto.name().c_str());
+    // Malloc size of string + 1 for NUL byte
     custom->filename = (char*) malloc((customProto.filename().length()+1) * sizeof(char));
     strcpy(custom->filename, customProto.filename().c_str());
     custom->allowMovingTransition = customProto.allow_moving_transition();
