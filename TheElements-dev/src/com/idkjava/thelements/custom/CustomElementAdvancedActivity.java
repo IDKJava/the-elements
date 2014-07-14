@@ -335,7 +335,17 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		case 9:
 		{
 			// The view is a Spinner
-			return ((Spinner) container.getChildAt(1)).getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
+			Spinner child = (Spinner) container.getChildAt(1);
+			if (child != null)
+			{
+				return child.getSelectedItemPosition() + MainActivity.NORMAL_ELEMENT;
+			}
+			else
+			{
+				// Use sand as the default, for lack of a better choice
+				Log.e("TheElements", "Spinner not defined in special");
+				return MainActivity.NORMAL_ELEMENT;
+			}
 		}
 		// Break, Explode, Life, Wander, Jump, Burn, Heat, Trail
 		case 2:
@@ -348,7 +358,17 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		case 13:
 		{
 			// The view is a SeekBar
-			return ((SeekBar) container.getChildAt(1)).getProgress();
+			SeekBar child = (SeekBar) container.getChildAt(1);
+			if (child != null)
+			{
+				return child.getProgress();
+			}
+			else
+			{
+				// Default to 0, for lack of a better choice.
+				Log.e("TheElements", "SeekBar not defined in special");
+				return 0;
+			}
 		}
 		// Hmm, something went wrong...
 		default:
