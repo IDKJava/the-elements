@@ -38,11 +38,12 @@ public class SaveManager
 		else
 		{
 			Log.v("TheElements", "SaveManager refreshed, files found: " + saveFiles.length);
+			for(int i = 0; i < saveFiles.length; i++)
+			{
+				Log.v("TheElements", "..." + saveFiles[i]);
+			}
 		}
-		for(int i = 0; i < saveFiles.length; i++)
-		{
-			Log.v("TheElements", "..." + saveFiles[i]);
-		}
+
 	}
 	public static int getNumSaves()
 	{
