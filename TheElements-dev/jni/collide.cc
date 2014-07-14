@@ -25,6 +25,7 @@ void collide(int firstParticle, int secondParticle)
     int oldXFirst = a_oldX[firstParticle], oldYFirst = a_oldY[firstParticle];
     //The type of the collision (retrieved from a static array)
 
+    //TODO(gkanwar): Lot of array referencing churn here. Fix this.
     int fs = a_element[firstParticle]->index;
     int ss = a_element[secondParticle]->index;
     int type;
@@ -123,6 +124,7 @@ void collide(int firstParticle, int secondParticle)
         {
             //Acid burns away Meltable
             unSetPoint(secondParticle);
+            a_hasMoved[secondParticle] = FALSE;
         }
         else if (rand() % 2 == 0 ) //Otherwise, 1/6 total
         {
@@ -203,7 +205,7 @@ void collide(int firstParticle, int secondParticle)
         }
         else //2/3 Chance
         {
-            //Move the water back
+            //Move firstParticle back
             a_x[firstParticle] = oldXFirst;
             a_y[firstParticle] = oldYFirst;
             a_hasMoved[firstParticle] = FALSE;

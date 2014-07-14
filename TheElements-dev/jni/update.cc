@@ -728,6 +728,12 @@ void UpdateView(void)
                     }
                 }
 
+                //Check for particle destroyed
+                if (!a_set[tempParticle])
+                {
+                    continue;
+                }
+
                 //Update heat
                 char *heat = &(a_heat[tempParticle]);
                 if(*heat != cAtmosphere->heat)
