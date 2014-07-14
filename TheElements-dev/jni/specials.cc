@@ -8,6 +8,14 @@
 #include "macros.h"
 #include "points.h"
 
+#include <android/log.h>
+
+#ifndef NDEBUG // Debug
+#define LOGGING 1
+#else // Release
+#define LOGGING 0
+#endif
+
 // Called before a collision happens, and can override the collision
 // Coming in, fp and sp have the same x and y coords. Allcoords hasn't been
 // updated yet, so the location fp and sp both point to is actually sp still.
@@ -199,37 +207,40 @@ void specialWander(int particle)
         return;
     }
 
+    // TODO(gkanwar): Track what direction we're moving in and try to
+    // wander in that direction and neighboring directions first with high
+    // probability.
+
     int randVal = rand()%100;
     // Randomly wander
     int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
     if (randVal <= wanderVal)
     {
-        if (a_xVel[particle] <= 4)
+        // Check below (can't wander if we're not standing on something)
+        int curX = a_x[particle];
+        int curY = a_y[particle];
+        if (!coordInBounds(curX, curY+1) ||
+            allCoords[getIndex(curX, curY)] != -1)
         {
-            a_xVel[particle] += 2;
-        }
-    }
-    else if (randVal >= wanderVal+1 && randVal <= wanderVal*2)
-    {
-        if (a_xVel[particle] >= -4)
-        {
-            a_xVel[particle] -= 2;
-        }
-    }
-
-    randVal = rand()%100;
-    if (randVal <= wanderVal)
-    {
-        if (a_yVel[particle] >= -4)
-        {
-            a_yVel[particle] -= 2;
-        }
-    }
-    if (randVal >= wanderVal + 1 && randVal <= wanderVal*2)
-    {
-        if (a_yVel[particle] <= 4)
-        {
-            a_yVel[particle] += 2;
+            // Random direction starting at bottom left, going clockwise.
+            // Straight up or down are ignored as possible wander directions.
+            int randDir = rand()%6;
+            int diffX = randDir < 3 ? -1 : 1;
+            int diffY = randDir%3 - 1;
+            // Desired point and below
+            if (coordInBounds(curX+diffX, curY+diffY) &&
+                allCoords[getIndex(curX+diffX, curY+diffY)] == -1 &&
+                (!coordInBounds(curX+diffX, curY+diffY+1) || // Either occupied or out of bounds
+                 allCoords[getIndex(curX+diffX, curY+diffY+1)] != -1))
+            {
+                // Good! Let's move
+                allCoords[getIndex(curX+diffX, curY+diffY)] = particle;
+                setBitmapColor(curX+diffX, curY+diffY, tempElement);
+                allCoords[getIndex(curX, curY)] = -1;
+                clearBitmapColor(curX, curY);
+                a_x[particle] = curX+diffX;
+                a_y[particle] = curY+diffY;
+            }
         }
     }
 }
@@ -248,27 +259,132 @@ void specialJump(int particle)
     }
 }
 
+// 0 = left,
+// 1 = up,
+// 2 = right,
+// 3 = down
+void getCardinalDirection(int index, int* x, int* y)
+{
+    switch(index)
+    {
+    case 0:
+        *x = 1;
+        *y = 0;
+        break;
+    case 1:
+        *x = 0;
+        *y = -1;
+        break;
+    case 2:
+        *x = -1;
+        *y = 0;
+        break;
+    case 3:
+        *x = 0;
+        *y = 1;
+        break;
+    default:
+        LOGE("Invalid cardinal direction index: %d", index);
+        // Arbitrarily choose left.
+        *x = 1;
+        *y = 0;
+        break;
+    }
+}
+
+// 0 = bottom left,
+// 1 = bottom right,
+// 2 = top left,
+// 3 = top right
+void getDiagonalDirection(int index, int* x, int* y)
+{
+    if (index < 0 || index > 3)
+    {
+        LOGE("Invalid diagonal index: %d", index);
+        *x = 1;
+        *y = 1;
+    }
+    else
+    {
+        *x = index % 2 == 0 ? -1 : 1;
+        *y = index < 2 ? -1 : 1;
+    }
+}
+
+// Create a tunnel assuming we're tunneling from curX, curY
+// to curX+diffX, curY+diffY. Builds all particles around the
+// point except directly back the way we came.
+void createTunnel(int curX, int curY,
+                  int diffX, int diffY,
+                  struct Element* tunnelElt)
+{
+    // Assuming curX, curY is in bounds, this check should properly
+    // guard all points below.
+    if (coordInBounds(curX+2*diffX, curY+2*diffY))
+    {
+        int dx, dy;
+        for (int i = 0; i < 4; ++i)
+        {
+            getCardinalDirection(i, &dx, &dy);
+            // Check for not backwards and empty
+            if (!(dx == -diffX && dy == -diffY) &&
+                allCoords[getIndex(curX+dx, curY+dy)] == -1)
+            {
+                createPoint(curX+dx, curY+dy, tunnelElt);
+            }
+
+            getDiagonalDirection(i, &dx, &dy);
+            // Check for not backwards and empty
+            if (!(dx == -diffX && dy == -diffY) &&
+                allCoords[getIndex(curX+dx, curY+dy)] == -1)
+            {
+                createPoint(curX+dx, curY+dy, tunnelElt);
+            }
+        }
+    }
+}
+
 void specialTunnel(int particle)
 {
     struct Element* tempElement = a_element[particle];
     int targetElementIndex = getElementSpecialVal(tempElement, SPECIAL_TUNNEL);
-    int state = getParticleSpecialVal(particle, SPECIAL_TUNNEL);
+    int dir = getParticleSpecialVal(particle, SPECIAL_TUNNEL);
 
     int curX = a_x[particle], curY = a_y[particle];
     int diffX, diffY;
 
-    if (state == SPECIAL_VAL_UNSET)
+    if (dir == SPECIAL_VAL_UNSET || dir >= 4 || // If unset/invalid OR
+        rand() % 100 == 0) // 1% chance to change direction while set
     {
         // Look in a random diagonal
         int randomDir = rand()%4;
-        diffX = 2*(randomDir%2) - 1;
-        diffY = (randomDir - randomDir%2) - 1;
-        if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
+        getDiagonalDirection(randomDir, &diffX, &diffY);
+        if (coordInBounds(curX+diffX, curY+diffY) &&
+            allCoords[getIndex(curX+diffX, curY+diffY)] != -1 &&
+            a_element[allCoords[getIndex(curX+diffX, curY+diffY)]]->index == targetElementIndex)
         {
-            return;
+            dir = randomDir;
+            setParticleSpecialVal(particle, SPECIAL_TUNNEL, randomDir);
         }
-        int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-        if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
+    }
+
+    // If we still did not set dir or dir is invalid, just quit
+    if (dir == SPECIAL_VAL_UNSET || dir >= 4) { return; }
+
+    getDiagonalDirection(dir, &diffX, &diffY);
+    //LOGI("Diagonal dir: %d -> %d %d", dir, diffX, diffY);
+    // Check out of bounds
+    if (!coordInBounds(curX+diffX, curY+diffY))
+    {
+        // Stop tunneling and quit, we'll try to find a new direction
+        setParticleSpecialVal(particle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
+        return;
+    }
+
+    int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
+    if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
+    {
+        if (rand() % 3) // 1/3 chance to move along a tunnel
         {
             // Remove the tempAllCoords particle, and move this particle there
             unSetPoint(tempAllCoords);
@@ -278,62 +394,27 @@ void specialTunnel(int particle)
             clearBitmapColor(curX, curY);
             a_x[particle] = curX + diffX;
             a_y[particle] = curY + diffY;
-            // Set the y velocity to the fall velocity to counteract movement
-            a_yVel[particle] = a_element[particle]->fallVel;
-            setParticleSpecialVal(particle, SPECIAL_TUNNEL, randomDir);
-
-
-            // Add particles around this point, forming a "tunnel"
-            if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
-            {
-                if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
-                {
-                    createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
-                }
-                if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
-                {
-                    createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
-                }
-                if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
-                {
-                    createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
-                }
-            }
         }
+
+        // Set the y velocity to the fall velocity to counteract movement
+        a_yVel[particle] = a_element[particle]->fallVel;
+
+        // Make the tunnel particles
+        createTunnel(curX, curY, diffX, diffY, elements[targetElementIndex]);
     }
-    // We're already moving in a direction
-    else
+    // If we're blocked, 1/3 chance to move horizontally/vertically
+    else if (rand() % 3 == 0)
     {
-        // Move the particle back to it's old location, to avoid
-        // collision velocities messing up tunneling
-        if (allCoords[getIndex(a_oldX[particle], a_oldY[particle])] == -1)
+        // Randomly choose start cardinal direction to look in
+        int randomDir = rand() % 4;
+        // Cycle through all 4 directions from that point and look for
+        // a particle to burrow into
+        for (int i = 0; i < 4; ++i)
         {
-            allCoords[getIndex(curX, curY)] = -1;
-            clearBitmapColor(curX, curY);
-            allCoords[getIndex(a_oldX[particle], a_oldY[particle])] = particle;
-            setBitmapColor(a_oldX[particle], a_oldY[particle], tempElement);
-
-            curX = a_x[particle] = a_oldX[particle];
-            curY = a_y[particle] = a_oldY[particle];
-        }
-
-        diffX = 2*(state%2) - 1;
-        diffY = (state - state%2) - 1;
-        if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
-        {
-            // Go back to the unset state
-            setParticleSpecialVal(particle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
-
-            // Look in a random diagonal
-            int randomDir = rand()%4;
-            diffX = 2*(randomDir%2) - 1;
-            diffY = (randomDir - randomDir%2) - 1;
-            if (curX+diffX < 0 || curX+diffX >= workWidth || curY+diffY < 0 || curY+diffY >= workHeight)
-            {
-                return;
-            }
-            int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-            if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
+            getCardinalDirection((randomDir+i)%4, &diffX, &diffY);
+            if (coordInBounds(curX+diffX, curY+diffY) &&
+                (tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)]) != -1 &&
+                a_element[tempAllCoords]->index == targetElementIndex)
             {
                 // Remove the tempAllCoords particle, and move this particle there
                 unSetPoint(tempAllCoords);
@@ -343,99 +424,17 @@ void specialTunnel(int particle)
                 clearBitmapColor(curX, curY);
                 a_x[particle] = curX + diffX;
                 a_y[particle] = curY + diffY;
-                // Set the y velocity to the fall velocity to counteract movement
-                a_yVel[particle] = a_element[particle]->fallVel;
-                setParticleSpecialVal(particle, SPECIAL_TUNNEL, randomDir);
 
+                // Make tunnel particles
+                createTunnel(curX, curY, diffX, diffY, elements[targetElementIndex]);
 
-                // Add particles around this point, forming a "tunnel"
-                if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
-                {
-                    if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
-                    {
-                        createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
-                    }
-                    if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
-                    {
-                        createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
-                    }
-                    if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
-                    {
-                        createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
-                    }
-                }
+                break;
             }
         }
-
-        int tempAllCoords = allCoords[getIndex(curX+diffX, curY+diffY)];
-        if (tempAllCoords == -1 || a_element[tempAllCoords]->index != targetElementIndex)
-        {
-            // Go back to the unset state
-            setParticleSpecialVal(particle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
-            // Look for any particle back the way we came and (if there is one)
-            // tunnel into it
-            tempAllCoords = allCoords[getIndex(curX, curY+diffY)];
-            if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
-            {
-                // Remove the tempAllCoords particle, and move this particle there
-                unSetPoint(tempAllCoords);
-                allCoords[getIndex(curX, curY+diffY)] = particle;
-                setBitmapColor(curX, curY+diffY, tempElement);
-                allCoords[getIndex(curX, curY)] = -1;
-                clearBitmapColor(curX, curY);
-                a_x[particle] = curX;
-                a_y[particle] = curY + diffY;
-            }
-            else
-            {
-                tempAllCoords = allCoords[getIndex(curX+diffX, curY)];
-                if (tempAllCoords != -1 && a_element[tempAllCoords]->index == targetElementIndex)
-                {
-                    // Remove the tempAllCoords particle, and move this particle there
-                    unSetPoint(tempAllCoords);
-                    allCoords[getIndex(curX+diffX, curY)] = particle;
-                    setBitmapColor(curX+diffX, curY, tempElement);
-                    allCoords[getIndex(curX, curY)] = -1;
-                    clearBitmapColor(curX, curY);
-                    a_x[particle] = curX + diffX;
-                    a_y[particle] = curY;
-                }
-            }
-            // Add velocity so that the particle stays still for one step
-            a_yVel[particle] = a_element[particle]->fallVel;
-            return;
-        }
-        else
-        {
-            // Remove the tempAllCoords particle, and move this particle there
-            unSetPoint(tempAllCoords);
-            allCoords[getIndex(curX+diffX, curY+diffY)] = particle;
-            setBitmapColor(curX+diffX, curY+diffY, tempElement);
-            allCoords[getIndex(curX, curY)] = -1;
-            clearBitmapColor(curX, curY);
-            a_x[particle] = curX + diffX;
-            a_y[particle] = curY + diffY;
-            // Set the y velocity to the fall velocity to counteract movement
-            a_yVel[particle] = a_element[particle]->fallVel;
-
-
-            // Add particles around this point, forming a "tunnel"
-            if (curX+2*diffX >= 0 && curX+2*diffX < workWidth && curY+2*diffY >= 0 && curY+2*diffY < workHeight)
-            {
-                if (allCoords[getIndex(curX+2*diffX, curY+2*diffY)] == -1)
-                {
-                    createPoint(curX+2*diffX, curY+2*diffY, elements[targetElementIndex]);
-                }
-                if (allCoords[getIndex(curX+2*diffX, curY+diffY)] == -1)
-                {
-                    createPoint(curX+2*diffX, curY+diffY, elements[targetElementIndex]);
-                }
-                if (allCoords[getIndex(curX+diffX, curY+2*diffY)] == -1)
-                {
-                    createPoint(curX+diffX, curY+2*diffY, elements[targetElementIndex]);
-                }
-            }
-        }
+    }
+    else if (rand() % 10 == 0) // 2/3 * 1/10 = 1/15 chance if we're blocked to reset
+    {
+        setParticleSpecialVal(particle, SPECIAL_TUNNEL, SPECIAL_VAL_UNSET);
     }
 }
 

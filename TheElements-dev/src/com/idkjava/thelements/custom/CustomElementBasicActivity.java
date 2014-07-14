@@ -211,7 +211,9 @@ public class CustomElementBasicActivity extends ReportingActivity
         fallvelField.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                fallvelText.setText(String.valueOf(progress));
+                // TODO(gkanwar): Fix this hack by subclassing seekbar so that the
+                // progress is appropriately shifted
+                fallvelText.setText(String.valueOf(progress-1));
             }
 
             @Override
@@ -335,7 +337,8 @@ public class CustomElementBasicActivity extends ReportingActivity
         mCustomElementBuilder.setGreen(Color.green(mChosenColor));
         mCustomElementBuilder.setBlue(Color.blue(mChosenColor));
         mCustomElementBuilder.setDensity(densityField.getProgress());
-        mCustomElementBuilder.setFallvel(fallvelField.getProgress());
+        // Because negative seekbars are not possible, we need to hack this
+        mCustomElementBuilder.setFallvel(fallvelField.getProgress()-1);
         if (inertiaUnmovableField.isChecked())
         {
             mCustomElementBuilder.setInertia(255);
@@ -462,7 +465,8 @@ public class CustomElementBasicActivity extends ReportingActivity
             }
         });
         densityField.setProgress(mCustomElementBuilder.getDensity());
-        fallvelField.setProgress(mCustomElementBuilder.getFallvel());
+        // Because negative seekbars are not possible we need to hack this
+        fallvelField.setProgress(mCustomElementBuilder.getFallvel()+1);
         if (mCustomElementBuilder.getInertia() == 255)
         {
             inertiaUnmovableField.setChecked(true);

@@ -23,7 +23,7 @@
 #define LOGGING 1
 #else
 //Release
-#define LOGGING 1
+#define LOGGING 0
 #endif
 
 char saveState2(char* saveLoc)
