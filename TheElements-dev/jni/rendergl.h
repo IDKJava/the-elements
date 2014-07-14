@@ -20,5 +20,6 @@
 
 void glInit(void);
 void glRender(void);
+void glRenderThreaded(void);
 
 #endif //!GL_H_INCLUDED

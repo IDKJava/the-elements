@@ -133,7 +133,7 @@
             android:name=".custom.CustomElementManagerActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Holo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -144,7 +144,7 @@
             android:name=".custom.CustomElementActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.Holo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -164,10 +164,12 @@
         </activity>
         <activity
             android:name=".custom.CustomElementBasicActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo"/>
         <activity
             android:name=".custom.CustomElementAdvancedActivity"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo"/>
         <activity
             android:name=".SaveStateActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"

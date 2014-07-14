@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="ListSeparator" parent="android:style/Widget.TextView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">8dip</item>
+        <item name="android:background">@drawable/list_section_divider_holo_dark</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="CustomPropertyDesc" parent="android:style/Widget.TextView">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/custom_property_desc</item>
+    </style>
+</resources>

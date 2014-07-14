@@ -19,12 +19,14 @@ public class SaveManager
 	
 	public static void refresh(Context c)
 	{
-		//Filter the files in the directory to exclude the demo and temp saves
+		//Filter the files in the directory to select the correct extension and
+	    //exclude the temp save.
 		FilenameFilter filter = new FilenameFilter()
 		{
 			public boolean accept(File dir, String name)
 			{
-				return !name.contentEquals("temp.sav");
+			    return name.endsWith(FileManager.SAVE2_EXT) &&
+			            !name.equals(FileManager.TEMP_SAVE + FileManager.SAVE2_EXT);
 			}
 		};
 		//Get the array of filenames
@@ -48,16 +50,16 @@ public class SaveManager
 	}
 	public static String getSaveName(int index)
 	{
-		return saveFiles[index].replace(FileManager.SAVE_EXT, "");
+		return saveFiles[index].replace(FileManager.SAVE2_EXT, "");
 	}
 	
 	//Overloading these functions -- be careful
 	public static boolean saveState(String statename)
 	{
-		Log.v("TheElements", "saveState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT);
+		Log.v("TheElements", "saveState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE2_EXT);
 		try
 		{
-			char retVal = saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			char retVal = saveState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE2_EXT).getBytes("ISO-8859-1"));
 			Log.v("LOG", "saveState retVal: " + (int)retVal);
 			if(retVal == 0)
 			{
@@ -79,7 +81,7 @@ public class SaveManager
 		//Log.v("TheElements", "loadState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT);
 		try
 		{
-			char retVal = loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE_EXT).getBytes("ISO-8859-1"));
+			char retVal = loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE2_EXT).getBytes("ISO-8859-1"));
 			Log.v("LOG", "loadState retVal: " + (int)retVal);
 			if(retVal == 0)
 			{
@@ -100,7 +102,7 @@ public class SaveManager
 	}
 	public static void deleteState(String statename)
 	{
-		String filename = statename + FileManager.SAVE_EXT;
+		String filename = statename + FileManager.SAVE2_EXT;
 		if(fileExists(filename))
 		{
 			File file = new File(saveDir, filename);
@@ -119,6 +121,8 @@ public class SaveManager
 	
 	static
 	{
+        System.loadLibrary("stlport_shared");
+	    System.loadLibrary("protobuf");
 		System.loadLibrary("thelements");
 	}
 }

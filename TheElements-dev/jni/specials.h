@@ -22,6 +22,7 @@ void specialHeat(int particle);
 void specialExplode(int particle);
 void specialLife(int particle);
 void specialWander(int particle);
+void specialJump(int particle);
 void specialTunnel(int particle);
 int specialBurn(int particle);
 void specialConductive(int particle);

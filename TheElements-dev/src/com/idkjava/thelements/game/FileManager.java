@@ -18,21 +18,22 @@ public class FileManager
 	public static final String SAVES_DIR = "saves/";
 	public static final String ELEMENTS_DIR = "elements/";
 	public static final String ATMOSPHERES_DIR = "atmospheres/";
-	public static final String SAVE_EXT = ".sav";
-	public static final String ELEMENT_EXT = ".ele";
+	public static final String SAVE2_EXT = ".sav2";
+	public static final String ELEMENT2_EXT = ".ele2";
 	public static final String ATMOSPHERE_EXT = ".atm";
 	public static final String BACKUP_EXT = ".bak";
 	public static final String DEMO_SAVE = "demo";
 	public static final String TEMP_SAVE = "temp";
-	public static final String ELEMENT_LIST_NAME = "eleList";
-	public static final String LIST_EXT = ".lst";
+	//Backwards compatibility
+	public static final String SAVE_EXT = ".sav";
+    public static final String ELEMENT_EXT = ".ele";
 	
 	public static String getTempSaveName() {
-	    return ROOT_DIR + SAVES_DIR + TEMP_SAVE + SAVE_EXT;
+	    return ROOT_DIR + SAVES_DIR + TEMP_SAVE + SAVE2_EXT;
 	}
 	
 	public static String getDemoSaveName() {
-	    return ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE_EXT;
+	    return ROOT_DIR + SAVES_DIR + DEMO_SAVE + SAVE2_EXT;
 	}
 	
 	public static void intialize(Context context)

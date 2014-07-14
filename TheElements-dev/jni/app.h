@@ -10,10 +10,6 @@
 #ifndef APP_H_INCLUDED
 #define APP_H_INCLUDED
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //Include the global macros
 #include "macros.h"
 //Include the server functions
@@ -22,13 +18,6 @@ extern "C" {
 #include <pthread.h>
 //Include KamCord stuff
 #include <Kamcord-C-Interface.h>
-
-/*
- * FUNCTIONS
- */
-
-    inline int getIndex(int x, int y);
-    inline int getColorIndex(int x, int y);
 
 /*
  * STRUCTS
@@ -40,8 +29,11 @@ extern "C" {
         unsigned char index;
         //Name
         char* name;
+        //Filename, only for customs
+        char* filename;
 
-        //Dealing with states
+        //Dealing with phases
+        char allowMovingTransition;
         char state;
         char startingTemp, lowestTemp, highestTemp;
         struct Element* lowerElement;
@@ -53,10 +45,10 @@ extern "C" {
         //Properties
         int specials[MAX_SPECIALS];
         int specialVals[MAX_SPECIALS];
-        char* collisions;  // Only for customs
+        char collisions[NUM_BASE_ELEMENTS];  // Only for customs
         char base; //Only for customs
         char density;
-        signed char fallVel;
+        int fallVel;
         char inertia;
     };
 
@@ -191,6 +183,21 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
 */
 
 /*
+ * FUNCTIONS
+ */
+
+//Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
+inline int getIndex(int x, int y)
+{
+    return y*workWidth + x;
+}
+//Used specifically for colors
+inline int getColorIndex( int x, int y )
+{
+    return y*stupidTegra + x;
+}
+
+/*
  * THREADS
  */
 
@@ -205,10 +212,5 @@ struct hostent *server; //Pointer to a hostent struct that is used to set up ser
     extern pthread_cond_t buffer_free_cond;
 
     extern pthread_mutex_t mouse_mutex;
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif // !APP_H_INCLUDED

@@ -32,8 +32,8 @@ public class FixMeActivity extends Activity
 		// Try to fix crashing by moving temp.sav to temp.sav.bak
 		logOutput.setText(logOutput.getText() + "\n\n" + getResources().getString(R.string.fix_me_temp_sav));
 		
-		File file = new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR + "temp" + FileManager.SAVE_EXT);
-		boolean success = file.renameTo(new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR + "temp" + FileManager.SAVE_EXT + FileManager.BACKUP_EXT));
+		File file = new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR + "temp" + FileManager.SAVE2_EXT);
+		boolean success = file.renameTo(new File(FileManager.ROOT_DIR + FileManager.SAVES_DIR + "temp" + FileManager.SAVE2_EXT + FileManager.BACKUP_EXT));
 		if (success)
 		{
 			logOutput.setText(logOutput.getText() + "\n" + getResources().getString(R.string.fix_me_temp_sav_succeeded));

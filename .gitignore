@@ -1,5 +1,7 @@
 *~
 *.o
+*.pb.cc
+*.pb.h
 bin/
 gen/
 obj/

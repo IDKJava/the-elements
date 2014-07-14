@@ -11,346 +11,443 @@
         android:padding="10dp" >
 
         <!-- Name -->
-
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal" >
-
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"
+                style="@style/ListSeparator"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
                 android:text="@string/ce_name_prompt" />
-
+        
             <EditText
                 android:id="@+id/ce_name"
                 android:hint="@string/custom_element_name_hint"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip" />
         </LinearLayout>
+        
         <!-- Base Element -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_base_element_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <Spinner
-                android:id="@+id/ce_base_element"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1" />
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+        
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/ce_base_element_desc"
+                    style="@style/CustomPropertyDesc"/>
+
+	            <Spinner
+	                android:id="@+id/ce_base_element"
+	                android:layout_width="fill_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_gravity="center_vertical" />
+            </LinearLayout>
         </LinearLayout>
+        
         <!-- State -->
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_state_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+        
             <RadioGroup
                 android:id="@+id/ce_state"
-                android:orientation="horizontal"
-                android:gravity="right"
+                android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip" >
+        
                 <RadioButton
                     android:id="@+id/ce_solid_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="@string/ce_solid_state" />
-
+        
                 <RadioButton
                     android:id="@+id/ce_liquid_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ce_liquid_state" />
-
+        
                 <RadioButton
                     android:id="@+id/ce_gas_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ce_gas_state" />
             </RadioGroup>
-
+        
         </LinearLayout>
+        
         <!-- Starting temp -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_starting_temp_prompt"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_starting_temp"
-                android:layout_width="0dp"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            
+            <TextView
+                android:text="@string/ce_starting_temp_desc"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
+                android:layout_marginLeft="10dip"
+                style="@style/CustomPropertyDesc"/>
+            
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_starting_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="255" />
+                <TextView
+                    android:id="@+id/ce_starting_temp_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        
         </LinearLayout>
+        
         <!-- Lowest temp -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_lowest_temp_prompt"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_lowest_temp"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
-        </LinearLayout>
-        <!-- Highest temp -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>            
             <TextView
-                android:text="@string/ce_highest_temp_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_highest_temp"
-                android:layout_width="0dp"
+                android:text="@string/ce_lowest_temp_desc"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
+                android:layout_marginLeft="10dip"
+                style="@style/CustomPropertyDesc"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_lowest_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="255" />
+                <TextView
+                    android:id="@+id/ce_lowest_temp_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        
         </LinearLayout>
+        
         <!-- Lower element -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="@string/ce_lower_element_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical" >
 
+            <TextView
+                style="@style/ListSeparator"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                android:text="@string/ce_lower_element_prompt" />            
+            <TextView
+                android:text="@string/ce_lower_element_desc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                style="@style/CustomPropertyDesc"/>
             <Spinner
                 android:id="@+id/ce_lower_element"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dip"
                 android:layout_weight="1" />
-
         </LinearLayout>
+
+        <!-- Highest temp -->
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
+            <TextView
+                android:text="@string/ce_highest_temp_prompt"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            <TextView
+                android:text="@string/ce_highest_temp_desc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                style="@style/CustomPropertyDesc"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_highest_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="255" />
+                <TextView
+                    android:id="@+id/ce_highest_temp_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        
+        </LinearLayout>
+        
         <!-- Higher element -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_higher_element_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            <TextView
+                android:text="@string/ce_higher_element_desc"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                style="@style/CustomPropertyDesc"/>
             <Spinner
                 android:id="@+id/ce_higher_element"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1" />
-
+        
         </LinearLayout>
-        <RelativeLayout
+        
+        <LinearLayout
             android:id="@+id/color_text_and_image"
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
-                android:text="@string/colortext"
-                android:layout_width="wrap_content"
+                android:text="@string/ce_color_prompt"
+                android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_alignParentLeft="true"
-                android:gravity="center_vertical|left"/>
-            <ImageView
-                android:id="@+id/custom_color_image"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true" />
-        </RelativeLayout>
-
-        <!-- Red -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="@string/ce_red_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_red"
-                android:layout_width="0dp"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            <LinearLayout
+                android:id="@+id/color_desc_and_selector"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <TextView
+                    android:text="@string/ce_color_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    style="@style/CustomPropertyDesc"/>
+                <ImageView
+                    android:id="@+id/custom_color_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
         </LinearLayout>
-        <!-- Green -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="@string/ce_green_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_green"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
-        </LinearLayout>
-        <!-- Blue -->
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
-            <TextView
-                android:text="@string/ce_blue_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_blue"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
-
-        </LinearLayout>
-
+        
         <!-- Density -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
             <TextView
                 android:text="@string/ce_density_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_density"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="255" />
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dip"
+                android:text="@string/ce_density_desc"
+                style="@style/CustomPropertyDesc"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_density"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="255" />
+                <TextView
+                    android:text=""
+                    android:id="@+id/ce_density_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
 
+        
         </LinearLayout>
+        
         <!-- Fall Velocity -->
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
+            android:orientation="vertical">
+            
             <TextView
                 android:text="@string/ce_fallvel_prompt"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_marginRight="10dp"
-                android:gravity="center_vertical|left"/>
-
-            <SeekBar
-                android:id="@+id/ce_fallvel"
-                android:layout_width="0dp"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:max="10" />
-
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dip"
+                android:text="@string/ce_fallvel_desc"
+                style="@style/CustomPropertyDesc"/>
+        
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_fallvel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:max="10" />
+                <TextView
+                    android:text=""
+                    android:id="@+id/ce_fallvel_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+        
         </LinearLayout>
-
+        
         <!-- Inertia -->
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
             android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
+        
+            <TextView
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="right"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical|left"
-                    android:text="@string/ce_inertia_prompt" />
-
-                <CheckBox
-                    android:id="@+id/ce_inertia_unmovable"
+                android:text="@string/ce_inertia_prompt"
+                android:layout_marginBottom="5dip"
+                style="@style/ListSeparator"/>
+            
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dip"
+                android:text="@string/ce_inertia_desc"
+                style="@style/CustomPropertyDesc"/>
+            
+            <CheckBox
+                android:id="@+id/ce_inertia_unmovable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ce_unmovable_prompt"
+                android:layout_marginLeft="10dip" />
+        
+            <LinearLayout
+                android:id="@+id/ce_inertia_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dip"
+                android:orientation="horizontal">
+                <SeekBar
+                    android:id="@+id/ce_inertia_normal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/ce_unmovable_prompt" />
+                    android:layout_weight="1"
+                    android:max="254" />
+                <TextView
+                    android:id="@+id/ce_inertia_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
             </LinearLayout>
-
-            <SeekBar
-                android:id="@+id/ce_inertia_normal"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_gravity="right"
-                android:layout_weight="1"
-                android:max="254" />
-
+        
         </LinearLayout>
 
         <Button
@@ -358,6 +455,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dip"
             android:text="@string/ce_save_button" />
 
     </LinearLayout>

@@ -1,0 +1,72 @@
+// Don't make anything required in case we need to change our format later on.
+
+option java_package = "com.idkjava.thelements.proto";
+option java_outer_classname = "Messages";
+
+message SaveFile {
+    // Dimensions
+    optional uint32 size_x = 1;
+    optional uint32 size_y = 2;
+    
+    repeated Particle particle = 3;
+}
+
+message ParticleSpecial {
+    optional uint32 val = 1;
+}
+
+message Particle {
+    optional float x = 1;
+    optional float y = 2;
+    optional sint32 x_vel = 3;
+    optional sint32 y_vel = 4;
+    optional uint32 heat = 5;
+    
+    repeated ParticleSpecial special = 9;
+    
+    enum Type {
+        BASIC = 0;
+        CUSTOM = 1;
+    }
+    optional Type element_type = 6;
+    // Basic
+    optional uint64 element_index = 7;
+    // Custom
+    optional string element_filename = 8;
+}
+
+message Collision {
+    optional uint64 type = 1;
+}
+
+message Special {
+    optional uint32 type = 1;
+    optional uint32 val = 2;
+}
+
+message CustomElement {
+    optional uint32 base_element_index = 1;
+    optional string name = 2;
+    optional string filename = 18;
+    
+    optional bool allow_moving_transition = 3;
+    optional uint32 state = 4;
+    optional uint32 starting_temp = 5;
+    optional uint32 lowest_temp = 6;
+    optional uint32 highest_temp = 7;
+    optional uint32 lower_element_index = 8;
+    optional uint32 higher_element_index = 9;
+    
+    optional uint32 red = 10;
+    optional uint32 green = 11;
+    optional uint32 blue = 12;
+    
+    optional uint32 density = 13;
+    optional sint32 fallvel = 14;
+    optional uint32 inertia = 15;
+    
+    // Set of collisions with non-special, non-custom elements
+    // (i.e. should be NUM_BASE_ELEMENTS - NORMAL_ELEMENT collisions)
+    repeated Collision collision = 16;
+    repeated Special special = 17;
+}

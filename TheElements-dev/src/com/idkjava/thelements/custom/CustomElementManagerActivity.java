@@ -18,16 +18,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.game.FileManager;
+import com.idkjava.thelements.proto.Messages.CustomElement;
 
-/**
- * File format:
- * NAME\n
- * COLLISION ARRAY (space separated)\n
- * SPECIALS ARRAY (space separated)
- */
 public class CustomElementManagerActivity extends ReportingActivity
 {
 	private static ImageButton actionButton;
@@ -69,10 +64,8 @@ public class CustomElementManagerActivity extends ReportingActivity
 		{
 			for(int i = 0; i < length; i++)
 			{
-				if (elements.get(i).isValid())
-				{
-					addEntity(elements.get(i).name, elements.get(i).getFilename(), elements.get(i).getCopy());
-				}
+				addEntity(elements.get(i).getName(),
+				        elements.get(i).getFilename());
 			}
 		}
 		else
@@ -89,7 +82,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 		}
 	}
 	
-    public void addEntity(String elementName, String filename, int copy)
+    public void addEntity(String elementName, String filename)
     {
     	final String filenameFinal = filename;
         
@@ -107,8 +100,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 		
 		//Create a TextView to hold the element name
 		TextView nameTextView = new TextView(this);
-		String versionTag = (copy == 0) ? "" : " (" + String.valueOf(copy) + ")";
-		nameTextView.setText(elementName + versionTag);
+		nameTextView.setText(elementName);
 		nameTextView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
 		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
@@ -154,7 +146,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 				public void onClick(View v)
 				{
 					// Delete the custom element file
-					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT_EXT)).delete();
+					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT2_EXT)).delete();
 					
 					// Update the view accordingly
 					ViewGroup parent = (ViewGroup) v.getParent().getParent();

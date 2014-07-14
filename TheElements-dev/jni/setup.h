@@ -24,6 +24,8 @@
 void gameSetup(void);
 //Set up the variable sized arrays
 void arraySetup(void);
+//Set up the atmosphere properties struct
+void atmosphereSetup(void);
 //Create all the elements
 void elementSetup(void);
 //Create all the particle structs

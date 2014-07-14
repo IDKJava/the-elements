@@ -41,6 +41,7 @@ import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.ExceptionReporter;
 import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.Tracker;
+import com.idkjava.thelements.custom.CustomElementManager;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
@@ -50,6 +51,7 @@ import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
+import com.idkjava.thelements.proto.Messages.CustomElement;
 import com.kamcord.android.Kamcord;
 import com.pollfish.constants.Position;
 import com.pollfish.main.PollFish;
@@ -201,34 +203,20 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             elementsList.add(baseElementsList[i].toString());
         }
                 
-        // Load the custom elements
+        // Load the custom elements list
         try
         {
-            // Open the file that is the first command line parameter
-            FileInputStream fstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + FileManager.ELEMENT_LIST_NAME + FileManager.LIST_EXT);
-            // Get the object of DataInputStream
-            DataInputStream in = new DataInputStream(fstream);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String strLine;
-            //Read file line by line
-            while ((strLine = br.readLine()) != null)
+            CustomElementManager.refresh(getApplicationContext());
+            for (CustomElement c : CustomElementManager.getElementList())
             {
-                FileInputStream tstream = new FileInputStream(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + strLine);
-                DataInputStream in2 = new DataInputStream(tstream);
-                BufferedReader br2 = new BufferedReader(new InputStreamReader(in2));
-                if ((strLine = br2.readLine()) != null)
-                {
-                    elementsList.add(strLine);
-                }
+                elementsList.add(c.getName());
             }
             baseElementsList = elementsList.toArray(new CharSequence[elementsList.size()]);
-            //Close the input stream
-            in.close();
         }
         //Catch any exceptions
         catch (Exception e)
         {
-            System.err.println("Error: " + e.getMessage());
+            Log.e("TheElements", "Error: " + e.getMessage());
         }
         
         // Refresh elements list
@@ -427,19 +415,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     //Set up the views based on the state of ui
     private void setUpViews()
     {
-        // Initialize the native library (SandView needs to make calls)
-        String androidId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        int versionCode;
-        try
-        {
-            versionCode = getPackageManager().getPackageInfo(this.getPackageName(), 0).versionCode;
-        }
-        catch (NameNotFoundException e)
-        {
-            versionCode = -1;
-            e.printStackTrace();
-        }
-        nativeInit(androidId, versionCode);
+        nativeInit();
                 
         //Set the content view based on this variable
         setContentView(R.layout.main_activity_ui);
@@ -543,10 +519,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     //Save/load functions
     public static native char saveTempState();
     public static native char loadDemoState();
-    public static native char removeTempSave();
         
     //General utility functions
-    private static native void nativeInit(String udidString, int versionCode);
+    private static native void nativeInit();
     private static native void nativeRefreshElements();
     public native void clearScreen();
         
@@ -564,7 +539,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         
     //Getters
     public static native char getElement();
-    public static native String getElementInfo(int index);
+    public static native byte[] getElementInfo(int index);
     public static native int getElementRed(int index);
     public static native int getElementGreen(int index);
     public static native int getElementBlue(int index);
@@ -572,22 +547,17 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     //Accelerometer related
     public static native void setXGravity(float xGravity);
     public static native void setYGravity(float yGravity);
-        
-    //TODO: Network related
-    public static native void setUsername(char[] username);
-    public static native void setPassword(char[] password);
-    public static native char login();
-    public static native char register();
-    public static native void viewErr(); //TODO: Figure this out
     //@formatter:on
 
     static
     {
+        System.loadLibrary("stlport_shared");
     	try {
     		System.loadLibrary("kamcord");
     	} catch (UnsatisfiedLinkError e) {
     		Log.d("TheElements", "Kamcord not supported");
     	}
+    	System.loadLibrary("protobuf");
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }
 }
