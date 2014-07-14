@@ -207,6 +207,10 @@ void specialWander(int particle)
         return;
     }
 
+    // TODO(gkanwar): Track what direction we're moving in and try to
+    // wander in that direction and neighboring directions first with high
+    // probability.
+
     int randVal = rand()%100;
     // Randomly wander
     int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
@@ -215,7 +219,7 @@ void specialWander(int particle)
         // Check below (can't wander if we're not standing on something)
         int curX = a_x[particle];
         int curY = a_y[particle];
-        if (coordInBounds(curX, curY+1) &&
+        if (!coordInBounds(curX, curY+1) ||
             allCoords[getIndex(curX, curY)] != -1)
         {
             // Random direction starting at bottom left, going clockwise.
