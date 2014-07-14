@@ -237,13 +237,13 @@ int getElementSpecialVal(struct Element* tempElement, int special)
 // Clears all special vals to the element special val if any
 void clearSpecialValsToElementDefault(int tempParticle)
 {
-    int i;
-    for (i = 0 ; i < MAX_SPECIALS; ++i)
+    for (int i = 0 ; i < MAX_SPECIALS; ++i)
     {
         if (a_set[tempParticle] &&
-        		// Burn is treated specially, because it uses the element
-        		// and particle special values simultaneously.
-        		!(a_element[tempParticle]->specials[i] == SPECIAL_BURN)) {
+        		// Burn and tunnel are treated specially, because they
+                // use the element and particle special values simultaneously.
+        		a_element[tempParticle]->specials[i] != SPECIAL_BURN &&
+        		a_element[tempParticle]->specials[i] != SPECIAL_TUNNEL) {
             a_specialVals[tempParticle][i] = a_element[tempParticle]->specialVals[i];
         }
         else {

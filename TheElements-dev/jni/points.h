@@ -29,4 +29,11 @@ void setParticleSpecialVal(int tempParticle, int special, int val);
 int getElementSpecialVal(struct Element* tempElement, int special);
 void clearSpecialValsToElementDefault(int tempParticle);
 
+
+// Utility function to check if a point is in bounds
+inline bool coordInBounds(int x, int y)
+{
+    return x >= 0 && x < workWidth && y >= 0 && y < workHeight;
+}
+
 #endif //!POINTS_H_INCLUDED
