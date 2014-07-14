@@ -162,9 +162,9 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 				// If we're selecting the special initially, we already have a special val that we can initialize to
 				int i = ((LinearLayout)parent.getParent().getParent()).indexOfChild((View) parent.getParent());
 				Log.d("LOG", "Checking special val: " + pos + ", " + i);
-				Log.d("LOG", "..." + CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)));
 				if (pos != 0 && i < mParent.specials.size() && pos == CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)))
 				{
+					Log.d("LOG", "..." + CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)));
 					Log.d("LOG", "Initializing special val: " + pos);
 					setSpecialVal(CustomElementManager.getSpecialPosFromIndex(mParent.specials.get(i)), child, mParent.specialVals.get(i));
 				}
