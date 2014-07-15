@@ -188,6 +188,12 @@ ifeq ($(KAMCORD),yes)
     LOCAL_LD_LIBS += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
 endif
 
+# stlport conflicts with the host stl library
+ifneq ($(TARGET_SIMULATOR),true)
+LOCAL_C_INCLUDES += external/stlport/stlport
+LOCAL_SHARED_LIBRARIES += libstlport
+endif
+
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 LOCAL_CFLAGS += -w
