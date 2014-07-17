@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.ReportingActivity;
-import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 
 public class CustomElementManagerActivity extends ReportingActivity
@@ -146,7 +146,8 @@ public class CustomElementManagerActivity extends ReportingActivity
 				public void onClick(View v)
 				{
 					// Delete the custom element file
-					(new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR + filenameFinal + FileManager.ELEMENT2_EXT)).delete();
+				    Log.i("TheElements", "Deleting " + filenameFinal);
+					new File(filenameFinal).delete();
 					
 					// Update the view accordingly
 					ViewGroup parent = (ViewGroup) v.getParent().getParent();
