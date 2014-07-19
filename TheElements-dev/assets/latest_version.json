@@ -1,4 +1,4 @@
 {
-"version_code": 93,
-"content": "Version 2.0 <p>New features:</p><li>Added feature A</li><li>Added feature B</li><li>Added feature C</li><li>Added feature D</li><li>Added feature E</li><li>Added feature F</li><li>Added feature G</li>"
+"version_code": 92,
+"content": "Version 6.6.4 <p>New features:</p><li>Fixes many stuck particle and custom element bugs</li><li>Fixes termite behavior</li>"
 }
