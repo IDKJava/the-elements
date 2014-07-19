@@ -4,6 +4,3 @@
 [submodule "TheElements-dev/src/com/idkjava/thelements/keys"]
 	path = TheElements-dev/src/com/idkjava/thelements/keys
 	url = git@bitbucket.org:idkjava/thelements-keys.git
-[submodule "Android-WVersionManager"]
-	path = Android-WVersionManager
-	url = git@github.com:winsontan520/Android-WVersionManager.git
