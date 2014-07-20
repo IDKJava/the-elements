@@ -18,7 +18,10 @@
         
         <HorizontalScrollView
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
+            android:layout_height="fill_parent"
+            android:scrollbars="none"
+            android:fadingEdge="horizontal"
+            android:fadingEdgeLength="10dp">
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
