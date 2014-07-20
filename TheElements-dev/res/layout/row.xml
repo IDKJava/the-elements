@@ -6,7 +6,6 @@
   <TextView
       android:id="@+id/elementname"
       android:gravity="center"
-      android:textColor="@color/black"
       android:layout_marginLeft="8dp"
       android:layout_marginTop="3dp"
       android:layout_marginBottom="3dp"
