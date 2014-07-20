@@ -152,6 +152,7 @@
         <!-- Brush Size Seekbar -->
 
         <SeekBar
+            android:thumb="@drawable/seek_thumb"
             android:id="@+id/brush_size_slider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
