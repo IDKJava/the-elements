@@ -14,4 +14,10 @@
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/custom_property_desc</item>
     </style>
+    <style name="RateDialog" parent="android:style/Theme.Holo.Dialog">
+    </style>
+    <style name="RateDialogAnimations">
+        <item name="android:windowEnterAnimation">@anim/slide_in_down</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_up</item>
+    </style>
 </resources>

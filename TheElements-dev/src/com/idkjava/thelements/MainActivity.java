@@ -1,9 +1,5 @@
 package com.idkjava.thelements;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,21 +17,26 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.ExceptionReporter;
 import com.google.analytics.tracking.android.GAServiceManager;
@@ -62,6 +62,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private static final int INTRO_MESSAGE = 1;
     public static final int ELEMENT_PICKER = 2;
     private static final int BRUSH_SIZE_PICKER = 3;
+    private static final int RATE_PROMPT = 4;
 
     //Constants for elements
     public static final char ERASER_ELEMENT = 2;
@@ -242,6 +243,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             //Unset firstrun
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("firstrun", false);
+            editor.putLong("date_firstlaunch", System.currentTimeMillis());
             editor.commit();
 
             //Also show the intro message
@@ -250,6 +252,34 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             //Finally, delete the temp save, in case there were save format changes
             SaveManager.deleteState("temp");
         }
+        
+        // Should we prompt for a rating?
+        SharedPreferences.Editor editor = settings.edit();
+        long launchCount = settings.getLong("launch_count", 0) + 1;
+        editor.putLong("launch_count", launchCount);
+
+        long dateFirstLaunch = settings.getLong("date_firstlaunch", System.currentTimeMillis());
+        // Write back date first launch in case we missed the first run and didn't
+        // set the property properly.
+        editor.putLong("date_firstlaunch", dateFirstLaunch);
+        boolean madeAnElement = settings.getBoolean("made_element", false);
+        long age = System.currentTimeMillis() - dateFirstLaunch;
+        boolean shownRatePrompt = settings.getBoolean("shown_rate_prompt", false);
+        if (age > 3 * 24 * 60 * 60 * 1000 && // 3 days -> millis
+            launchCount > 5 &&
+            madeAnElement &&
+            !shownRatePrompt)
+        {
+            FlurryAgent.logEvent("shown_rate_prompt");
+            editor.putBoolean("shown_rate_prompt", true);
+            new Handler().postDelayed(new Runnable() {
+               @Override
+               public void run() {
+                   showDialog(RATE_PROMPT);
+               }
+            }, 5000);
+        }
+        editor.commit();
         
         //Set the activity for Control so that we can call showDialog() from it
         control.setActivity(this);
@@ -275,8 +305,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     dialog.cancel();
                 }
             });
-            AlertDialog alert = builder.create(); // Actually create the message
-            return alert; // Return the object created
+            return builder.create();
         }
         else if (id == ELEMENT_PICKER) // Element picker
         {
@@ -300,9 +329,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 }
             });
 
-            AlertDialog alert = builder.create(); // Create the dialog
-
-            return alert; // Return handle
+            return builder.create();
         }
         else if (id == BRUSH_SIZE_PICKER)
         {
@@ -324,8 +351,64 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     setPlaying(play);
                 }
             });
-            AlertDialog alert = builder.create(); // Create object
-            return alert; // Return handle
+            return builder.create();
+        }
+        else if (id == RATE_PROMPT)
+        {
+            final Dialog rateDialog = new Dialog(this);
+            Window window = rateDialog.getWindow();
+            window.requestFeature(Window.FEATURE_NO_TITLE);
+            window.setContentView(R.layout.rate_dialog);
+            // Make this dialog not focused, so it doesn't interrupt play
+            window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+            window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            // Plain gray background without margin
+            window.setBackgroundDrawableResource(R.drawable.dialog_background);
+            // Bump this dialog below the menu bar
+            window.setGravity(Gravity.TOP);
+            WindowManager.LayoutParams params = window.getAttributes();
+            // Leave a 45dip margin on top for the menu bar
+            params.y = (int) (getResources().getDisplayMetrics().density * 45 + 0.5f);
+            params.windowAnimations = R.style.RateDialogAnimations;
+            window.setAttributes(params);
+
+            // Dialog content
+            TextView tv = (TextView)rateDialog.findViewById(R.id.message);
+            tv.setText("Enjoying \"The Elements\"? Rate us.");
+            Button positiveButton = (Button)rateDialog.findViewById(R.id.button1);
+            positiveButton.setText("Rate");
+            positiveButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MainActivity.this.startActivity(new Intent(
+                            Intent.ACTION_VIEW, Uri.parse(
+                            "market://details?id=com.idkjava.thelements")));
+                    rateDialog.dismiss();
+                }
+            });
+            Button neutralButton = (Button)rateDialog.findViewById(R.id.button2);
+            neutralButton.setText("Feedback");
+            neutralButton.setOnClickListener(new Button.OnClickListener() {
+               @Override
+               public void onClick(View v) {
+                   MainActivity.this.startActivity(new Intent(
+                               Intent.ACTION_SENDTO, Uri.parse(
+                               "mailto:idkjava@gmail.com")));
+                   rateDialog.dismiss();
+               }
+            });
+            Button negativeButton = (Button)rateDialog.findViewById(R.id.button3);
+            negativeButton.setText("Not now");
+            negativeButton.setOnClickListener(new Button.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    rateDialog.dismiss();
+                }
+            });
+            return rateDialog;
         }
 
         return null; //Default case: return nothing

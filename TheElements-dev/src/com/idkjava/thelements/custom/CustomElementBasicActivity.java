@@ -1,16 +1,15 @@
 package com.idkjava.thelements.custom;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.OnAmbilWarnaListener;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -261,6 +260,11 @@ public class CustomElementBasicActivity extends ReportingActivity
                 if(CustomElementBasicActivity.this.saveElement())
                 {
                     dialog.dismiss();
+                    FlurryAgent.logEvent("made_element");
+                    SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("made_element", true);
+                    editor.commit();
                     finish();
                 }
                 else

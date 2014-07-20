@@ -1,5 +1,10 @@
-
-    <resources>
-        <color name="black">#000000</color>
-        <color name="custom_property_desc">#666</color>
-    </resources>
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color name="black">#000000</color>
+    <color name="custom_property_desc">#666</color>
+    
+    <!-- Holo theme -->
+    <color name="dialog_color">#ff222222</color>
+    <color name="dialog_text">#ffa5a7aa</color>
+    <color name="dialog_stroke">#ffededed</color>
+</resources>

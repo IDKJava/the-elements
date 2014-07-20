@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Derived from the AOSP alert_dialog.xml layout. -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:attr/alertDialogStyle"
+    android:id="@+id/parentPanel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout android:id="@+id/contentPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <ScrollView android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false">
+
+            <TextView
+                android:id="@+id/message"
+                style="?android:attr/textAppearanceMedium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/dialog_text"
+                android:paddingBottom="8dip"
+                android:paddingRight="16dip"
+                android:paddingLeft="16dip"
+                android:paddingTop="8dip" />
+
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/buttonPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="35dip"
+        android:orientation="vertical"
+        android:divider="?android:attr/dividerHorizontal"
+        android:showDividers="beginning"
+        android:dividerPadding="0dip">
+        <LinearLayout
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layoutDirection="locale"
+            android:measureWithLargestChild="true">
+            <Button android:id="@+id/button1"
+                android:layout_width="wrap_content"
+                android:layout_gravity="start"
+                android:layout_weight="1"
+                android:textColor="@color/dialog_text"
+                android:maxLines="2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textSize="14sp"
+                android:minHeight="35dip"
+                android:layout_height="wrap_content" />
+            <Button android:id="@+id/button3"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:textColor="@color/dialog_text"
+                android:maxLines="2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textSize="14sp"
+                android:minHeight="35dip"
+                android:layout_height="wrap_content" />
+            <Button android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:textColor="@color/dialog_text"
+                android:maxLines="2"
+                android:minHeight="35dip"
+                style="?android:attr/buttonBarButtonStyle"
+                android:textSize="14sp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+     </LinearLayout>
+</LinearLayout>
