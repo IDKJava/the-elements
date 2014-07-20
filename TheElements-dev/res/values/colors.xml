@@ -7,4 +7,5 @@
     <color name="dialog_color">#ff222222</color>
     <color name="dialog_text">#ffa5a7aa</color>
     <color name="dialog_stroke">#ffededed</color>
+    <color name="transparent">#00000000</color>
 </resources>

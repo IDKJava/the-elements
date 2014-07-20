@@ -3,7 +3,6 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/parentPanel"
-    style="?android:attr/alertDialogStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical" >
@@ -23,14 +22,14 @@
 
             <TextView
                 android:id="@+id/message"
-                style="?android:attr/textAppearanceMedium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dip"
                 android:paddingLeft="16dip"
                 android:paddingRight="16dip"
                 android:paddingTop="8dip"
-                android:textColor="@color/dialog_text" />
+                android:textColor="@color/dialog_text"
+                android:textSize="18dip" />
         </ScrollView>
     </LinearLayout>
 
@@ -39,54 +38,60 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/dialog_color"
-        android:divider="?android:attr/dividerHorizontal"
+        android:divider="@drawable/divider_vertical_dark"
         android:dividerPadding="0dip"
         android:minHeight="35dip"
         android:orientation="vertical"
         android:showDividers="beginning" >
 
         <LinearLayout
-            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
-            android:divider="?android:attr/dividerHorizontal"
+            android:divider="@drawable/divider_vertical_dark"
             android:measureWithLargestChild="true"
             android:orientation="horizontal"
             android:showDividers="middle" >
 
             <Button
                 android:id="@+id/button1"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:background="@drawable/item_background"
                 android:maxLines="2"
+                android:minHeight="35dp"
                 android:textColor="@color/dialog_text"
                 android:textSize="14sp" />
 
             <Button
                 android:id="@+id/button2"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:background="@drawable/item_background"
                 android:maxLines="2"
+                android:minHeight="35dp"
                 android:textColor="@color/dialog_text"
                 android:textSize="14sp" />
 
             <Button
                 android:id="@+id/button3"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@null"
+                android:paddingLeft="4dip"
+                android:paddingRight="4dip"
+                android:background="@drawable/item_background"
                 android:maxLines="2"
+                android:minHeight="35dp"
                 android:textColor="@color/dialog_text"
                 android:textSize="14sp" />
+
         </LinearLayout>
     </LinearLayout>
 

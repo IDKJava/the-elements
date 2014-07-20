@@ -252,8 +252,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         long dateFirstLaunch = settings.getLong("date_firstlaunch", System.currentTimeMillis());
         // Write back date first launch in case we missed the first run and
-        // didn't
-        // set the property properly.
+        // didn't set the property properly.
         editor.putLong("date_firstlaunch", dateFirstLaunch);
         boolean madeAnElement = settings.getBoolean("made_element", false);
         long age = System.currentTimeMillis() - dateFirstLaunch;
@@ -281,8 +280,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Log.v("TheElements", "sand_view.onResume() done");
     }
 
-    protected Dialog onCreateDialog(int id) // This is called when showDialog is
-                                            // called
+    protected Dialog onCreateDialog(int id) // This is called when showDialog is called
     {
         if (id == INTRO_MESSAGE) // The first dialog - the intro message
         {
@@ -299,10 +297,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             return builder.create();
         } else if (id == ELEMENT_PICKER) // Element picker
         {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this); // Create
-                                                                         // a
-                                                                         // new
-                                                                         // one
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             mElementAdapter = new ElementAdapter(this, elementsList);
 
@@ -323,9 +318,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
             return builder.create();
         } else if (id == BRUSH_SIZE_PICKER) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this); // Declare
-                                                                         // the
-                                                                         // object
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.brush_size_picker);
             builder.setOnCancelListener(this);
             builder.setItems(R.array.brush_size_list, new DialogInterface.OnClickListener() {
@@ -412,13 +405,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         setPlaying(play);
     }
 
-    public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press
-                                                   // Menu
+    public boolean onPrepareOptionsMenu(Menu menu) // Pops up when you press Menu
     {
         // Create an inflater to inflate the menu already defined in
-        // res/menu/options_menu.xml
-        // This seems to be a bit faster at loading the menu, and easier to
-        // modify
+        // res/menu/options_menu.xml. This seems to be a bit faster at
+        // loading the menu, and easier to modify
         MenuInflater inflater = getMenuInflater();
         menu.clear();
         inflater.inflate(R.menu.options_menu_small, menu);
@@ -574,21 +565,16 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     // JNI Functions
     // Save/load functions
     public static native char saveTempState();
-
     public static native char loadDemoState();
 
     // General utility functions
     private static native void nativeInit();
-
     private static native void nativeRefreshElements();
-
     public native void clearScreen();
 
     // Setters
     public static native void setPlayState(boolean playState);
-
     public static native void setElement(char element);
-
     public static native void setBrushSize(char brushSize);
 
     /**
@@ -601,18 +587,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     // Getters
     public static native char getElement();
-
     public static native byte[] getElementInfo(int index);
-
     public static native int getElementRed(int index);
-
     public static native int getElementGreen(int index);
-
     public static native int getElementBlue(int index);
 
     // Accelerometer related
     public static native void setXGravity(float xGravity);
-
     public static native void setYGravity(float yGravity);
 
     // @formatter:on
@@ -625,7 +606,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             Log.d("TheElements", "Kamcord not supported");
         }
         System.loadLibrary("protobuf");
-        System.loadLibrary("thelements"); // Load the JNI library
-                                          // (libthelements.so)
+        System.loadLibrary("thelements");
     }
 }
