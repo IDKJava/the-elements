@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
@@ -35,6 +36,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -377,15 +379,22 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
             // Dialog content
             TextView tv = (TextView)rateDialog.findViewById(R.id.message);
-            tv.setText("Enjoying \"The Elements\"? Rate us.");
+            tv.setText(R.string.rate_prompt);
             Button positiveButton = (Button)rateDialog.findViewById(R.id.button1);
             positiveButton.setText("Rate");
             positiveButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity.this.startActivity(new Intent(
+                    try {
+                        MainActivity.this.startActivity(new Intent(
                             Intent.ACTION_VIEW, Uri.parse(
                             "market://details?id=com.idkjava.thelements")));
+                    }
+                    catch (ActivityNotFoundException e) {
+                        Log.e("TheElements", "No google play found");
+                        Toast.makeText(MainActivity.this,
+                                R.string.couldnt_launch_market, Toast.LENGTH_LONG).show();
+                    }
                     rateDialog.dismiss();
                 }
             });

@@ -49,6 +49,7 @@
 <string name="remind_later">Remind Later</string>
 <string name="skip_version">Skip This Version</string>
 <string name="update_avail">A new version of The Elements is available now on the play store!</string>
-
+<string name="rate_prompt">Enjoying "The Elements"? Rate us!</string>
+<string name="couldnt_launch_market">Sorry, looks like you don\'t have the Google Play store installed.</string>
 
 </resources>
