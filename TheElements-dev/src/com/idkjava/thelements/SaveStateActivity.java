@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.game.SaveManager;
 
 public class SaveStateActivity extends ReportingActivity
@@ -38,6 +39,7 @@ public class SaveStateActivity extends ReportingActivity
 						{
 							Toast.makeText(getApplicationContext(), R.string.save_state_failed, Toast.LENGTH_SHORT).show();
 						}
+						FlurryAgent.logEvent("save");
 						finish();
 					}
 				}

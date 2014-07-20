@@ -14,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.game.SaveManager;
 
 public class LoadStateActivity extends ReportingActivity
@@ -159,6 +160,7 @@ public class LoadStateActivity extends ReportingActivity
                 	{
                 		Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
                 	}
+                	FlurryAgent.logEvent("load");
                 	finish();
                 }
 	        }
