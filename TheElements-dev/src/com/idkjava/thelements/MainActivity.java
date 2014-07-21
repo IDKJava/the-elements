@@ -259,7 +259,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         boolean shownRatePrompt = settings.getBoolean("shown_rate_prompt", false);
 
         if (age > 3 * 24 * 60 * 60 * 1000 && // 3 days -> millis
-                launchCount > 5 && madeAnElement && !shownRatePrompt) {
+                launchCount > 5 &&
+                madeAnElement &&
+                !shownRatePrompt)
+        {
             FlurryAgent.logEvent("shown_rate_prompt");
             editor.putBoolean("shown_rate_prompt", true);
             new Handler().postDelayed(new Runnable() {
