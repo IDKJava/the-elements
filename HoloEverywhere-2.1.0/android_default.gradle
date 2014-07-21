@@ -1,0 +1,141 @@
+import org.gradle.api.internal.artifacts.publish.DefaultPublishArtifact;
+
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion '18.1'
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 18
+
+        versionName '2.1.0'
+        versionCode 2001000
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
+}
+
+boolean officialBuild = rootProject.hasProperty('officialBuild')
+
+// Sign and attach apks
+if (android.class.name.startsWith('com.android.build.gradle.AppExtension') && project.hasProperty('holoeverywhere.sign.storeFile')) {
+    android {
+        signingConfigs {
+            release {
+                storeFile = file(project.getProperty('holoeverywhere.sign.storeFile'))
+                keyAlias = project.getProperty('holoeverywhere.sign.keyAlias')
+                storePassword = project.getProperty('holoeverywhere.sign.storePassword')
+                keyPassword = project.getProperty('holoeverywhere.sign.keyPassword')
+            }
+        }
+
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+    artifacts {
+        archives file: file("${buildDir}/apk/${project.name}-release.apk"), type: 'apk'
+    }
+}
+
+// Attach apklib (builded by maven), generate javadoc and sources (only for libraries)
+if (android.class.name.startsWith('com.android.build.gradle.LibraryExtension')) {
+    task apklib(type: Copy, dependsOn: rootProject.tasks.buildMaven) {
+        from fileTree("${project.projectDir}/target") { include "*.apklib" }
+        into file("${project.buildDir}/libs")
+        rename '(.*)', "${project.name}-${project.version}.apklib"
+    }
+
+    task generateJavadoc(type: Javadoc) {
+        source = android.sourceSets.main.allJava
+        classpath = project.files(
+                configurations.compile,
+                "${buildDir}/classes/release",
+                project.fileTree("${buildDir}/exploded-bundles") { include '*/classes.jar' },
+                new File(android.plugin.sdkDirectory, 'platforms/android-18/android.jar')
+        )
+    }
+
+    task javadoc(type: Jar, dependsOn: generateJavadoc) {
+        from generateJavadoc.destinationDir
+        classifier = 'javadoc'
+    }
+
+    task sources(type: Jar) {
+        from android.sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    if (officialBuild) {
+        artifacts {
+            archives tasks.sources
+            archives tasks.javadoc
+            archives new DefaultPublishArtifact(project.name, 'apklib', 'apklib', '', new Date(), file("${project.buildDir}/libs/${project.name}-${project.version}.apklib"), tasks.apklib)
+        }
+    }
+}
+
+// Deploy to maven repo (local)
+afterEvaluate { project ->
+    signing {
+        required officialBuild
+        sign configurations.archives
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+                pom.artifactId = ARTIFACT_ID
+
+                repository(url: project.hasProperty('holoeverywhere.repo') ? project.getProperty('holoeverywhere.repo') : 'file:///invalid_path')
+
+                pom.project {
+                    name NAME
+                    packaging PACKAGING
+                    description DESCRIPTION
+                    url 'https://github.com/Prototik/HoloEverywhere'
+
+                    scm {
+                        url 'https://github.com/Prototik/HoloEverywhere'
+                        connection 'scm:git@github.com:Prototik/HoloEverywhere.git'
+                        developerConnection 'scm:git@github.com:Prototik/HoloEverywhere.git'
+                    }
+
+                    licenses {
+                        license {
+                            name 'MIT License'
+                            url 'https://raw.github.com/Prototik/HoloEverywhere/master/LICENSE'
+                            distribution 'repo'
+                            comments 'Copyright (c) 2013 Sergey Shatunov'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id 'Prototik'
+                            name 'Sergey Shatunov'
+                            email 'prototypegamez@gmail.com'
+                            timezone '+8'
+                            roles {
+                                role "developer"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

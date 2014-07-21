@@ -1,0 +1,32 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.6.3'
+  }
+}
+
+allprojects {
+  group = 'org.holoeverywhere'
+  version = '2.1.0'
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url "https://raw.github.com/Prototik/HoloEverywhere/repo" }
+  }
+
+  tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+  }
+}
+
+task buildMaven(type: Exec) {
+    executable = 'mvn'
+    args = ['--batch-mode', '--quiet', 'clean', 'package']
+    workingDir = projectDir
+}
+
+apply plugin: 'android-reporting'

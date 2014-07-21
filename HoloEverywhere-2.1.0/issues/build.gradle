@@ -1,0 +1,16 @@
+apply plugin: 'android'
+
+dependencies {
+    compile project(':library')
+    compile project(':addons:preferences')
+    compile project(':addons:slider')
+    compile 'com.google.android.gms:play-services:3.2.25@aar'
+}
+
+apply from: '../android_default.gradle'
+
+android {
+    defaultConfig {
+        minSdkVersion 8
+    }
+}
