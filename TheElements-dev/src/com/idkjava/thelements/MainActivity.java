@@ -78,7 +78,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     // Constants for specials, collisions
     public static final int MAX_SPECIALS = 6;
-    public static final int NUM_COLLISIONS = 12;
+    public static final int NUM_COLLISIONS = 13;
 
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;

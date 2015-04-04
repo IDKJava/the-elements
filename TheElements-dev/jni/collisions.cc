@@ -54,6 +54,7 @@
  *      9 = Salt-Water - Plant or Plant - Salt-Water
  *      10 = Water - Sand, Sand - Water, Coal - Water, Water - Coal
  *      11 = Electricity - Electricity
+ *      12 = Stacking - Solid
  *      * = Should not happen, something messed up
  */
 
@@ -74,8 +75,8 @@ char reciprocals[NUM_COLLISIONS] =
         8,
         9,
         10,
+        13,
         12,
-        11
 };
 
 // Collision grid describing which collision type to use between each pair
@@ -107,7 +108,7 @@ char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS] =
     //Magma 11
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1,1,4,1},
     //Stone 12
-    {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0,0,4,0},
+    {0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 12, 1, 0, 0, 0, 1, 0, 1, 0, 1, 2, 0, 0, 0, 0, 0, 0,0,4,0},
     //Oil 13
     {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1,1,4,1},
     //C4 14

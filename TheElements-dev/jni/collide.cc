@@ -259,5 +259,12 @@ void collide(int firstParticle, int secondParticle)
         a_hasMoved[secondParticle] = FALSE;
         break;
     }
+    case 12: //Stacking - Solid
+    {
+        //First particle goes back to where it was before
+        a_x[firstParticle] = oldXFirst;
+        a_y[firstParticle] = oldYFirst;
+        a_hasMoved[firstParticle] = FALSE;
+    }
     }
 }
