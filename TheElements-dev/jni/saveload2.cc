@@ -201,16 +201,16 @@ bool loadStateLogic2(ifstream& in)
         a_x[tempParticle] = particle.x();
         a_y[tempParticle] = particle.y();
         // Integer coords for allcoords and bitmap color
-        int i = (int)a_x[tempParticle];
-        int j = (int)a_y[tempParticle];
+        int x = (int)a_x[tempParticle];
+        int y = (int)a_y[tempParticle];
         // Check bounds
-        if (i < 0 || i >= workWidth || j < 0 || j >= workHeight)
+        if (x < 0 || x >= workWidth || y < 0 || y >= workHeight)
         {
             LOGE("Out of bound particle found. Skipping");
             continue;
         }
         // Check that coords are not already taken
-        if (allCoords[getIndex(i, j)] != -1)
+        if (allCoords[getIndex(x, y)] != -1)
         {
             // TODO(gkanwar): Put in a Flurry log here
             LOGE("Particle space already occupied. Skipping");
@@ -294,8 +294,8 @@ bool loadStateLogic2(ifstream& in)
         --loq;
 
         // Set the allCoords and bitmap color
-        allCoords[getIndex(i, j)] = tempParticle;
-        setBitmapColor(i, j, a_element[tempParticle]);
+        allCoords[getIndex(x, y)] = tempParticle;
+        setBitmapColor(x, y, a_element[tempParticle]);
     }
 
     return true;
