@@ -1,5 +1,5 @@
 /*
- * update.c
+ * update.h
  * -----------------------------------
  * Declares the function UpdateView(), which
  * is called every frame to update all the
@@ -11,6 +11,7 @@
 #define UPDATE_H_INCLUDED
 
 #include <stdlib.h>
+#include <math.h>
 
 //Include the global variables
 #include "app.h"
@@ -18,7 +19,10 @@
 #include "points.h"
 //Include the collision function
 #include "collide.h"
+//Include the clear funtion (rsetup)
+#include "setup.h"
 
-void UpdateView(void);
+void startUpdateThread();
+void killUpdateThread();
 
-#endif
+#endif //!UPDATE_H_INCLUDED

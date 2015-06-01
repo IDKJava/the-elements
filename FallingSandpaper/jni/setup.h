@@ -13,7 +13,22 @@
 #include "app.h"
 //Include the global macros
 #include "macros.h"
+//Include the Element properties (yes this is obvious)
+#include "elementproperties.h"
+//Include the free function
+#include <stdlib.h>
+//Include saveload for custom element loading
+#include "saveload.h"
 
-void rsetup(void);
+//Set up the workspace
+void gameSetup(void);
+//Set up the variable sized arrays
+void arraySetup(void);
+//Set up the atmosphere properties struct
+void atmosphereSetup(void);
+//Create all the elements
+void elementSetup(void);
+//Create all the particle structs
+void particleSetup(void);
 
-#endif
+#endif //!SETUP_H_INCLUDED

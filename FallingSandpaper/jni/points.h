@@ -11,10 +11,29 @@
 
 //Include global variables
 #include "app.h"
+//Include macros
+#include "macros.h"
 
-void CreatePoint(int k, int l, int e);
-void DeletePoint(int partnum);
-void setBitmapColor(int xpos, int ypos, int element);
-void unFreezeParticles(int xcentre, int ycentre);
+void createPoint(int xCoord, int yCoord, struct Element* element);
+void deletePoint(int particle);
+void unSetPoint(int particle);
+void setElement(int particle, struct Element* newElement);
+void setBitmapColor(int xCoord, int yCoord, struct Element* element);
+void clearBitmapColor(int xCoord, int yCoord);
+void createBitmapFromPoints(void);
+void unFreezeParticles(int xCoord, int yCoord);
+void changeHeat(char *heat, int heatChange);
+int hasSpecial(int tempParticle, int special);
+int getParticleSpecialVal(int tempParticle, int special);
+void setParticleSpecialVal(int tempParticle, int special, int val);
+int getElementSpecialVal(struct Element* tempElement, int special);
+void clearSpecialValsToElementDefault(int tempParticle);
 
-#endif
+
+// Utility function to check if a point is in bounds
+inline bool coordInBounds(int x, int y)
+{
+    return x >= 0 && x < workWidth && y >= 0 && y < workHeight;
+}
+
+#endif //!POINTS_H_INCLUDED

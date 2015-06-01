@@ -10,133 +10,207 @@
 #ifndef APP_H_INCLUDED
 #define APP_H_INCLUDED
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 //Include the global macros
 #include "macros.h"
+//Include the server functions
+#include "server.h"
+//Include the pthread functions
+#include <pthread.h>
+//Include KamCord stuff
+#include <Kamcord-C-Interface.h>
 
-// The simple framework expects the application code to define these functions.
-extern void appInit();
-extern void appDeinit();
-extern void appRender();
-
-/* Value is non-zero when application is alive, and 0 when it is closing.
- * Defined by the application framework.
+/*
+ * STRUCTS
  */
-extern int gAppAlive;
+ 
+    struct Element
+    {
+        //Index
+        unsigned char index;
+        //Name
+        char* name;
+        //Filename, only for customs
+        char* filename;
 
+        //Dealing with phases
+        char allowMovingTransition;
+        char state;
+        char startingTemp, lowestTemp, highestTemp;
+        struct Element* lowerElement;
+        struct Element* higherElement;
+
+        //Dealing with drawing
+        char red, green, blue;
+
+        //Properties
+        int specials[MAX_SPECIALS];
+        int specialVals[MAX_SPECIALS];
+        char collisions[NUM_BASE_ELEMENTS];  // Only for customs
+        char base; //Only for customs
+        char density;
+        int fallVel;
+        char inertia;
+    };
+
+    struct Atmosphere
+    {
+        char heat;
+        char gravity;
+
+        unsigned char backgroundRed, backgroundGreen, backgroundBlue;
+
+        char borderLeft, borderTop, borderRight, borderBottom;
+    };
+
+/*
+ * VARIABLES
+ */
+
+//Variables to track the user/app version
+    extern char udid[];
+    extern int versionCode;
+
+//An array of all the elements
+    extern struct Element** elements;
+//The number of elements available
+    extern unsigned char numElements;
+
+    extern char a_set[];
+    extern float a_x[];
+    extern float a_y[];
+    extern float a_oldX[];
+    extern float a_oldY[];
+    extern short a_xVel[];
+    extern short a_yVel[];
+    extern char a_heat[];
+    extern int* a_specialVals[];
+    extern struct Element* a_element[];
+    extern char a_frozen[];
+    extern char a_hasMoved[];
+
+ 
+
+
+    
+
+//A stack of available particles
+    extern int avail[];
+//Points to the index AFTER the top of the stack
+    extern int loq;
 //Current element selected
-extern int celement;
-//Current point during processing
-extern int cpoint;
-//Play state
-extern int play;
-//Size variable
-extern int size;
+    extern struct Element* cElement;
+//Atmosphere in use
+    extern struct Atmosphere* cAtmosphere;
 
-//Array for bitmap drawing
-extern unsigned char colors[TPixels*3]; // 3 bytes per pixel
+//State variables
+    extern char play;
+    extern char flipped;
+    extern char fingerDown;
+    extern char accelOn;
+    extern char dimensionsChanged;
+    extern char zoomChanged;
+    extern int shouldClear;
 
-//Coordinates
-extern float x[TPoints];
-extern float y[TPoints];
-//Old coordinates (for collision resolving)
-extern short int oldx[TPoints];
-extern short int oldy[TPoints];
-//Velocities
-extern short int xvel[TPoints];
-extern short int yvel[TPoints];
+    extern unsigned char brushSize;
+    extern unsigned char zoomFactor;
 
-//Element type
-extern char element[TPoints];
-//Frozen state
-extern char frozen[TPoints];
-//Spawn type
-extern char spawn[TPoints];
+    extern unsigned char filterType;
 
-//RGB properties
-extern unsigned char red[TElements];
-extern unsigned char green[TElements];
-extern unsigned char blue[TElements];
-//Fall velocity property
-extern int fallvel[TElements];
-//Density property
-extern int density[TElements];
-//Solid property
-extern int solid[TElements];
-//Growing property
-extern int growing[TElements];
-//Condensing property
-extern int condensing[TElements];
-//Fire-like burning property
-extern int fireburn[TElements];
-//Explosiveness property
-extern int exploness[TElements];
-
-//Custom element collision data
-extern int colliseelement1[TCollision];
-
-//Collision matrix
-extern int collision[TElements][TElements];
-
-//Index set state
-extern char set[TPoints];
-//Index available state
-extern short int avail[TPoints];
-
-//Location in avail array
-extern int loq;
-//Zoom value
-extern int screensize;
-
-//Gravity values
-extern float gravx;
-extern float gravy;
-
-//Accelerometer control state
-extern int accelcon;
-//Flipped state
-extern int flipped;
-
-//The extent of the screen (what area to draw in)
-extern int maxx;
-extern int maxy;
-
-// A map of all the coordinates on the screen
-extern int allcoords[WIDTH][HEIGHT];
+//A map of all the points (a two-dimensional variable-size array)
+    extern int* allCoords;
 
 //Mouse positions
-extern int xm;  
-extern int ym;
+    extern short mouseX;
+    extern short mouseY;
 //Old mouse positions
-extern int lmx;
-extern int lmy;
-//Finger down state
-extern int fd;
+    extern short lastMouseX;
+    extern short lastMouseY;
 
+    extern int randOffset;
+
+//Array for bitmap drawing
+    extern unsigned char* colors;
+    extern unsigned char* colorsFrameBuffer;
+
+//Screen dimensions
+    extern int screenWidth;
+    extern int screenHeight;
+//Workspace dimensions
+    extern int workWidth;
+    extern int workHeight;
+
+//Nearest power of 2 to workWidth - needed due to stupid Tegra 2.
+    extern int stupidTegra;
+
+//Collision matrix
+    extern char collision[NUM_BASE_ELEMENTS][NUM_BASE_ELEMENTS];
+    extern char reciprocals[NUM_COLLISIONS];
+
+//Set when a mouse update is requested, unset when udpated
+    extern char shouldUpdateMouse;
+
+    //For pinch to zoom/ panning
+    extern float zoomScale;
+    extern float centerX;
+    extern float centerY;
+    extern float viewWidth;
+    extern float viewHeight;
+    extern char isPinch;
+    extern char isPanMode;
+
+//Gravity values
+    extern float xGravity;
+    extern float yGravity;
+
+
+/*Network stuff taken out for now
 //Buffer building variables
-extern char username[8];
-extern char password[8];
-extern char userlength;
-extern char passlength;
-extern char buffer[3 + 1 + (2 * TPoints * 4) + 200];
-extern int bufferlength;
+char username[8];
+char password[8];
+char userlength;
+char passlength;
+char buffer[3 + 1 + (2 * TPoints * 4) + 200];
+int bufferlength;
 
 //Error variable
-extern char* error;
+char* error;
 
 //Socket variables
-extern int sockfd; //The file descriptor for the socket
-extern int n; //Used in sending and recieving data
-extern struct sockaddr_in serv_addr; //The server address struct
-extern struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+int sockfd; //The file descriptor for the socket
+int n; //Used in sending and recieving data
+struct sockaddr_in serv_addr; //The server address struct
+struct hostent *server; //Pointer to a hostent struct that is used to set up serv_addr
+*/
 
-#ifdef __cplusplus
+/*
+ * FUNCTIONS
+ */
+
+//Used to get the index for allcoords (since it's actually a two dimensional array, but we allocated it using malloc
+inline int getIndex(int x, int y)
+{
+    return y*workWidth + x;
 }
-#endif
+//Used specifically for colors
+inline int getColorIndex( int x, int y )
+{
+    return y*stupidTegra + x;
+}
 
+/*
+ * THREADS
+ */
+
+    extern int threadsInitialized;
+    extern int bufferFree;
+    extern int frameReady;
+
+    extern pthread_mutex_t update_mutex;
+    extern pthread_mutex_t frame_ready_mutex;
+    extern pthread_cond_t frame_ready_cond;
+    extern pthread_mutex_t buffer_free_mutex;
+    extern pthread_cond_t buffer_free_cond;
+
+    extern pthread_mutex_t mouse_mutex;
 
 #endif // !APP_H_INCLUDED
