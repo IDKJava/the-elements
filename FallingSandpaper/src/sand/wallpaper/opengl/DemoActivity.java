@@ -18,7 +18,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
-import android.opengl.GLWallpaperService;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;

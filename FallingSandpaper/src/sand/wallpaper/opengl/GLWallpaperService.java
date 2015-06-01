@@ -1,4 +1,4 @@
-package android.opengl;
+package sand.wallpaper.opengl;
 
 import java.io.Writer;
 import java.util.ArrayList;
@@ -12,8 +12,9 @@ import javax.microedition.khronos.egl.EGLSurface;
 import javax.microedition.khronos.opengles.GL;
 import javax.microedition.khronos.opengles.GL10;
 
-import android.opengl.BaseConfigChooser.ComponentSizeChooser;
-import android.opengl.BaseConfigChooser.SimpleEGLConfigChooser;
+import sand.wallpaper.opengl.BaseConfigChooser.ComponentSizeChooser;
+import sand.wallpaper.opengl.BaseConfigChooser.SimpleEGLConfigChooser;
+
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
