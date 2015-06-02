@@ -7,20 +7,24 @@
 
 package sand.wallpaper.opengl;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.SensorListener;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.view.MotionEvent;
 
-public class DemoActivity extends OpenGLES2WallpaperService implements
-        SensorListener {
+public class DemoActivity extends OpenGLES2WallpaperService {
+
     class SandView extends GLEngine {
         private int fd; // Set the "finger down" variable
 
@@ -34,18 +38,20 @@ public class DemoActivity extends OpenGLES2WallpaperService implements
 
         DemoRenderer mRenderer;
 
-        SharedPreferences myPrefs = getSharedPreferences("TheElementsPrefs", 0);
+        SharedPreferences myPrefs = getSharedPreferences(
+                "TheElementsWallpaperPrefs", 0);
 
         SandView() {
             super();
             // Handle prefs, other initialization
             initSurfaceView();
-            mRenderer = new DemoRenderer();
+            mRenderer = new DemoRenderer(DemoActivity.this);
             setEGLContextClientVersion(2);
             setEGLConfigChooser(8, 8, 8, 8, // RGBA channel bits
                     16, 0); // depth and stencil channel min bits
             setRenderer(mRenderer);
             setTouchEventsEnabled(true);
+
         }
 
         // When finger is held down, flood of events killing framerate, need to
@@ -172,7 +178,9 @@ public class DemoActivity extends OpenGLES2WallpaperService implements
     private long lastUpdate = -1;
     private int random_num;
 
-    private SensorManager sensorMgr;
+    private SensorManager myManager;
+    private List<Sensor> sensors;
+    private Sensor accSensor;
 
     private float x, y, z;
 
@@ -188,21 +196,13 @@ public class DemoActivity extends OpenGLES2WallpaperService implements
     public void onCreate() {
         super.onCreate(); // Uses onCreate from the general
 
-        // Create the sensor manager
-        sensorMgr = (SensorManager) getSystemService(SENSOR_SERVICE);
-        // Find out if the accelerometer is supported
-        boolean accelSupported = sensorMgr.registerListener(this,
-                SensorManager.SENSOR_ACCELEROMETER,
+        myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        // Register the accelerometer listener
+        myManager.registerListener(mySensorListener, accSensor,
                 SensorManager.SENSOR_DELAY_GAME);
 
-        // If accel is not supported
-        if (!accelSupported) {
-            // Remove the listener
-            sensorMgr.unregisterListener(this,
-                    SensorManager.SENSOR_ACCELEROMETER);
-        }
-
-        Preferences.setPreferences(this);
     }
 
     @Override
@@ -210,37 +210,31 @@ public class DemoActivity extends OpenGLES2WallpaperService implements
         return new SandView();
     }
 
-    public void onSensorChanged(int sensor, float[] values) {
-        if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
-            long curTime = System.currentTimeMillis();
-            // only allow one update every 100ms.
-            if ((curTime - lastUpdate) > 100) {
-                long diffTime = (curTime - lastUpdate);
-                lastUpdate = curTime;
-
-                x = values[SensorManager.DATA_X];
-                y = values[SensorManager.DATA_Y];
-                z = values[SensorManager.DATA_Z];
-
-                float speed = Math.abs(x + y + z - last_x - last_y - last_z)
-                        / diffTime * 10000;
-                if (speed > SHAKE_THRESHOLD) {
-                    clearScreen();
-                }
-                last_x = x;
-                last_y = y;
-                last_z = z;
-            }
+    private final SensorEventListener mySensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            setXGravity(event.values[0]);
+            setYGravity(event.values[1]);
         }
-    }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
 
     @Override
     Renderer getNewRenderer() {
-        return new DemoRenderer();
+        return new DemoRenderer(this);
     }
 }
 
 class DemoRenderer implements GLSurfaceView.Renderer {
+    private Context mContext;
+
+    public DemoRenderer(Context context) {
+        mContext = context;
+    }
+
     public void onDrawFrame(GL10 gl) {
         nativeRender(); // Actual rendering - everything happens here
     }
@@ -257,6 +251,7 @@ class DemoRenderer implements GLSurfaceView.Renderer {
 
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
         nativeInit();
+        Preferences.setPreferences(mContext);
     }
 
     private static native void nativeInit(); // Jni init

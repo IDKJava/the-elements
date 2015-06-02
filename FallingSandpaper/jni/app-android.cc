@@ -241,10 +241,13 @@ Java_sand_wallpaper_opengl_Preferences_setFlippedState(JNIEnv* env, jobject thiz
 JNIEXPORT void JNICALL
 Java_sand_wallpaper_opengl_Preferences_setBackgroundColor(JNIEnv* env, jobject thiz, jchar redValue, jchar greenValue, jchar blueValue)
 {
+
+  if ( cAtmosphere)  {
     //Set the eraser color to the background color, used as the reference whenever background color is needed
     cAtmosphere->backgroundRed = redValue;
     cAtmosphere->backgroundGreen = greenValue;
     cAtmosphere->backgroundBlue = blueValue;
+  }
 
     char buffer[100];
     sprintf(buffer, "blue: %d", blueValue);

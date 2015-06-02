@@ -8,7 +8,6 @@ import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
-import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 
 public class Preferences extends PreferenceActivity implements
@@ -17,7 +16,8 @@ public class Preferences extends PreferenceActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        getPreferenceManager().setSharedPreferencesName("TheElementsPrefs");
+        getPreferenceManager().setSharedPreferencesName(
+                "TheElementsWallpaperPrefs");
 
         // Set the preference screen created by createPreferenceHierarchy()
         setPreferenceScreen(createPreferenceHierarchy());
@@ -69,7 +69,7 @@ public class Preferences extends PreferenceActivity implements
         accel_pref.setTitle(R.string.accel_pref_title);
         accel_pref.setSummary(R.string.accel_pref_summary);
         accel_pref.setKey("accel_pref");
-        // root.addPreference(accel_pref);
+        root.addPreference(accel_pref);
 
         // Random checkbox
         CheckBoxPreference random_pref = new CheckBoxPreference(this);
@@ -79,17 +79,16 @@ public class Preferences extends PreferenceActivity implements
         root.addPreference(random_pref);
 
         // Create the shared prefs used to access all this
-        final SharedPreferences sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+        final SharedPreferences sharedPrefs = getSharedPreferences(
+                "TheElementsWallpaperPrefs", 0);
 
         // Set default values
         if (!sharedPrefs.contains("back_color_pref"))
             back_color_pref.setValue("black");
         if (!sharedPrefs.contains("flip_screen_pref"))
             flip_screen_pref.setChecked(false);
-        /*
-         * if(!sharedPrefs.contains("accel_pref")) accel_pref.setChecked(false);
-         */
+        if (!sharedPrefs.contains("accel_pref"))
+            accel_pref.setChecked(false);
         if (!sharedPrefs.contains("random_pref"))
             random_pref.setChecked(true);
 
@@ -98,49 +97,33 @@ public class Preferences extends PreferenceActivity implements
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
             String key) {
-        // if (key == "back_color_pref") {
-        // if (sharedPreferences.getString("back_color_pref", "black")
-        // .equalsIgnoreCase("black")) {
-        // setBackgroundColor((char) 0, (char) 0, (char) 0);
-        // } else {
-        // setBackgroundColor((char) 1, (char) 1, (char) 1);
-        // }
-        // } else if (key == "flip_screen_pref") {
-        // if (sharedPreferences.getBoolean("flip_screen_pref", false) == false)
-        // {
-        // setFlippedState(false);
-        // } else {
-        // setFlippedState(true);
-        // }
-        // } else if (key == "accel_pref") {
-        // if (sharedPreferences.getBoolean("accel_pref", false) == false) {
-        // setAccelState(false);
-        // } else {
-        // setAccelState(true);
-        // }
-        // }
+
+        // Dunno what's with all the nots, just leaving as is
+        if (key == "back_color_pref") {
+            char color = (sharedPreferences.getString("back_color_pref",
+                    "black").equalsIgnoreCase("black")) ? (char) 0 : (char) 255;
+            setBackgroundColor(color, color, color);
+        } else if (key == "flip_screen_pref") {
+            setFlippedState(!(sharedPreferences.getBoolean("flip_screen_pref",
+                    false) == false));
+        } else if (key == "accel_pref") {
+            setAccelState(!(sharedPreferences.getBoolean("accel_pref", false) == false));
+        }
+
     }
 
     public static void setPreferences(Context context) {
-        // final SharedPreferences sharedPreferences = PreferenceManager
-        // .getDefaultSharedPreferences(context);
-        // if (sharedPreferences.getString("back_color_pref", "black") ==
-        // "black") {
-        // setBackgroundColor((char) 0, (char) 0, (char) 0);
-        // } else {
-        // setBackgroundColor((char) 1, (char) 1, (char) 1);
-        // }
-        // if (sharedPreferences.getBoolean("flip_screen_pref", false) == false)
-        // {
-        // setFlippedState(false);
-        // } else {
-        // setFlippedState(true);
-        // }
-        /*
-         * if(sharedPreferences.getBoolean("accel_pref", false) == false) {
-         * DemoActivity.setAccelOnOff(0); } else {
-         * DemoActivity.setAccelOnOff(1); }
-         */
+        final SharedPreferences sharedPreferences = context
+                .getSharedPreferences("TheElementsWallpaperPrefs", 0);
+
+        char color = (sharedPreferences.getString("back_color_pref", "black")
+                .equalsIgnoreCase("black")) ? (char) 0 : (char) 255;
+
+        setBackgroundColor(color, color, color);
+
+        setFlippedState(!(sharedPreferences.getBoolean("flip_screen_pref",
+                false) == false));
+        setAccelState(!(sharedPreferences.getBoolean("accel_pref", false) == false));
     }
 
     public static native void setBorderState(boolean leftBorderState,
