@@ -28,7 +28,7 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
     </content>
-    <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="module-library">
       <library name="FlurryAgent.jar">
         <CLASSES>
@@ -58,10 +58,9 @@
     </orderEntry>
     <orderEntry type="library" name="pollfish" level="project" />
     <orderEntry type="module" module-name="AmbilWarna" />
-    <orderEntry type="module" module-name="Android-WVersionManager" />
-    <orderEntry type="module" module-name="kamcord" />
     <orderEntry type="module" module-name="android-ColorPickerPreference" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="kamcord" level="project" />
+    <orderEntry type="library" name="wversionmanager-1.2" level="project" />
   </component>
 </module>
-
