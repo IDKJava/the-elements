@@ -6,3 +6,7 @@ bin/
 gen/
 obj/
 libthelements.so
+*/.idea/workspace.xml
+*/.idea/libraries
+*/local.properties
+.gradle
