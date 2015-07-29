@@ -1,5 +1,8 @@
 #!/bin/sh
 
 BASEDIR=$(dirname $0)
+PROTOC=${BASEDIR}/../protobuf/src/protoc
 
-protoc --cpp_out=$BASEDIR/jni --proto_path=$BASEDIR/proto $BASEDIR/proto/messages.proto
+${PROTOC} --cpp_out=$BASEDIR/jni --proto_path=$BASEDIR/proto $BASEDIR/proto/messages.proto
+cd ${BASEDIR}/jni
+${ANDROID_NDK_HOME}/ndk-build
