@@ -1,0 +1,4 @@
+include ':Android-WVersionManager:library'
+include ':android-color-picker:AmbilWarna'
+include ':TheElements-dev'
+include ':kamcord-android-sdk:kamcord'

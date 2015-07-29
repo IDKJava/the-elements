@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="kamcord">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../kamcord-android-sdk/kamcord/libs/kamcord.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

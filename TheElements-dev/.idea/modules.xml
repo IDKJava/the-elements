@@ -3,11 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../android-color-picker/AmbilWarna/AmbilWarna.iml" filepath="$PROJECT_DIR$/../android-color-picker/AmbilWarna/AmbilWarna.iml" />
-      <module fileurl="file:///media/home/gurtej/workspace/the-elements/Android-WVersionManager/library/Android-WVersionManager.iml" filepath="/media/home/gurtej/workspace/the-elements/Android-WVersionManager/library/Android-WVersionManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Android-WVersionManager/library/Android-WVersionManager.iml" filepath="$PROJECT_DIR$/../Android-WVersionManager/library/Android-WVersionManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/TheElements.iml" filepath="$PROJECT_DIR$/TheElements.iml" />
       <module fileurl="file://$PROJECT_DIR$/../android-ColorPickerPreference/android-ColorPickerPreference.iml" filepath="$PROJECT_DIR$/../android-ColorPickerPreference/android-ColorPickerPreference.iml" />
       <module fileurl="file://$PROJECT_DIR$/../kamcord-android-sdk/kamcord/kamcord.iml" filepath="$PROJECT_DIR$/../kamcord-android-sdk/kamcord/kamcord.iml" />
     </modules>
   </component>
 </project>
-

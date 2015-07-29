@@ -5,9 +5,9 @@
 	<classpathentry kind="lib" path="libs/protobuf-java-2.4.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/libGoogleAnalyticsServices.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="libs/libGoogleAnalyticsServices.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/AmbilWarna"/>
+	<classpathentry kind="lib" path="/home/gkanwar/the-elements/kamcord-android-sdk/kamcord/libs/kamcord.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

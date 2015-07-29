@@ -18,6 +18,7 @@
         <proGuardCfgFiles>
           <file>file://$USER_HOME$/adt-bundle-linux/sdk/tools/proguard/proguard-android.txt</file>
         </proGuardCfgFiles>
+        <option name="UPDATE_PROPERTY_FILES" value="true" />
       </configuration>
     </facet>
   </component>
@@ -56,11 +57,28 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="pollfish" level="project" />
     <orderEntry type="module" module-name="AmbilWarna" />
     <orderEntry type="module" module-name="android-ColorPickerPreference" />
+    <orderEntry type="module" module-name="kamcord" />
+    <orderEntry type="module" module-name="Android-WVersionManager" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../kamcord-android-sdk/kamcord/libs/kamcord.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/libs/pollfish.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="kamcord" level="project" />
-    <orderEntry type="library" name="wversionmanager-1.2" level="project" />
   </component>
 </module>
