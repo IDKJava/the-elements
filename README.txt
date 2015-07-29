@@ -9,3 +9,5 @@ Installing
    -- ./configure
    -- make -j
    -- Confirm protobuf/src/protoc exists.
+3. Download the Android NDK.
+4. Add ANDROID_HOME and ANDROID_NDK_HOME to env variables.
