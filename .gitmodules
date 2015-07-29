@@ -7,3 +7,6 @@
 [submodule "Android-WVersionManager"]
 	path = Android-WVersionManager
 	url = git@github.com:IDKJava/Android-WVersionManager.git
+[submodule "protobuf"]
+	path = protobuf
+	url = git@github.com:google/protobuf.git
