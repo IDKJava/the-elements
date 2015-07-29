@@ -1,6 +1,6 @@
 [submodule "kamcord-android-sdk"]
 	path = kamcord-android-sdk
-	url = https://github.com/kamcord/kamcord-android-sdk.git
+	url = git@github.com:IDKJava/kamcord-android-sdk.git
 [submodule "TheElements-dev/src/com/idkjava/thelements/keys"]
 	path = TheElements-dev/src/com/idkjava/thelements/keys
 	url = git@bitbucket.org:idkjava/thelements-keys.git
