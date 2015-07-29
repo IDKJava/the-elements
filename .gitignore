@@ -10,3 +10,5 @@ libthelements.so
 */.idea/libraries
 */local.properties
 .gradle
+build/
+gradle/
