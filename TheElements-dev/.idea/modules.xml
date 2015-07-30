@@ -3,10 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../android-color-picker/AmbilWarna/AmbilWarna.iml" filepath="$PROJECT_DIR$/../android-color-picker/AmbilWarna/AmbilWarna.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../Android-WVersionManager/library/Android-WVersionManager.iml" filepath="$PROJECT_DIR$/../Android-WVersionManager/library/Android-WVersionManager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/TheElements.iml" filepath="$PROJECT_DIR$/TheElements.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../android-ColorPickerPreference/android-ColorPickerPreference.iml" filepath="$PROJECT_DIR$/../android-ColorPickerPreference/android-ColorPickerPreference.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Android-WVersionManager/Android-WVersionManager.iml" filepath="$PROJECT_DIR$/../Android-WVersionManager/Android-WVersionManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TheElements-dev.iml" filepath="$PROJECT_DIR$/TheElements-dev.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../android-color-picker/android-color-picker.iml" filepath="$PROJECT_DIR$/../android-color-picker/android-color-picker.iml" />
       <module fileurl="file://$PROJECT_DIR$/../kamcord-android-sdk/kamcord/kamcord.iml" filepath="$PROJECT_DIR$/../kamcord-android-sdk/kamcord/kamcord.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../kamcord-android-sdk/kamcord-android-sdk.iml" filepath="$PROJECT_DIR$/../kamcord-android-sdk/kamcord-android-sdk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Android-WVersionManager/library/library.iml" filepath="$PROJECT_DIR$/../Android-WVersionManager/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../the-elements.iml" filepath="$PROJECT_DIR$/../the-elements.iml" />
     </modules>
   </component>
 </project>

@@ -10,4 +10,18 @@ Installing
    -- make -j
    -- Confirm protobuf/src/protoc exists.
 3. Download the Android NDK.
-4. Add ANDROID_HOME and ANDROID_NDK_HOME to env variables.
+4. Set ANDROID_HOME and ANDROID_NDK_HOME env variables.
+5. Set IDKJAVA_KEYSTORE_PATH and IDKJAVA_KEY_ALIAS variables.
+6. If using Android Studio GUI to build the gradle project, then create
+   a gradle.properties file under TheElements-dev, with ndkdir=path/to/ndk
+   to ensure that the gradle spawned under Android Studio can find the NDK.
+
+Building an APK (gradle)
+========================
+The root of the repository contains a gradlew shell wrapper.
+To build a debug build:
+-- ./gradlew assembleDebug
+To build a release build:
+-- ./gradlew assembleRelease
+-- Respond to the password prompts for keystore signing
+The built apk will be outputted to TheElements-dev/build/outputs/apk/.
