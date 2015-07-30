@@ -8,7 +8,10 @@ obj/
 libthelements.so
 */.idea/workspace.xml
 */.idea/libraries
-*/local.properties
+local.properties
+gradle.properties
 .gradle
 build/
 gradle/
+.settings/
+out/
