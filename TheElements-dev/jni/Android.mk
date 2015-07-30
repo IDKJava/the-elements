@@ -174,7 +174,7 @@ endif
 $(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING))
 
 LOCAL_CFLAGS := -DANDROID_NDK
-LOCAL_LDLIBS +=  -llog -ldl -landroid -lEGL -lGLESv2 -lprotobuf
+LOCAL_LDLIBS +=  -llog -ldl -landroid -lEGL -lGLESv2
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
@@ -183,9 +183,10 @@ KAMCORD = yes
 ifeq ($(KAMCORD),yes)
     LOCAL_CFLAGS += -DUSE_KAMCORD
     LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
-    LOCAL_SHARED_LIBRARIES := libkamcord
+    # This is warned against, but with LOCAL_SHARED_LIBRARIES I cannot get ndk-build to find the
+    # actual shared library for linking...
+    LOCAL_LDLIBS += -L$(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
     LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
-    LOCAL_LD_LIBS += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
 endif
 
 # stlport conflicts with the host stl library

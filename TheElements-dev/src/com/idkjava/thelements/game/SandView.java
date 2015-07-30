@@ -156,9 +156,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onDrawFrame(GL10 gl)
 	{
-	    Kamcord.beginDraw();
-	    nativeRender();
-	    Kamcord.endDraw();
+      Kamcord.beginDraw();
+      nativeRender();
+      Kamcord.endDraw();
 	}
 
 	//@formatter:off

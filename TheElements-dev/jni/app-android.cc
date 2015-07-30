@@ -520,6 +520,60 @@ Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject 
     return success;
 }
 
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_init(JNIEnv *env, jclass clazz,
+    jstring key, jstring secret, jstring gameName) {
+    const char* nativeKey = env->GetStringUTFChars(key, NULL);
+    const char* nativeSecret = env->GetStringUTFChars(secret, NULL);
+    const char* nativeName = env->GetStringUTFChars(gameName, NULL);
+
+    Kamcord_Init(nativeKey, nativeSecret, nativeName, KC_STANDARD_VIDEO_QUALITY);
+
+    env->ReleaseStringUTFChars(key, nativeKey);
+    env->ReleaseStringUTFChars(secret, nativeSecret);
+    env->ReleaseStringUTFChars(gameName, nativeName);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_initActivity(JNIEnv *env, jclass clazz, jobject act) {
+    Kamcord_InitActivity(act);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_startRecording(JNIEnv *env, jclass clazz) {
+    Kamcord_StartRecording();
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_stopRecording(JNIEnv *env, jclass clazz) {
+    Kamcord_StopRecording();
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_pauseRecording(JNIEnv *env, jclass clazz) {
+    Kamcord_Pause();
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_resumeRecording(JNIEnv *env, jclass clazz) {
+    Kamcord_Resume();
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_showView(JNIEnv *env, jclass clazz) {
+    Kamcord_ShowView();
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_video_VideoLib_showWatchView(JNIEnv *env, jclass clazz) {
+    Kamcord_ShowWatchView();
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_video_VideoLib_isWhitelisted(JNIEnv *env, jclass clazz) {
+    return (jboolean) Kamcord_IsWhitelisted();
+}
+
 // extern "C"
 #if __cplusplus
 }
