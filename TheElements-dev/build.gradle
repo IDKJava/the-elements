@@ -52,6 +52,15 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+
+    buildTypes {
+        debug {
+            resValue "string", "app_name", "The Elements Debug"
+        }
+        release {
+            resValue "string", "app_name", "The Elements"
+        }
+    }
 //    signingConfigs {
 //        release {
 //	    storeFile file(System.console().readLine("\n\$ Enter keystore path: "))

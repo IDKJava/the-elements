@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
-import com.idkjava.thelements.video.VideoLib;
 import com.kamcord.android.Kamcord;
 
 public class MenuBar extends LinearLayout {
