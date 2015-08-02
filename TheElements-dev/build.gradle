@@ -17,6 +17,21 @@ task buildProto(type: Exec) {
 assembleDebug.dependsOn(buildProto)
 assembleRelease.dependsOn(buildProto)
 
+task keystoreInfo << {
+    def console = System.console()
+    if (console == null)
+        throw new IllegalStateException('no console available, use --no-daemon flag')
+
+    def pass = new String(console.readPassword('Enter keystore password: '))
+    android.signingConfigs.release.storePassword = pass
+    android.signingConfigs.release.keyPassword = pass
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'validateReleaseSigning')
+        task.dependsOn keystoreInfo
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile project(':android-color-picker:AmbilWarna')
@@ -53,20 +68,21 @@ android {
         release.setRoot('build-types/release')
     }
 
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("IDKJAVA_KEYSTORE"))
+            storePassword ''
+            keyAlias System.getenv("IDKJAVA_KEYALIAS")
+            keyPassword ''
+        }
+    }
     buildTypes {
         debug {
             resValue "string", "app_name", "The Elements Debug"
         }
         release {
             resValue "string", "app_name", "The Elements"
+            signingConfig signingConfigs.release
         }
     }
-//    signingConfigs {
-//        release {
-//	    storeFile file(System.console().readLine("\n\$ Enter keystore path: "))
-//	    storePassword new String(System.console().readPassword("\n\$ Enter keystore password: "))
-//	    keyAlias System.console().readLine("\n\$ Enter key alias: ")
-//	    keyPassword new String(System.console().readPassword("\n\$ Enter key password"))
-//        }
-//    }
 }

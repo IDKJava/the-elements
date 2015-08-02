@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.idkjava.thelements"
     android:installLocation="auto"
-    android:versionCode="93"
-    android:versionName="6.6.5" >
+    android:versionCode="95"
+    android:versionName="6.7" >
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -19,8 +19,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    
-    <uses-feature android:glEsVersion="0x00020000"></uses-feature>
+
+    <uses-feature android:glEsVersion="0x00020000" />
+
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
@@ -58,6 +63,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.kamcord.android.KamcordActivity" />
         </activity>
+
         <service android:name="com.kamcord.android.UploadService" />
 
         <activity
@@ -166,11 +172,11 @@
         <activity
             android:name=".custom.CustomElementBasicActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo"/>
+            android:theme="@android:style/Theme.Holo" />
         <activity
             android:name=".custom.CustomElementAdvancedActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo"/>
+            android:theme="@android:style/Theme.Holo" />
         <activity
             android:name=".SaveStateActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"
@@ -194,7 +200,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <service android:name="com.google.android.gms.analytics.service.AnalyticsService"/>
+
+        <service android:name="com.google.android.gms.analytics.service.AnalyticsService" />
+
+        <activity
+            android:name=".PurchaseActivity"
+            android:label="@string/title_activity_purchase" >
+        </activity>
     </application>
 
 </manifest>

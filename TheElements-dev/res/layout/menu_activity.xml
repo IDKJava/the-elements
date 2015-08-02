@@ -24,6 +24,17 @@
 	    	android:gravity="center" 
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
+
+		<!-- Gravity pack buy button -->
+		<Button
+			android:id="@+id/gravity_pack_button"
+			android:text="Gravity Pack"
+			android:gravity="center"
+			android:background="@drawable/btn_mm"
+			android:textColor="#FFF"
+			android:layout_marginTop="10dip"
+			android:layout_width="200sp"
+			android:layout_height="34dip" />
 	    
 	    <!-- Preferences button -->
 	    <Button
