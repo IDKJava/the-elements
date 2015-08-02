@@ -36,6 +36,7 @@ import android.widget.Toast;
 import com.flurry.android.FlurryAgent;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.idkjava.thelements.ElementsApplication;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.ReportingActivity;
@@ -261,7 +262,7 @@ public class CustomElementBasicActivity extends ReportingActivity
                 {
                     dialog.dismiss();
                     FlurryAgent.logEvent("made_element");
-                    SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+                    SharedPreferences settings = ElementsApplication.getPrefs();
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("made_element", true);
                     editor.commit();

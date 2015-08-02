@@ -5,9 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.idkjava.thelements.BuildConfig;
+import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.iab.IabHelper;
 import com.idkjava.thelements.iab.IabResult;
 import com.idkjava.thelements.iab.Inventory;
@@ -17,6 +20,8 @@ import com.idkjava.thelements.keys.APIKeys;
 /**
  * Class to manage Google Play billing services: initialization, purchasing in-game items,
  * and storing knowledge of in-game purchased settings (currently very insecure).
+ * TODO: ProductManager should maintain a queue of async activities to be performed, rather
+ * than the currently janky sleeper thread method.
  */
 public class ProductManager {
     public static String SKU_GRAVITY_PACK = "gravity_pack"; // includes all gravity tools
@@ -25,18 +30,12 @@ public class ProductManager {
     public static String SKU_GRAVITY_CH = "gravity_whirlpool"; // whirlpool
     public static String SKU_GRAVITY_NG = "gravity_null_gravity"; // null gravity
 
-    private static ProductManager sInst;
-    public static ProductManager getInstance(Context ctx, SharedPreferences prefs) {
-        if (sInst == null) {
-            sInst = new ProductManager(ctx, prefs);
-        }
-        return sInst;
-    }
-
     public ProductManager(Context ctx, SharedPreferences prefs) {
-        mCtx = ctx;
+        // Only ever use the application context, because this transcends
+        // Activity boundaries
+        mCtx = ctx.getApplicationContext();
         mPrefs = prefs;
-        mHelper = new IabHelper(ctx, APIKeys.googlePlayPublicKey);
+        mHelper = new IabHelper(mCtx, APIKeys.googlePlayPublicKey);
         mHelper.enableDebugLogging(BuildConfig.DEBUG);
         mSetup = false;
         Log.d("TheElements", "Product manager starting helper setup");
@@ -50,10 +49,19 @@ public class ProductManager {
                 }
 
                 if (mHelper == null) return;
-                mSetup = true;
                 mHelper.queryInventoryAsync(mGotInventoryListener);
             }
         });
+    }
+
+    public void bindErrorHandler(ErrorHandler handler) {
+        mHandler = handler;
+    }
+    // This method must be called as the relevant error handler goes out of
+    // scope. I.e. for an activity handler, which launches a dialog, when the
+    // activity is destroyed the handler should be unbound.
+    public void unbindErrorHandler() {
+        mHandler = null;
     }
 
     private IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
@@ -65,12 +73,14 @@ public class ProductManager {
                 return;
             }
 
+            mSetup = true;
+
             // Check items and resolve purchases into in-app settings
             // TODO: Use a more secure item tracking method in the future
 
             // Gravity pack
             Purchase gravityPurchase = inventory.getPurchase(SKU_GRAVITY_PACK);
-            if (gravityPurchase != null && verifyPayload(gravityPurchase)) {
+            if (gravityPurchase != null && verify(gravityPurchase)) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_GRAVITY_BH, true);
                 editor.putBoolean(SKU_GRAVITY_CH, true);
@@ -81,7 +91,7 @@ public class ProductManager {
 
             // Black hole
             Purchase gravityBHPurchase = inventory.getPurchase(SKU_GRAVITY_BH);
-            if (gravityBHPurchase != null && verifyPayload(gravityBHPurchase)) {
+            if (gravityBHPurchase != null && verify(gravityBHPurchase)) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_GRAVITY_BH, true);
                 editor.commit();
@@ -89,7 +99,7 @@ public class ProductManager {
 
             // White hole
             Purchase gravityWHPurchase = inventory.getPurchase(SKU_GRAVITY_WH);
-            if (gravityWHPurchase != null && verifyPayload(gravityWHPurchase)) {
+            if (gravityWHPurchase != null && verify(gravityWHPurchase)) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_GRAVITY_WH, true);
                 editor.commit();
@@ -97,7 +107,7 @@ public class ProductManager {
 
             // Curl hole
             Purchase gravityCHPurchase = inventory.getPurchase(SKU_GRAVITY_CH);
-            if (gravityCHPurchase != null && verifyPayload(gravityCHPurchase)) {
+            if (gravityCHPurchase != null && verify(gravityCHPurchase)) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_GRAVITY_CH, true);
                 editor.commit();
@@ -105,7 +115,7 @@ public class ProductManager {
 
             // Null gravity
             Purchase gravityNGPurchase = inventory.getPurchase(SKU_GRAVITY_NG);
-            if (gravityNGPurchase != null && verifyPayload(gravityNGPurchase)) {
+            if (gravityNGPurchase != null && verify(gravityNGPurchase)) {
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_GRAVITY_NG, true);
                 editor.commit();
@@ -121,7 +131,7 @@ public class ProductManager {
                 makeError("Error purchasing: " + result);
                 return;
             }
-            if (!verifyPayload(purchase)) {
+            if (!verify(purchase)) {
                 makeError("Error purchasing, auth failure.");
                 return;
             }
@@ -141,9 +151,13 @@ public class ProductManager {
         }
     };
 
-    private boolean verifyPayload(Purchase purchase) {
+    private boolean verify(Purchase purchase) {
+        // If state is cancelled, do not provide the feature
+        boolean state = (purchase.getPurchaseState() != 1);
+
         // TODO: Implement a payload verification scheme
-        return true;
+        boolean payload = true;
+        return (state && payload);
     }
 
     public void launchPurchase(Activity act, String sku) {
@@ -197,18 +211,14 @@ public class ProductManager {
 
     private void makeError(String msg) {
         Log.e("TheElements", msg);
-        alert(msg);
-    }
-
-    private void alert(String msg) {
-        AlertDialog.Builder b = new AlertDialog.Builder(mCtx);
-        b.setMessage(msg);
-        b.setNeutralButton("OK", null);
-        b.create().show();
+        if (mHandler != null) {
+            mHandler.error(msg);
+        }
     }
 
     private IabHelper mHelper;
     private boolean mSetup;
     private Context mCtx;
     private SharedPreferences mPrefs;
+    private ErrorHandler mHandler;
 }

@@ -6,10 +6,21 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.idkjava.thelements.PurchaseActivity">
 
-    <TextView
-        android:id="@+id/purchasing_text"
-        android:text="@string/purchasing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/purchasing_text"
+            android:text="@string/purchasing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/purchasing_state"
+            android:text="Gravity state: "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>

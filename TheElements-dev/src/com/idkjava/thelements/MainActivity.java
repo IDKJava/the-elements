@@ -89,7 +89,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     private SensorManager mSensorManager;
 
-    public static final String PREFS_NAME = "MyPrefsfile";
     public static boolean shouldLoadDemo = false;
 
     public static MenuBar menu_bar;
@@ -168,7 +167,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Do a temp save
         saveTempState();
         // Set the preferences to indicate paused
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, 0).edit();
+        SharedPreferences.Editor editor = ElementsApplication.getPrefs().edit();
         editor.putBoolean("paused", true);
         editor.commit();
 
@@ -182,7 +181,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Load the settings shared preferences which deals with if we're
         // resuming from pause or not
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences settings = ElementsApplication.getPrefs();
 
         // Load the regular preferences into JNI
         Preferences.loadPreferences();
