@@ -40,6 +40,10 @@ public class MenuBar extends LinearLayout {
         m_sandView = sandView;
     }
 
+    public void setToolIcon(int toolIcon) {
+        mToolButton.setCompoundDrawablesWithIntrinsicBounds(toolIcon, 0, 0, 0);
+    }
+
     // Set the eraser to the off position
     public void setPlayState(boolean state) {
 

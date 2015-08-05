@@ -29,6 +29,7 @@
             style="?android:attr/buttonBarButtonStyle"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:drawableLeft="@drawable/palette"
             android:layout_weight="1"
             android:text="@string/tool_button_text"/>
 

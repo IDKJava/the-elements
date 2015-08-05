@@ -352,6 +352,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     IconListItem item = toolList.get(which);
+                    menu_bar.setToolIcon(item.iconRes);
                     switch (item.nameRes) {
                         case R.string.brush_tool: {
                             // Clear other states
@@ -359,19 +360,16 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             if (lastElement >= 0) {
                                 setElement((char)lastElement);
                             }
-                            // TODO: Update menu icon
                             break;
                         }
                         case R.string.zoom_tool: {
                             sand_view.setTool(SandView.Tool.HAND_TOOL);
-                            // TODO: Update menu icon
                             break;
                         }
                         case R.string.eraser: {
                             sand_view.setTool(SandView.Tool.BRUSH_TOOL);
                             lastElement = getElement();
                             setElement(ERASER_ELEMENT);
-                            // TODO: Update menu icon
                             break;
                         }
                         default : {
