@@ -183,15 +183,6 @@
             android:background="@drawable/btn_ui_element"
             android:src="@drawable/palette_custom_elements" />
 
-        <!-- Eraser Button -->
-
-        <ImageButton
-            android:id="@+id/eraser_button"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_margin="3dp"
-            android:background="@drawable/btn_ui_element" />
-
         <!-- Brush Size Seekbar -->
 
         <SeekBar

@@ -62,9 +62,10 @@
 
     <string name="brush_tool">Brush</string>
     <string name="zoom_tool">Zoom/Pan</string>
-    <string name="toggle_trails">Toggle Trails</string>
-    <string name="start_stop_recording">Start/Stop Recording</string>
+    <string name="trails_on">Enable Trails</string>
+    <string name="trails_off">Disable Trails</string>
+    <string name="start_recording">Start Recording</string>
+    <string name="stop_recording">Stop Recording</string>
     <string name="watch_videos">Watch Videos</string>
-
 
 </resources>

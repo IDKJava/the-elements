@@ -21,6 +21,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -90,19 +91,19 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;
     // TODO(gkanwar): Load strings from resources
-    static ArrayList<IconListItem> toolList =  new ArrayList<IconListItem>(Arrays.asList(
+    static ArrayList<IconListItem> toolList =  new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
             new IconListItem(R.string.eraser, R.drawable.eraser_on)
     ));
-    static ArrayList<IconListItem> utilList = new ArrayList<IconListItem>(Arrays.asList(
+    static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
             new IconListItem(R.string.save, R.drawable.save),
             new IconListItem(R.string.load, R.drawable.load),
-            new IconListItem(R.string.toggle_trails, R.drawable.fade_icon)
+            new IconListItem(R.string.trails_on, R.drawable.fade_icon)
     ));
-    static ArrayList<IconListItem> recordList = new ArrayList<IconListItem>(Arrays.asList(
-            new IconListItem(R.string.start_stop_recording, R.drawable.record_icon),
+    static ArrayList<IconListItem> recordList = new ArrayList<>(Arrays.asList(
+            new IconListItem(R.string.start_recording, R.drawable.record_icon),
             new IconListItem(R.string.watch_videos, R.drawable.kamcord_view_button)
     ));
 
@@ -350,7 +351,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setAdapter(mToolAdapter, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    switch (toolList.get(which).nameRes) {
+                    IconListItem item = toolList.get(which);
+                    switch (item.nameRes) {
                         case R.string.brush_tool: {
                             // Clear other states
                             sand_view.setTool(SandView.Tool.BRUSH_TOOL);
@@ -369,6 +371,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             sand_view.setTool(SandView.Tool.BRUSH_TOOL);
                             lastElement = getElement();
                             setElement(ERASER_ELEMENT);
+                            // TODO: Update menu icon
                             break;
                         }
                         default : {
@@ -389,7 +392,46 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setAdapter(mUtilAdapter, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO(gkanwar)
+                    IconListItem item = utilList.get(which);
+                    switch (utilList.get(which).nameRes) {
+                        case R.string.clear_screen:
+                            clearScreen();
+                            break;
+                        case R.string.save:
+                            if (Environment.getExternalStorageState().equals(
+                                    Environment.MEDIA_MOUNTED)) {
+                                saveState();
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, R.string.sdcard_not_found,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case R.string.load:
+                            if (Environment.getExternalStorageState().equals(
+                                    Environment.MEDIA_MOUNTED)) {
+                                loadState();
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, R.string.sdcard_not_found,
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            break;
+                        case R.string.trails_on:
+                            setFilterMode((char) 1);
+                            item.nameRes = R.string.trails_off;
+                            item.iconRes = R.drawable.fade_icon_inactive;
+                            mUtilAdapter.notifyDataSetChanged();
+                            break;
+                        case R.string.trails_off:
+                            setFilterMode((char)0);
+                            item.nameRes = R.string.trails_on;
+                            item.iconRes = R.drawable.fade_icon;
+                            mUtilAdapter.notifyDataSetChanged();
+                            break;
+                        default:
+                            throw new RuntimeException("Unknown utility item selected");
+                    }
                 }
             });
 
@@ -404,7 +446,27 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setAdapter(mRecordAdapter, new OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // TODO(gkanwar)
+                    IconListItem item = recordList.get(which);
+                    switch (item.nameRes) {
+                        case R.string.start_recording:
+                            Kamcord.startRecording();
+                            item.nameRes = R.string.stop_recording;
+                            item.iconRes = R.drawable.stop_icon;
+                            mRecordAdapter.notifyDataSetChanged();
+                            break;
+                        case R.string.stop_recording:
+                            Kamcord.stopRecording();
+                            item.nameRes = R.string.start_recording;
+                            item.iconRes = R.drawable.record_icon;
+                            mRecordAdapter.notifyDataSetChanged();
+                            Kamcord.showView();
+                            break;
+                        case R.string.watch_videos:
+                            Kamcord.showWatchView();
+                            break;
+                        default:
+                            throw new RuntimeException("Unsupported record operation.");
+                    }
                 }
             });
 
