@@ -53,10 +53,8 @@ unsigned char filterType = FILTER_NONE;
 
 int* allCoords = NULL;
 
-short mouseX;
-short mouseY;
-short lastMouseX = -1;
-short lastMouseY = -1;
+short brushLocX = -1, brushLocY = -1, brushNextLocX = -1, brushNextLocY = -1;
+bool brushOn = false;
 
 int randOffset = 0;
 
@@ -80,9 +78,6 @@ float centerX = -1;
 float centerY = -1;
 float viewWidth = -1;
 float viewHeight = -1;
-
-char isPinch = FALSE;
-char isPanMode = FALSE;
 
 //Gravity values
 float xGravity;
@@ -121,4 +116,4 @@ pthread_cond_t frame_ready_cond = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t buffer_free_mutex = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t buffer_free_cond = PTHREAD_COND_INITIALIZER;
 
-pthread_mutex_t mouse_mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t brush_mutex = PTHREAD_MUTEX_INITIALIZER;

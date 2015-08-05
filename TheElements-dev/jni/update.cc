@@ -583,29 +583,20 @@ void UpdateView(void)
     }
 
     // Draw update
-    pthread_mutex_lock(&mouse_mutex);
-    if (fingerDown)
-    {
-        if ( isPanMode) {
-            if (!isPinch) {
-                centerX -= mouseX - lastMouseX;
-                centerY -= mouseY - lastMouseY;
-            }
-        }
-        else {
-            if (lastMouseX < 0 || (lastMouseX == mouseX && lastMouseY == mouseY))
-            {
-                drawCircle(mouseX, mouseY);
-            }
-            else
-            {
-                drawCircleyLine(lastMouseX, lastMouseY, mouseX, mouseY);
-            }
-        }
-        lastMouseX = mouseX;
-        lastMouseY = mouseY;
+    pthread_mutex_lock(&brush_mutex);
+    if (brushNextLocX >= 0) {
+        // Draw a line to next brush position
+        drawCircleyLine(brushLocX, brushLocY, brushNextLocX, brushNextLocY);
+        brushLocX = brushNextLocX;
+        brushLocY = brushNextLocY;
+        brushNextLocX = -1;
+        brushNextLocY = -1;
     }
-    pthread_mutex_unlock(&mouse_mutex);
+    else if (brushOn) {
+        // Continuous draw
+        drawCircle(brushLocX, brushLocY);
+    }
+    pthread_mutex_unlock(&brush_mutex);
 
 
     //__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");

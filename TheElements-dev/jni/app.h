@@ -111,20 +111,17 @@
     extern char zoomChanged;
     extern int shouldClear;
 
-    extern unsigned char brushSize;
     extern unsigned char zoomFactor;
+
+    // Brush tool
+    extern unsigned char brushSize;
+    extern short brushLocX, brushLocY, brushNextLocX, brushNextLocY;
+    extern bool brushOn;
 
     extern unsigned char filterType;
 
 //A map of all the points (a two-dimensional variable-size array)
     extern int* allCoords;
-
-//Mouse positions
-    extern short mouseX;
-    extern short mouseY;
-//Old mouse positions
-    extern short lastMouseX;
-    extern short lastMouseY;
 
     extern int randOffset;
 
@@ -155,8 +152,6 @@
     extern float centerY;
     extern float viewWidth;
     extern float viewHeight;
-    extern char isPinch;
-    extern char isPanMode;
 
 //Gravity values
     extern float xGravity;
@@ -211,6 +206,6 @@ inline int getColorIndex( int x, int y )
     extern pthread_mutex_t buffer_free_mutex;
     extern pthread_cond_t buffer_free_cond;
 
-    extern pthread_mutex_t mouse_mutex;
+    extern pthread_mutex_t brush_mutex;
 
 #endif // !APP_H_INCLUDED

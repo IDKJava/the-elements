@@ -298,38 +298,45 @@ Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz,
     brushSize = brushSizeValue;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setMouseLocation(JNIEnv* env, jobject thiz, jchar state, jint x, jint y)
-{
-    pthread_mutex_lock(&mouse_mutex);
+Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+    pthread_mutex_lock(&brush_mutex);
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
-    if ( !isPanMode ) {
-        mouseX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-        mouseY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    }
-    else {
-        mouseX = x;
-        mouseY = y;
-    }
-
-    // Translate x and y coords to zoomed coords
-    mouseX /= zoomFactor;
-    mouseY /= zoomFactor;
-
-    if (state != 2 && fingerDown != state)
-    {
-        fingerDown = state;
-
-        // If we're got ACTION_DOWN, then we don't want to continue drawing
-        // from previous mouse location.
-        if (fingerDown)
-        {
-            lastMouseX = mouseX;
-            lastMouseY = mouseY;
-        }
-    }
-
-    pthread_mutex_unlock(&mouse_mutex);
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    brushLocX = mX;
+    brushLocY = mY;
+    brushOn = true;
+    pthread_mutex_unlock(&brush_mutex);
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+    pthread_mutex_lock(&brush_mutex);
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    brushNextLocX = mX;
+    brushNextLocY = mY;
+    pthread_mutex_unlock(&brush_mutex);
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+    pthread_mutex_lock(&brush_mutex);
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    brushNextLocX = mX;
+    brushNextLocY = mY;
+    brushOn = false;
+    pthread_mutex_unlock(&brush_mutex);
 }
 
 JNIEXPORT void JNICALL
@@ -339,28 +346,24 @@ Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz
 }
 
 JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_panView(JNIEnv* env, jobject thiz, jint dx, jint dy) {
+  // Scale to view coords and pan by the given delta
+  centerX += (dx/(float)screenWidth)*viewWidth;
+  centerY += (dy/(float)screenHeight)*viewHeight;
+}
+
+JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject thiz, jfloat scale)
 {
   zoomScale = scale;
 }
 
-
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setPinchActive(JNIEnv* env, jobject thiz, jchar active)
+Java_com_idkjava_thelements_game_SandView_commitPinch(JNIEnv* env, jobject thiz)
 {
-    isPinch = active;
-    if (!active) 
-    {
-        viewWidth = viewWidth * zoomScale;
-        viewHeight = viewHeight * zoomScale;
-        zoomScale = 1.0;
-    }
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setIsPanMode(JNIEnv* env, jobject thiz, jchar isPan)
-{
-  isPanMode = isPan;
+  viewWidth = viewWidth * zoomScale;
+  viewHeight = viewHeight * zoomScale;
+  zoomScale = 1.0;
 }
 
 

@@ -88,7 +88,7 @@ public class CustomElementManagerActivity extends ReportingActivity
         
         //Create a TableLayout object associated with the TableLayout in the .xml file
         TableLayout tl = (TableLayout)findViewById(R.id.loads_container);
-        //Create a LinearLayout to contain our row
+        //Create a LinearLayout to contain our element_row
         buttonContainer = new LinearLayout(this);
 		//Set some properties
 		//tr.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
@@ -170,7 +170,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 		);
 		buttonContainer.addView(actionButton);
         
-        // Click on the entire row
+        // Click on the entire element_row
         buttonContainer.setOnClickListener
         (
         	new OnClickListener()
@@ -184,7 +184,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 	        }
         );
         
-        // Add the created row to our TableLayout
+        // Add the created element_row to our TableLayout
         tl.addView(buttonContainer, new LayoutParams(
                 LayoutParams.FILL_PARENT, 
                 LayoutParams.WRAP_CONTENT));

@@ -1,6 +1,7 @@
 package com.idkjava.thelements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -45,6 +46,9 @@ import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.analytics.tracking.android.Tracker;
 import com.idkjava.thelements.custom.CustomElementManager;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
+import com.idkjava.thelements.dialog.ElementAdapter;
+import com.idkjava.thelements.dialog.IconListAdapter;
+import com.idkjava.thelements.dialog.IconListItem;
 import com.idkjava.thelements.game.Control;
 import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
@@ -64,6 +68,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static final int ELEMENT_PICKER = 2;
     private static final int BRUSH_SIZE_PICKER = 3;
     private static final int RATE_PROMPT = 4;
+    public static final int TOOL_PICKER = 5;
+    public static final int UTIL_DIALOG = 6;
+    public static final int RECORD_DIALOG = 7;
 
     // Constants for elements
     public static final char ERASER_ELEMENT = 2;
@@ -82,10 +89,25 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;
-
-    private static final int COLOR_SQUARE_SIZE = 40;
+    // TODO(gkanwar): Load strings from resources
+    static ArrayList<IconListItem> toolList =  new ArrayList<IconListItem>(Arrays.asList(
+            new IconListItem(R.string.brush_tool, R.drawable.palette),
+            new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
+            new IconListItem(R.string.eraser, R.drawable.eraser_on)
+    ));
+    static ArrayList<IconListItem> utilList = new ArrayList<IconListItem>(Arrays.asList(
+            new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
+            new IconListItem(R.string.save, R.drawable.save),
+            new IconListItem(R.string.load, R.drawable.load),
+            new IconListItem(R.string.toggle_trails, R.drawable.fade_icon)
+    ));
+    static ArrayList<IconListItem> recordList = new ArrayList<IconListItem>(Arrays.asList(
+            new IconListItem(R.string.start_stop_recording, R.drawable.record_icon),
+            new IconListItem(R.string.watch_videos, R.drawable.kamcord_view_button)
+    ));
 
     public static boolean play;
+    public static int lastElement = -1; // Element to revert to on brush selection
 
     private SensorManager mSensorManager;
 
@@ -96,6 +118,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static SandView sand_view;
 
     private ElementAdapter mElementAdapter;
+    private IconListAdapter mToolAdapter;
+    private IconListAdapter mUtilAdapter;
+    private IconListAdapter mRecordAdapter;
 
     public static String last_state_loaded = null;
 
@@ -275,6 +300,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Set the activity for Control so that we can call showDialog() from it
         control.setActivity(this);
+        menu_bar.setActivity(this);
 
         // Call onResume() for view too
         // Log.v("TheElements", "sand_view.onResume()");
@@ -284,8 +310,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     protected Dialog onCreateDialog(int id) // This is called when showDialog is called
     {
-        if (id == INTRO_MESSAGE) // The first dialog - the intro message
-        {
+        if (id == INTRO_MESSAGE) { // The first dialog - the intro message
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             WebView wv = new WebView(this);
             wv.loadData(getResources().getString(R.string.app_intro), "text/html", "utf-8");
@@ -297,8 +322,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         }
                     });
             return builder.create();
-        } else if (id == ELEMENT_PICKER) // Element picker
-        {
+        }
+        else if (id == ELEMENT_PICKER) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             mElementAdapter = new ElementAdapter(this, elementsList);
@@ -307,11 +332,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setOnCancelListener(this);
             builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
-                    // lol this code is kinda bad, these methods probably
-                    // shouldn't be static
-                    if (Control.eraserOn) {
-                        Control.setEraserOff();
-                    }
+                    // TODO(gkanwar): Set tool to brush
                     setElement((char) (item + NORMAL_ELEMENT));
                     setPlaying(play);
                     dialog.dismiss();
@@ -319,7 +340,77 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             });
 
             return builder.create();
-        } else if (id == BRUSH_SIZE_PICKER) {
+        }
+        else if (id == TOOL_PICKER) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Tools");
+            builder.setOnCancelListener(this);
+
+            mToolAdapter = new IconListAdapter(this, toolList);
+            builder.setAdapter(mToolAdapter, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (toolList.get(which).nameRes) {
+                        case R.string.brush_tool: {
+                            // Clear other states
+                            sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                            if (lastElement >= 0) {
+                                setElement((char)lastElement);
+                            }
+                            // TODO: Update menu icon
+                            break;
+                        }
+                        case R.string.zoom_tool: {
+                            sand_view.setTool(SandView.Tool.HAND_TOOL);
+                            // TODO: Update menu icon
+                            break;
+                        }
+                        case R.string.eraser: {
+                            sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                            lastElement = getElement();
+                            setElement(ERASER_ELEMENT);
+                            break;
+                        }
+                        default : {
+                            throw new RuntimeException("Unknown tool selected.");
+                        }
+                    }
+                }
+            });
+
+            return builder.create();
+        }
+        else if (id == UTIL_DIALOG) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Utils");
+            builder.setOnCancelListener(this);
+
+            mUtilAdapter = new IconListAdapter(this, utilList);
+            builder.setAdapter(mUtilAdapter, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // TODO(gkanwar)
+                }
+            });
+
+            return builder.create();
+        }
+        else if (id == RECORD_DIALOG) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Record");
+            builder.setOnCancelListener(this);
+
+            mRecordAdapter = new IconListAdapter(this, recordList);
+            builder.setAdapter(mRecordAdapter, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // TODO(gkanwar)
+                }
+            });
+
+            return builder.create();
+        }
+        else if (id == BRUSH_SIZE_PICKER) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.brush_size_picker);
             builder.setOnCancelListener(this);
@@ -497,54 +588,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public void loadState() {
         Intent tempIntent = new Intent(this, LoadStateActivity.class);
         startActivity(tempIntent);
-    }
-
-    /**
-     * Definition of the list adapter...uses the View Holder pattern to optimize
-     * performance.
-     */
-    private static class ElementAdapter extends ArrayAdapter {
-
-        private static final int RESOURCE = R.layout.row;
-        private LayoutInflater inflater;
-
-        static class ViewHolder {
-            TextView nameTxVw;
-        }
-
-        public ElementAdapter(Context context, ArrayList<String> elements) {
-            super(context, RESOURCE, elements);
-            inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
-
-            if (convertView == null) {
-                // inflate a new view and setup the view holder for future use
-                convertView = inflater.inflate(RESOURCE, null);
-
-                holder = new ViewHolder();
-                holder.nameTxVw = (TextView) convertView.findViewById(R.id.elementname);
-                convertView.setTag(holder);
-            } else {
-                // view already defined, retrieve view holder
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            String name = (String) getItem(position);
-            int realElementPosition = position + NORMAL_ELEMENT;
-            holder.nameTxVw.setText(name);
-            int theColor = Color.rgb(getElementRed(realElementPosition),
-                    getElementGreen(realElementPosition), getElementBlue(realElementPosition));
-            ColorDrawable elementColor = new ColorDrawable(theColor);
-
-            elementColor.setBounds(0, 0, toPx(COLOR_SQUARE_SIZE), toPx(COLOR_SQUARE_SIZE));
-            holder.nameTxVw.setCompoundDrawables(elementColor, null, null, null);
-
-            return convertView;
-        }
     }
 
     // Converts dp to pixels

@@ -16,127 +16,125 @@ import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
-  private static final char FINGER_MOVE = 2;
-	private static final char FINGER_DOWN = 1;
-	private static final char FINGER_UP = 0;
-
-	 //Touch event related variables
-	private int m_touchState;
-	private final int IDLE = 0;
-  private final int TOUCH = 1;
-  private final int PINCH = 2;
-  private float m_dist0, m_distCurrent;
-
-	private SandViewRenderer mRenderer; //Declare the renderer
-
-	private static boolean m_isDragState = false;
+    public enum Tool { BRUSH_TOOL, HAND_TOOL }
+    private Tool mTool = Tool.BRUSH_TOOL;
 
 	//Constructor
 	public SandView(Context context, AttributeSet attrs)
 	{
 		super(context, attrs);
 		setEGLContextClientVersion(2);
-		mRenderer = new SandViewRenderer(); //Set up the Renderer for the View
+		SandViewRenderer rend = new SandViewRenderer(); //Set up the Renderer for the View
 		setEGLConfigChooser(8, 8, 8, 8, // RGBA channel bits
 				16, 0); // depth and stencil channel min bits
-		setRenderer(mRenderer); //Associate it with this view
+		setRenderer(rend); //Associate it with this view
 	}
 
-	public void setIsDragging(boolean isDrag) {
-	  m_isDragState = isDrag;
-	  setIsPanMode(isDrag ? (char) 1 : (char) 0);
+	public void setTool(Tool tool) {
+      mTool = tool;
 	}
 
   // When a touch screen event occurs
   public boolean onTouchEvent(final MotionEvent event)
   {
-    if (!m_isDragState) {
-      return handleNormalTouch(event);
+    switch (mTool) {
+      case BRUSH_TOOL: return handleBrushTouch(event);
+      case HAND_TOOL: return handlePanTouch(event);
     }
-    else {
-      return handlePanTouch(event);
-    }
-  }
-
-  private boolean handleNormalTouch(final MotionEvent event) {
-    // Set the touch state in JNI
-    char fingerState;
-    if (event.getAction() == MotionEvent.ACTION_DOWN)
-    {
-      fingerState = FINGER_DOWN;
-    }
-    else if (event.getAction() == MotionEvent.ACTION_UP)
-    {
-      fingerState = FINGER_UP;
-    }
-    else
-    {
-      fingerState = FINGER_MOVE;
-    }
-
-    // Pass raw mouse state into native code
-    setMouseLocation(fingerState, (int) event.getX(), (int) event.getY());
-
     return true;
   }
 
+  private boolean handleBrushTouch(final MotionEvent event) {
+    // Send the touch events to the native lib
+    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        Log.e("TheElements", "Brush down start");
+        brushStartLocation((int) event.getX(), (int) event.getY());
+        Log.e("TheElements", "Brush down end");
+    }
+    else if (event.getAction() == MotionEvent.ACTION_UP) {
+        Log.e("TheElements", "Brush up start");
+        brushEndLocation((int) event.getX(), (int) event.getY());
+        Log.e("TheElements", "Brush up end");
+    }
+    else {
+        Log.e("TheElements", "Brush move start");
+        brushMoveLocation((int) event.getX(), (int) event.getY());
+        Log.e("TheElements", "Brush move end");
+    }
+    return true;
+  }
+
+  private enum HandState { NONE, PAN, PINCH }
+  private int mDragStartX, mDragStartY;
+  private HandState mHandState;
+  private float m_dist0;
   private boolean handlePanTouch(final MotionEvent event) {
     float distx, disty;
 
     switch (event.getAction() & MotionEvent.ACTION_MASK) {
     case MotionEvent.ACTION_DOWN:
-      setMouseLocation(FINGER_DOWN, (int) event.getX(), (int) event.getY());
-      m_touchState = TOUCH;
+      mHandState = HandState.PAN;
+      mDragStartX = (int)event.getX();
+      mDragStartY = (int)event.getY();
       break;
     case MotionEvent.ACTION_POINTER_DOWN:
-      m_touchState = PINCH;
-      setPinchActive((char) 1);
+      mHandState = HandState.PINCH;
       // Get the distance when the second pointer touch
       distx = event.getX(0) - event.getX(1);
       disty = event.getY(0) - event.getY(1);
       m_dist0 = FloatMath.sqrt(distx * distx + disty * disty);
-
       break;
     case MotionEvent.ACTION_MOVE:
-      if (m_touchState == PINCH) {
+      if (mHandState == HandState.PAN) {
+        panView(mDragStartX - (int)event.getX(), mDragStartY - (int)event.getY());
+        mDragStartX = (int)event.getX();
+        mDragStartY = (int)event.getY();
+      }
+      else if (mHandState == HandState.PINCH){
         // Get the current distance
         distx = event.getX(0) - event.getX(1);
         disty = event.getY(0) - event.getY(1);
-        m_distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
-        setPinchScale(m_dist0 / m_distCurrent);
+        float distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
+        setPinchScale(m_dist0 / distCurrent);
       }
-      else {
-        setMouseLocation(FINGER_MOVE, (int) event.getX(), (int) event.getY());
-      }
-
       break;
     case MotionEvent.ACTION_UP:
-      setMouseLocation(FINGER_UP, (int) event.getX(), (int) event.getY());
-      m_touchState = IDLE;
+      mHandState = HandState.NONE;
       break;
     case MotionEvent.ACTION_POINTER_UP:
-      setMouseLocation(FINGER_UP, (int) event.getX(), (int) event.getY());
-      setPinchActive((char) 0);
-      m_touchState = TOUCH;
+      mHandState = HandState.PAN;
+      // Reset the drag position so the pan doesn't go crazy when one finger
+      // is lifted. Uses the finger opposite of the one lifted.
+      if (event.getActionIndex() == 0) {
+          mDragStartX = (int)event.getX(1);
+          mDragStartY = (int)event.getY(1);
+      }
+      else {
+          mDragStartX = (int)event.getX(0);
+          mDragStartY = (int)event.getY(0);
+      }
+      commitPinch();
       break;
     }
 
     return true;
   }
 
-	//@formatter:off
-	private static native void setMouseLocation(char state, int x, int y);
-	private static native void setPinchScale(float scale);
-	private static native void setPinchActive(char active);
-	private static native void setIsPanMode(char isDrag);
-	//@formatter:on
+  //@formatter:off
+  private static native void brushStartLocation(int x, int y);
+  private static native void brushMoveLocation(int x, int y);
+  private static native void brushEndLocation(int x, int y);
+  private static native void panView(int dx, int dy);
+  private static native void setPinchScale(float scale);
+  private static native void commitPinch();
+  //@formatter:on
 
-	static
-	{
-        System.loadLibrary("stlport_shared");
-	    System.loadLibrary("protobuf");
-		System.loadLibrary("thelements");
-	}
+  static
+  {
+      System.loadLibrary("stlport_shared");
+      System.loadLibrary("protobuf");
+      System.loadLibrary("thelements");
+  }
 }
 
 class SandViewRenderer implements GLSurfaceView.Renderer

@@ -52,6 +52,19 @@
 <string name="couldnt_launch_market">Sorry, looks like you don\'t have the Google Play store installed.</string>
     <string name="title_activity_purchase">PurchaseActivity</string>
 
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
     <string name="purchasing">Purchasing...</string>
+
+    <string name="tool_button_text">Tools</string>
+    <string name="util_button_text">Utils</string>
+    <string name="record_button_text">Record</string>
+
+    <string name="brush_tool">Brush</string>
+    <string name="zoom_tool">Zoom/Pan</string>
+    <string name="toggle_trails">Toggle Trails</string>
+    <string name="start_stop_recording">Start/Stop Recording</string>
+    <string name="watch_videos">Watch Videos</string>
+
 
 </resources>
