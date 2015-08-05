@@ -17,6 +17,12 @@ Installing
    a gradle.properties file under TheElements-dev, with ndkdir=path/to/ndk
    to ensure that the gradle spawned under Android Studio can find the NDK.
 
+Updating
+=======
+1. git pull
+2. DON'T FORGET: `git submodule sync`
+   This will receive any changes to submodule HEAD.
+
 Building an APK (gradle)
 ========================
 The root of the repository contains a gradlew shell wrapper.
