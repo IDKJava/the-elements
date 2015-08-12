@@ -18,9 +18,11 @@ message ParticleSpecial {
 message Particle {
     optional float x = 1;
     optional float y = 2;
-    optional sint32 x_vel = 3;
-    optional sint32 y_vel = 4;
+    optional sint32 DELETED_x_vel = 3;
+    optional sint32 DELETED_y_vel = 4;
     optional uint32 heat = 5;
+    optional float x_vel = 10;
+    optional float y_vel = 11;
     
     repeated ParticleSpecial special = 9;
     
