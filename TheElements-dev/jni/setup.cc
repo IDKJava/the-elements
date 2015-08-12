@@ -81,6 +81,9 @@ void arraySetup()
     free(colors);
     free(colorsFrameBuffer);
     free(allCoords);
+    free(gravityFieldX);
+    free(gravityFieldY);
+    free(gravCoords);
 
     //Allocate memory
     colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));

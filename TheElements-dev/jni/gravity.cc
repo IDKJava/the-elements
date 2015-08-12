@@ -57,9 +57,16 @@ void getFallField(float x, float y, float *fx, float *fy, float *fmag) {
         float gx = gravityFieldX[gfInd];
         float gy = gravityFieldY[gfInd];
         float norm = sqrt(gx*gx+gy*gy);
-        *fx = gx/norm;
-        *fy = gy/norm;
-        if (fmag != NULL) *fmag = 1.0;
+        if (norm > 0.0) {
+            *fx = gx/norm;
+            *fy = gy/norm;
+            if (fmag != NULL) *fmag = 1.0;
+        }
+        else {
+            *fx = 0.0;
+            *fy = 0.0;
+            if (fmag != NULL) *fmag = 0.0;
+        }
     }
     else {
         // Just assume down
