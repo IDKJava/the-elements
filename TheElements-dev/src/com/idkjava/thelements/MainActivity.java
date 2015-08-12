@@ -95,12 +95,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;
-    // TODO(gkanwar): Load strings from resources
     static ArrayList<IconListItem> toolList =  new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
             new IconListItem(R.string.eraser, R.drawable.eraser_on),
-            new IconListItem(R.string.make_black_hole, R.drawable.bt_icon)
+            new IconListItem(R.string.make_black_hole, R.drawable.bt_icon),
+            new IconListItem(R.string.make_white_hole, R.drawable.bt_icon),
+            new IconListItem(R.string.make_curl_hole, R.drawable.bt_icon)
     ));
     static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
@@ -386,6 +387,14 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         }
                         case R.string.make_black_hole: {
                             sand_view.setTool(SandView.Tool.BH_TOOL);
+                            break;
+                        }
+                        case R.string.make_white_hole: {
+                            sand_view.setTool(SandView.Tool.WH_TOOL);
+                            break;
+                        }
+                        case R.string.make_curl_hole: {
+                            sand_view.setTool(SandView.Tool.CH_TOOL);
                             break;
                         }
                         default : {

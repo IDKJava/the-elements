@@ -16,7 +16,7 @@ import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
-    public enum Tool { BRUSH_TOOL, HAND_TOOL, BH_TOOL }
+    public enum Tool { BRUSH_TOOL, HAND_TOOL, BH_TOOL, WH_TOOL, CH_TOOL }
     private Tool mTool = Tool.BRUSH_TOOL;
 
 	//Constructor
@@ -38,9 +38,12 @@ public class SandView extends GLSurfaceView
   public boolean onTouchEvent(final MotionEvent event)
   {
       switch (mTool) {
-        case BRUSH_TOOL: return handleBrushTouch(event);
-        case HAND_TOOL: return handlePanTouch(event);
-        case BH_TOOL: return handleBHTouch(event);
+          case BRUSH_TOOL: return handleBrushTouch(event);
+          case HAND_TOOL: return handlePanTouch(event);
+          case BH_TOOL:
+          case WH_TOOL:
+          case CH_TOOL:
+              return handleGravHoleTouch(event);
       }
       return true;
   }
@@ -65,14 +68,26 @@ public class SandView extends GLSurfaceView
     return true;
   }
 
-    private boolean handleBHTouch(final MotionEvent event) {
+    private boolean handleGravHoleTouch(final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // TODO: Send a temp black hole signal to native,
             // so we render without the gravity
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
-            // Final placement of the BH
-            makeBlackHole((int) event.getX(), (int) event.getY());
+            // Final placement of the hole
+            switch (mTool) {
+                case BH_TOOL:
+                    makeBlackHole((int) event.getX(), (int) event.getY());
+                    break;
+                case WH_TOOL:
+                    makeWhiteHole((int) event.getX(), (int) event.getY());
+                    break;
+                case CH_TOOL:
+                    makeCurlHole((int) event.getX(), (int) event.getY());
+                    break;
+                default:
+                    throw new RuntimeException("Invalid handler for tool: " + mTool);
+            }
         }
         else {
             // TODO: Send a move temp signal to native.
@@ -141,6 +156,8 @@ public class SandView extends GLSurfaceView
   private static native void brushMoveLocation(int x, int y);
   private static native void brushEndLocation(int x, int y);
   private static native boolean makeBlackHole(int x, int y);
+  private static native boolean makeWhiteHole(int x, int y);
+  private static native boolean makeCurlHole(int x, int y);
   private static native void panView(int dx, int dy);
   private static native void setPinchScale(float scale);
   private static native void commitPinch();

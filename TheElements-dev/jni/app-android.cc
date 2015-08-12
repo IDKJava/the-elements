@@ -372,6 +372,46 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
     return false;
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    if (numSpaceHoles < MAX_SPACE_HOLES) {
+        SpaceHole *next = &spaceHoles[numSpaceHoles];
+        numSpaceHoles++;
+        next->type = WHITE_HOLE;
+        next->x = mX;
+        next->y = mY;
+        updateGravityField(next);
+        return true;
+    }
+    return false;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    if (numSpaceHoles < MAX_SPACE_HOLES) {
+        SpaceHole *next = &spaceHoles[numSpaceHoles];
+        numSpaceHoles++;
+        next->type = CURL_HOLE;
+        next->x = mX;
+        next->y = mY;
+        updateGravityField(next);
+        return true;
+    }
+    return false;
+}
+
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
 {
