@@ -9,6 +9,8 @@
 
 #include "collide.h"
 
+#include <cmath>
+
 #include "collisions.h"
 #include "specials.h"
 
@@ -22,7 +24,13 @@ void collide(int firstParticle, int secondParticle)
     }
 
     //Temporary variables
-    int oldXFirst = a_oldX[firstParticle], oldYFirst = a_oldY[firstParticle];
+    float oldXFirst = a_oldX[firstParticle], oldYFirst = a_oldY[firstParticle];
+    float dx = (a_oldX[firstParticle]-a_x[firstParticle]), dy = (a_oldY[firstParticle]-a_y[firstParticle]);
+    float velMag = sqrt((float)dx*dx+dy*dy);
+    float perpXVel = -dy/velMag;
+    float perpYVel = dx/velMag;
+    float tangXVel = dx/velMag;
+    float tangYVel = dy/velMag;
     //The type of the collision (retrieved from a static array)
 
     //TODO(gkanwar): Lot of array referencing churn here. Fix this.
@@ -55,7 +63,10 @@ void collide(int firstParticle, int secondParticle)
         a_y[firstParticle] = oldYFirst;
         a_hasMoved[firstParticle] = FALSE;
 
-        a_xVel[firstParticle] = (rand() % 3) - 1;
+        // -5/3 to 5/3
+        float perpDelta = ((rand() % 101) - 50)/30.0;
+        a_xVel[firstParticle] += perpXVel*perpDelta;
+        a_yVel[firstParticle] += perpYVel*perpDelta;
         break;
     }
     case 1: //Density Based
@@ -76,13 +87,11 @@ void collide(int firstParticle, int secondParticle)
             a_y[firstParticle] = oldYFirst;
             a_hasMoved[firstParticle] = FALSE;
                         
-            //-1 to 1
-            int random = rand() % 2 - 1;
-            a_yVel[firstParticle] = random;
 
-            //-5 to 5
-            random = rand() % 11 - 5;
-            a_xVel[firstParticle] = random;
+            //-5/3 to 5/3
+            float perpDelta = ((rand() % 101) - 50)/30.0;
+            a_xVel[firstParticle] += perpXVel*perpDelta;
+            a_yVel[firstParticle] += perpYVel*perpDelta;
 
             break;
         }

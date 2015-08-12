@@ -86,8 +86,8 @@
     extern float a_y[];
     extern float a_oldX[];
     extern float a_oldY[];
-    extern short a_xVel[];
-    extern short a_yVel[];
+    extern float a_xVel[];
+    extern float a_yVel[];
     extern char a_heat[];
     extern int* a_specialVals[];
     extern struct Element* a_element[];

@@ -30,8 +30,8 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         a_set[i] = TRUE;
         
         //Set x and y
-        a_x[i] = xCoord;
-        a_y[i] = yCoord;
+        a_x[i] = xCoord+0.5;
+        a_y[i] = yCoord+0.5;
 
         //Put it in the allcoords array
         allCoords[getIndex(xCoord, yCoord)] = i;

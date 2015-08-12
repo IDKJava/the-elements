@@ -11,6 +11,7 @@
 #include <android/log.h>
 
 #include "specials.h"
+#include "gravity.h"
 
 // Per-file logging
 #ifndef NDEBUG
@@ -287,55 +288,39 @@ int checkBoundariesAndMove(float *x, float *y, float diffx, float diffy)
 }
 
 // Update the velocities based on inertia
-void updateVelocities(short *xvel, short *yvel, int inertia)
+void updateVelocities(float *xvel, float *yvel, float inertia)
 {
     if(*xvel < 0)
     {
-        if(inertia >= -(*xvel))
+        *xvel += inertia;
+        if(*xvel > 0)
         {
             *xvel = 0;
-        }
-        else
-        {
-            *xvel += inertia;
         }
     }
     else if(*xvel > 0)
     {
-        if(inertia >= *xvel)
+        *xvel -= inertia;
+        if(*xvel < 0)
         {
             *xvel = 0;
-        }
-        else
-        {
-            *xvel -= inertia;
         }
     }
     // Update y vel based on inertia, always approaching 0
     if(*yvel < 0)
     {
         *yvel += inertia;
-
-        if (*yvel >= 0)
+        if (*yvel > 0)
         {
             *yvel = 0;
-        }
-        else
-        {
-            *yvel++;
         }
     }
     else if(*yvel > 0)
     {
         *yvel -= inertia;
-
-        if(*yvel <= 0)
+        if(*yvel < 0)
         {
             *yvel = 0;
-        }
-        else
-        {
-            *yvel--;
         }
     }
 }
@@ -347,45 +332,15 @@ int updateKinetic(int index)
 {
     float *x_ptr = &(a_x[index]);
     float *y_ptr = &(a_y[index]);
-    short *xvel_ptr = &(a_xVel[index]);
-    short *yvel_ptr = &(a_yVel[index]);
+    float *xvel_ptr = &(a_xVel[index]);
+    float *yvel_ptr = &(a_yVel[index]);
     float diffx, diffy;
 
     //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
-    if (world == WORLD_EARTH) {
-        //If accelOn, do tempYVel based on that
-        if (yGravity != 0 && accelOn)
-        {
-            diffy = ((yGravity / 9.8) * a_element[index]->fallVel + *yvel_ptr);
-        }
-        //Otherwise, just do the fallvelocity
-        else if (!accelOn)
-        {
-            diffy = a_element[index]->fallVel + *yvel_ptr;
-        }
-        //Accelerometer on, but no gravity (held horizontal)
-        else
-        {
-            diffy = *yvel_ptr;
-        }
-
-        //If accelOn, calculate new x using the gravity set
-        //X Gravity is REVERSED! (hence the "-")
-        if ((int) xGravity != 0 && accelOn == 1)
-        {
-            diffx = ((-xGravity / 9.8) * a_element[index]->fallVel + *xvel_ptr);
-        }
-        //Otherwise, just add tempXVel
-        else
-        {
-            diffx = *xvel_ptr;
-        }
-    }
-    else if (world == WORLD_SPACE) {
-        int ind = getGravityIndex((int)*x_ptr, (int)*y_ptr);
-        diffy = (gravityFieldY[ind] * a_element[index]->fallVel + *yvel_ptr);
-        diffx = (gravityFieldX[ind] * a_element[index]->fallVel + *xvel_ptr);
-    }
+    float gx, gy, gmag;
+    getFallField(*x_ptr, *y_ptr, &gx, &gy, &gmag);
+    diffy = gy*gmag*a_element[index]->fallVel + *yvel_ptr;
+    diffx = gx*gmag*a_element[index]->fallVel + *xvel_ptr;
 
     //Boundary checking
     if (!checkBoundariesAndMove(x_ptr, y_ptr, diffx, diffy))
@@ -395,7 +350,8 @@ int updateKinetic(int index)
         return FALSE;
     }
     //Reduce velocities
-    updateVelocities(xvel_ptr, yvel_ptr, a_element[index]->inertia);
+    float inertiaScale = (world == WORLD_SPACE) ? 0.3 : 1.0;
+    updateVelocities(xvel_ptr, yvel_ptr, inertiaScale*a_element[index]->inertia);
 
     //Indicate that the particle has moved
     a_hasMoved[index] = TRUE;
@@ -443,7 +399,7 @@ int updateSpecials(int index)
 
         switch(tempElement->specials[MAX_SPECIALS-i])
         {
-            //Spawn
+        //Spawn
         case SPECIAL_SPAWN:
         {
             LOGD("Special spawn");
@@ -553,7 +509,7 @@ void UpdateView(void)
     //For speed we're going to create temp variables to store stuff
     int tempOldX, tempOldY;
     float *tempX, *tempY;
-    short *tempXVel, *tempYVel;
+    float *tempXVel, *tempYVel;
     char tempInertia;
     int tempParticle;
     int tempAllCoords;
@@ -628,10 +584,10 @@ void UpdateView(void)
                 //Set the temp and old variables
                 tempX = &(a_x[tempParticle]);
                 tempY = &(a_y[tempParticle]);
+                a_oldX[tempParticle] = a_x[tempParticle];
+                a_oldY[tempParticle] = a_y[tempParticle];
                 tempOldX = (int) a_x[tempParticle];
                 tempOldY = (int) a_y[tempParticle];
-                a_oldX[tempParticle] = tempOldX;
-                a_oldY[tempParticle] = tempOldY;
                 tempElement = a_element[tempParticle];
                 tempInertia = tempElement->inertia;
                 tempXVel = &(a_xVel[tempParticle]);
@@ -761,7 +717,7 @@ void UpdateView(void)
                         {
                             //Don't go to more solid element if the particle is moving
                             if (*tempX == tempOldX && *tempY == tempOldY &&
-                                *tempXVel == 0 && *tempYVel == 0)
+                                *tempXVel < 0.5 && *tempYVel < 0.5)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
                                 {
@@ -782,7 +738,7 @@ void UpdateView(void)
                         {
                             //Don't go to more solid element if the particle is moving
                             if (*tempX == tempOldX && *tempY == tempOldY &&
-                                *tempXVel == 0 && *tempYVel == 0)
+                                *tempXVel < 0.5 && *tempYVel < 0.5)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
                                 {

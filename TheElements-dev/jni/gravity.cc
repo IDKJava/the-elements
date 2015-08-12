@@ -37,3 +37,34 @@ void updateGravityField(SpaceHole *hole) {
         }
     }
 }
+
+void getFallField(float x, float y, float *fx, float *fy, float *fmag) {
+    if (world == WORLD_EARTH) {
+        if (accelOn) {
+            float norm = sqrt(xGravity*xGravity + yGravity*yGravity);
+            *fx = xGravity/norm;
+            *fy = yGravity/norm;
+            if (fmag != NULL) *fmag = norm;
+        }
+        else {
+            *fx = 0.0;
+            *fy = 1.0;
+            if (fmag != NULL) *fmag = 1.0;
+        }
+    }
+    else if (world == WORLD_SPACE) {
+        int gfInd = getGravityIndex((int)x, (int)y);
+        float gx = gravityFieldX[gfInd];
+        float gy = gravityFieldY[gfInd];
+        float norm = sqrt(gx*gx+gy*gy);
+        *fx = gx/norm;
+        *fy = gy/norm;
+        if (fmag != NULL) *fmag = 1.0;
+    }
+    else {
+        // Just assume down
+        *fx = 0.0;
+        *fy = 1.0;
+        if (fmag != NULL) *fmag = 1.0;
+    }
+}

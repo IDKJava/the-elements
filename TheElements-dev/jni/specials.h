@@ -27,5 +27,6 @@ void specialTunnel(int particle);
 int specialBurn(int particle);
 void specialConductive(int particle);
 void specialTrail(int particle);
+bool specialFlow(int particle, int sp);
 
 #endif

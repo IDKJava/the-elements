@@ -7,7 +7,9 @@
 #include "specials.h"
 #include "macros.h"
 #include "points.h"
+#include "gravity.h"
 
+#include <cmath>
 #include <android/log.h>
 
 #ifndef NDEBUG // Debug
@@ -37,6 +39,10 @@ bool collisionSpecials(int firstParticle, int secondParticle)
         setParticleSpecialVal(secondParticle, SPECIAL_CONDUCTIVE, ELECTRIC_NO_DIR);
 
         return TRUE;
+    }
+    // Liquids flow around obstacles
+    else if (a_element[firstParticle]->state == 1) {
+        return specialFlow(firstParticle, secondParticle);
     }
 
     return FALSE;
@@ -243,6 +249,60 @@ void specialWander(int particle)
             }
         }
     }
+}
+
+bool specialFlow(int particle, int sp) {
+    struct Element* tempElement = a_element[particle];
+    float gx, gy;
+    float x = a_x[particle], y = a_y[particle];
+    getFallField(x, y, &gx, &gy, NULL);
+    int curInd = getIndex(x, y);
+    float ang = atan2(gy, gx);
+    // Randomize direction check order
+    int dir = (rand()%2 == 0) ? -1 : 1;
+    float leftAng = ang+dir*M_PI/2.0, rightAng = ang-dir*M_PI/2.0,
+          leftUpAng = ang+dir*M_PI*3.0/4.0, rightUpAng = ang-dir*M_PI*3.0/4.0;
+    float leftX = x+cos(leftAng), leftY = y+sin(leftAng);
+    int leftInd = getIndex(leftX, leftY);
+    float rightX = x+cos(rightAng), rightY = y+sin(rightAng);
+    int rightInd = getIndex(rightX, rightY);
+    float leftUpX = x+cos(leftUpAng), leftUpY = y+sin(leftUpAng);
+    int leftUpInd = getIndex(leftUpX, leftUpY);
+    float rightUpX = x+cos(rightUpAng), rightUpY = y+sin(rightUpAng);
+    int rightUpInd = getIndex(rightUpX, rightUpY);
+    if (coordInBounds(leftX, leftY) && allCoords[leftInd] == -1) {
+        a_hasMoved[particle] = true;
+        a_x[particle] = leftX;
+        a_y[particle] = leftY;
+        a_xVel[particle] += cos(leftAng);
+        a_yVel[particle] += sin(leftAng);
+        return true;
+    }
+    else if (coordInBounds(rightX, rightY) && allCoords[rightInd] == -1) {
+        a_hasMoved[particle] = true;
+        a_x[particle] = rightX;
+        a_y[particle] = rightY;
+        a_xVel[particle] += cos(rightAng);
+        a_yVel[particle] += sin(rightAng);
+        return true;
+    }
+    else if (coordInBounds(leftUpX, leftUpY) && allCoords[leftUpInd] == -1) {
+        a_hasMoved[particle] = true;
+        a_x[particle] = leftUpX;
+        a_y[particle] = leftUpY;
+        a_xVel[particle] += cos(leftUpAng);
+        a_yVel[particle] += sin(leftUpAng);
+        return true;
+    }
+    else if (coordInBounds(rightUpX, rightUpY) && allCoords[rightUpInd] == -1) {
+        a_hasMoved[particle] = true;
+        a_x[particle] = rightUpX;
+        a_y[particle] = rightUpY;
+        a_xVel[particle] += cos(rightUpAng);
+        a_yVel[particle] += sin(rightUpAng);
+        return true;
+    }
+    return false;
 }
 
 void specialJump(int particle)
