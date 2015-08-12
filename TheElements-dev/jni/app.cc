@@ -54,6 +54,7 @@ unsigned char filterType = FILTER_NONE;
 int* allCoords = NULL;
 float* gravityFieldX = NULL;
 float* gravityFieldY = NULL;
+float* gravCoords = NULL;
 
 int numSpaceHoles = 0;
 SpaceHole spaceHoles[MAX_SPACE_HOLES];

@@ -115,7 +115,7 @@
 #define WORLD_SPACE 1
 
 // Size of the gravity field blocks
-#define GF_BLOCK_SIZE 9
+#define GF_BLOCK_SIZE 3
 
 #define BLACK_HOLE 0
 #define WHITE_HOLE 1

@@ -132,6 +132,7 @@
 //Gravity field (space world)
     extern float* gravityFieldX;
     extern float* gravityFieldY;
+    extern float* gravCoords; // Rendering only
 
 //Array of all space holes
     extern int numSpaceHoles;

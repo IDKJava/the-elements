@@ -61,6 +61,17 @@ void gameSetup()
     memset(gravityFieldX, 0, gfWidth*gfHeight*sizeof(float));
     memset(gravityFieldY, 0, gfWidth*gfHeight*sizeof(float));
     numSpaceHoles = 0;
+    const float gravXOffset = 0.5*GF_BLOCK_SIZE / (float)workWidth;
+    const float gravYOffset = 0.5*GF_BLOCK_SIZE / (float)workHeight;
+    // TODO: Add the offsets
+    for (int j = 0; j < gfHeight; ++j) {
+        for (int i = 0; i < gfWidth; ++i) {
+            gravCoords[4*(j*gfWidth+i)] = gravCoords[4*(j*gfWidth+i)+2] =
+                i/(float)gfWidth+gravXOffset;
+            gravCoords[4*(j*gfWidth+i)+1] = gravCoords[4*(j*gfWidth+i)+3] =
+                1.0 - j/(float)gfHeight+gravYOffset;
+        }
+    }
 }
 
 //Set up all the variable sized arrays
@@ -78,6 +89,7 @@ void arraySetup()
     // Two dimensional array, use getGravityIndex(x,y) for indexing
     gravityFieldX = (float*)malloc(gfWidth*gfHeight*sizeof(float));
     gravityFieldY = (float*)malloc(gfWidth*gfHeight*sizeof(float));
+    gravCoords = (float*)malloc(gfWidth*gfHeight*4*sizeof(float));
 }
 
 void atmosphereSetup()

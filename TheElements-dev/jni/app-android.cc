@@ -32,6 +32,7 @@
 //#include "server.h"
 //Include the rendering functions
 #include "rendergl.h"
+#include "gravity.h"
 //Include pthread functions
 #include <pthread.h>
 
@@ -365,24 +366,7 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
         next->type = BLACK_HOLE;
         next->x = mX;
         next->y = mY;
-        int gfX = mX/GF_BLOCK_SIZE;
-        int gfY = mY/GF_BLOCK_SIZE;
-        // TODO: Thread this compute-heavy step better?
-        for (int i = 0; i < gfHeight; ++i) {
-            for (int j = 0; j < gfWidth; ++j) {
-                int gfInd = i*gfWidth + j;
-                // Vec from gf coord to black hole
-                float dx = (i-gfX);
-                float dy = (j-gfY);
-                float dist = sqrt(dx*dx + dy*dy);
-                // Normalize
-                dx /= dist;
-                dy /= dist;
-                // Gravity field weakens with distance squared
-                gravityFieldX[gfInd] = dx/(dist*dist);
-                gravityFieldY[gfInd] = dy/(dist*dist);
-            }
-        }
+        updateGravityField(next);
         return true;
     }
     return false;

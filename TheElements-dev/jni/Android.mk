@@ -214,6 +214,7 @@ LOCAL_SRC_FILES := \
 	collide.cc \
 	collisions.cc \
 	elementproperties.cc \
+	gravity.cc \
 	messages.pb.cc \
     points.cc \
     rendergl.cc \

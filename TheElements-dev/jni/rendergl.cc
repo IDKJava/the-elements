@@ -31,6 +31,8 @@ int mTextureUniformHandle;
 int mScreenSizeHandle;
 int mProjMatrixUniformHandle;
 
+int mGravProjMatrixUniformHandle;
+
 float vertices[] = {0.0f,1.0f,
                     1.0f,1.0f,
                     1.0f,0.0f,
@@ -105,6 +107,12 @@ static const char gFragmentShader[] =
     "  v_TexCoordinate.y);"
 */
 
+static const char gRedFragShader[] =
+    "precision mediump float;\n"
+    "void main() {\n"
+    "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+    "}\n";
+
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
     if (shader) {
@@ -172,6 +180,45 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
     return program;
 }
 
+GLuint createGravityProgram(const char* pVertexSource, const char* pFragmentSource) {
+
+    GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
+    if (!vertexShader) {
+        return 0;
+    }
+
+    GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
+    if (!pixelShader) {
+        return 0;
+    }
+
+    GLuint program = glCreateProgram();
+    if (program) {
+        glAttachShader(program, vertexShader);
+        glAttachShader(program, pixelShader);
+        glLinkProgram(program);
+        GLint linkStatus = GL_FALSE;
+        glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
+        if (linkStatus != GL_TRUE) {
+            GLint bufLength = 0;
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
+            if (bufLength) {
+                char* buf = (char*) malloc(bufLength);
+                if (buf) {
+                    glGetProgramInfoLog(program, bufLength, NULL, buf);
+                    LOGE("Could not link program:\n%s\n", buf);
+                    free(buf);
+                }
+            }
+            glDeleteProgram(program);
+            program = 0;
+        }
+
+        mGravProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
+    }
+    return program;
+}
+
 
 //Makes an orthographic projection matrix
 void setOthographicMat(float l, float r, float t, float b, float n, float f,  float mat[])
@@ -203,6 +250,11 @@ void setOthographicMat(float l, float r, float t, float b, float n, float f,  fl
 GLuint gProgram;
 GLuint gvPositionHandle;
 
+GLuint gGravProgram;
+GLuint gGravVPositionHandle;
+GLuint gGravFieldXHandle;
+GLuint gGravFieldYHandle;
+
 void glInit() {
     printGLString("Version", GL_VERSION);
     printGLString("Vendor", GL_VENDOR);
@@ -215,7 +267,13 @@ void glInit() {
         LOGE("Could not create program.");
         return;
     }
+    gGravProgram = createGravityProgram(gVertexShader, gRedFragShader);
+    if (!gGravProgram) {
+        LOGE("Could not create grav program.");
+        return;
+    }
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
+    gGravVPositionHandle = glGetAttribLocation(gGravProgram, "vPosition");
 
     glViewport(0, 0, screenWidth, screenHeight);
     //Generate the new texture
@@ -372,6 +430,15 @@ void glRender() {
     }
     bhVerts.clear();
     bhTexCoords.clear();
+
+    // Draw gravity field
+    // TODO: Do this only conditionally
+    glUseProgram(gGravProgram);
+    glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+    glEnableVertexAttribArray(gGravVPositionHandle);
+    glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
+
+    glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
 }
 
 void glRenderThreaded()
