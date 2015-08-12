@@ -21,6 +21,7 @@ public class Control extends LinearLayout {
     // Two objects in the control area
     private ImageButton element_picker_button;
     private ImageButton custom_elements_button;
+    private ImageButton world_select_button;
     private SeekBar brush_size_slider;
 
     // Constructor
@@ -39,6 +40,7 @@ public class Control extends LinearLayout {
         // Define the ImageButton and SeekBar set before using the res ids
         element_picker_button = (ImageButton) findViewById(R.id.element_picker_button);
         custom_elements_button = (ImageButton) findViewById(R.id.custom_elements_button);
+        world_select_button = (ImageButton) findViewById(R.id.world_select_button);
         brush_size_slider = (SeekBar) findViewById(R.id.brush_size_slider);
 
         // Set a click listener for the button which should pop up element
@@ -60,6 +62,14 @@ public class Control extends LinearLayout {
                 FlurryAgent.logEvent("Custom elements button (app)");
                 activity.startActivity(new Intent(activity,
                         CustomElementManagerActivity.class));
+            }
+        });
+
+        // Button to open the world select dialog
+        world_select_button.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.showDialog(MainActivity.WORLD_DIALOG);
             }
         });
 

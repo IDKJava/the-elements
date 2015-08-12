@@ -56,92 +56,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:text="@string/record_button_text"/>
-        
-        <!--<HorizontalScrollView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="fill_parent"-->
-            <!--android:scrollbarAlwaysDrawHorizontalTrack="true"-->
-            <!--android:fadingEdge="horizontal"-->
-            <!--android:fadingEdgeLength="10dp">-->
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:paddingLeft="10dip"-->
-            <!--android:paddingRight="10dip"-->
-            <!--android:layout_gravity="left">-->
-            <!-- -->
-	        <!--&lt;!&ndash; Pan/Zoom button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/hand_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@drawable/hand_button" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Kamcord button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/kamcord_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/kamcord_icon_button" />-->
-	        <!-- -->
-	        <!--&lt;!&ndash; Kamcord view button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/kamcord_view_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/kamcord_view_button" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Play/Pause button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/play_pause_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:gravity="center" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Save button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/save_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/save" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Load button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/load_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/load" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Clear button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/clear_screen_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:layout_marginRight="4dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/clear_icon_normal" />-->
-	<!-- -->
-	        <!--&lt;!&ndash; Fade button &ndash;&gt;-->
-	        <!--<ImageButton-->
-	            <!--android:id="@+id/fade_button"-->
-	            <!--android:layout_width="42dip"-->
-	            <!--android:layout_height="42dip"-->
-	            <!--android:background="@drawable/btn_mb"-->
-	            <!--android:src="@+drawable/fade_icon_select" />-->
-        <!--</LinearLayout>-->
-        <!--</HorizontalScrollView>-->
+
     </com.idkjava.thelements.game.MenuBar>
 
     <!-- Main viewing section -->
@@ -184,6 +99,16 @@
             android:background="@drawable/btn_ui_element"
             android:src="@drawable/palette_custom_elements" />
 
+        <!-- World Select Button -->
+
+        <ImageButton
+            android:id="@+id/world_select_button"
+            android:layout_width="42dip"
+            android:layout_height="42dip"
+            android:layout_margin="3dip"
+            android:background="@drawable/btn_ui_element"
+            android:src="@drawable/kamcord_edit_video_icon" />
+
         <!-- Brush Size Seekbar -->
 
         <SeekBar
@@ -191,7 +116,6 @@
             android:id="@+id/brush_size_slider"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="50dp"
             android:layout_weight="1"
             android:progressDrawable="@drawable/bg_ui_progress" />
     </com.idkjava.thelements.game.Control>

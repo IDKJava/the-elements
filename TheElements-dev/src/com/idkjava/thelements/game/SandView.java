@@ -16,7 +16,7 @@ import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
-    public enum Tool { BRUSH_TOOL, HAND_TOOL }
+    public enum Tool { BRUSH_TOOL, HAND_TOOL, BH_TOOL }
     private Tool mTool = Tool.BRUSH_TOOL;
 
 	//Constructor
@@ -37,11 +37,12 @@ public class SandView extends GLSurfaceView
   // When a touch screen event occurs
   public boolean onTouchEvent(final MotionEvent event)
   {
-    switch (mTool) {
-      case BRUSH_TOOL: return handleBrushTouch(event);
-      case HAND_TOOL: return handlePanTouch(event);
-    }
-    return true;
+      switch (mTool) {
+        case BRUSH_TOOL: return handleBrushTouch(event);
+        case HAND_TOOL: return handlePanTouch(event);
+        case BH_TOOL: return handleBHTouch(event);
+      }
+      return true;
   }
 
   private boolean handleBrushTouch(final MotionEvent event) {
@@ -63,6 +64,21 @@ public class SandView extends GLSurfaceView
     }
     return true;
   }
+
+    private boolean handleBHTouch(final MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            // TODO: Send a temp black hole signal to native,
+            // so we render without the gravity
+        }
+        else if (event.getAction() == MotionEvent.ACTION_UP) {
+            // Final placement of the BH
+            makeBlackHole((int) event.getX(), (int) event.getY());
+        }
+        else {
+            // TODO: Send a move temp signal to native.
+        }
+        return true;
+    }
 
   private enum HandState { NONE, PAN, PINCH }
   private int mDragStartX, mDragStartY;
@@ -124,6 +140,7 @@ public class SandView extends GLSurfaceView
   private static native void brushStartLocation(int x, int y);
   private static native void brushMoveLocation(int x, int y);
   private static native void brushEndLocation(int x, int y);
+  private static native boolean makeBlackHole(int x, int y);
   private static native void panView(int dx, int dy);
   private static native void setPinchScale(float scale);
   private static native void commitPinch();

@@ -52,6 +52,11 @@ unsigned char zoomFactor = DEFAULT_ZOOM_FACTOR;
 unsigned char filterType = FILTER_NONE;
 
 int* allCoords = NULL;
+float* gravityFieldX = NULL;
+float* gravityFieldY = NULL;
+
+int numSpaceHoles = 0;
+SpaceHole spaceHoles[MAX_SPACE_HOLES];
 
 short brushLocX = -1, brushLocY = -1, brushNextLocX = -1, brushNextLocY = -1;
 bool brushOn = false;
@@ -65,6 +70,8 @@ int screenWidth;
 int screenHeight;
 int workWidth;
 int workHeight;
+int gfWidth;
+int gfHeight;
 
 int stupidTegra;
 
@@ -82,6 +89,13 @@ float viewHeight = -1;
 //Gravity values
 float xGravity;
 float yGravity;
+
+//World state
+int world = WORLD_EARTH;
+
+//OpenGL
+int bhTexWidth = 0, bhTexHeight = 0;
+char *bhTexPixels;
 
 /*Network stuff taken out for now
 //Buffer building variables

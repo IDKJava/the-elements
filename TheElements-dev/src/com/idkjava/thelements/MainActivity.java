@@ -72,6 +72,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static final int TOOL_PICKER = 5;
     public static final int UTIL_DIALOG = 6;
     public static final int RECORD_DIALOG = 7;
+    public static final int WORLD_DIALOG = 8;
+
+    // Constants for worlds (MUST match macros in native lib)
+    private static final int EARTH_WORLD = 0;
+    private static final int SPACE_WORLD = 1;
 
     // Constants for elements
     public static final char ERASER_ELEMENT = 2;
@@ -94,7 +99,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static ArrayList<IconListItem> toolList =  new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
-            new IconListItem(R.string.eraser, R.drawable.eraser_on)
+            new IconListItem(R.string.eraser, R.drawable.eraser_on),
+            new IconListItem(R.string.make_black_hole, R.drawable.bt_icon)
     ));
     static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
@@ -105,6 +111,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static ArrayList<IconListItem> recordList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.start_recording, R.drawable.record_icon),
             new IconListItem(R.string.watch_videos, R.drawable.kamcord_view_button)
+    ));
+    // TODO: Fix UI for world selection
+    static ArrayList<IconListItem> worldList = new ArrayList<>(Arrays.asList(
+            new IconListItem(R.string.earth_world, R.drawable.hand_icon),
+            new IconListItem(R.string.space_world, R.drawable.kamcord_back_icon)
     ));
 
     public static boolean play;
@@ -122,6 +133,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private IconListAdapter mToolAdapter;
     private IconListAdapter mUtilAdapter;
     private IconListAdapter mRecordAdapter;
+    private IconListAdapter mWorldAdapter;
 
     public static String last_state_loaded = null;
 
@@ -372,6 +384,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             setElement(ERASER_ELEMENT);
                             break;
                         }
+                        case R.string.make_black_hole: {
+                            sand_view.setTool(SandView.Tool.BH_TOOL);
+                            break;
+                        }
                         default : {
                             throw new RuntimeException("Unknown tool selected.");
                         }
@@ -461,6 +477,33 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             break;
                         case R.string.watch_videos:
                             Kamcord.showWatchView();
+                            break;
+                        default:
+                            throw new RuntimeException("Unsupported record operation.");
+                    }
+                }
+            });
+
+            return builder.create();
+        }
+        else if (id == WORLD_DIALOG) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Select World");
+            builder.setOnCancelListener(this);
+
+            mWorldAdapter = new IconListAdapter(this, worldList);
+            builder.setAdapter(mWorldAdapter, new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    IconListItem item = worldList.get(which);
+                    switch (item.nameRes) {
+                        case R.string.earth_world:
+                            FlurryAgent.logEvent("Earth world select");
+                            setWorld(EARTH_WORLD);
+                            break;
+                        case R.string.space_world:
+                            FlurryAgent.logEvent("Space world select");
+                            setWorld(SPACE_WORLD);
                             break;
                         default:
                             throw new RuntimeException("Unsupported record operation.");
@@ -689,6 +732,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
      *            0 - none 1 - motion blur
      */
     public static native void setFilterMode(char mode);
+    public static native void setWorld(int world);
 
     // Getters
     public static native char getElement();

@@ -352,32 +352,39 @@ int updateKinetic(int index)
     float diffx, diffy;
 
     //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
-    //If accelOn, do tempYVel based on that
-    if (yGravity != 0 && accelOn)
-    {
-        diffy = ((yGravity / 9.8) * a_element[index]->fallVel + *yvel_ptr);
-    }
-    //Otherwise, just do the fallvelocity
-    else if (!accelOn)
-    {
-        diffy = a_element[index]->fallVel + *yvel_ptr;
-    }
-    //Accelerometer on, but no gravity (held horizontal)
-    else
-    {
-        diffy = *yvel_ptr;
-    }
+    if (world == WORLD_EARTH) {
+        //If accelOn, do tempYVel based on that
+        if (yGravity != 0 && accelOn)
+        {
+            diffy = ((yGravity / 9.8) * a_element[index]->fallVel + *yvel_ptr);
+        }
+        //Otherwise, just do the fallvelocity
+        else if (!accelOn)
+        {
+            diffy = a_element[index]->fallVel + *yvel_ptr;
+        }
+        //Accelerometer on, but no gravity (held horizontal)
+        else
+        {
+            diffy = *yvel_ptr;
+        }
 
-    //If accelOn, calculate new x using the gravity set
-    //X Gravity is REVERSED! (hence the "-")
-    if ((int) xGravity != 0 && accelOn == 1)
-    {
-        diffx = ((-xGravity / 9.8) * a_element[index]->fallVel + *xvel_ptr);
+        //If accelOn, calculate new x using the gravity set
+        //X Gravity is REVERSED! (hence the "-")
+        if ((int) xGravity != 0 && accelOn == 1)
+        {
+            diffx = ((-xGravity / 9.8) * a_element[index]->fallVel + *xvel_ptr);
+        }
+        //Otherwise, just add tempXVel
+        else
+        {
+            diffx = *xvel_ptr;
+        }
     }
-    //Otherwise, just add tempXVel
-    else
-    {
-        diffx = *xvel_ptr;
+    else if (world == WORLD_SPACE) {
+        int ind = getGravityIndex((int)*x_ptr, (int)*y_ptr);
+        diffy = (gravityFieldY[ind] * a_element[index]->fallVel + *yvel_ptr);
+        diffx = (gravityFieldX[ind] * a_element[index]->fallVel + *xvel_ptr);
     }
 
     //Boundary checking

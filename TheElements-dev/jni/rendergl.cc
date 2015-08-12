@@ -7,6 +7,7 @@
 
 #include "rendergl.h"
 #include <android/log.h>
+#include <vector>
 
 #ifndef NDEBUG
 #define LOGGING 0 // Debug
@@ -23,6 +24,7 @@ static struct timeval time1;
 unsigned int fb;
 unsigned int depthRb;
 unsigned int textureID;
+unsigned int bhTex;
 
 int mTextureCoordinateHandle;
 int mTextureUniformHandle;
@@ -218,8 +220,9 @@ void glInit() {
     glViewport(0, 0, screenWidth, screenHeight);
     //Generate the new texture
     glGenTextures(1, &textureID);
+    glGenTextures(1, &bhTex);
     checkGlError("glTexParam");
-    //Bind the texture
+    //Bind the sand texture
     glBindTexture(GL_TEXTURE_2D, textureID);
     checkGlError("glBindTexture");
 
@@ -242,6 +245,13 @@ void glInit() {
     checkGlError("glTexImage2D");
     //Free the dummy array
     free(emptyPixels);
+
+    //Bind the BH tex image
+    glBindTexture(GL_TEXTURE_2D, bhTex);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    // NOTE: BH tex image MUST be power-of-two dimensions
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bhTexWidth, bhTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bhTexPixels);
     return;
 }
 
@@ -260,9 +270,9 @@ void glRender() {
 
     glUseProgram(gProgram);
 
+    // Swap to sand texture unit
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
-
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, stupidTegra, workHeight, GL_RGB, GL_UNSIGNED_BYTE, colorsFrameBuffer);
 
     // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
@@ -300,6 +310,68 @@ void glRender() {
     glUniform2fv(mScreenSizeHandle, 1, &screenSizeV[0]);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    // Draw black holes
+    vector<float> bhVerts;
+    vector<float> bhTexCoords;
+    const float bhRadX = 10.0/workWidth;
+    const float bhRadY = 10.0/workHeight;
+    for (int i = 0; i < numSpaceHoles; ++i) {
+        const SpaceHole &h = spaceHoles[i];
+        if (h.type == BLACK_HOLE) {
+            float fx = h.x/(float)workWidth, fy = 1.0 - h.y/(float)workHeight;
+            bhVerts.push_back(fx - bhRadX); // Bottom-left
+            bhVerts.push_back(fy - bhRadY);
+            bhVerts.push_back(fx + bhRadX); // Bottom-right
+            bhVerts.push_back(fy - bhRadY);
+            bhVerts.push_back(fx + bhRadX); // Top-right
+            bhVerts.push_back(fy + bhRadY);
+            bhVerts.push_back(fx - bhRadX); // Bottom-left
+            bhVerts.push_back(fy - bhRadY);
+            bhVerts.push_back(fx + bhRadX); // Top-right
+            bhVerts.push_back(fy + bhRadY);
+            bhVerts.push_back(fx - bhRadX); // Top-left
+            bhVerts.push_back(fy + bhRadY);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(1.0);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(1.0);
+            bhTexCoords.push_back(1.0);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(1.0);
+            bhTexCoords.push_back(1.0);
+            bhTexCoords.push_back(0.0);
+            bhTexCoords.push_back(1.0);
+        }
+    }
+    int size = bhVerts.size();
+
+    if (size > 0) {
+        float *bhVertsArr = (float*) malloc(size*sizeof(float));
+        for (int i = 0; i < size; ++i) {
+            bhVertsArr[i] = bhVerts[i];
+        }
+        float *bhTexArr = (float*) malloc(size*sizeof(float));
+        for (int i = 0; i < size; ++i) {
+            bhTexArr[i] = bhTexCoords[i];
+        }
+
+        // Swap to bh texture
+        glBindTexture(GL_TEXTURE_2D, bhTex);
+        glEnableVertexAttribArray(gvPositionHandle);
+        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, bhVertsArr);
+        glEnableVertexAttribArray(mTextureCoordinateHandle);
+        glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, bhTexArr);
+
+        glDrawArrays(GL_TRIANGLES, 0, size/2);
+
+        free(bhVertsArr);
+        free(bhTexArr);
+    }
+    bhVerts.clear();
+    bhTexCoords.clear();
 }
 
 void glRenderThreaded()

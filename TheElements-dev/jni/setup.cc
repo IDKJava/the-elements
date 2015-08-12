@@ -56,6 +56,11 @@ void gameSetup()
             colors[3 * getColorIndex(i, j) + 2] = backgroundBlue;
         }
     }
+
+    //Clear all space objects
+    memset(gravityFieldX, 0, gfWidth*gfHeight*sizeof(float));
+    memset(gravityFieldY, 0, gfWidth*gfHeight*sizeof(float));
+    numSpaceHoles = 0;
 }
 
 //Set up all the variable sized arrays
@@ -70,6 +75,9 @@ void arraySetup()
     colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
     colorsFrameBuffer = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
     allCoords = (int*)malloc(workWidth * workHeight * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
+    // Two dimensional array, use getGravityIndex(x,y) for indexing
+    gravityFieldX = (float*)malloc(gfWidth*gfHeight*sizeof(float));
+    gravityFieldY = (float*)malloc(gfWidth*gfHeight*sizeof(float));
 }
 
 void atmosphereSetup()

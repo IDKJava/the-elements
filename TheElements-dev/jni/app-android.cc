@@ -66,6 +66,8 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
     screenHeight = height;
     workWidth = screenWidth / zoomFactor;
     workHeight = screenHeight / zoomFactor;
+    gfWidth = (workWidth+GF_BLOCK_SIZE-1)/GF_BLOCK_SIZE;
+    gfHeight = (workHeight+GF_BLOCK_SIZE-1)/GF_BLOCK_SIZE;
 
     //Finds nearest power of 2 to work Width
     stupidTegra = 1;
@@ -298,6 +300,16 @@ Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz,
     brushSize = brushSizeValue;
 }
 JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+    int numChannels = 4;
+    bhTexWidth = w;
+    bhTexHeight = h;
+    bhTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
+    jbyte *bhArr = env->GetByteArrayElements(pixels, NULL);
+    memcpy(bhTexPixels, bhArr, numChannels*w*h*sizeof(char));
+    env->ReleaseByteArrayElements(pixels, bhArr, 0);
+}
+JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
     float modViewWidth = viewWidth * zoomScale;
@@ -339,10 +351,52 @@ Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject 
     pthread_mutex_unlock(&brush_mutex);
 }
 
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    if (numSpaceHoles < MAX_SPACE_HOLES) {
+        SpaceHole *next = &spaceHoles[numSpaceHoles];
+        numSpaceHoles++;
+        next->type = BLACK_HOLE;
+        next->x = mX;
+        next->y = mY;
+        int gfX = mX/GF_BLOCK_SIZE;
+        int gfY = mY/GF_BLOCK_SIZE;
+        // TODO: Thread this compute-heavy step better?
+        for (int i = 0; i < gfHeight; ++i) {
+            for (int j = 0; j < gfWidth; ++j) {
+                int gfInd = i*gfWidth + j;
+                // Vec from gf coord to black hole
+                float dx = (i-gfX);
+                float dy = (j-gfY);
+                float dist = sqrt(dx*dx + dy*dy);
+                // Normalize
+                dx /= dist;
+                dy /= dist;
+                // Gravity field weakens with distance squared
+                gravityFieldX[gfInd] = dx/(dist*dist);
+                gravityFieldY[gfInd] = dy/(dist*dist);
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
 {
   filterType = mode;
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setWorld(JNIEnv* env, jobject thiz, jint newWorld) {
+  world = newWorld;
 }
 
 JNIEXPORT void JNICALL
@@ -521,60 +575,6 @@ Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject 
 
     env->ReleaseStringUTFChars(filename, nativeFilename);
     return success;
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_init(JNIEnv *env, jclass clazz,
-    jstring key, jstring secret, jstring gameName) {
-    const char* nativeKey = env->GetStringUTFChars(key, NULL);
-    const char* nativeSecret = env->GetStringUTFChars(secret, NULL);
-    const char* nativeName = env->GetStringUTFChars(gameName, NULL);
-
-    Kamcord_Init(nativeKey, nativeSecret, nativeName, KC_STANDARD_VIDEO_QUALITY);
-
-    env->ReleaseStringUTFChars(key, nativeKey);
-    env->ReleaseStringUTFChars(secret, nativeSecret);
-    env->ReleaseStringUTFChars(gameName, nativeName);
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_initActivity(JNIEnv *env, jclass clazz, jobject act) {
-    Kamcord_InitActivity(act);
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_startRecording(JNIEnv *env, jclass clazz) {
-    Kamcord_StartRecording();
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_stopRecording(JNIEnv *env, jclass clazz) {
-    Kamcord_StopRecording();
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_pauseRecording(JNIEnv *env, jclass clazz) {
-    Kamcord_Pause();
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_resumeRecording(JNIEnv *env, jclass clazz) {
-    Kamcord_Resume();
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_showView(JNIEnv *env, jclass clazz) {
-    Kamcord_ShowView();
-}
-
-JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_video_VideoLib_showWatchView(JNIEnv *env, jclass clazz) {
-    Kamcord_ShowWatchView();
-}
-
-JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_video_VideoLib_isWhitelisted(JNIEnv *env, jclass clazz) {
-    return (jboolean) Kamcord_IsWhitelisted();
 }
 
 // extern "C"

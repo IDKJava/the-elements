@@ -62,6 +62,12 @@
         char borderLeft, borderTop, borderRight, borderBottom;
     };
 
+    struct SpaceHole
+    {
+        int type;
+        int x, y;
+    };
+
 /*
  * VARIABLES
  */
@@ -88,7 +94,7 @@
     extern char a_frozen[];
     extern char a_hasMoved[];
 
- 
+
 
 
     
@@ -123,6 +129,14 @@
 //A map of all the points (a two-dimensional variable-size array)
     extern int* allCoords;
 
+//Gravity field (space world)
+    extern float* gravityFieldX;
+    extern float* gravityFieldY;
+
+//Array of all space holes
+    extern int numSpaceHoles;
+    extern SpaceHole spaceHoles[];
+
     extern int randOffset;
 
 //Array for bitmap drawing
@@ -135,6 +149,9 @@
 //Workspace dimensions
     extern int workWidth;
     extern int workHeight;
+//Gravity field dimensions
+    extern int gfWidth;
+    extern int gfHeight;
 
 //Nearest power of 2 to workWidth - needed due to stupid Tegra 2.
     extern int stupidTegra;
@@ -153,9 +170,16 @@
     extern float viewWidth;
     extern float viewHeight;
 
-//Gravity values
+//Gravity values, for Earth world
     extern float xGravity;
     extern float yGravity;
+
+//World
+    extern int world ;
+
+//OpenGL variables
+    extern int bhTexWidth, bhTexHeight;
+    extern char *bhTexPixels;
 
 
 /*Network stuff taken out for now
@@ -190,6 +214,12 @@ inline int getIndex(int x, int y)
 inline int getColorIndex( int x, int y )
 {
     return y*stupidTegra + x;
+}
+//Index into gravity field array (space world)
+//Params are GAME COORDS, not coordinates of the 2D array. I.e. don't divide
+//the coordinates by GF_BLOCK_SIZE before passing in.
+inline int getGravityIndex(int x, int y) {
+    return (y/GF_BLOCK_SIZE)*gfWidth + (x/GF_BLOCK_SIZE);
 }
 
 /*

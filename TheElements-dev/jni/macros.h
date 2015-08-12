@@ -111,6 +111,17 @@
 #define FILTER_NONE 0
 #define FILTER_MOTION 1
 
+#define WORLD_EARTH 0
+#define WORLD_SPACE 1
+
+// Size of the gravity field blocks
+#define GF_BLOCK_SIZE 9
+
+#define BLACK_HOLE 0
+#define WHITE_HOLE 1
+#define CURL_HOLE 2
+#define MAX_SPACE_HOLES 100
+
 /*
  * LOGGING
  */
