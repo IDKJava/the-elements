@@ -133,6 +133,7 @@
     extern float* gravityFieldX;
     extern float* gravityFieldY;
     extern float* gravCoords; // Rendering only
+    extern float* gravMag; // Rendering only
 
 //Array of all space holes
     extern int numSpaceHoles;

@@ -31,9 +31,15 @@ void updateGravityField(SpaceHole *hole) {
                 gravityFieldX[gfInd] += -dy*str/(dist*dist);
                 gravityFieldY[gfInd] += dx*str/(dist*dist);
             }
-            gravCoords[4*gfInd+2] = gravCoords[4*gfInd]+gravityFieldX[gfInd];
+            float gx = gravityFieldX[gfInd], gy = gravityFieldY[gfInd];
+            float mag = sqrt(gx*gx+gy*gy);
+            gravCoords[4*gfInd+2] = gravCoords[4*gfInd] +
+                gravityFieldX[gfInd]/(mag*gfWidth);
             // Invert Y coordinate because OpenGL y is the opposite of game y
-            gravCoords[4*gfInd+3] = gravCoords[4*gfInd+1]-gravityFieldY[gfInd];
+            gravCoords[4*gfInd+3] = gravCoords[4*gfInd+1] -
+                gravityFieldY[gfInd]/(mag*gfHeight);
+            gravMag[2*gfInd+0] = mag;
+            gravMag[2*gfInd+1] = mag;
         }
     }
 }

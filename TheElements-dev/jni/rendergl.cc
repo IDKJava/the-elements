@@ -107,10 +107,22 @@ static const char gFragmentShader[] =
     "  v_TexCoordinate.y);"
 */
 
-static const char gRedFragShader[] =
-    "precision mediump float;\n"
+static const char gFieldVertexShader[] =
+    "attribute vec4 vPosition;\n"
+    "attribute vec4 aMag;\n"
+    "varying vec4 vMag;\n"
+    "uniform mat4 u_MVPMatrix;\n"
     "void main() {\n"
-    "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n"
+    "  vMag = aMag;\n"
+    "  gl_Position = vPosition;\n"
+    "  gl_Position *= u_MVPMatrix;\n"
+    "}\n";
+
+static const char gMagFragShader[] =
+    "precision mediump float;\n"
+    "varying vec4 vMag;\n"
+    "void main() {\n"
+    "  gl_FragColor = vMag[0]*vec4(10.0, 5.0, 0.0, 1.0) + vec4(0.2, 0.2, 0.2, 0.0);\n"
     "}\n";
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
@@ -252,8 +264,7 @@ GLuint gvPositionHandle;
 
 GLuint gGravProgram;
 GLuint gGravVPositionHandle;
-GLuint gGravFieldXHandle;
-GLuint gGravFieldYHandle;
+GLuint gGravVMagHandle;
 
 void glInit() {
     printGLString("Version", GL_VERSION);
@@ -267,13 +278,14 @@ void glInit() {
         LOGE("Could not create program.");
         return;
     }
-    gGravProgram = createGravityProgram(gVertexShader, gRedFragShader);
+    gGravProgram = createGravityProgram(gFieldVertexShader, gMagFragShader);
     if (!gGravProgram) {
         LOGE("Could not create grav program.");
         return;
     }
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
     gGravVPositionHandle = glGetAttribLocation(gGravProgram, "vPosition");
+    gGravVMagHandle = glGetAttribLocation(gGravProgram, "aMag");
 
     glViewport(0, 0, screenWidth, screenHeight);
     //Generate the new texture
@@ -437,6 +449,8 @@ void glRender() {
     glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
     glEnableVertexAttribArray(gGravVPositionHandle);
     glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
+    glEnableVertexAttribArray(gGravVMagHandle);
+    glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
 
     glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
 }

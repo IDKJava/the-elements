@@ -70,6 +70,8 @@ void gameSetup()
                 i/(float)gfWidth+gravXOffset;
             gravCoords[4*(j*gfWidth+i)+1] = gravCoords[4*(j*gfWidth+i)+3] =
                 1.0 - j/(float)gfHeight+gravYOffset;
+            gravMag[2*(j*gfWidth+i)] = 0.0;
+            gravMag[2*(j*gfWidth+i)+1] = 0.0;
         }
     }
 }
@@ -84,6 +86,7 @@ void arraySetup()
     free(gravityFieldX);
     free(gravityFieldY);
     free(gravCoords);
+    free(gravMag);
 
     //Allocate memory
     colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
@@ -93,6 +96,7 @@ void arraySetup()
     gravityFieldX = (float*)malloc(gfWidth*gfHeight*sizeof(float));
     gravityFieldY = (float*)malloc(gfWidth*gfHeight*sizeof(float));
     gravCoords = (float*)malloc(gfWidth*gfHeight*4*sizeof(float));
+    gravMag = (float*)malloc(gfWidth*gfHeight*2*sizeof(float));
 }
 
 void atmosphereSetup()
