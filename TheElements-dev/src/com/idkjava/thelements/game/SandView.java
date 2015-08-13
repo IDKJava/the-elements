@@ -16,7 +16,15 @@ import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
-    public enum Tool { BRUSH_TOOL, HAND_TOOL, BH_TOOL, WH_TOOL, CH_TOOL }
+    public enum Tool {
+        BRUSH_TOOL,
+        HAND_TOOL,
+        BH_TOOL,
+        WH_TOOL,
+        CH_TOOL,
+        NG_TOOL,
+        REMOVE_GRAV_TOOL
+    }
     private Tool mTool = Tool.BRUSH_TOOL;
 
 	//Constructor
@@ -43,7 +51,10 @@ public class SandView extends GLSurfaceView
           case BH_TOOL:
           case WH_TOOL:
           case CH_TOOL:
-              return handleGravHoleTouch(event);
+          case REMOVE_GRAV_TOOL:
+              return handlePointTouch(event);
+          case NG_TOOL:
+              return handleRectTouch(event);
       }
       return true;
   }
@@ -68,7 +79,7 @@ public class SandView extends GLSurfaceView
     return true;
   }
 
-    private boolean handleGravHoleTouch(final MotionEvent event) {
+    private boolean handlePointTouch(final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             // TODO: Send a temp black hole signal to native,
             // so we render without the gravity
@@ -85,12 +96,37 @@ public class SandView extends GLSurfaceView
                 case CH_TOOL:
                     makeCurlHole((int) event.getX(), (int) event.getY());
                     break;
+                case REMOVE_GRAV_TOOL:
+                    removeGravObject((int) event.getX(), (int) event.getY());
+                    break;
                 default:
                     throw new RuntimeException("Invalid handler for tool: " + mTool);
             }
         }
         else {
             // TODO: Send a move temp signal to native.
+        }
+        return true;
+    }
+
+    private int mRectStartX, mRectStartY;
+    private boolean handleRectTouch(final MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            // TODO: Send start rect signal
+            mRectStartX = (int)event.getX();
+            mRectStartY = (int)event.getY();
+        }
+        else if (event.getAction() == MotionEvent.ACTION_UP) {
+            switch (mTool) {
+                case NG_TOOL:
+                    makeNullGravity(mRectStartX, mRectStartY, (int) event.getX(), (int) event.getY());
+                    break;
+                default:
+                    throw new RuntimeException("Invalid handler for tool: " + mTool);
+            }
+        }
+        else {
+            // TODO: Send move signal to native
         }
         return true;
     }
@@ -158,6 +194,8 @@ public class SandView extends GLSurfaceView
   private static native boolean makeBlackHole(int x, int y);
   private static native boolean makeWhiteHole(int x, int y);
   private static native boolean makeCurlHole(int x, int y);
+  private static native boolean makeNullGravity(int sx, int sy, int ex, int ey);
+  private static native void removeGravObject(int x, int y);
   private static native void panView(int dx, int dy);
   private static native void setPinchScale(float scale);
   private static native void commitPinch();

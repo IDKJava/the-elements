@@ -120,7 +120,8 @@
 #define BLACK_HOLE 0
 #define WHITE_HOLE 1
 #define CURL_HOLE 2
-#define MAX_SPACE_HOLES 100
+#define NULL_GRAVITY 3
+#define MAX_SPACE_OBJS 100
 
 /*
  * LOGGING

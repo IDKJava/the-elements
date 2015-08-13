@@ -101,7 +101,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.eraser, R.drawable.eraser_on),
             new IconListItem(R.string.make_black_hole, R.drawable.bt_icon),
             new IconListItem(R.string.make_white_hole, R.drawable.bt_icon),
-            new IconListItem(R.string.make_curl_hole, R.drawable.bt_icon)
+            new IconListItem(R.string.make_curl_hole, R.drawable.bt_icon),
+            new IconListItem(R.string.null_gravity_zone, R.drawable.bt_icon),
+            new IconListItem(R.string.remove_gravity_object, R.drawable.eraser)
     ));
     static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
@@ -395,6 +397,14 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         }
                         case R.string.make_curl_hole: {
                             sand_view.setTool(SandView.Tool.CH_TOOL);
+                            break;
+                        }
+                        case R.string.null_gravity_zone: {
+                            sand_view.setTool(SandView.Tool.NG_TOOL);
+                            break;
+                        }
+                        case R.string.remove_gravity_object: {
+                            sand_view.setTool(SandView.Tool.REMOVE_GRAV_TOOL);
                             break;
                         }
                         default : {

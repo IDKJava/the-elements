@@ -360,13 +360,13 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceHoles < MAX_SPACE_HOLES) {
-        SpaceHole *next = &spaceHoles[numSpaceHoles];
-        numSpaceHoles++;
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
         next->type = BLACK_HOLE;
         next->x = mX;
         next->y = mY;
-        updateGravityField(next);
+        updateGravityField(next, false);
         return true;
     }
     return false;
@@ -380,13 +380,13 @@ Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thi
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceHoles < MAX_SPACE_HOLES) {
-        SpaceHole *next = &spaceHoles[numSpaceHoles];
-        numSpaceHoles++;
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
         next->type = WHITE_HOLE;
         next->x = mX;
         next->y = mY;
-        updateGravityField(next);
+        updateGravityField(next, false);
         return true;
     }
     return false;
@@ -400,14 +400,81 @@ Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceHoles < MAX_SPACE_HOLES) {
-        SpaceHole *next = &spaceHoles[numSpaceHoles];
-        numSpaceHoles++;
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
         next->type = CURL_HOLE;
         next->x = mX;
         next->y = mY;
-        updateGravityField(next);
+        updateGravityField(next, false);
         return true;
+    }
+    return false;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject thiz,
+    jint sx, jint sy, jint ex, jint ey) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float startX = ((float)sx/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float startY = ((float)sy/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    float endX = ((float)ex/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float endY = ((float)ey/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    startX /= zoomFactor;
+    startY /= zoomFactor;
+    endX /= zoomFactor;
+    endY /= zoomFactor;
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
+        next->type = NULL_GRAVITY;
+        next->x = startX;
+        next->y = startY;
+        next->ex = endX;
+        next->ey = endY;
+        updateGravityField(next, false);
+        return true;
+    }
+    return false;
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+
+    int closest = -1;
+    float dist;
+    for (int i = 0; i < numSpaceObjs; ++i) {
+        SpaceObj *obj = &spaceObjs[i];
+        float dx = obj->x - mX;
+        float dy = obj->y - mY;
+        float objDist = dx*dx+dy*dy;
+        if (closest == -1 || dist > objDist) {
+            closest = i;
+            dist = objDist;
+        }
+        // Deleting null gravity zone should work from either terminal
+        else if (obj->type == NULL_GRAVITY) {
+            dx = obj->ex - mX;
+            dy = obj->ey - mY;
+            objDist = dx*dx+dy*dy;
+            if (dist > objDist) {
+                closest = i;
+                dist = objDist;
+            }
+        }
+    }
+    SpaceObj *deleteObj = &spaceObjs[closest];
+    updateGravityField(deleteObj, true);
+    numSpaceObjs--;
+    for (int j = closest; j < numSpaceObjs; ++j) {
+        spaceObjs[j] = spaceObjs[j+1];
     }
     return false;
 }

@@ -65,6 +65,8 @@
     <string name="make_black_hole">Make Black Hole</string>
     <string name="make_white_hole">Make White Hole</string>
     <string name="make_curl_hole">Make Curl Hole</string>
+    <string name="null_gravity_zone">Null Gravity Zone</string>
+    <string name="remove_gravity_object">Remove Gravity Object</string>
     <string name="trails_on">Enable Trails</string>
     <string name="trails_off">Disable Trails</string>
     <string name="start_recording">Start Recording</string>

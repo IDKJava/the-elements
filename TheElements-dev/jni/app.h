@@ -62,10 +62,11 @@
         char borderLeft, borderTop, borderRight, borderBottom;
     };
 
-    struct SpaceHole
+    struct SpaceObj
     {
         int type;
         int x, y;
+        int ex, ey; // Only used for null gravity
     };
 
 /*
@@ -132,12 +133,13 @@
 //Gravity field (space world)
     extern float* gravityFieldX;
     extern float* gravityFieldY;
+    extern int* gravityMask;
     extern float* gravCoords; // Rendering only
     extern float* gravMag; // Rendering only
 
 //Array of all space holes
-    extern int numSpaceHoles;
-    extern SpaceHole spaceHoles[];
+    extern int numSpaceObjs;
+    extern SpaceObj spaceObjs[];
 
     extern int randOffset;
 

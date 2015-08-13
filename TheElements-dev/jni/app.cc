@@ -54,11 +54,12 @@ unsigned char filterType = FILTER_NONE;
 int* allCoords = NULL;
 float* gravityFieldX = NULL;
 float* gravityFieldY = NULL;
+int* gravityMask = NULL;
 float* gravCoords = NULL;
 float* gravMag = NULL;
 
-int numSpaceHoles = 0;
-SpaceHole spaceHoles[MAX_SPACE_HOLES];
+int numSpaceObjs = 0;
+SpaceObj spaceObjs[MAX_SPACE_OBJS];
 
 short brushLocX = -1, brushLocY = -1, brushNextLocX = -1, brushNextLocY = -1;
 bool brushOn = false;
