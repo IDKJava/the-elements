@@ -373,7 +373,7 @@ void getDiagonalDirection(int index, int* x, int* y)
 
 // Create a tunnel assuming we're tunneling from curX, curY
 // to curX+diffX, curY+diffY. Builds all particles around the
-// point except directly back the way we came.
+// new point except directly back the way we came.
 void createTunnel(int curX, int curY,
                   int diffX, int diffY,
                   struct Element* tunnelElt)
@@ -386,19 +386,18 @@ void createTunnel(int curX, int curY,
         for (int i = 0; i < 4; ++i)
         {
             getCardinalDirection(i, &dx, &dy);
-            // Check for not backwards and empty
             if (!(dx == -diffX && dy == -diffY) &&
-                allCoords[getIndex(curX+dx, curY+dy)] == -1)
+                allCoords[getIndex(curX+diffX+dx, curY+diffY+dy)] == -1)
             {
-                createPoint(curX+dx, curY+dy, tunnelElt);
+                createPoint(curX+diffX+dx, curY+diffY+dy, tunnelElt);
             }
 
             getDiagonalDirection(i, &dx, &dy);
             // Check for not backwards and empty
             if (!(dx == -diffX && dy == -diffY) &&
-                allCoords[getIndex(curX+dx, curY+dy)] == -1)
+                allCoords[getIndex(curX+diffX+dx, curY+diffY+dy)] == -1)
             {
-                createPoint(curX+dx, curY+dy, tunnelElt);
+                createPoint(curX+diffX+dx, curY+diffY+dy, tunnelElt);
             }
         }
     }
