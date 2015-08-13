@@ -5,7 +5,6 @@
 #include <fstream>
 
 //File/folder locations
-#define ROOT_FOLDER "/sdcard/thelements/"
 #define SAVES_FOLDER "saves/"
 #define ELEMENTS_FOLDER "elements/"
 #define ATMOSPHERES_FOLDER "atmospheres/"
@@ -19,6 +18,9 @@
 //Deprecated
 #define SAVE_EXTENSION ".sav"
 #define ELEMENT_EXTENSION ".ele"
+
+// Root must be changeable
+extern char* ROOT_FOLDER;
 
 using namespace std;
 

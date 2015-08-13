@@ -667,6 +667,14 @@ Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject 
     env->ReleaseStringUTFChars(filename, nativeFilename);
     return success;
 }
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jobject thiz, jstring newRoot) {
+    const char* nativeRoot = env->GetStringUTFChars(newRoot, NULL);
+    char *nativeRootCpy = new char[256];
+    strncpy(nativeRootCpy, nativeRoot, 256);
+    ROOT_FOLDER = nativeRootCpy;
+    env->ReleaseStringUTFChars(newRoot, nativeRoot);
+}
 
 // extern "C"
 #if __cplusplus

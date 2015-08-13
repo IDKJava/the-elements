@@ -14,7 +14,8 @@ import android.content.Context;
 public class FileManager
 {
 	//File and directory constants
-	public static final String ROOT_DIR = "/sdcard/thelements/";
+	public static final String OLD_ROOT_DIR = "/sdcard/thelements/";
+	public static String ROOT_DIR = "/sdcard/thelements/";
 	public static final String SAVES_DIR = "saves/";
 	public static final String ELEMENTS_DIR = "elements/";
 	public static final String ATMOSPHERES_DIR = "atmospheres/";

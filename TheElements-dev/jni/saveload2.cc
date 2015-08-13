@@ -26,6 +26,8 @@
 #define LOGGING 0
 #endif
 
+char* ROOT_FOLDER = "/sdcard/thelements/";
+
 char saveState2(char* saveLoc)
 {
     // Lock the mutex so that we don't continue to update

@@ -58,7 +58,7 @@ void specialSpawn(int particle)
     {
         for (diffY = -2; diffY <= 2; diffY++)
         {
-            if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+            if (coordInBounds(tempX+diffX, tempY+diffY))
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                 if (tempAllCoords != -1 &&
