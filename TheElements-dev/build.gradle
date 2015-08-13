@@ -37,6 +37,7 @@ dependencies {
     compile project(':android-color-picker:AmbilWarna')
     compile project(':kamcord-android-sdk:kamcord')
     compile project(':Android-WVersionManager:library')
+    compile project(':android-ColorPickerPreference')
 }
 
 android {

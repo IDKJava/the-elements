@@ -1,4 +1,4 @@
-include ':Android-WVersionManager:library'
+include ':Android-WVersionManager:library', ':android-ColorPickerPreference'
 include ':android-color-picker:AmbilWarna'
 include ':TheElements-dev'
 include ':kamcord-android-sdk:kamcord'
