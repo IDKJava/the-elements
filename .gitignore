@@ -12,6 +12,5 @@ local.properties
 gradle.properties
 .gradle
 build/
-gradle/
 .settings/
 out/
