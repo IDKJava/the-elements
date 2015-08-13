@@ -14,6 +14,16 @@
 #include "collisions.h"
 #include "specials.h"
 
+inline void removeSp(int p) {
+    unSetPoint(p);
+    a_hasMoved[p] = FALSE;
+}
+inline void bounceFp(float ox, float oy, int p) {
+    a_x[p] = ox;
+    a_y[p] = oy;
+    a_hasMoved[p] = FALSE;
+}
+
 void collide(int firstParticle, int secondParticle)
 {
     //Specials hook on collision
@@ -59,9 +69,7 @@ void collide(int firstParticle, int secondParticle)
     case 0: //Solid - Solid
     {
         //First particle goes back to where it was before
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
-        a_hasMoved[firstParticle] = FALSE;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
 
         // -5/3 to 5/3
         float perpDelta = ((rand() % 101) - 50)/30.0;
@@ -83,10 +91,7 @@ void collide(int firstParticle, int secondParticle)
         //The less dense element bounces back and adds some velocities
         else
         {
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
-            a_hasMoved[firstParticle] = FALSE;
-                        
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
 
             //-5/3 to 5/3
             float perpDelta = ((rand() % 101) - 50)/30.0;
@@ -104,10 +109,8 @@ void collide(int firstParticle, int secondParticle)
         a_hasMoved[secondParticle] = TRUE;
 
         //Move back and delete firstParticle
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
         deletePoint(firstParticle);
-        a_hasMoved[firstParticle] = FALSE;
 
         break;
     }
@@ -120,8 +123,7 @@ void collide(int firstParticle, int secondParticle)
         a_hasMoved[firstParticle] = TRUE;
 
         //Delete secondParticle
-        unSetPoint(secondParticle);
-        a_hasMoved[secondParticle] = FALSE;
+        removeSp(secondParticle);
 
         break;
     }
@@ -132,24 +134,19 @@ void collide(int firstParticle, int secondParticle)
         if (rand() % 3 != 0 ) //2/3 chance
         {
             //Acid burns away Meltable
-            unSetPoint(secondParticle);
-            a_hasMoved[secondParticle] = FALSE;
+            removeSp(secondParticle);
         }
         else if (rand() % 2 == 0 ) //Otherwise, 1/6 total
         {
             //Acid is neutralized
             //Move firstParticle back and delete it
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
             deletePoint(firstParticle);
-            a_hasMoved[firstParticle] = FALSE;
         }
         else //Otherwise, 1/6 total
         {
             //Acid bounces
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
-            a_hasMoved[firstParticle] = FALSE;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
         }
 
         break;
@@ -161,25 +158,20 @@ void collide(int firstParticle, int secondParticle)
             //Meltable is destroyed
 
             //Delete firstParticle
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
             deletePoint(firstParticle);
-            a_hasMoved[firstParticle] = FALSE;
         }
         else if (rand() % 2 == 0 ) //Otherwise, 1/6 totaln
         {
             //Acid is neutralized
 
             //Delete secondParticle
-            unSetPoint(secondParticle);
-            a_hasMoved[secondParticle] = FALSE;
+            removeSp(secondParticle);
         }
         else //Otherwise, 1/6 total
         {
             //Meltable bounces
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
-            a_hasMoved[firstParticle] = FALSE;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
         }
         break;
     }
@@ -189,17 +181,13 @@ void collide(int firstParticle, int secondParticle)
         if (rand() % 3 == 0) //1/3 Chance
         {
             //Delete firstParticle
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
             deletePoint(firstParticle);
-            a_hasMoved[firstParticle] = FALSE;
         }
         else //2/3 Change of bouncing
         {
             //Move the point back
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
-            a_hasMoved[firstParticle] = FALSE;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
         }
                         
         break;
@@ -209,15 +197,12 @@ void collide(int firstParticle, int secondParticle)
         if (rand() % 3 == 0) //1/3 Chance
         {
             //Delete secondParticle
-            unSetPoint(secondParticle);
-            a_hasMoved[secondParticle] = FALSE;
+            removeSp(secondParticle);
         }
         else //2/3 Chance
         {
             //Move firstParticle back
-            a_x[firstParticle] = oldXFirst;
-            a_y[firstParticle] = oldYFirst;
-            a_hasMoved[firstParticle] = FALSE;
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
         }
 
         break;
@@ -225,10 +210,8 @@ void collide(int firstParticle, int secondParticle)
     case 8: //Salt - Water or Water - Salt or Salt - Ice or Ice - Salt or Salt-Water with any
     {
         //Move back and delete firstParticle
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
         deletePoint(firstParticle);
-        a_hasMoved[firstParticle] = FALSE;
 
         //Change the element of secondParticle to Salt-water
         setElement(secondParticle, elements[SALT_WATER_ELEMENT]);
@@ -239,10 +222,8 @@ void collide(int firstParticle, int secondParticle)
     case 9: //Salt-water - Plant or Plant - Salt-water
     {
         //Delete firstParticle
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
         deletePoint(firstParticle);
-        a_hasMoved[firstParticle] = FALSE;
                     
         //Change the element or secondParticle to Sand
         setElement(secondParticle, elements[SAND_ELEMENT]);
@@ -252,28 +233,23 @@ void collide(int firstParticle, int secondParticle)
     case 10: //Water - Sand or Sand - Water
     {
         //Delete firstParticle
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
         deletePoint(firstParticle);
-        a_hasMoved[firstParticle] = FALSE;
 
         //Change the element of secondParticle to Mud
-        setElement(secondParticle, elements[21]);
+        setElement(secondParticle, elements[MUD_ELEMENT]);
         a_hasMoved[secondParticle] = TRUE;
         break;
     }
     case 11: //Destroy -- second particle is erased
     {
-        unSetPoint(secondParticle);
-        a_hasMoved[secondParticle] = FALSE;
+        removeSp(secondParticle);
         break;
     }
     case 12: //Stacking - Solid
     {
         //First particle goes back to where it was before
-        a_x[firstParticle] = oldXFirst;
-        a_y[firstParticle] = oldYFirst;
-        a_hasMoved[firstParticle] = FALSE;
+        bounceFp(oldXFirst, oldYFirst, firstParticle);
     }
     }
 }
