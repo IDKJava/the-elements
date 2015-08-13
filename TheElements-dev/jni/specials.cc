@@ -121,7 +121,7 @@ void specialHeat(int particle)
         {
             for(diffY = -1; diffY <=1; diffY++)
             {
-                if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
+                if((diffX!=0||diffY!=0) && coordInBounds(tempX+diffX, tempY+diffY))
                 {
                     tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                     if(tempAllCoords != -1)
@@ -536,13 +536,13 @@ int specialBurn(int particle)
         {
             for(diffY = -1; diffY <=1; diffY++)
             {
-                if((diffX!=0||diffY!=0) && tempX+diffX < workWidth && tempX+diffX >= 0 && tempY+diffY < workHeight && tempY+diffY >= 0)
+                if((diffX!=0||diffY!=0) && coordInBounds(tempX+diffX, tempY+diffY))
                 {
                     tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                     if(tempAllCoords != -1)
                     {
                         changeHeat(&(a_heat[tempAllCoords]),
-				   1000/(state*getElementSpecialVal(tempElement, SPECIAL_BURN)));
+				            1000/(10+state*getElementSpecialVal(tempElement, SPECIAL_BURN)));
                     }
                 }
             }
