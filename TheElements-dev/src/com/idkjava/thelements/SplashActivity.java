@@ -37,7 +37,7 @@ public class SplashActivity extends ReportingActivity
                 } catch (InterruptedException e) {}
 		        
                 //Create an Intent to start MainActivity
-                Intent mainIntent = new Intent(SplashActivity.this, MainActivity.class);
+                Intent mainIntent = new Intent(SplashActivity.this, SelectWorldActivity.class);
                 startActivity(mainIntent);
                 finish();
 		    }

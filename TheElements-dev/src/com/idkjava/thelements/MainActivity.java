@@ -72,8 +72,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static final int WORLD_DIALOG = 8;
 
     // Constants for worlds (MUST match macros in native lib)
-    private static final int WORLD_EARTH = 0;
-    private static final int WORLD_SPACE = 1;
+    public static final int WORLD_EARTH = 0;
+    public static final int WORLD_SPACE = 1;
 
     // Constants for elements
     public static final char ERASER_ELEMENT = 2;
@@ -169,10 +169,24 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private Tracker mTracker;
     private int curWorld = WORLD_EARTH;
 
+    private void setWorldFromIntent() {
+        Intent i = getIntent();
+        if (i.hasExtra("world")) {
+            int iWorld = i.getIntExtra("world", WORLD_EARTH);
+            if (iWorld >= 0 && iWorld <= WORLD_SPACE) {
+                curWorld = iWorld;
+                setWorld(curWorld);
+            }
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
+
+        // Get world info from intent, if present
+        setWorldFromIntent();
 
         // Set up EasyTracker custom error reporting
         EasyTracker curTracker = EasyTracker.getInstance(this);
@@ -239,6 +253,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     protected void onResume() {
         // Use the super onResume
         super.onResume();
+
+        // Get world info from intent, if present
+        setWorldFromIntent();
+
         PollFish.init(this, APIKeys.pollfishAPIKey, Position.BOTTOM_RIGHT, 0);
 
         // Load the settings shared preferences which deals with if we're
