@@ -75,8 +75,8 @@
 
     <string name="select_world">Select World</string>
 
-    <string name="earth_world">Earth World</string>
-    <string name="space_world">Space World</string>
+    <string name="earth_world">Earth</string>
+    <string name="space_world">Space</string>
     <string name="bullet">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
     <string name="earth_world_desc_2">Average Earth atomspheric temperature.</string>
