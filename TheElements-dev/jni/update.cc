@@ -288,9 +288,9 @@ int checkBoundariesAndMove(float *x, float *y, float diffx, float diffy)
 }
 
 // Update the velocities based on inertia
-void updateVelocities(float *xvel, float *yvel, float inertia)
+void updateVelocities(float *xvel, float *yvel, float inertia, float lowDragThresh)
 {
-    if(*xvel < 0)
+    if(*xvel < -lowDragThresh)
     {
         *xvel += inertia;
         if(*xvel > 0)
@@ -298,7 +298,7 @@ void updateVelocities(float *xvel, float *yvel, float inertia)
             *xvel = 0;
         }
     }
-    else if(*xvel > 0)
+    else if(*xvel > lowDragThresh)
     {
         *xvel -= inertia;
         if(*xvel < 0)
@@ -307,7 +307,7 @@ void updateVelocities(float *xvel, float *yvel, float inertia)
         }
     }
     // Update y vel based on inertia, always approaching 0
-    if(*yvel < 0)
+    if(*yvel < -lowDragThresh)
     {
         *yvel += inertia;
         if (*yvel > 0)
@@ -315,7 +315,7 @@ void updateVelocities(float *xvel, float *yvel, float inertia)
             *yvel = 0;
         }
     }
-    else if(*yvel > 0)
+    else if(*yvel > lowDragThresh)
     {
         *yvel -= inertia;
         if(*yvel < 0)
@@ -337,10 +337,28 @@ int updateKinetic(int index)
     float diffx, diffy;
 
     //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
+    int fallVel = a_element[index]->fallVel;
     float gx, gy, gmag;
     getFallField(*x_ptr, *y_ptr, &gx, &gy, &gmag);
-    diffy = gy*gmag*a_element[index]->fallVel + *yvel_ptr;
-    diffx = gx*gmag*a_element[index]->fallVel + *xvel_ptr;
+    float gravX = gx*gmag*fallVel, gravY = gy*gmag*fallVel;
+    // How much the gravitational field couples to velocity
+    float velFactor = (world == WORLD_SPACE) ? 0.2 : 0.0;
+    diffy = (1.0-velFactor)*gravY + *yvel_ptr;
+    diffx = (1.0-velFactor)*gravX + *xvel_ptr;
+    // Add scaled acceleration factor. Acceleration adds less at higher velocities
+    // (heuristic drag factor).
+    if (gy > 0.0 && velFactor*gravY > *yvel_ptr) {
+        *yvel_ptr += velFactor*gravY;
+    }
+    else if (gy < 0.0 && velFactor*gravY < *yvel_ptr) {
+        *yvel_ptr += velFactor*gravY;
+    }
+    if (gx > 0.0 && velFactor*gravX > *xvel_ptr) {
+        *xvel_ptr += velFactor*gravX;
+    }
+    else if (gx < 0.0 && velFactor*gravX < *xvel_ptr) {
+        *xvel_ptr += velFactor*gravX;
+    }
 
     //Boundary checking
     if (!checkBoundariesAndMove(x_ptr, y_ptr, diffx, diffy))
@@ -351,7 +369,8 @@ int updateKinetic(int index)
     }
     //Reduce velocities
     float inertiaScale = (world == WORLD_SPACE) ? 0.3 : 1.0;
-    updateVelocities(xvel_ptr, yvel_ptr, inertiaScale*a_element[index]->inertia);
+    float lowDragThresh = (world == WORLD_SPACE) ? 0.4 : 0.0;
+    updateVelocities(xvel_ptr, yvel_ptr, inertiaScale*a_element[index]->inertia, lowDragThresh);
 
     //Indicate that the particle has moved
     a_hasMoved[index] = TRUE;
