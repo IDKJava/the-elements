@@ -429,10 +429,10 @@ Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject t
         SpaceObj *next = &spaceObjs[numSpaceObjs];
         numSpaceObjs++;
         next->type = NULL_GRAVITY;
-        next->x = startX;
-        next->y = startY;
-        next->ex = endX;
-        next->ey = endY;
+        next->x = startX-fmod(startX, GF_BLOCK_SIZE);
+        next->y = startY-fmod(startY, GF_BLOCK_SIZE);
+        next->ex = endX-fmod(endX, GF_BLOCK_SIZE);
+        next->ey = endY-fmod(endY, GF_BLOCK_SIZE);
         updateGravityField(next, false);
         return true;
     }

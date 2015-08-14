@@ -125,7 +125,7 @@ static const char gMagFragShader[] =
     "precision mediump float;\n"
     "varying vec4 vMag;\n"
     "void main() {\n"
-    "  gl_FragColor = vMag[0]*vec4(10.0, 5.0, 0.0, 1.0) + vec4(0.2, 0.2, 0.2, 0.0);\n"
+    "  gl_FragColor = vMag[0]*vec4(10.0, 5.0, 0.0, 0.0) + vec4(0.2, 0.2, 0.2, 1.0);\n"
     "}\n";
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
@@ -274,6 +274,9 @@ void glInit() {
     printGLString("Vendor", GL_VENDOR);
     printGLString("Renderer", GL_RENDERER);
     printGLString("Extensions", GL_EXTENSIONS);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     LOGI("setupGraphics(%d, %d)", screenWidth, screenHeight);
     gProgram = createProgram(gVertexShader, gFragmentShader);
