@@ -350,6 +350,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 public void onClick(DialogInterface dialog, int item) {
                     // TODO(gkanwar): Set tool to brush
                     setElement((char) (item + NORMAL_ELEMENT));
+                    sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                    menu_bar.setToolIcon(R.drawable.palette);
                     setPlaying(play);
                     dialog.dismiss();
                 }
