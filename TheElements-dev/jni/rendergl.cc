@@ -382,6 +382,32 @@ void makeSpriteSquare(float cx, float cy, float radx, float rady,
     texCoords.push_back(1.0);
 }
 
+void makeLineRect(float sx, float sy, float ex, float ey,
+    vector<float> &verts) {
+    verts.push_back(sx);
+    verts.push_back(sy);
+    verts.push_back(sx);
+    verts.push_back(ey);
+
+
+    verts.push_back(sx);
+    verts.push_back(ey);
+    verts.push_back(ex);
+    verts.push_back(ey);
+
+
+    verts.push_back(ex);
+    verts.push_back(ey);
+    verts.push_back(ex);
+    verts.push_back(sy);
+
+
+    verts.push_back(ex);
+    verts.push_back(sy);
+    verts.push_back(sx);
+    verts.push_back(sy);
+}
+
 void glRender() {
     // Update dimensions
     texture[2] = (float) workWidth/texWidth;
@@ -437,14 +463,16 @@ void glRender() {
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     // Build OpenGL arrays for sprites
+    // TODO: Build arrays at time of sprite addition to scene
     vector<float> bhVerts;
     vector<float> bhTexCoords;
     vector<float> whVerts;
     vector<float> whTexCoords;
     vector<float> chVerts;
     vector<float> chTexCoords;
-    vector<float> ngVerts;
+    vector<float> ngTermVerts;
     vector<float> ngTexCoords;
+    vector<float> ngSideVerts;
     const float radX = 10.0/workWidth;
     const float radY = 10.0/workHeight;
     for (int i = 0; i < numSpaceObjs; ++i) {
@@ -460,10 +488,11 @@ void glRender() {
             makeSpriteSquare(fx, fy, radX, radY, chVerts, chTexCoords);
         }
         else if (h.type == NULL_GRAVITY) {
-            makeSpriteSquare(fx, fy, radX, radY, ngVerts, ngTexCoords);
-            fx = h.ex/(float)workWidth;
-            fy = 1.0 - h.ey/(float)workHeight;
-            makeSpriteSquare(fx, fy, radX, radY, ngVerts, ngTexCoords);
+            makeSpriteSquare(fx, fy, radX, radY, ngTermVerts, ngTexCoords);
+            float ex = h.ex/(float)workWidth;
+            float ey = 1.0 - h.ey/(float)workHeight;
+            makeSpriteSquare(ex, ey, radX, radY, ngTermVerts, ngTexCoords);
+            makeLineRect(fx, fy, ex, ey, ngSideVerts);
         }
     }
 
@@ -549,11 +578,11 @@ void glRender() {
     chTexCoords.clear();
 
     // Draw null gravity terminal sprites
-    int ngSize = ngVerts.size();
+    int ngSize = ngTermVerts.size();
     if (ngSize > 0) {
-        float *ngVertsArr = (float*) malloc(ngSize*sizeof(float));
+        float *ngTermVertsArr = (float*) malloc(ngSize*sizeof(float));
         for (int i = 0; i < ngSize; ++i) {
-            ngVertsArr[i] = ngVerts[i];
+            ngTermVertsArr[i] = ngTermVerts[i];
         }
         float *ngTexArr = (float*) malloc(ngSize*sizeof(float));
         for (int i = 0; i < ngSize; ++i) {
@@ -563,16 +592,16 @@ void glRender() {
         // Swap to ng texture
         glBindTexture(GL_TEXTURE_2D, ngTex);
         glEnableVertexAttribArray(gvPositionHandle);
-        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngVertsArr);
+        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTermVertsArr);
         glEnableVertexAttribArray(mTextureCoordinateHandle);
         glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTexArr);
 
         glDrawArrays(GL_TRIANGLES, 0, ngSize/2);
 
-        free(ngVertsArr);
+        free(ngTermVertsArr);
         free(ngTexArr);
     }
-    ngVerts.clear();
+    ngTermVerts.clear();
     ngTexCoords.clear();
 
     // Draw gravity field
@@ -585,6 +614,30 @@ void glRender() {
     glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
 
     glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
+
+    // Draw the null gravity rect lines using the grav program
+    int ngLineSize = ngSideVerts.size();
+    if (ngLineSize > 0) {
+        float *ngLineVertsArr = (float*) malloc(ngLineSize*sizeof(float));
+        float *ngLineMagArr = (float*) malloc((ngLineSize/2)*sizeof(float));
+        for (int i = 0; i < ngLineSize; ++i) {
+            ngLineVertsArr[i] = ngSideVerts[i];
+            if (i % 2 == 0) {
+                ngLineMagArr[i/2] = 1.0;
+            }
+        }
+
+        glEnableVertexAttribArray(gGravVPositionHandle);
+        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngLineVertsArr);
+        glEnableVertexAttribArray(gGravVMagHandle);
+        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, ngLineMagArr);
+
+        glDrawArrays(GL_LINES, 0, ngLineSize/2);
+
+        free(ngLineVertsArr);
+        free(ngLineMagArr);
+    }
+    ngSideVerts.clear();
 }
 
 void glRenderThreaded()
