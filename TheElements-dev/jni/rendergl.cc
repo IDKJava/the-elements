@@ -465,182 +465,184 @@ void glRender() {
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    // Build OpenGL arrays for sprites
-    // TODO: Build arrays at time of sprite addition to scene
-    vector<float> bhVerts;
-    vector<float> bhTexCoords;
-    vector<float> whVerts;
-    vector<float> whTexCoords;
-    vector<float> chVerts;
-    vector<float> chTexCoords;
-    vector<float> ngTermVerts;
-    vector<float> ngTexCoords;
-    vector<float> ngSideVerts;
-    const float radX = 10.0/workWidth;
-    const float radY = 10.0/workHeight;
-    for (int i = 0; i < numSpaceObjs; ++i) {
-        const SpaceObj &h = spaceObjs[i];
-        float fx = h.x/(float)workWidth, fy = 1.0 - h.y/(float)workHeight;
-        if (h.type == BLACK_HOLE) {
-            makeSpriteSquare(fx, fy, radX, radY, bhVerts, bhTexCoords);
-        }
-        else if (h.type == WHITE_HOLE) {
-            makeSpriteSquare(fx, fy, radX, radY, whVerts, whTexCoords);
-        }
-        else if (h.type == CURL_HOLE) {
-            makeSpriteSquare(fx, fy, radX, radY, chVerts, chTexCoords);
-        }
-        else if (h.type == NULL_GRAVITY) {
-            makeSpriteSquare(fx, fy, radX, radY, ngTermVerts, ngTexCoords);
-            float ex = h.ex/(float)workWidth;
-            float ey = 1.0 - h.ey/(float)workHeight;
-            makeSpriteSquare(ex, ey, radX, radY, ngTermVerts, ngTexCoords);
-            makeLineRect(fx, fy, ex, ey, ngSideVerts);
-        }
-    }
-
-    // Draw black hole sprites
-    int bhSize = bhVerts.size();
-    if (bhSize > 0) {
-        float *bhVertsArr = (float*) malloc(bhSize*sizeof(float));
-        for (int i = 0; i < bhSize; ++i) {
-            bhVertsArr[i] = bhVerts[i];
-        }
-        float *bhTexArr = (float*) malloc(bhSize*sizeof(float));
-        for (int i = 0; i < bhSize; ++i) {
-            bhTexArr[i] = bhTexCoords[i];
-        }
-
-        // Swap to bh texture
-        glBindTexture(GL_TEXTURE_2D, bhTex);
-        glEnableVertexAttribArray(gvPositionHandle);
-        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, bhVertsArr);
-        glEnableVertexAttribArray(mTextureCoordinateHandle);
-        glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, bhTexArr);
-
-        glDrawArrays(GL_TRIANGLES, 0, bhSize/2);
-
-        free(bhVertsArr);
-        free(bhTexArr);
-    }
-    bhVerts.clear();
-    bhTexCoords.clear();
-
-    // Draw white hole sprites
-    int whSize = whVerts.size();
-    if (whSize > 0) {
-        float *whVertsArr = (float*) malloc(whSize*sizeof(float));
-        for (int i = 0; i < whSize; ++i) {
-            whVertsArr[i] = whVerts[i];
-        }
-        float *whTexArr = (float*) malloc(whSize*sizeof(float));
-        for (int i = 0; i < whSize; ++i) {
-            whTexArr[i] = whTexCoords[i];
-        }
-
-        // Swap to wh texture
-        glBindTexture(GL_TEXTURE_2D, whTex);
-        glEnableVertexAttribArray(gvPositionHandle);
-        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, whVertsArr);
-        glEnableVertexAttribArray(mTextureCoordinateHandle);
-        glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, whTexArr);
-
-        glDrawArrays(GL_TRIANGLES, 0, whSize/2);
-
-        free(whVertsArr);
-        free(whTexArr);
-    }
-    whVerts.clear();
-    whTexCoords.clear();
-
-    // Draw curl hole sprites
-    int chSize = chVerts.size();
-    if (chSize > 0) {
-        float *chVertsArr = (float*) malloc(chSize*sizeof(float));
-        for (int i = 0; i < chSize; ++i) {
-            chVertsArr[i] = chVerts[i];
-        }
-        float *chTexArr = (float*) malloc(chSize*sizeof(float));
-        for (int i = 0; i < chSize; ++i) {
-            chTexArr[i] = chTexCoords[i];
-        }
-
-        // Swap to ch texture
-        glBindTexture(GL_TEXTURE_2D, chTex);
-        glEnableVertexAttribArray(gvPositionHandle);
-        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, chVertsArr);
-        glEnableVertexAttribArray(mTextureCoordinateHandle);
-        glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, chTexArr);
-
-        glDrawArrays(GL_TRIANGLES, 0, chSize/2);
-
-        free(chVertsArr);
-        free(chTexArr);
-    }
-    chVerts.clear();
-    chTexCoords.clear();
-
-    // Draw null gravity terminal sprites
-    int ngSize = ngTermVerts.size();
-    if (ngSize > 0) {
-        float *ngTermVertsArr = (float*) malloc(ngSize*sizeof(float));
-        for (int i = 0; i < ngSize; ++i) {
-            ngTermVertsArr[i] = ngTermVerts[i];
-        }
-        float *ngTexArr = (float*) malloc(ngSize*sizeof(float));
-        for (int i = 0; i < ngSize; ++i) {
-            ngTexArr[i] = ngTexCoords[i];
-        }
-
-        // Swap to ng texture
-        glBindTexture(GL_TEXTURE_2D, ngTex);
-        glEnableVertexAttribArray(gvPositionHandle);
-        glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTermVertsArr);
-        glEnableVertexAttribArray(mTextureCoordinateHandle);
-        glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTexArr);
-
-        glDrawArrays(GL_TRIANGLES, 0, ngSize/2);
-
-        free(ngTermVertsArr);
-        free(ngTexArr);
-    }
-    ngTermVerts.clear();
-    ngTexCoords.clear();
-
-    // Draw gravity field
-    // TODO: Do this only conditionally
-    glUseProgram(gGravProgram);
-    glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
-    glEnableVertexAttribArray(gGravVPositionHandle);
-    glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
-    glEnableVertexAttribArray(gGravVMagHandle);
-    glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
-
-    glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
-
-    // Draw the null gravity rect lines using the grav program
-    int ngLineSize = ngSideVerts.size();
-    if (ngLineSize > 0) {
-        float *ngLineVertsArr = (float*) malloc(ngLineSize*sizeof(float));
-        float *ngLineMagArr = (float*) malloc((ngLineSize/2)*sizeof(float));
-        for (int i = 0; i < ngLineSize; ++i) {
-            ngLineVertsArr[i] = ngSideVerts[i];
-            if (i % 2 == 0) {
-                ngLineMagArr[i/2] = 1.0;
+    if (world == WORLD_SPACE) {
+        // Build OpenGL arrays for sprites
+        // TODO: Build arrays at time of sprite addition to scene
+        vector<float> bhVerts;
+        vector<float> bhTexCoords;
+        vector<float> whVerts;
+        vector<float> whTexCoords;
+        vector<float> chVerts;
+        vector<float> chTexCoords;
+        vector<float> ngTermVerts;
+        vector<float> ngTexCoords;
+        vector<float> ngSideVerts;
+        const float radX = 10.0/workWidth;
+        const float radY = 10.0/workHeight;
+        for (int i = 0; i < numSpaceObjs; ++i) {
+            const SpaceObj &h = spaceObjs[i];
+            float fx = h.x/(float)workWidth, fy = 1.0 - h.y/(float)workHeight;
+            if (h.type == BLACK_HOLE) {
+                makeSpriteSquare(fx, fy, radX, radY, bhVerts, bhTexCoords);
+            }
+            else if (h.type == WHITE_HOLE) {
+                makeSpriteSquare(fx, fy, radX, radY, whVerts, whTexCoords);
+            }
+            else if (h.type == CURL_HOLE) {
+                makeSpriteSquare(fx, fy, radX, radY, chVerts, chTexCoords);
+            }
+            else if (h.type == NULL_GRAVITY) {
+                makeSpriteSquare(fx, fy, radX, radY, ngTermVerts, ngTexCoords);
+                float ex = h.ex/(float)workWidth;
+                float ey = 1.0 - h.ey/(float)workHeight;
+                makeSpriteSquare(ex, ey, radX, radY, ngTermVerts, ngTexCoords);
+                makeLineRect(fx, fy, ex, ey, ngSideVerts);
             }
         }
 
+        // Draw black hole sprites
+        int bhSize = bhVerts.size();
+        if (bhSize > 0) {
+            float *bhVertsArr = (float*) malloc(bhSize*sizeof(float));
+            for (int i = 0; i < bhSize; ++i) {
+                bhVertsArr[i] = bhVerts[i];
+            }
+            float *bhTexArr = (float*) malloc(bhSize*sizeof(float));
+            for (int i = 0; i < bhSize; ++i) {
+                bhTexArr[i] = bhTexCoords[i];
+            }
+
+            // Swap to bh texture
+            glBindTexture(GL_TEXTURE_2D, bhTex);
+            glEnableVertexAttribArray(gvPositionHandle);
+            glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, bhVertsArr);
+            glEnableVertexAttribArray(mTextureCoordinateHandle);
+            glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, bhTexArr);
+
+            glDrawArrays(GL_TRIANGLES, 0, bhSize/2);
+
+            free(bhVertsArr);
+            free(bhTexArr);
+        }
+        bhVerts.clear();
+        bhTexCoords.clear();
+
+        // Draw white hole sprites
+        int whSize = whVerts.size();
+        if (whSize > 0) {
+            float *whVertsArr = (float*) malloc(whSize*sizeof(float));
+            for (int i = 0; i < whSize; ++i) {
+                whVertsArr[i] = whVerts[i];
+            }
+            float *whTexArr = (float*) malloc(whSize*sizeof(float));
+            for (int i = 0; i < whSize; ++i) {
+                whTexArr[i] = whTexCoords[i];
+            }
+
+            // Swap to wh texture
+            glBindTexture(GL_TEXTURE_2D, whTex);
+            glEnableVertexAttribArray(gvPositionHandle);
+            glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, whVertsArr);
+            glEnableVertexAttribArray(mTextureCoordinateHandle);
+            glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, whTexArr);
+
+            glDrawArrays(GL_TRIANGLES, 0, whSize/2);
+
+            free(whVertsArr);
+            free(whTexArr);
+        }
+        whVerts.clear();
+        whTexCoords.clear();
+
+        // Draw curl hole sprites
+        int chSize = chVerts.size();
+        if (chSize > 0) {
+            float *chVertsArr = (float*) malloc(chSize*sizeof(float));
+            for (int i = 0; i < chSize; ++i) {
+                chVertsArr[i] = chVerts[i];
+            }
+            float *chTexArr = (float*) malloc(chSize*sizeof(float));
+            for (int i = 0; i < chSize; ++i) {
+                chTexArr[i] = chTexCoords[i];
+            }
+
+            // Swap to ch texture
+            glBindTexture(GL_TEXTURE_2D, chTex);
+            glEnableVertexAttribArray(gvPositionHandle);
+            glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, chVertsArr);
+            glEnableVertexAttribArray(mTextureCoordinateHandle);
+            glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, chTexArr);
+
+            glDrawArrays(GL_TRIANGLES, 0, chSize/2);
+
+            free(chVertsArr);
+            free(chTexArr);
+        }
+        chVerts.clear();
+        chTexCoords.clear();
+
+        // Draw null gravity terminal sprites
+        int ngSize = ngTermVerts.size();
+        if (ngSize > 0) {
+            float *ngTermVertsArr = (float*) malloc(ngSize*sizeof(float));
+            for (int i = 0; i < ngSize; ++i) {
+                ngTermVertsArr[i] = ngTermVerts[i];
+            }
+            float *ngTexArr = (float*) malloc(ngSize*sizeof(float));
+            for (int i = 0; i < ngSize; ++i) {
+                ngTexArr[i] = ngTexCoords[i];
+            }
+
+            // Swap to ng texture
+            glBindTexture(GL_TEXTURE_2D, ngTex);
+            glEnableVertexAttribArray(gvPositionHandle);
+            glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTermVertsArr);
+            glEnableVertexAttribArray(mTextureCoordinateHandle);
+            glVertexAttribPointer(mTextureCoordinateHandle, 2, GL_FLOAT, GL_FALSE, 0, ngTexArr);
+
+            glDrawArrays(GL_TRIANGLES, 0, ngSize/2);
+
+            free(ngTermVertsArr);
+            free(ngTexArr);
+        }
+        ngTermVerts.clear();
+        ngTexCoords.clear();
+
+        // Draw gravity field
+        // TODO: Do this only conditionally
+        glUseProgram(gGravProgram);
+        glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
         glEnableVertexAttribArray(gGravVPositionHandle);
-        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngLineVertsArr);
+        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
         glEnableVertexAttribArray(gGravVMagHandle);
-        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, ngLineMagArr);
+        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
 
-        glDrawArrays(GL_LINES, 0, ngLineSize/2);
+        glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
 
-        free(ngLineVertsArr);
-        free(ngLineMagArr);
+        // Draw the null gravity rect lines using the grav program
+        int ngLineSize = ngSideVerts.size();
+        if (ngLineSize > 0) {
+            float *ngLineVertsArr = (float*) malloc(ngLineSize*sizeof(float));
+            float *ngLineMagArr = (float*) malloc((ngLineSize/2)*sizeof(float));
+            for (int i = 0; i < ngLineSize; ++i) {
+                ngLineVertsArr[i] = ngSideVerts[i];
+                if (i % 2 == 0) {
+                    ngLineMagArr[i/2] = 1.0;
+                }
+            }
+
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngLineVertsArr);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, ngLineMagArr);
+
+            glDrawArrays(GL_LINES, 0, ngLineSize/2);
+
+            free(ngLineVertsArr);
+            free(ngLineMagArr);
+        }
+        ngSideVerts.clear();
     }
-    ngSideVerts.clear();
 }
 
 void glRenderThreaded()

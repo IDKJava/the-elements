@@ -354,6 +354,9 @@ Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject 
 
 JNIEXPORT jboolean JNICALL
 Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    if (world != WORLD_SPACE) {
+        return false;
+    }
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
     float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
@@ -374,6 +377,9 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
 
 JNIEXPORT jboolean JNICALL
 Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    if (world != WORLD_SPACE) {
+        return false;
+    }
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
     float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
@@ -394,6 +400,9 @@ Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thi
 
 JNIEXPORT jboolean JNICALL
 Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+    if (world != WORLD_SPACE) {
+        return false;
+    }
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
     float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
@@ -415,6 +424,9 @@ Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz
 JNIEXPORT jboolean JNICALL
 Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject thiz,
     jint sx, jint sy, jint ex, jint ey) {
+    if (world != WORLD_SPACE) {
+        return false;
+    }
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
     float startX = ((float)sx/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
@@ -441,6 +453,9 @@ Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject t
 
 JNIEXPORT jboolean JNICALL
 Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject thiz, jint x, jint y) {
+    if (world != WORLD_SPACE) {
+        return false;
+    }
     float modViewWidth = viewWidth * zoomScale;
     float modViewHeight = viewHeight * zoomScale;
     float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));

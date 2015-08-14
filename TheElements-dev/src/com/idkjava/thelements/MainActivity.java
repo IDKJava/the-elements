@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -26,7 +25,6 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +33,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,8 +72,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static final int WORLD_DIALOG = 8;
 
     // Constants for worlds (MUST match macros in native lib)
-    private static final int EARTH_WORLD = 0;
-    private static final int SPACE_WORLD = 1;
+    private static final int WORLD_EARTH = 0;
+    private static final int WORLD_SPACE = 1;
 
     // Constants for elements
     public static final char ERASER_ELEMENT = 2;
@@ -95,16 +92,39 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;
-    static ArrayList<IconListItem> toolList =  new ArrayList<>(Arrays.asList(
+
+    static ArrayList<IconListItem> baseToolList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
-            new IconListItem(R.string.eraser, R.drawable.eraser_on),
+            new IconListItem(R.string.eraser, R.drawable.eraser_on)
+    ));
+    static ArrayList<IconListItem> gravToolList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.make_black_hole, R.drawable.bt_icon),
             new IconListItem(R.string.make_white_hole, R.drawable.bt_icon),
             new IconListItem(R.string.make_curl_hole, R.drawable.bt_icon),
             new IconListItem(R.string.null_gravity_zone, R.drawable.bt_icon),
             new IconListItem(R.string.remove_gravity_object, R.drawable.eraser)
     ));
+    ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);
+    private void refreshToolList() {
+        if (curWorld == WORLD_EARTH) {
+            toolList = new ArrayList<>(baseToolList);
+        }
+        else if (curWorld == WORLD_SPACE) {
+            toolList = new ArrayList<>(baseToolList);
+            toolList.addAll(gravToolList);
+        }
+        else {
+            throw new RuntimeException("Tool set unspecified for world: " + curWorld);
+        }
+
+        if (mToolAdapter != null) {
+            mToolAdapter.clear();
+            mToolAdapter.addAll(toolList);
+            mToolAdapter.notifyDataSetChanged();
+        }
+    }
+
     static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
             new IconListItem(R.string.save, R.drawable.save),
@@ -147,6 +167,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private static float mDPI;
 
     private Tracker mTracker;
+    private int curWorld = WORLD_EARTH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -364,6 +385,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setTitle("Tools");
             builder.setOnCancelListener(this);
 
+            refreshToolList();
             mToolAdapter = new IconListAdapter(this, toolList);
             builder.setAdapter(mToolAdapter, new OnClickListener() {
                 @Override
@@ -389,6 +411,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             setElement(ERASER_ELEMENT);
                             break;
                         }
+
+                        // Gravity tools
                         case R.string.make_black_hole: {
                             sand_view.setTool(SandView.Tool.BH_TOOL);
                             break;
@@ -520,15 +544,22 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     switch (item.nameRes) {
                         case R.string.earth_world:
                             FlurryAgent.logEvent("Earth world select");
-                            setWorld(EARTH_WORLD);
+                            setWorld(WORLD_EARTH);
+                            curWorld = WORLD_EARTH;
                             break;
                         case R.string.space_world:
                             FlurryAgent.logEvent("Space world select");
-                            setWorld(SPACE_WORLD);
+                            setWorld(WORLD_SPACE);
+                            curWorld = WORLD_SPACE;
                             break;
                         default:
                             throw new RuntimeException("Unsupported record operation.");
                     }
+
+                    // Always reset tool to brush
+                    sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                    menu_bar.setToolIcon(R.drawable.palette);
+                    refreshToolList();
                 }
             });
 
