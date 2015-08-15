@@ -28,7 +28,7 @@ import com.winsontan520.wversionmanager.library.WVersionManager.WVersionManagerE
 public class MenuActivity extends ReportingActivity {
     public static Button start_game_button;
     public static Button custom_elements_button;
-    public static Button gravity_pack_button;
+    public static Button store_button;
     public static Button preferences_button;
     public static Button fix_me_button;
     public static Button how_to_play_button;
@@ -52,7 +52,7 @@ public class MenuActivity extends ReportingActivity {
         // Define all the objects
         start_game_button = (Button) findViewById(R.id.start_game_button);
         custom_elements_button = (Button) findViewById(R.id.custom_elements_button);
-        gravity_pack_button = (Button) findViewById(R.id.gravity_pack_button);
+        store_button = (Button) findViewById(R.id.unlock_features_button);
         preferences_button = (Button) findViewById(R.id.preferences_button);
         fix_me_button = (Button) findViewById(R.id.fix_me_button);
         how_to_play_button = (Button) findViewById(R.id.how_to_play_button);
@@ -76,14 +76,11 @@ public class MenuActivity extends ReportingActivity {
             }
         });
 
-        gravity_pack_button.setOnClickListener(new OnClickListener() {
+        store_button.setOnClickListener(new OnClickListener() {
            @Override
             public void onClick(View v) {
-               FlurryAgent.logEvent("Gravity pack button (main menu)");
-               // Start the gravity pack purchase
-               Intent i = new Intent(MenuActivity.this, PurchaseActivity.class);
-               i.putExtra("purchase_sku", ProductManager.SKU_GRAVITY_PACK);
-               startActivity(i);
+               FlurryAgent.logEvent("Store button (main menu)");
+               startActivity(new Intent(MenuActivity.this, PurchaseActivity.class));
            }
         });
 

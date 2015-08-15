@@ -33,6 +33,7 @@
 			android:layout_marginRight="10dip"
 			android:padding="3dip">
 			<ImageView
+				android:id="@+id/earth_world_icon"
 				android:layout_height="100dip"
 				android:layout_width="100dip"
 				android:src="@drawable/earth_icon"
@@ -44,6 +45,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
 				android:layout_marginTop="5dip"
+				android:layout_marginBottom="5dip"
 				android:layout_marginLeft="5dip">
 				<TextView
 					android:text="@string/earth_world"
@@ -100,6 +102,7 @@
 			android:layout_marginRight="10dip"
 			android:padding="3dip">
 			<ImageView
+				android:id="@+id/space_world_icon"
 				android:layout_height="100dip"
 				android:layout_width="100dip"
 				android:src="@drawable/icon2"
@@ -111,6 +114,7 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
 				android:layout_marginTop="5dip"
+				android:layout_marginBottom="5dip"
 				android:layout_marginLeft="5dip">
 				<TextView
 					android:text="@string/space_world"

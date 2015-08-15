@@ -86,6 +86,7 @@ public class ProductManager {
                 editor.putBoolean(SKU_GRAVITY_CH, true);
                 editor.putBoolean(SKU_GRAVITY_NG, true);
                 editor.putBoolean(SKU_GRAVITY_WH, true);
+                editor.putBoolean(SKU_GRAVITY_PACK, true);
                 editor.commit();
             }
 

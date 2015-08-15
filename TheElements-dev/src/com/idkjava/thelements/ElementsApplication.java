@@ -50,7 +50,12 @@ public class ElementsApplication extends Application {
         return sProductManager;
     }
 
+    public static boolean checkOwned(String sku) {
+        return sPrefs.getBoolean(sku, false);
+    }
+
     private void initAppSingletons() {
+        Log.d("TheElements", "Setting up app singletons: prefs, product manager");
         sPrefs = getSharedPreferences(PREFS_NAME, 0);
         sProductManager = new ProductManager(this, sPrefs);
     }

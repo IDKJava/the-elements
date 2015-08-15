@@ -53,6 +53,7 @@ import com.idkjava.thelements.game.MenuBar;
 import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.keys.APIKeys;
+import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.idkjava.thelements.proto.Messages.CustomElement;
@@ -169,13 +170,35 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private Tracker mTracker;
     private int curWorld = WORLD_EARTH;
 
+    private boolean checkWorldOwned(int world) {
+        if (world == WORLD_EARTH) return true;
+        else if (world == WORLD_SPACE) {
+            if (ElementsApplication.getPrefs().getBoolean(ProductManager.SKU_GRAVITY_PACK, false)) {
+                return true;
+            }
+            else {
+                Intent buyIntent = new Intent(this, PurchaseActivity.class);
+                buyIntent.putExtra("purchase_sku", ProductManager.SKU_GRAVITY_PACK);
+                startActivity(buyIntent);
+                finish();
+                return false;
+            }
+        }
+        else {
+            throw new RuntimeException("Unknown world in ownership check.");
+        }
+    }
+
     private void setWorldFromIntent() {
         Intent i = getIntent();
         if (i.hasExtra("world")) {
             int iWorld = i.getIntExtra("world", WORLD_EARTH);
             if (iWorld >= 0 && iWorld <= WORLD_SPACE) {
-                curWorld = iWorld;
-                setWorld(curWorld);
+                // Check that we own that world
+                if (checkWorldOwned(iWorld)) {
+                    curWorld = iWorld;
+                    setWorld(curWorld);
+                }
             }
         }
     }
@@ -562,13 +585,17 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     switch (item.nameRes) {
                         case R.string.earth_world:
                             FlurryAgent.logEvent("Earth world select");
-                            setWorld(WORLD_EARTH);
-                            curWorld = WORLD_EARTH;
+                            if (checkWorldOwned(WORLD_EARTH)) {
+                                setWorld(WORLD_EARTH);
+                                curWorld = WORLD_EARTH;
+                            }
                             break;
                         case R.string.space_world:
                             FlurryAgent.logEvent("Space world select");
-                            setWorld(WORLD_SPACE);
-                            curWorld = WORLD_SPACE;
+                            if (checkWorldOwned(WORLD_SPACE)) {
+                                setWorld(WORLD_SPACE);
+                                curWorld = WORLD_SPACE;
+                            }
                             break;
                         default:
                             throw new RuntimeException("Unsupported record operation.");

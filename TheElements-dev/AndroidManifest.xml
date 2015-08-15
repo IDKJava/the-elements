@@ -211,7 +211,10 @@
 
         <activity
             android:name=".PurchaseActivity"
-            android:label="@string/title_activity_purchase" >
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|fontScale"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
         </activity>
     </application>
 

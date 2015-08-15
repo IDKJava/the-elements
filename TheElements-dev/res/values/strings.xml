@@ -38,6 +38,7 @@
 <string name="about_button">About</string>
 <string name="custom_elements_button">Custom Elements</string>
 <string name="preferences_button">Preferences</string>
+    <string name="unlock_game_features">Unlock Game Features</string>
 <string name="sdcard_not_found">Warning: SD Card inaccessible. You will not be able to save or load.</string>
 <string name="eraser">Eraser</string>
 <string name="clear_screen">Clear Screen</string>
@@ -77,10 +78,16 @@
 
     <string name="earth_world">Earth</string>
     <string name="space_world">Space</string>
+    <string name="space_world_purchase">Buy Space World: $5.00</string>
+    <string name="space_world_owned">Space World: OWNED!</string>
+    <string name="space_world_owned_error">Error: You already own the space world!</string>
+    <string name="item_owned_error">Error: You already own that item!</string>
     <string name="bullet">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
     <string name="earth_world_desc_2">Average Earth atomspheric temperature.</string>
     <string name="space_world_desc_1">Dynamic gravity field determined by objects placed in the scene.</string>
     <string name="space_world_desc_2">Place astronomical objects: black, white, and curl holes.</string>
     <string name="space_world_desc_3">Box out null gravity zones.</string>
+
+    <string name="purchase_item">Unlock In-Game Item</string>
 </resources>

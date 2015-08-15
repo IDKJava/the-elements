@@ -25,10 +25,10 @@
 	    	android:background="@drawable/btn_mm" 
 	    	android:layout_height="34dip" android:textColor="#FFF" android:layout_marginTop="10dip"/>
 
-		<!-- Gravity pack buy button -->
+		<!-- Unlock items button -->
 		<Button
-			android:id="@+id/gravity_pack_button"
-			android:text="Gravity Pack"
+			android:id="@+id/unlock_features_button"
+			android:text="@string/unlock_game_features"
 			android:gravity="center"
 			android:background="@drawable/btn_mm"
 			android:textColor="#FFF"

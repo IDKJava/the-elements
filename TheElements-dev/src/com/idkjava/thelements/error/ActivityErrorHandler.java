@@ -32,5 +32,15 @@ public class ActivityErrorHandler implements ErrorHandler {
         });
     }
 
+    @Override
+    public void error(int resId) {
+        error(mAct.getResources().getString(resId));
+    }
+
+    @Override
+    public void clear() {
+        mAct = null;
+    }
+
     private Activity mAct;
 }
