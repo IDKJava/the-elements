@@ -8,7 +8,6 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.FloatMath;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.idkjava.thelements.MainActivity;
@@ -62,19 +61,13 @@ public class SandView extends GLSurfaceView
   private boolean handleBrushTouch(final MotionEvent event) {
     // Send the touch events to the native lib
     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-        Log.e("TheElements", "Brush down start");
         brushStartLocation((int) event.getX(), (int) event.getY());
-        Log.e("TheElements", "Brush down end");
     }
     else if (event.getAction() == MotionEvent.ACTION_UP) {
-        Log.e("TheElements", "Brush up start");
         brushEndLocation((int) event.getX(), (int) event.getY());
-        Log.e("TheElements", "Brush up end");
     }
     else {
-        Log.e("TheElements", "Brush move start");
         brushMoveLocation((int) event.getX(), (int) event.getY());
-        Log.e("TheElements", "Brush move end");
     }
     return true;
   }
@@ -112,11 +105,12 @@ public class SandView extends GLSurfaceView
     private int mRectStartX, mRectStartY;
     private boolean handleRectTouch(final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            // TODO: Send start rect signal
             mRectStartX = (int)event.getX();
             mRectStartY = (int)event.getY();
+            rectStart(mRectStartX, mRectStartY);
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
+            rectEnd();
             switch (mTool) {
                 case NG_TOOL:
                     makeNullGravity(mRectStartX, mRectStartY, (int) event.getX(), (int) event.getY());
@@ -126,7 +120,7 @@ public class SandView extends GLSurfaceView
             }
         }
         else {
-            // TODO: Send move signal to native
+            rectMove((int)event.getX(), (int)event.getY());
         }
         return true;
     }
@@ -188,6 +182,9 @@ public class SandView extends GLSurfaceView
   }
 
   //@formatter:off
+  private static native void rectStart(int x, int y);
+  private static native void rectMove(int x, int y);
+  private static native void rectEnd();
   private static native void brushStartLocation(int x, int y);
   private static native void brushMoveLocation(int x, int y);
   private static native void brushEndLocation(int x, int y);

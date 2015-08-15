@@ -643,6 +643,35 @@ void glRender() {
         }
         ngSideVerts.clear();
     }
+
+    // Currently drawing overlay
+    if (rectValid) {
+        float *rectCoords = new float[8];
+        float sx = rectSX/workWidth, sy = 1.0 - rectSY/workHeight,
+            ex = rectEX/workWidth, ey = 1.0 - rectEY/workHeight;
+        rectCoords[0] = sx;
+        rectCoords[1] = sy;
+        rectCoords[2] = sx;
+        rectCoords[3] = ey;
+        rectCoords[4] = ex;
+        rectCoords[5] = ey;
+        rectCoords[6] = ex;
+        rectCoords[7] = sy;
+        // Mag chosen for a slightly different color than the null gravity rect
+        float *magVals = new float[4];
+        magVals[0] = magVals[1] = magVals[2] = magVals[3] = 0.1;
+        glUseProgram(gGravProgram);
+        glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+        glEnableVertexAttribArray(gGravVPositionHandle);
+        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, rectCoords);
+        glEnableVertexAttribArray(gGravVMagHandle);
+        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
+
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+        free(rectCoords);
+        free(magVals);
+    }
 }
 
 void glRenderThreaded()

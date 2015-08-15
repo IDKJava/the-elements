@@ -147,6 +147,10 @@
     extern unsigned char* colors;
     extern unsigned char* colorsFrameBuffer;
 
+//Currently drawing rect
+    extern int rectValid;
+    extern float rectSX, rectSY, rectEX, rectEY;
+
 //Screen dimensions
     extern int screenWidth;
     extern int screenHeight;

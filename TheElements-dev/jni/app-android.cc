@@ -311,6 +311,33 @@ Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, bhArr, 0);
 }
 JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    rectValid = true;
+    rectSX = rectEX = mX;
+    rectSY = rectEY = mY;
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_rectMove(JNIEnv* env, jobject thiz, jint x, jint y) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    mX /= zoomFactor;
+    mY /= zoomFactor;
+    rectEX = mX;
+    rectEY = mY;
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_rectEnd(JNIEnv* env, jobject thiz) {
+    rectValid = false;
+}
+JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
     float modViewWidth = viewWidth * zoomScale;
@@ -475,7 +502,7 @@ Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject 
             dist = objDist;
         }
         // Deleting null gravity zone should work from either terminal
-        else if (obj->type == NULL_GRAVITY) {
+        if (obj->type == NULL_GRAVITY) {
             dx = obj->ex - mX;
             dy = obj->ey - mY;
             objDist = dx*dx+dy*dy;

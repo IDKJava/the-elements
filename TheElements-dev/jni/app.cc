@@ -69,6 +69,9 @@ int randOffset = 0;
 unsigned char* colors = NULL;
 unsigned char* colorsFrameBuffer = NULL;
 
+int rectValid = false;
+float rectSX, rectSY, rectEX, rectEY;
+
 int screenWidth;
 int screenHeight;
 int workWidth;
