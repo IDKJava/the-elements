@@ -147,6 +147,7 @@ void elementSetup()
             tempElement = (struct Element*) malloc(sizeof(struct Element));
             elements[i] = tempElement;
             tempElement->index = i;
+            tempElement->base = i;
             tempElement->name = baseName[i];
             tempElement->red = baseRed[i];
             tempElement->green = baseGreen[i];

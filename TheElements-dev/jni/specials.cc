@@ -70,7 +70,12 @@ void specialSpawn(int particle)
                 }
                 else if (tempAllCoords == -1 && rand() % GENERATOR_SPAWN_PROB == 0 && loq < MAX_POINTS - 1) //There's an empty spot
                 {
-                    createPoint(tempX + diffX, tempY + diffY, elements[getParticleSpecialVal(particle, SPECIAL_SPAWN)]);
+                    int eltIndex = getParticleSpecialVal(particle, SPECIAL_SPAWN);
+                    if (eltIndex < 0 || eltIndex >= numElements) {
+                        LOGE("Invalid special spawn value: %d", eltIndex);
+                        eltIndex = SAND_ELEMENT;
+                    }
+                    createPoint(tempX + diffX, tempY + diffY, elements[eltIndex]);
                 }
             }
         }
