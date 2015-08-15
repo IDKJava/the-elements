@@ -4,6 +4,7 @@ import java.util.Hashtable;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -25,7 +27,8 @@ public class MenuBar extends LinearLayout {
     private SandView m_sandView = null;
 
     private ImageButton mPlayPauseButton;
-    private Button mToolButton;
+    private View mToolButton;
+    private ImageView mToolButtonIcon;
     private Button mUtilButton;
     private Button mRecordButton;
 
@@ -41,7 +44,7 @@ public class MenuBar extends LinearLayout {
     }
 
     public void setToolIcon(int toolIcon) {
-        mToolButton.setCompoundDrawablesWithIntrinsicBounds(toolIcon, 0, 0, 0);
+        mToolButtonIcon.setImageResource(toolIcon);
     }
 
     // Set the eraser to the off position
@@ -59,7 +62,8 @@ public class MenuBar extends LinearLayout {
     protected void onFinishInflate() {
 
         mPlayPauseButton = (ImageButton) findViewById(R.id.play_pause_button);
-        mToolButton = (Button) findViewById(R.id.tool_button);
+        mToolButton = findViewById(R.id.tool_button);
+        mToolButtonIcon = (ImageView) findViewById(R.id.tool_button_icon);
         mUtilButton = (Button) findViewById(R.id.util_button);
         mRecordButton = (Button) findViewById(R.id.record_button);
 

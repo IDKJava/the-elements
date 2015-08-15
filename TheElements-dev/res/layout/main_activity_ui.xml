@@ -24,14 +24,27 @@
             android:layout_width="1px"
             android:background="#90909090"/>
 
-        <Button
+        <LinearLayout
             android:id="@+id/tool_button"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
+            android:layout_width="0px"
             android:layout_height="fill_parent"
-            android:drawableLeft="@drawable/palette"
-            android:layout_weight="1"
-            android:text="@string/tool_button_text"/>
+            android:clickable="true"
+            android:layout_weight="3">
+            <ImageView
+                android:layout_width="35dip"
+                android:layout_height="35dip"
+                android:id="@+id/tool_button_icon"
+                android:src="@drawable/palette"
+                android:scaleType="fitCenter"/>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="#f3f3f3"
+                android:text="@string/tool_button_text"/>
+        </LinearLayout>
 
         <View android:layout_height="fill_parent"
             android:layout_width="1px"
@@ -40,9 +53,10 @@
         <Button
             android:id="@+id/util_button"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:textColor="#f3f3f3"
             android:text="@string/util_button_text"/>
 
         <View android:layout_height="fill_parent"
@@ -52,9 +66,10 @@
         <Button
             android:id="@+id/record_button"
             style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="fill_parent"
+            android:layout_width="0dp"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
+            android:layout_weight="2"
+            android:textColor="#f3f3f3"
             android:text="@string/record_button_text"/>
 
     </com.idkjava.thelements.game.MenuBar>

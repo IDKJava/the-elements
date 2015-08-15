@@ -58,8 +58,6 @@ import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 import com.kamcord.android.Kamcord;
-import com.pollfish.constants.Position;
-import com.pollfish.main.PollFish;
 
 public class MainActivity extends ReportingActivity implements DialogInterface.OnCancelListener {
     // Constants for dialogue ids
@@ -100,7 +98,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.eraser, R.drawable.eraser_on)
     ));
     static ArrayList<IconListItem> gravToolList = new ArrayList<>(Arrays.asList(
-            new IconListItem(R.string.make_black_hole, R.drawable.bt_icon),
+            new IconListItem(R.string.make_black_hole, R.drawable.bh_tex),
             new IconListItem(R.string.make_white_hole, R.drawable.bt_icon),
             new IconListItem(R.string.make_curl_hole, R.drawable.bt_icon),
             new IconListItem(R.string.null_gravity_zone, R.drawable.bt_icon),
@@ -295,8 +293,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Get world info from intent, if present
         setWorldFromIntent();
-
-        PollFish.init(this, APIKeys.pollfishAPIKey, Position.BOTTOM_RIGHT, 0);
 
         // Load the settings shared preferences which deals with if we're
         // resuming from pause or not
