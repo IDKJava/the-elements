@@ -54,7 +54,7 @@ public class SelectWorldActivity extends Activity {
         if (!ElementsApplication.getPrefs().getBoolean(ProductManager.SKU_GRAVITY_PACK, false)) {
             // Show button locked mode
             ImageView spaceWorldIcon = (ImageView) findViewById(R.id.space_world_icon);
-            spaceWorldIcon.setImageResource(R.drawable.eraser);
+            spaceWorldIcon.setImageResource(R.drawable.space_icon_locked);
         }
     }
 }
