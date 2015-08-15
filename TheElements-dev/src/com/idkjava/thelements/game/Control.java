@@ -34,6 +34,10 @@ public class Control extends LinearLayout {
         activity = act;
     }
 
+    public void setWorldIcon(int resId) {
+        world_select_button.setImageResource(resId);
+    }
+
     // Called once the the xml is finished inflating
     @Override
     protected void onFinishInflate() {

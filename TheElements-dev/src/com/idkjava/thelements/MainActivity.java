@@ -138,8 +138,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     ));
     // TODO: Fix UI for world selection
     static ArrayList<IconListItem> worldList = new ArrayList<>(Arrays.asList(
-            new IconListItem(R.string.earth_world, R.drawable.hand_icon),
-            new IconListItem(R.string.space_world, R.drawable.kamcord_back_icon)
+            new IconListItem(R.string.earth_world, R.drawable.earth_icon_button),
+            new IconListItem(R.string.space_world, R.drawable.space_icon_button)
     ));
 
     public static boolean play;
@@ -189,6 +189,21 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
     }
 
+    private void setCurWorld(int world) {
+        curWorld = world;
+        setWorld(world);
+        switch(world) {
+            case WORLD_EARTH:
+                control.setWorldIcon(R.drawable.earth_icon_button);
+                break;
+            case WORLD_SPACE:
+                control.setWorldIcon(R.drawable.space_icon_button);
+                break;
+            default:
+                throw new RuntimeException("Unknown world when setting control icon");
+        }
+    }
+
     private void setWorldFromIntent() {
         Intent i = getIntent();
         if (i.hasExtra("world")) {
@@ -196,8 +211,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             if (iWorld >= 0 && iWorld <= WORLD_SPACE) {
                 // Check that we own that world
                 if (checkWorldOwned(iWorld)) {
-                    curWorld = iWorld;
-                    setWorld(curWorld);
+                    setCurWorld(iWorld);
                 }
             }
         }
@@ -207,9 +221,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     protected void onCreate(Bundle savedInstanceState) {
         // Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
-
-        // Get world info from intent, if present
-        setWorldFromIntent();
 
         // Set up EasyTracker custom error reporting
         EasyTracker curTracker = EasyTracker.getInstance(this);
@@ -228,6 +239,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         setUpViews();
+
+        // Get world info from intent, if present
+        // NOTE: Must be after setUpViews, so that we can update view states to reflect
+        // our current world.
+        setWorldFromIntent();
 
         elementsList = new ArrayList<String>();
 
@@ -586,15 +602,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         case R.string.earth_world:
                             FlurryAgent.logEvent("Earth world select");
                             if (checkWorldOwned(WORLD_EARTH)) {
-                                setWorld(WORLD_EARTH);
-                                curWorld = WORLD_EARTH;
+                                setCurWorld(WORLD_EARTH);
                             }
                             break;
                         case R.string.space_world:
                             FlurryAgent.logEvent("Space world select");
                             if (checkWorldOwned(WORLD_SPACE)) {
-                                setWorld(WORLD_SPACE);
-                                curWorld = WORLD_SPACE;
+                                setCurWorld(WORLD_SPACE);
                             }
                             break;
                         default:

@@ -105,7 +105,7 @@
 				android:id="@+id/space_world_icon"
 				android:layout_height="100dip"
 				android:layout_width="100dip"
-				android:src="@drawable/icon2"
+				android:src="@drawable/space_icon"
 				android:layout_marginRight="5dip"
 				android:layout_margin="3dip"
 				android:layout_gravity="center_vertical" />

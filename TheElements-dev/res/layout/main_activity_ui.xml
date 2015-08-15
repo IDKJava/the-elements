@@ -107,7 +107,9 @@
             android:layout_height="42dip"
             android:layout_margin="3dip"
             android:background="@drawable/btn_ui_element"
-            android:src="@drawable/kamcord_edit_video_icon" />
+            android:padding="5dip"
+            android:scaleType="fitCenter"
+            android:src="@drawable/earth_icon_button" />
 
         <!-- Brush Size Seekbar -->
 
