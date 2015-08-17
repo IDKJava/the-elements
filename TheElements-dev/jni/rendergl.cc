@@ -350,8 +350,7 @@ void glInit() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // NOTE: BH tex image MUST be power-of-two dimensions
-    // TODO: Replace with null gravity terminus sprite
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bhTexWidth, bhTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bhTexPixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, ngTexWidth, ngTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, ngTexPixels);
     return;
 }
 
@@ -449,8 +448,6 @@ void glRender() {
     float top = modCenterY + modViewHeight;
     float bottom = modCenterY - modViewHeight;
 
-
-    //TODO: Figure out why everything here is multiplied by 0.5 (probaly should reverse the verticies being 2.0 o something)
     setOthographicMat(left/(screenWidth), right/(screenWidth), top/(screenHeight), bottom/(screenHeight), 1, -1, proj);
 
     glUniformMatrix4fv(mProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
@@ -497,6 +494,45 @@ void glRender() {
                 makeLineRect(fx, fy, ex, ey, ngSideVerts);
             }
         }
+        
+        // Draw gravity field
+        // TODO: Do this only conditionally
+        glUseProgram(gGravProgram);
+        glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+        glEnableVertexAttribArray(gGravVPositionHandle);
+        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
+        glEnableVertexAttribArray(gGravVMagHandle);
+        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
+
+        glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
+
+        // Draw the null gravity rect lines using the grav program
+        int ngLineSize = ngSideVerts.size();
+        if (ngLineSize > 0) {
+            float *ngLineVertsArr = (float*) malloc(ngLineSize*sizeof(float));
+            float *ngLineMagArr = (float*) malloc((ngLineSize/2)*sizeof(float));
+            for (int i = 0; i < ngLineSize; ++i) {
+                ngLineVertsArr[i] = ngSideVerts[i];
+                if (i % 2 == 0) {
+                    ngLineMagArr[i/2] = 1.0;
+                }
+            }
+
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngLineVertsArr);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, ngLineMagArr);
+
+            glDrawArrays(GL_LINES, 0, ngLineSize/2);
+
+            free(ngLineVertsArr);
+            free(ngLineMagArr);
+        }
+        ngSideVerts.clear();
+
+        // Switch to texture rect program
+        glUseProgram(gProgram);
+        glUniformMatrix4fv(mProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
 
         // Draw black hole sprites
         int bhSize = bhVerts.size();
@@ -605,41 +641,6 @@ void glRender() {
         }
         ngTermVerts.clear();
         ngTexCoords.clear();
-
-        // Draw gravity field
-        // TODO: Do this only conditionally
-        glUseProgram(gGravProgram);
-        glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
-        glEnableVertexAttribArray(gGravVPositionHandle);
-        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gravCoords);
-        glEnableVertexAttribArray(gGravVMagHandle);
-        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, gravMag);
-
-        glDrawArrays(GL_LINES, 0, 2*gfWidth*gfHeight);
-
-        // Draw the null gravity rect lines using the grav program
-        int ngLineSize = ngSideVerts.size();
-        if (ngLineSize > 0) {
-            float *ngLineVertsArr = (float*) malloc(ngLineSize*sizeof(float));
-            float *ngLineMagArr = (float*) malloc((ngLineSize/2)*sizeof(float));
-            for (int i = 0; i < ngLineSize; ++i) {
-                ngLineVertsArr[i] = ngSideVerts[i];
-                if (i % 2 == 0) {
-                    ngLineMagArr[i/2] = 1.0;
-                }
-            }
-
-            glEnableVertexAttribArray(gGravVPositionHandle);
-            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, ngLineVertsArr);
-            glEnableVertexAttribArray(gGravVMagHandle);
-            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, ngLineMagArr);
-
-            glDrawArrays(GL_LINES, 0, ngLineSize/2);
-
-            free(ngLineVertsArr);
-            free(ngLineMagArr);
-        }
-        ngSideVerts.clear();
     }
 
     // Currently drawing overlay

@@ -192,6 +192,8 @@
     extern char *whTexPixels;
     extern int chTexWidth, chTexHeight;
     extern char *chTexPixels;
+    extern int ngTexWidth, ngTexHeight;
+    extern char *ngTexPixels;
 
 
 /*Network stuff taken out for now

@@ -311,25 +311,35 @@ Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, bhArr, 0);
 }
 JNIEXPORT void JNICALL
- Java_com_idkjava_thelements_ElementsApplication_setWHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
-     int numChannels = 4;
-     whTexWidth = w;
-     whTexHeight = h;
-     whTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
-     jbyte *whArr = env->GetByteArrayElements(pixels, NULL);
-     memcpy(whTexPixels, whArr, numChannels*w*h*sizeof(char));
-     env->ReleaseByteArrayElements(pixels, whArr, 0);
- }
- JNIEXPORT void JNICALL
-  Java_com_idkjava_thelements_ElementsApplication_setCHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
-      int numChannels = 4;
-      chTexWidth = w;
-      chTexHeight = h;
-      chTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
-      jbyte *chArr = env->GetByteArrayElements(pixels, NULL);
-      memcpy(chTexPixels, chArr, numChannels*w*h*sizeof(char));
-      env->ReleaseByteArrayElements(pixels, chArr, 0);
-  }
+Java_com_idkjava_thelements_ElementsApplication_setWHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+    int numChannels = 4;
+    whTexWidth = w;
+    whTexHeight = h;
+    whTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
+    jbyte *whArr = env->GetByteArrayElements(pixels, NULL);
+    memcpy(whTexPixels, whArr, numChannels*w*h*sizeof(char));
+    env->ReleaseByteArrayElements(pixels, whArr, 0);
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_ElementsApplication_setCHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+    int numChannels = 4;
+    chTexWidth = w;
+    chTexHeight = h;
+    chTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
+    jbyte *chArr = env->GetByteArrayElements(pixels, NULL);
+    memcpy(chTexPixels, chArr, numChannels*w*h*sizeof(char));
+    env->ReleaseByteArrayElements(pixels, chArr, 0);
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_ElementsApplication_setNGTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+    int numChannels = 4;
+    ngTexWidth = w;
+    ngTexHeight = h;
+    ngTexPixels = (char*) malloc(numChannels*w*h*sizeof(char));
+    jbyte *ngArr = env->GetByteArrayElements(pixels, NULL);
+    memcpy(ngTexPixels, ngArr, numChannels*w*h*sizeof(char));
+    env->ReleaseByteArrayElements(pixels, ngArr, 0);
+}
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jobject thiz, jint x, jint y) {
     float modViewWidth = viewWidth * zoomScale;

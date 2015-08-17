@@ -101,7 +101,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.make_black_hole, R.drawable.bh_tex),
             new IconListItem(R.string.make_white_hole, R.drawable.wh_tex),
             new IconListItem(R.string.make_curl_hole, R.drawable.ch_tex),
-            new IconListItem(R.string.null_gravity_zone, R.drawable.bt_icon),
+            new IconListItem(R.string.null_gravity_zone, R.drawable.ng_tex),
             new IconListItem(R.string.remove_gravity_object, R.drawable.eraser)
     ));
     ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);

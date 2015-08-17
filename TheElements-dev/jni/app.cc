@@ -106,6 +106,8 @@ int whTexWidth = 0, whTexHeight = 0;
 char *whTexPixels;
 int chTexWidth = 0, chTexHeight = 0;
 char *chTexPixels;
+int ngTexWidth = 0, ngTexHeight = 0;
+char *ngTexPixels;
 
 /*Network stuff taken out for now
 //Buffer building variables

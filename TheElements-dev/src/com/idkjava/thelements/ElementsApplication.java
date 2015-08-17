@@ -27,6 +27,7 @@ public class ElementsApplication extends Application {
         Bitmap bhTex;
         Bitmap whTex;
         Bitmap chTex;
+        Bitmap ngTex;
 
         // TODO: Remove code duplication by creating a sprite loader system
 
@@ -74,6 +75,21 @@ public class ElementsApplication extends Application {
         chTex.copyPixelsToBuffer(buf);
         setCHTex(w, h, buf.array());
         chTex.recycle();
+
+        // Null gravity terminal
+        try {
+            ngTex = BitmapFactory.decodeStream(am.open("ng_tex.png"));
+        }
+        catch (IOException e) {
+            throw new RuntimeException("Could not load BH texture.");
+        }
+        w = ngTex.getWidth();
+        h = ngTex.getHeight();
+        size = ngTex.getRowBytes()*h;
+        buf = ByteBuffer.allocate(size);
+        ngTex.copyPixelsToBuffer(buf);
+        setNGTex(w, h, buf.array());
+        ngTex.recycle();
     }
 
     public static SharedPreferences getPrefs() {
@@ -103,6 +119,7 @@ public class ElementsApplication extends Application {
     public static native void setBHTex(int w, int h, byte[] pixels);
     public static native void setWHTex(int w, int h, byte[] pixels);
     public static native void setCHTex(int w, int h, byte[] pixels);
+    public static native void setNGTex(int w, int h, byte[] pixels);
 
     static {
         System.loadLibrary("stlport_shared");
