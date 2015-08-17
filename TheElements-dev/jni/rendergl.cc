@@ -336,16 +336,14 @@ void glInit() {
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // NOTE: BH tex image MUST be power-of-two dimensions
-    // TODO: Replace with white hole sprite
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bhTexWidth, bhTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bhTexPixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, whTexWidth, whTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, whTexPixels);
 
     //Bind the CH tex image
     glBindTexture(GL_TEXTURE_2D, chTex);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // NOTE: BH tex image MUST be power-of-two dimensions
-    // TODO: Replace with curl hole sprite
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bhTexWidth, bhTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, bhTexPixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, chTexWidth, chTexHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, chTexPixels);
 
     //Bind the NG tex image
     glBindTexture(GL_TEXTURE_2D, ngTex);

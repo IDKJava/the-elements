@@ -17,9 +17,9 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="black_hole.svg"
-   inkscape:export-filename="/home/gkanwar/the-elements/TheElements-dev/assets/bhTex.png"
-   inkscape:export-xdpi="22.5"
-   inkscape:export-ydpi="22.5">
+   inkscape:export-filename="/home/gkanwar/the-elements/TheElements-dev/res/drawable-xxhdpi/bh_tex.png"
+   inkscape:export-xdpi="180"
+   inkscape:export-ydpi="180">
   <defs
      id="defs4">
     <linearGradient
@@ -513,7 +513,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.4199219"
-     inkscape:cx="144.92792"
+     inkscape:cx="142.4485"
      inkscape:cy="104.63748"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"

@@ -102,6 +102,10 @@ int world = WORLD_EARTH;
 //OpenGL
 int bhTexWidth = 0, bhTexHeight = 0;
 char *bhTexPixels;
+int whTexWidth = 0, whTexHeight = 0;
+char *whTexPixels;
+int chTexWidth = 0, chTexHeight = 0;
+char *chTexPixels;
 
 /*Network stuff taken out for now
 //Buffer building variables

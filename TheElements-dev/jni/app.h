@@ -183,11 +183,15 @@
     extern float yGravity;
 
 //World
-    extern int world ;
+    extern int world;
 
 //OpenGL variables
     extern int bhTexWidth, bhTexHeight;
     extern char *bhTexPixels;
+    extern int whTexWidth, whTexHeight;
+    extern char *whTexPixels;
+    extern int chTexWidth, chTexHeight;
+    extern char *chTexPixels;
 
 
 /*Network stuff taken out for now
