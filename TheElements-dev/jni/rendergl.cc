@@ -368,18 +368,20 @@ void makeSpriteSquare(float cx, float cy, float radx, float rady,
     verts.push_back(cy + rady);
     verts.push_back(cx - radx); // Top-left
     verts.push_back(cy + rady);
+
+    // Tex coords go in the opposite order, so texture is drawn with the right parity
     texCoords.push_back(0.0);
-    texCoords.push_back(0.0);
-    texCoords.push_back(1.0);
-    texCoords.push_back(0.0);
-    texCoords.push_back(1.0);
-    texCoords.push_back(1.0);
     texCoords.push_back(0.0);
     texCoords.push_back(0.0);
     texCoords.push_back(1.0);
     texCoords.push_back(1.0);
+    texCoords.push_back(1.0);
+    texCoords.push_back(0.0);
     texCoords.push_back(0.0);
     texCoords.push_back(1.0);
+    texCoords.push_back(1.0);
+    texCoords.push_back(1.0);
+    texCoords.push_back(0.0);
 }
 
 void makeLineRect(float sx, float sy, float ex, float ey,
@@ -494,7 +496,7 @@ void glRender() {
                 makeLineRect(fx, fy, ex, ey, ngSideVerts);
             }
         }
-        
+
         // Draw gravity field
         // TODO: Do this only conditionally
         glUseProgram(gGravProgram);
