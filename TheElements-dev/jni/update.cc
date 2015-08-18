@@ -57,7 +57,12 @@ void drawCircle(int mx, int my)
                         {
                             if (rand() % 3 == 1 && allCoords[getIndex((int) (dx + mx), (int) (dy + my))] == -1)
                             {
-                                createPoint(mx + dx, my + dy, cElement);
+                                int pt = createPoint(mx + dx, my + dy, cElement);
+                                if (pt >= 0) {
+                                    // -1.0 to 1.0
+                                    a_xVel[pt] = ((rand()%11)-5)*0.2;
+                                    a_yVel[pt] = ((rand()%11)-5)*0.2;
+                                }
                             }
                         }
                     }
@@ -107,7 +112,12 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
             {
                 if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
-                    createPoint(x, y, cElement);
+                    int pt = createPoint(x, y, cElement);
+                    if (pt >= 0) {
+                        // -1.0 to 1.0
+                        a_xVel[pt] = ((rand()%11)-5)*0.2;
+                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                    }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
                 {
@@ -133,7 +143,12 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
             {
                 if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
-                    createPoint(x, y, cElement);
+                    int pt = createPoint(x, y, cElement);
+                    if (pt >= 0) {
+                        // -1.0 to 1.0
+                        a_xVel[pt] = ((rand()%11)-5)*0.2;
+                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                    }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
                 {
@@ -209,7 +224,12 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
                 // We passed all constraints
                 if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
                 {
-                    createPoint(x, y, cElement);
+                    int pt = createPoint(x, y, cElement);
+                    if (pt >= 0) {
+                        // -1.0 to 1.0
+                        a_xVel[pt] = ((rand()%11)-5)*0.2;
+                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                    }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
                 {

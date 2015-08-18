@@ -19,13 +19,14 @@
 static int dx;
 static int dy;
 
-void createPoint(int xCoord, int yCoord, struct Element* element)
+int createPoint(int xCoord, int yCoord, struct Element* element)
 {
+    int created = -1;
     //If there are points available
     if (loq > 0)
     {
         //Get the pointer to the particle, decrement loq
-        int i = avail[--loq];
+        int i = created = avail[--loq];
         //Indicate that the particle is in use
         a_set[i] = TRUE;
         
@@ -67,6 +68,8 @@ void createPoint(int xCoord, int yCoord, struct Element* element)
         //Unfreeze particles around it
         //unFreezeParticles(xCoord, yCoord);
     }
+
+    return created;
 }
 void deletePoint(int particle)
 {

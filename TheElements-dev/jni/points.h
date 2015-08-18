@@ -14,7 +14,8 @@
 //Include macros
 #include "macros.h"
 
-void createPoint(int xCoord, int yCoord, struct Element* element);
+// Create a point and return the index of the created point, or -1
+int createPoint(int xCoord, int yCoord, struct Element* element);
 void deletePoint(int particle);
 void unSetPoint(int particle);
 void setElement(int particle, struct Element* newElement);
