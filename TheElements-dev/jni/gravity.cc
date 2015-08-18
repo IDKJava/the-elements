@@ -142,3 +142,57 @@ void getFallField(float x, float y, float *fx, float *fy, float *fmag) {
         if (fmag != NULL) *fmag = 1.0;
     }
 }
+
+bool makeBlackHole(int x, int y) {
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
+        next->type = BLACK_HOLE;
+        next->x = x - x%GF_BLOCK_SIZE;
+        next->y = y - y%GF_BLOCK_SIZE;
+        updateGravityField(next, false);
+        return true;
+    }
+    return false;
+}
+
+bool makeWhiteHole(int x, int y) {
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
+        next->type = WHITE_HOLE;
+        next->x = x - x%GF_BLOCK_SIZE;
+        next->y = y - y%GF_BLOCK_SIZE;
+        updateGravityField(next, false);
+        return true;
+    }
+    return false;
+}
+
+bool makeCurlHole(int x, int y) {
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
+        next->type = CURL_HOLE;
+        next->x = x - x%GF_BLOCK_SIZE;
+        next->y = y - y%GF_BLOCK_SIZE;
+        updateGravityField(next, false);
+        return true;
+    }
+    return false;
+}
+
+bool makeNullGravity(int x, int y, int ex, int ey) {
+    if (numSpaceObjs < MAX_SPACE_OBJS) {
+        SpaceObj *next = &spaceObjs[numSpaceObjs];
+        numSpaceObjs++;
+        next->type = NULL_GRAVITY;
+        next->x = x - x%GF_BLOCK_SIZE;
+        next->y = y - y%GF_BLOCK_SIZE;
+        next->ex = ex - ex%GF_BLOCK_SIZE;
+        next->ey = ey - ey%GF_BLOCK_SIZE;
+        updateGravityField(next, false);
+        return true;
+    }
+    return false;
+}

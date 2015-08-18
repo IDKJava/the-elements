@@ -2,11 +2,17 @@ package com.idkjava.thelements.game;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
+import com.idkjava.thelements.ElementsApplication;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
+import com.idkjava.thelements.money.ProductManager;
+import com.idkjava.thelements.proto.Messages;
 
 import android.content.Context;
 import android.util.Log;
@@ -80,9 +86,31 @@ public class SaveManager
 	public static boolean loadState(String statename)
 	{
 		//Log.v("TheElements", "loadState() called: " + FileManager.ROOT_DIR + FileManager.SAVES_DIR + filename + FileManager.SAVE_EXT);
+		String filename = FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE2_EXT;
 		try
 		{
-			char retVal = loadState((FileManager.ROOT_DIR + FileManager.SAVES_DIR + statename + FileManager.SAVE2_EXT).getBytes("ISO-8859-1"));
+			try {
+				// Switch to the appropriate world
+				Messages.SaveFile save = Messages.SaveFile.parseFrom(new FileInputStream(filename));
+				Messages.SaveFile.World w = save.getWorld();
+				Log.d("TheElements", "Save has world: " + w.name());
+				if (w == Messages.SaveFile.World.EARTH) {
+					Log.d("TheElements", "Setting world earth");
+					MainActivity.setWorld(MainActivity.WORLD_EARTH);
+				}
+				else if (w == Messages.SaveFile.World.SPACE) {
+					Log.d("TheElements", "Setting world space");
+					MainActivity.setWorld(MainActivity.WORLD_SPACE);
+				}
+				else {
+					// Unknown, but try loading anyway
+					Log.e("TheElements", "Unknown world type: " + w.name());
+				}
+			}
+			catch (FileNotFoundException e) {}
+			catch (IOException e) {}
+
+			char retVal = loadState(filename.getBytes("ISO-8859-1"));
 			Log.v("LOG", "loadState retVal: " + (int)retVal);
 			if(retVal == 0)
 			{

@@ -9,6 +9,15 @@ message SaveFile {
     optional uint32 size_y = 2;
     
     repeated Particle particle = 3;
+
+    enum World {
+        EARTH = 0;
+        SPACE = 1;
+    }
+    optional World world = 4;
+
+    // Space world only
+    repeated GravObj grav_obj = 5;
 }
 
 message ParticleSpecial {
@@ -71,4 +80,19 @@ message CustomElement {
     // (i.e. should be NUM_BASE_ELEMENTS - NORMAL_ELEMENT collisions)
     repeated Collision collision = 16;
     repeated Special special = 17;
+}
+
+message GravObj {
+    enum Type {
+        GO_BLACK_HOLE = 0;
+        GO_WHITE_HOLE = 1;
+        GO_CURL_HOLE = 2;
+        GO_NULL_GRAVITY = 3;
+    }
+    optional Type type = 1;
+    optional uint32 x = 2;
+    optional uint32 y = 3;
+    // Null gravity only
+    optional uint32 ex = 4;
+    optional uint32 ey = 5;
 }

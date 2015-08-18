@@ -291,8 +291,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Use the super onResume
         super.onResume();
 
-        // Get world info from intent, if present
-        setWorldFromIntent();
+        // Update our current world if needed. It's possible that another activity changed the
+        // current world in the native library while we were paused (ex. loading).
+        int nativeWorld = getWorld();
+        if (nativeWorld != curWorld) {
+            setCurWorld(nativeWorld);
+        }
 
         // Load the settings shared preferences which deals with if we're
         // resuming from pause or not
@@ -847,6 +851,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static native int getElementRed(int index);
     public static native int getElementGreen(int index);
     public static native int getElementBlue(int index);
+    public static native int getWorld();
 
     // Accelerometer related
     public static native void setXGravity(float xGravity);

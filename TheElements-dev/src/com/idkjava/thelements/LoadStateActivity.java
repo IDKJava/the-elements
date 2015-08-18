@@ -2,6 +2,7 @@ package com.idkjava.thelements;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,12 @@ import android.widget.Toast;
 
 import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.game.SaveManager;
+import com.idkjava.thelements.money.ProductManager;
+import com.idkjava.thelements.proto.Messages;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class LoadStateActivity extends ReportingActivity
 {
@@ -104,12 +111,7 @@ public class LoadStateActivity extends ReportingActivity
     		{
     			public void onClick(View v)
     			{
-                	boolean success = SaveManager.loadState(entityNameFinal);
-                	if (!success)
-                	{
-                		Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
-                	}
-                	finish();
+					tryLoadFile(entityNameFinal);
     			}
     		}
         );
@@ -155,13 +157,7 @@ public class LoadStateActivity extends ReportingActivity
 	        {
                 public void onClick(View viewParam)
                 {
-                	boolean success = SaveManager.loadState(entityNameFinal);
-                	if (!success)
-                	{
-                		Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
-                	}
-                	FlurryAgent.logEvent("load");
-                	finish();
+					tryLoadFile(entityNameFinal);
                 }
 	        }
         );
@@ -171,4 +167,15 @@ public class LoadStateActivity extends ReportingActivity
                 LayoutParams.FILL_PARENT, 
                 LayoutParams.WRAP_CONTENT));
     }
+
+	private void tryLoadFile(String entityName) {
+		boolean success = SaveManager.loadState(entityName);
+		if (!success)
+		{
+			Toast.makeText(getApplicationContext(), R.string.load_state_failed, Toast.LENGTH_SHORT).show();
+		}
+
+		FlurryAgent.logEvent("load");
+		finish();
+	}
 }

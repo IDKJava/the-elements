@@ -420,16 +420,7 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceObjs < MAX_SPACE_OBJS) {
-        SpaceObj *next = &spaceObjs[numSpaceObjs];
-        numSpaceObjs++;
-        next->type = BLACK_HOLE;
-        next->x = mX;
-        next->y = mY;
-        updateGravityField(next, false);
-        return true;
-    }
-    return false;
+    return makeBlackHole(mX, mY);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -443,16 +434,7 @@ Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thi
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceObjs < MAX_SPACE_OBJS) {
-        SpaceObj *next = &spaceObjs[numSpaceObjs];
-        numSpaceObjs++;
-        next->type = WHITE_HOLE;
-        next->x = mX;
-        next->y = mY;
-        updateGravityField(next, false);
-        return true;
-    }
-    return false;
+    return makeWhiteHole(mX, mY);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -466,16 +448,7 @@ Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz
     float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
     mX /= zoomFactor;
     mY /= zoomFactor;
-    if (numSpaceObjs < MAX_SPACE_OBJS) {
-        SpaceObj *next = &spaceObjs[numSpaceObjs];
-        numSpaceObjs++;
-        next->type = CURL_HOLE;
-        next->x = mX;
-        next->y = mY;
-        updateGravityField(next, false);
-        return true;
-    }
-    return false;
+    return makeCurlHole(mX, mY);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -494,18 +467,7 @@ Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject t
     startY /= zoomFactor;
     endX /= zoomFactor;
     endY /= zoomFactor;
-    if (numSpaceObjs < MAX_SPACE_OBJS) {
-        SpaceObj *next = &spaceObjs[numSpaceObjs];
-        numSpaceObjs++;
-        next->type = NULL_GRAVITY;
-        next->x = startX-fmod(startX, GF_BLOCK_SIZE);
-        next->y = startY-fmod(startY, GF_BLOCK_SIZE);
-        next->ex = endX-fmod(endX, GF_BLOCK_SIZE);
-        next->ey = endY-fmod(endY, GF_BLOCK_SIZE);
-        updateGravityField(next, false);
-        return true;
-    }
-    return false;
+    return makeNullGravity(startX, startY, endX, endY);
 }
 
 JNIEXPORT jboolean JNICALL
@@ -667,6 +629,10 @@ JNIEXPORT int JNICALL
 Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject thiz)
 {
     return MAX_SPECIALS;
+}
+JNIEXPORT int JNICALL
+Java_com_idkjava_thelements_MainActivity_getWorld(JNIEnv* env, jobject thiz) {
+    return world;
 }
 
 //Accelerometer related

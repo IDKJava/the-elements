@@ -8,6 +8,7 @@
 #include "saveload2.h"
 
 #include "app.h"
+#include "gravity.h"
 #include "macros.h"
 #include "messages.pb.h"
 #include "points.h"
@@ -135,6 +136,19 @@ bool saveStateLogic2(ofstream& out)
     save.set_size_x(workWidth);
     save.set_size_y(workHeight);
     LOGE("Save dims: %d %d", workWidth, workHeight);
+
+    switch (world) {
+        case WORLD_EARTH:
+            save.set_world(SaveFile::EARTH);
+            break;
+        case WORLD_SPACE:
+            save.set_world(SaveFile::SPACE);
+            break;
+        default:
+            LOGE("Unknown world type.");
+            return false;
+    }
+
     for (int i = 0; i < MAX_POINTS; ++i)
     {
         if (!a_set[i]) continue;
@@ -164,6 +178,35 @@ bool saveStateLogic2(ofstream& out)
         }
     }
 
+    // Space world must save gravity objects as well
+    if (world == WORLD_SPACE) {
+        for (int i = 0; i < numSpaceObjs; ++i) {
+            GravObj *pObj = save.add_grav_obj();
+            SpaceObj *obj = &spaceObjs[i];
+            pObj->set_x(obj->x);
+            pObj->set_y(obj->y);
+            switch (obj->type) {
+            case BLACK_HOLE:
+                pObj->set_type(GravObj::GO_BLACK_HOLE);
+                break;
+            case WHITE_HOLE:
+                pObj->set_type(GravObj::GO_WHITE_HOLE);
+                break;
+            case CURL_HOLE:
+                pObj->set_type(GravObj::GO_CURL_HOLE);
+                break;
+            case NULL_GRAVITY:
+                pObj->set_ex(obj->ex);
+                pObj->set_ey(obj->ey);
+                pObj->set_type(GravObj::GO_NULL_GRAVITY);
+                break;
+            default:
+                LOGE("Unknown grav obj type: %d", obj->type);
+                break;
+            }
+        }
+    }
+
     // Write the file itself
     return save.SerializeToOstream(&out);
 }
@@ -179,6 +222,23 @@ bool loadStateLogic2(ifstream& in)
     }
 
     LOGI("Found input file with dimensions: %d %d", save.size_x(), save.size_y());
+
+    // Must be in the appropriate world already
+    switch (save.world()) {
+        case SaveFile::EARTH:
+            if (world != WORLD_EARTH) {
+                return false;
+            }
+            break;
+        case SaveFile::SPACE:
+            if (world != WORLD_SPACE) {
+                return false;
+            }
+            break;
+        default:
+            LOGE("Unknown world type: %d", save.world());
+            return false;
+    }
 
     for (int i = 0; i < save.particle_size(); ++i)
     {
@@ -298,6 +358,39 @@ bool loadStateLogic2(ifstream& in)
         // Set the allCoords and bitmap color
         allCoords[getIndex(x, y)] = tempParticle;
         setBitmapColor(x, y, a_element[tempParticle]);
+    }
+
+    // Load gravity objects if space world
+    if (save.world() == SaveFile::SPACE) {
+        for (int i = 0; i < save.grav_obj_size(); ++i) {
+            const GravObj &obj = save.grav_obj(i);
+            if (!obj.has_x() || !obj.has_y()) {
+                LOGE("Gravity object missing coordinates. Skipping.");
+                continue;
+            }
+            // An object missing a type will default to black hole
+            switch (obj.type()) {
+            case GravObj::GO_BLACK_HOLE:
+                makeBlackHole(obj.x(), obj.y());
+                break;
+            case GravObj::GO_WHITE_HOLE:
+                makeWhiteHole(obj.x(), obj.y());
+                break;
+            case GravObj::GO_CURL_HOLE:
+                makeCurlHole(obj.x(), obj.y());
+                break;
+            case GravObj::GO_NULL_GRAVITY:
+                if (!obj.has_ex() || !obj.has_ey()) {
+                    LOGE("Null gravity missing endpoints.");
+                    continue;
+                }
+                makeNullGravity(obj.x(), obj.y(), obj.ex(), obj.ey());
+                break;
+            default:
+                LOGE("Unknown gravity object.");
+                continue;
+            }
+        }
     }
 
     return true;

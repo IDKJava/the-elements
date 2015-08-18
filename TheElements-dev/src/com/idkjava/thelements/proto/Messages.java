@@ -28,6 +28,20 @@ public final class Messages {
         getParticleOrBuilderList();
     com.idkjava.thelements.proto.Messages.ParticleOrBuilder getParticleOrBuilder(
         int index);
+    
+    // optional .SaveFile.World world = 4;
+    boolean hasWorld();
+    com.idkjava.thelements.proto.Messages.SaveFile.World getWorld();
+    
+    // repeated .GravObj grav_obj = 5;
+    java.util.List<com.idkjava.thelements.proto.Messages.GravObj> 
+        getGravObjList();
+    com.idkjava.thelements.proto.Messages.GravObj getGravObj(int index);
+    int getGravObjCount();
+    java.util.List<? extends com.idkjava.thelements.proto.Messages.GravObjOrBuilder> 
+        getGravObjOrBuilderList();
+    com.idkjava.thelements.proto.Messages.GravObjOrBuilder getGravObjOrBuilder(
+        int index);
   }
   public static final class SaveFile extends
       com.google.protobuf.GeneratedMessage
@@ -55,6 +69,75 @@ public final class Messages {
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return com.idkjava.thelements.proto.Messages.internal_static_SaveFile_fieldAccessorTable;
+    }
+    
+    public enum World
+        implements com.google.protobuf.ProtocolMessageEnum {
+      EARTH(0, 0),
+      SPACE(1, 1),
+      ;
+      
+      public static final int EARTH_VALUE = 0;
+      public static final int SPACE_VALUE = 1;
+      
+      
+      public final int getNumber() { return value; }
+      
+      public static World valueOf(int value) {
+        switch (value) {
+          case 0: return EARTH;
+          case 1: return SPACE;
+          default: return null;
+        }
+      }
+      
+      public static com.google.protobuf.Internal.EnumLiteMap<World>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<World>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<World>() {
+              public World findValueByNumber(int number) {
+                return World.valueOf(number);
+              }
+            };
+      
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.idkjava.thelements.proto.Messages.SaveFile.getDescriptor().getEnumTypes().get(0);
+      }
+      
+      private static final World[] VALUES = {
+        EARTH, SPACE, 
+      };
+      
+      public static World valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+      
+      private final int index;
+      private final int value;
+      
+      private World(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+      
+      // @@protoc_insertion_point(enum_scope:SaveFile.World)
     }
     
     private int bitField0_;
@@ -99,10 +182,43 @@ public final class Messages {
       return particle_.get(index);
     }
     
+    // optional .SaveFile.World world = 4;
+    public static final int WORLD_FIELD_NUMBER = 4;
+    private com.idkjava.thelements.proto.Messages.SaveFile.World world_;
+    public boolean hasWorld() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public com.idkjava.thelements.proto.Messages.SaveFile.World getWorld() {
+      return world_;
+    }
+    
+    // repeated .GravObj grav_obj = 5;
+    public static final int GRAV_OBJ_FIELD_NUMBER = 5;
+    private java.util.List<com.idkjava.thelements.proto.Messages.GravObj> gravObj_;
+    public java.util.List<com.idkjava.thelements.proto.Messages.GravObj> getGravObjList() {
+      return gravObj_;
+    }
+    public java.util.List<? extends com.idkjava.thelements.proto.Messages.GravObjOrBuilder> 
+        getGravObjOrBuilderList() {
+      return gravObj_;
+    }
+    public int getGravObjCount() {
+      return gravObj_.size();
+    }
+    public com.idkjava.thelements.proto.Messages.GravObj getGravObj(int index) {
+      return gravObj_.get(index);
+    }
+    public com.idkjava.thelements.proto.Messages.GravObjOrBuilder getGravObjOrBuilder(
+        int index) {
+      return gravObj_.get(index);
+    }
+    
     private void initFields() {
       sizeX_ = 0;
       sizeY_ = 0;
       particle_ = java.util.Collections.emptyList();
+      world_ = com.idkjava.thelements.proto.Messages.SaveFile.World.EARTH;
+      gravObj_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -125,6 +241,12 @@ public final class Messages {
       for (int i = 0; i < particle_.size(); i++) {
         output.writeMessage(3, particle_.get(i));
       }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeEnum(4, world_.getNumber());
+      }
+      for (int i = 0; i < gravObj_.size(); i++) {
+        output.writeMessage(5, gravObj_.get(i));
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -145,6 +267,14 @@ public final class Messages {
       for (int i = 0; i < particle_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, particle_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, world_.getNumber());
+      }
+      for (int i = 0; i < gravObj_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, gravObj_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -263,6 +393,7 @@ public final class Messages {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getParticleFieldBuilder();
+          getGravObjFieldBuilder();
         }
       }
       private static Builder create() {
@@ -280,6 +411,14 @@ public final class Messages {
           bitField0_ = (bitField0_ & ~0x00000004);
         } else {
           particleBuilder_.clear();
+        }
+        world_ = com.idkjava.thelements.proto.Messages.SaveFile.World.EARTH;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (gravObjBuilder_ == null) {
+          gravObj_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          gravObjBuilder_.clear();
         }
         return this;
       }
@@ -336,6 +475,19 @@ public final class Messages {
         } else {
           result.particle_ = particleBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.world_ = world_;
+        if (gravObjBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            gravObj_ = java.util.Collections.unmodifiableList(gravObj_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.gravObj_ = gravObj_;
+        } else {
+          result.gravObj_ = gravObjBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -384,6 +536,35 @@ public final class Messages {
             }
           }
         }
+        if (other.hasWorld()) {
+          setWorld(other.getWorld());
+        }
+        if (gravObjBuilder_ == null) {
+          if (!other.gravObj_.isEmpty()) {
+            if (gravObj_.isEmpty()) {
+              gravObj_ = other.gravObj_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureGravObjIsMutable();
+              gravObj_.addAll(other.gravObj_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.gravObj_.isEmpty()) {
+            if (gravObjBuilder_.isEmpty()) {
+              gravObjBuilder_.dispose();
+              gravObjBuilder_ = null;
+              gravObj_ = other.gravObj_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              gravObjBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getGravObjFieldBuilder() : null;
+            } else {
+              gravObjBuilder_.addAllMessages(other.gravObj_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -429,6 +610,23 @@ public final class Messages {
               com.idkjava.thelements.proto.Messages.Particle.Builder subBuilder = com.idkjava.thelements.proto.Messages.Particle.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addParticle(subBuilder.buildPartial());
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+              com.idkjava.thelements.proto.Messages.SaveFile.World value = com.idkjava.thelements.proto.Messages.SaveFile.World.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(4, rawValue);
+              } else {
+                bitField0_ |= 0x00000008;
+                world_ = value;
+              }
+              break;
+            }
+            case 42: {
+              com.idkjava.thelements.proto.Messages.GravObj.Builder subBuilder = com.idkjava.thelements.proto.Messages.GravObj.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addGravObj(subBuilder.buildPartial());
               break;
             }
           }
@@ -663,6 +861,216 @@ public final class Messages {
           particle_ = null;
         }
         return particleBuilder_;
+      }
+      
+      // optional .SaveFile.World world = 4;
+      private com.idkjava.thelements.proto.Messages.SaveFile.World world_ = com.idkjava.thelements.proto.Messages.SaveFile.World.EARTH;
+      public boolean hasWorld() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public com.idkjava.thelements.proto.Messages.SaveFile.World getWorld() {
+        return world_;
+      }
+      public Builder setWorld(com.idkjava.thelements.proto.Messages.SaveFile.World value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000008;
+        world_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearWorld() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        world_ = com.idkjava.thelements.proto.Messages.SaveFile.World.EARTH;
+        onChanged();
+        return this;
+      }
+      
+      // repeated .GravObj grav_obj = 5;
+      private java.util.List<com.idkjava.thelements.proto.Messages.GravObj> gravObj_ =
+        java.util.Collections.emptyList();
+      private void ensureGravObjIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          gravObj_ = new java.util.ArrayList<com.idkjava.thelements.proto.Messages.GravObj>(gravObj_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.idkjava.thelements.proto.Messages.GravObj, com.idkjava.thelements.proto.Messages.GravObj.Builder, com.idkjava.thelements.proto.Messages.GravObjOrBuilder> gravObjBuilder_;
+      
+      public java.util.List<com.idkjava.thelements.proto.Messages.GravObj> getGravObjList() {
+        if (gravObjBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(gravObj_);
+        } else {
+          return gravObjBuilder_.getMessageList();
+        }
+      }
+      public int getGravObjCount() {
+        if (gravObjBuilder_ == null) {
+          return gravObj_.size();
+        } else {
+          return gravObjBuilder_.getCount();
+        }
+      }
+      public com.idkjava.thelements.proto.Messages.GravObj getGravObj(int index) {
+        if (gravObjBuilder_ == null) {
+          return gravObj_.get(index);
+        } else {
+          return gravObjBuilder_.getMessage(index);
+        }
+      }
+      public Builder setGravObj(
+          int index, com.idkjava.thelements.proto.Messages.GravObj value) {
+        if (gravObjBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGravObjIsMutable();
+          gravObj_.set(index, value);
+          onChanged();
+        } else {
+          gravObjBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setGravObj(
+          int index, com.idkjava.thelements.proto.Messages.GravObj.Builder builderForValue) {
+        if (gravObjBuilder_ == null) {
+          ensureGravObjIsMutable();
+          gravObj_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          gravObjBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addGravObj(com.idkjava.thelements.proto.Messages.GravObj value) {
+        if (gravObjBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGravObjIsMutable();
+          gravObj_.add(value);
+          onChanged();
+        } else {
+          gravObjBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addGravObj(
+          int index, com.idkjava.thelements.proto.Messages.GravObj value) {
+        if (gravObjBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGravObjIsMutable();
+          gravObj_.add(index, value);
+          onChanged();
+        } else {
+          gravObjBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addGravObj(
+          com.idkjava.thelements.proto.Messages.GravObj.Builder builderForValue) {
+        if (gravObjBuilder_ == null) {
+          ensureGravObjIsMutable();
+          gravObj_.add(builderForValue.build());
+          onChanged();
+        } else {
+          gravObjBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addGravObj(
+          int index, com.idkjava.thelements.proto.Messages.GravObj.Builder builderForValue) {
+        if (gravObjBuilder_ == null) {
+          ensureGravObjIsMutable();
+          gravObj_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          gravObjBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllGravObj(
+          java.lang.Iterable<? extends com.idkjava.thelements.proto.Messages.GravObj> values) {
+        if (gravObjBuilder_ == null) {
+          ensureGravObjIsMutable();
+          super.addAll(values, gravObj_);
+          onChanged();
+        } else {
+          gravObjBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearGravObj() {
+        if (gravObjBuilder_ == null) {
+          gravObj_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          gravObjBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeGravObj(int index) {
+        if (gravObjBuilder_ == null) {
+          ensureGravObjIsMutable();
+          gravObj_.remove(index);
+          onChanged();
+        } else {
+          gravObjBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.idkjava.thelements.proto.Messages.GravObj.Builder getGravObjBuilder(
+          int index) {
+        return getGravObjFieldBuilder().getBuilder(index);
+      }
+      public com.idkjava.thelements.proto.Messages.GravObjOrBuilder getGravObjOrBuilder(
+          int index) {
+        if (gravObjBuilder_ == null) {
+          return gravObj_.get(index);  } else {
+          return gravObjBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.idkjava.thelements.proto.Messages.GravObjOrBuilder> 
+           getGravObjOrBuilderList() {
+        if (gravObjBuilder_ != null) {
+          return gravObjBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(gravObj_);
+        }
+      }
+      public com.idkjava.thelements.proto.Messages.GravObj.Builder addGravObjBuilder() {
+        return getGravObjFieldBuilder().addBuilder(
+            com.idkjava.thelements.proto.Messages.GravObj.getDefaultInstance());
+      }
+      public com.idkjava.thelements.proto.Messages.GravObj.Builder addGravObjBuilder(
+          int index) {
+        return getGravObjFieldBuilder().addBuilder(
+            index, com.idkjava.thelements.proto.Messages.GravObj.getDefaultInstance());
+      }
+      public java.util.List<com.idkjava.thelements.proto.Messages.GravObj.Builder> 
+           getGravObjBuilderList() {
+        return getGravObjFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.idkjava.thelements.proto.Messages.GravObj, com.idkjava.thelements.proto.Messages.GravObj.Builder, com.idkjava.thelements.proto.Messages.GravObjOrBuilder> 
+          getGravObjFieldBuilder() {
+        if (gravObjBuilder_ == null) {
+          gravObjBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.idkjava.thelements.proto.Messages.GravObj, com.idkjava.thelements.proto.Messages.GravObj.Builder, com.idkjava.thelements.proto.Messages.GravObjOrBuilder>(
+                  gravObj_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          gravObj_ = null;
+        }
+        return gravObjBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:SaveFile)
@@ -1025,17 +1433,25 @@ public final class Messages {
     boolean hasY();
     float getY();
     
-    // optional sint32 x_vel = 3;
-    boolean hasXVel();
-    int getXVel();
+    // optional sint32 DELETED_x_vel = 3;
+    boolean hasDELETEDXVel();
+    int getDELETEDXVel();
     
-    // optional sint32 y_vel = 4;
-    boolean hasYVel();
-    int getYVel();
+    // optional sint32 DELETED_y_vel = 4;
+    boolean hasDELETEDYVel();
+    int getDELETEDYVel();
     
     // optional uint32 heat = 5;
     boolean hasHeat();
     int getHeat();
+    
+    // optional float x_vel = 10;
+    boolean hasXVel();
+    float getXVel();
+    
+    // optional float y_vel = 11;
+    boolean hasYVel();
+    float getYVel();
     
     // repeated .ParticleSpecial special = 9;
     java.util.List<com.idkjava.thelements.proto.Messages.ParticleSpecial> 
@@ -1177,24 +1593,24 @@ public final class Messages {
       return y_;
     }
     
-    // optional sint32 x_vel = 3;
-    public static final int X_VEL_FIELD_NUMBER = 3;
-    private int xVel_;
-    public boolean hasXVel() {
+    // optional sint32 DELETED_x_vel = 3;
+    public static final int DELETED_X_VEL_FIELD_NUMBER = 3;
+    private int dELETEDXVel_;
+    public boolean hasDELETEDXVel() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public int getXVel() {
-      return xVel_;
+    public int getDELETEDXVel() {
+      return dELETEDXVel_;
     }
     
-    // optional sint32 y_vel = 4;
-    public static final int Y_VEL_FIELD_NUMBER = 4;
-    private int yVel_;
-    public boolean hasYVel() {
+    // optional sint32 DELETED_y_vel = 4;
+    public static final int DELETED_Y_VEL_FIELD_NUMBER = 4;
+    private int dELETEDYVel_;
+    public boolean hasDELETEDYVel() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public int getYVel() {
-      return yVel_;
+    public int getDELETEDYVel() {
+      return dELETEDYVel_;
     }
     
     // optional uint32 heat = 5;
@@ -1205,6 +1621,26 @@ public final class Messages {
     }
     public int getHeat() {
       return heat_;
+    }
+    
+    // optional float x_vel = 10;
+    public static final int X_VEL_FIELD_NUMBER = 10;
+    private float xVel_;
+    public boolean hasXVel() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public float getXVel() {
+      return xVel_;
+    }
+    
+    // optional float y_vel = 11;
+    public static final int Y_VEL_FIELD_NUMBER = 11;
+    private float yVel_;
+    public boolean hasYVel() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public float getYVel() {
+      return yVel_;
     }
     
     // repeated .ParticleSpecial special = 9;
@@ -1232,7 +1668,7 @@ public final class Messages {
     public static final int ELEMENT_TYPE_FIELD_NUMBER = 6;
     private com.idkjava.thelements.proto.Messages.Particle.Type elementType_;
     public boolean hasElementType() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     public com.idkjava.thelements.proto.Messages.Particle.Type getElementType() {
       return elementType_;
@@ -1242,7 +1678,7 @@ public final class Messages {
     public static final int ELEMENT_INDEX_FIELD_NUMBER = 7;
     private long elementIndex_;
     public boolean hasElementIndex() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     public long getElementIndex() {
       return elementIndex_;
@@ -1252,7 +1688,7 @@ public final class Messages {
     public static final int ELEMENT_FILENAME_FIELD_NUMBER = 8;
     private java.lang.Object elementFilename_;
     public boolean hasElementFilename() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     public String getElementFilename() {
       java.lang.Object ref = elementFilename_;
@@ -1283,9 +1719,11 @@ public final class Messages {
     private void initFields() {
       x_ = 0F;
       y_ = 0F;
-      xVel_ = 0;
-      yVel_ = 0;
+      dELETEDXVel_ = 0;
+      dELETEDYVel_ = 0;
       heat_ = 0;
+      xVel_ = 0F;
+      yVel_ = 0F;
       special_ = java.util.Collections.emptyList();
       elementType_ = com.idkjava.thelements.proto.Messages.Particle.Type.BASIC;
       elementIndex_ = 0L;
@@ -1310,25 +1748,31 @@ public final class Messages {
         output.writeFloat(2, y_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeSInt32(3, xVel_);
+        output.writeSInt32(3, dELETEDXVel_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeSInt32(4, yVel_);
+        output.writeSInt32(4, dELETEDYVel_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeUInt32(5, heat_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeEnum(6, elementType_.getNumber());
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeUInt64(7, elementIndex_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(8, getElementFilenameBytes());
       }
       for (int i = 0; i < special_.size(); i++) {
         output.writeMessage(9, special_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeFloat(10, xVel_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeFloat(11, yVel_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1349,31 +1793,39 @@ public final class Messages {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(3, xVel_);
+          .computeSInt32Size(3, dELETEDXVel_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(4, yVel_);
+          .computeSInt32Size(4, dELETEDYVel_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(5, heat_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(6, elementType_.getNumber());
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(7, elementIndex_);
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(8, getElementFilenameBytes());
       }
       for (int i = 0; i < special_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, special_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(10, xVel_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeFloatSize(11, yVel_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1504,24 +1956,28 @@ public final class Messages {
         bitField0_ = (bitField0_ & ~0x00000001);
         y_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000002);
-        xVel_ = 0;
+        dELETEDXVel_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        yVel_ = 0;
+        dELETEDYVel_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
         heat_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        xVel_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        yVel_ = 0F;
+        bitField0_ = (bitField0_ & ~0x00000040);
         if (specialBuilder_ == null) {
           special_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000080);
         } else {
           specialBuilder_.clear();
         }
         elementType_ = com.idkjava.thelements.proto.Messages.Particle.Type.BASIC;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        elementIndex_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        elementFilename_ = "";
         bitField0_ = (bitField0_ & ~0x00000100);
+        elementIndex_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        elementFilename_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
       
@@ -1571,34 +2027,42 @@ public final class Messages {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.xVel_ = xVel_;
+        result.dELETEDXVel_ = dELETEDXVel_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.yVel_ = yVel_;
+        result.dELETEDYVel_ = dELETEDYVel_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
         result.heat_ = heat_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.xVel_ = xVel_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.yVel_ = yVel_;
         if (specialBuilder_ == null) {
-          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+          if (((bitField0_ & 0x00000080) == 0x00000080)) {
             special_ = java.util.Collections.unmodifiableList(special_);
-            bitField0_ = (bitField0_ & ~0x00000020);
+            bitField0_ = (bitField0_ & ~0x00000080);
           }
           result.special_ = special_;
         } else {
           result.special_ = specialBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.elementType_ = elementType_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.elementIndex_ = elementIndex_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000080;
+        }
+        result.elementType_ = elementType_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.elementIndex_ = elementIndex_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000200;
         }
         result.elementFilename_ = elementFilename_;
         result.bitField0_ = to_bitField0_;
@@ -1623,20 +2087,26 @@ public final class Messages {
         if (other.hasY()) {
           setY(other.getY());
         }
+        if (other.hasDELETEDXVel()) {
+          setDELETEDXVel(other.getDELETEDXVel());
+        }
+        if (other.hasDELETEDYVel()) {
+          setDELETEDYVel(other.getDELETEDYVel());
+        }
+        if (other.hasHeat()) {
+          setHeat(other.getHeat());
+        }
         if (other.hasXVel()) {
           setXVel(other.getXVel());
         }
         if (other.hasYVel()) {
           setYVel(other.getYVel());
         }
-        if (other.hasHeat()) {
-          setHeat(other.getHeat());
-        }
         if (specialBuilder_ == null) {
           if (!other.special_.isEmpty()) {
             if (special_.isEmpty()) {
               special_ = other.special_;
-              bitField0_ = (bitField0_ & ~0x00000020);
+              bitField0_ = (bitField0_ & ~0x00000080);
             } else {
               ensureSpecialIsMutable();
               special_.addAll(other.special_);
@@ -1649,7 +2119,7 @@ public final class Messages {
               specialBuilder_.dispose();
               specialBuilder_ = null;
               special_ = other.special_;
-              bitField0_ = (bitField0_ & ~0x00000020);
+              bitField0_ = (bitField0_ & ~0x00000080);
               specialBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getSpecialFieldBuilder() : null;
@@ -1710,12 +2180,12 @@ public final class Messages {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              xVel_ = input.readSInt32();
+              dELETEDXVel_ = input.readSInt32();
               break;
             }
             case 32: {
               bitField0_ |= 0x00000008;
-              yVel_ = input.readSInt32();
+              dELETEDYVel_ = input.readSInt32();
               break;
             }
             case 40: {
@@ -1729,18 +2199,18 @@ public final class Messages {
               if (value == null) {
                 unknownFields.mergeVarintField(6, rawValue);
               } else {
-                bitField0_ |= 0x00000040;
+                bitField0_ |= 0x00000100;
                 elementType_ = value;
               }
               break;
             }
             case 56: {
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000200;
               elementIndex_ = input.readUInt64();
               break;
             }
             case 66: {
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000400;
               elementFilename_ = input.readBytes();
               break;
             }
@@ -1748,6 +2218,16 @@ public final class Messages {
               com.idkjava.thelements.proto.Messages.ParticleSpecial.Builder subBuilder = com.idkjava.thelements.proto.Messages.ParticleSpecial.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addSpecial(subBuilder.buildPartial());
+              break;
+            }
+            case 85: {
+              bitField0_ |= 0x00000020;
+              xVel_ = input.readFloat();
+              break;
+            }
+            case 93: {
+              bitField0_ |= 0x00000040;
+              yVel_ = input.readFloat();
               break;
             }
           }
@@ -1798,44 +2278,44 @@ public final class Messages {
         return this;
       }
       
-      // optional sint32 x_vel = 3;
-      private int xVel_ ;
-      public boolean hasXVel() {
+      // optional sint32 DELETED_x_vel = 3;
+      private int dELETEDXVel_ ;
+      public boolean hasDELETEDXVel() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public int getXVel() {
-        return xVel_;
+      public int getDELETEDXVel() {
+        return dELETEDXVel_;
       }
-      public Builder setXVel(int value) {
+      public Builder setDELETEDXVel(int value) {
         bitField0_ |= 0x00000004;
-        xVel_ = value;
+        dELETEDXVel_ = value;
         onChanged();
         return this;
       }
-      public Builder clearXVel() {
+      public Builder clearDELETEDXVel() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        xVel_ = 0;
+        dELETEDXVel_ = 0;
         onChanged();
         return this;
       }
       
-      // optional sint32 y_vel = 4;
-      private int yVel_ ;
-      public boolean hasYVel() {
+      // optional sint32 DELETED_y_vel = 4;
+      private int dELETEDYVel_ ;
+      public boolean hasDELETEDYVel() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public int getYVel() {
-        return yVel_;
+      public int getDELETEDYVel() {
+        return dELETEDYVel_;
       }
-      public Builder setYVel(int value) {
+      public Builder setDELETEDYVel(int value) {
         bitField0_ |= 0x00000008;
-        yVel_ = value;
+        dELETEDYVel_ = value;
         onChanged();
         return this;
       }
-      public Builder clearYVel() {
+      public Builder clearDELETEDYVel() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        yVel_ = 0;
+        dELETEDYVel_ = 0;
         onChanged();
         return this;
       }
@@ -1861,13 +2341,55 @@ public final class Messages {
         return this;
       }
       
+      // optional float x_vel = 10;
+      private float xVel_ ;
+      public boolean hasXVel() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public float getXVel() {
+        return xVel_;
+      }
+      public Builder setXVel(float value) {
+        bitField0_ |= 0x00000020;
+        xVel_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearXVel() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        xVel_ = 0F;
+        onChanged();
+        return this;
+      }
+      
+      // optional float y_vel = 11;
+      private float yVel_ ;
+      public boolean hasYVel() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public float getYVel() {
+        return yVel_;
+      }
+      public Builder setYVel(float value) {
+        bitField0_ |= 0x00000040;
+        yVel_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearYVel() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        yVel_ = 0F;
+        onChanged();
+        return this;
+      }
+      
       // repeated .ParticleSpecial special = 9;
       private java.util.List<com.idkjava.thelements.proto.Messages.ParticleSpecial> special_ =
         java.util.Collections.emptyList();
       private void ensureSpecialIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
           special_ = new java.util.ArrayList<com.idkjava.thelements.proto.Messages.ParticleSpecial>(special_);
-          bitField0_ |= 0x00000020;
+          bitField0_ |= 0x00000080;
          }
       }
       
@@ -1983,7 +2505,7 @@ public final class Messages {
       public Builder clearSpecial() {
         if (specialBuilder_ == null) {
           special_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000020);
+          bitField0_ = (bitField0_ & ~0x00000080);
           onChanged();
         } else {
           specialBuilder_.clear();
@@ -2039,7 +2561,7 @@ public final class Messages {
           specialBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.idkjava.thelements.proto.Messages.ParticleSpecial, com.idkjava.thelements.proto.Messages.ParticleSpecial.Builder, com.idkjava.thelements.proto.Messages.ParticleSpecialOrBuilder>(
                   special_,
-                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  ((bitField0_ & 0x00000080) == 0x00000080),
                   getParentForChildren(),
                   isClean());
           special_ = null;
@@ -2050,7 +2572,7 @@ public final class Messages {
       // optional .Particle.Type element_type = 6;
       private com.idkjava.thelements.proto.Messages.Particle.Type elementType_ = com.idkjava.thelements.proto.Messages.Particle.Type.BASIC;
       public boolean hasElementType() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       public com.idkjava.thelements.proto.Messages.Particle.Type getElementType() {
         return elementType_;
@@ -2059,13 +2581,13 @@ public final class Messages {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000100;
         elementType_ = value;
         onChanged();
         return this;
       }
       public Builder clearElementType() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000100);
         elementType_ = com.idkjava.thelements.proto.Messages.Particle.Type.BASIC;
         onChanged();
         return this;
@@ -2074,19 +2596,19 @@ public final class Messages {
       // optional uint64 element_index = 7;
       private long elementIndex_ ;
       public boolean hasElementIndex() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       public long getElementIndex() {
         return elementIndex_;
       }
       public Builder setElementIndex(long value) {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000200;
         elementIndex_ = value;
         onChanged();
         return this;
       }
       public Builder clearElementIndex() {
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000200);
         elementIndex_ = 0L;
         onChanged();
         return this;
@@ -2095,7 +2617,7 @@ public final class Messages {
       // optional string element_filename = 8;
       private java.lang.Object elementFilename_ = "";
       public boolean hasElementFilename() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       public String getElementFilename() {
         java.lang.Object ref = elementFilename_;
@@ -2111,19 +2633,19 @@ public final class Messages {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000100;
+  bitField0_ |= 0x00000400;
         elementFilename_ = value;
         onChanged();
         return this;
       }
       public Builder clearElementFilename() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000400);
         elementFilename_ = getDefaultInstance().getElementFilename();
         onChanged();
         return this;
       }
       void setElementFilename(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000400;
         elementFilename_ = value;
         onChanged();
       }
@@ -4685,6 +5207,656 @@ public final class Messages {
     // @@protoc_insertion_point(class_scope:CustomElement)
   }
   
+  public interface GravObjOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // optional .GravObj.Type type = 1;
+    boolean hasType();
+    com.idkjava.thelements.proto.Messages.GravObj.Type getType();
+    
+    // optional uint32 x = 2;
+    boolean hasX();
+    int getX();
+    
+    // optional uint32 y = 3;
+    boolean hasY();
+    int getY();
+    
+    // optional uint32 ex = 4;
+    boolean hasEx();
+    int getEx();
+    
+    // optional uint32 ey = 5;
+    boolean hasEy();
+    int getEy();
+  }
+  public static final class GravObj extends
+      com.google.protobuf.GeneratedMessage
+      implements GravObjOrBuilder {
+    // Use GravObj.newBuilder() to construct.
+    private GravObj(Builder builder) {
+      super(builder);
+    }
+    private GravObj(boolean noInit) {}
+    
+    private static final GravObj defaultInstance;
+    public static GravObj getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public GravObj getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.idkjava.thelements.proto.Messages.internal_static_GravObj_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.idkjava.thelements.proto.Messages.internal_static_GravObj_fieldAccessorTable;
+    }
+    
+    public enum Type
+        implements com.google.protobuf.ProtocolMessageEnum {
+      GO_BLACK_HOLE(0, 0),
+      GO_WHITE_HOLE(1, 1),
+      GO_CURL_HOLE(2, 2),
+      GO_NULL_GRAVITY(3, 3),
+      ;
+      
+      public static final int GO_BLACK_HOLE_VALUE = 0;
+      public static final int GO_WHITE_HOLE_VALUE = 1;
+      public static final int GO_CURL_HOLE_VALUE = 2;
+      public static final int GO_NULL_GRAVITY_VALUE = 3;
+      
+      
+      public final int getNumber() { return value; }
+      
+      public static Type valueOf(int value) {
+        switch (value) {
+          case 0: return GO_BLACK_HOLE;
+          case 1: return GO_WHITE_HOLE;
+          case 2: return GO_CURL_HOLE;
+          case 3: return GO_NULL_GRAVITY;
+          default: return null;
+        }
+      }
+      
+      public static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Type>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+              public Type findValueByNumber(int number) {
+                return Type.valueOf(number);
+              }
+            };
+      
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.idkjava.thelements.proto.Messages.GravObj.getDescriptor().getEnumTypes().get(0);
+      }
+      
+      private static final Type[] VALUES = {
+        GO_BLACK_HOLE, GO_WHITE_HOLE, GO_CURL_HOLE, GO_NULL_GRAVITY, 
+      };
+      
+      public static Type valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+      
+      private final int index;
+      private final int value;
+      
+      private Type(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+      
+      // @@protoc_insertion_point(enum_scope:GravObj.Type)
+    }
+    
+    private int bitField0_;
+    // optional .GravObj.Type type = 1;
+    public static final int TYPE_FIELD_NUMBER = 1;
+    private com.idkjava.thelements.proto.Messages.GravObj.Type type_;
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public com.idkjava.thelements.proto.Messages.GravObj.Type getType() {
+      return type_;
+    }
+    
+    // optional uint32 x = 2;
+    public static final int X_FIELD_NUMBER = 2;
+    private int x_;
+    public boolean hasX() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getX() {
+      return x_;
+    }
+    
+    // optional uint32 y = 3;
+    public static final int Y_FIELD_NUMBER = 3;
+    private int y_;
+    public boolean hasY() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getY() {
+      return y_;
+    }
+    
+    // optional uint32 ex = 4;
+    public static final int EX_FIELD_NUMBER = 4;
+    private int ex_;
+    public boolean hasEx() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public int getEx() {
+      return ex_;
+    }
+    
+    // optional uint32 ey = 5;
+    public static final int EY_FIELD_NUMBER = 5;
+    private int ey_;
+    public boolean hasEy() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getEy() {
+      return ey_;
+    }
+    
+    private void initFields() {
+      type_ = com.idkjava.thelements.proto.Messages.GravObj.Type.GO_BLACK_HOLE;
+      x_ = 0;
+      y_ = 0;
+      ex_ = 0;
+      ey_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeUInt32(2, x_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeUInt32(3, y_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeUInt32(4, ex_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeUInt32(5, ey_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, type_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(2, x_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, y_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(4, ex_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, ey_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.idkjava.thelements.proto.Messages.GravObj parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.idkjava.thelements.proto.Messages.GravObj prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.idkjava.thelements.proto.Messages.GravObjOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.idkjava.thelements.proto.Messages.internal_static_GravObj_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.idkjava.thelements.proto.Messages.internal_static_GravObj_fieldAccessorTable;
+      }
+      
+      // Construct using com.idkjava.thelements.proto.Messages.GravObj.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        type_ = com.idkjava.thelements.proto.Messages.GravObj.Type.GO_BLACK_HOLE;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        x_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        y_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        ex_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        ey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.idkjava.thelements.proto.Messages.GravObj.getDescriptor();
+      }
+      
+      public com.idkjava.thelements.proto.Messages.GravObj getDefaultInstanceForType() {
+        return com.idkjava.thelements.proto.Messages.GravObj.getDefaultInstance();
+      }
+      
+      public com.idkjava.thelements.proto.Messages.GravObj build() {
+        com.idkjava.thelements.proto.Messages.GravObj result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.idkjava.thelements.proto.Messages.GravObj buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.idkjava.thelements.proto.Messages.GravObj result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.idkjava.thelements.proto.Messages.GravObj buildPartial() {
+        com.idkjava.thelements.proto.Messages.GravObj result = new com.idkjava.thelements.proto.Messages.GravObj(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.x_ = x_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.y_ = y_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.ex_ = ex_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.ey_ = ey_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.idkjava.thelements.proto.Messages.GravObj) {
+          return mergeFrom((com.idkjava.thelements.proto.Messages.GravObj)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.idkjava.thelements.proto.Messages.GravObj other) {
+        if (other == com.idkjava.thelements.proto.Messages.GravObj.getDefaultInstance()) return this;
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasX()) {
+          setX(other.getX());
+        }
+        if (other.hasY()) {
+          setY(other.getY());
+        }
+        if (other.hasEx()) {
+          setEx(other.getEx());
+        }
+        if (other.hasEy()) {
+          setEy(other.getEy());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              com.idkjava.thelements.proto.Messages.GravObj.Type value = com.idkjava.thelements.proto.Messages.GravObj.Type.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                type_ = value;
+              }
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              x_ = input.readUInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              y_ = input.readUInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              ex_ = input.readUInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              ey_ = input.readUInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // optional .GravObj.Type type = 1;
+      private com.idkjava.thelements.proto.Messages.GravObj.Type type_ = com.idkjava.thelements.proto.Messages.GravObj.Type.GO_BLACK_HOLE;
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public com.idkjava.thelements.proto.Messages.GravObj.Type getType() {
+        return type_;
+      }
+      public Builder setType(com.idkjava.thelements.proto.Messages.GravObj.Type value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = com.idkjava.thelements.proto.Messages.GravObj.Type.GO_BLACK_HOLE;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint32 x = 2;
+      private int x_ ;
+      public boolean hasX() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getX() {
+        return x_;
+      }
+      public Builder setX(int value) {
+        bitField0_ |= 0x00000002;
+        x_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearX() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        x_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint32 y = 3;
+      private int y_ ;
+      public boolean hasY() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getY() {
+        return y_;
+      }
+      public Builder setY(int value) {
+        bitField0_ |= 0x00000004;
+        y_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearY() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        y_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint32 ex = 4;
+      private int ex_ ;
+      public boolean hasEx() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getEx() {
+        return ex_;
+      }
+      public Builder setEx(int value) {
+        bitField0_ |= 0x00000008;
+        ex_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearEx() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        ex_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint32 ey = 5;
+      private int ey_ ;
+      public boolean hasEy() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getEy() {
+        return ey_;
+      }
+      public Builder setEy(int value) {
+        bitField0_ |= 0x00000010;
+        ey_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearEy() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        ey_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:GravObj)
+    }
+    
+    static {
+      defaultInstance = new GravObj(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:GravObj)
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_SaveFile_descriptor;
   private static
@@ -4715,6 +5887,11 @@ public final class Messages {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_CustomElement_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_GravObj_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_GravObj_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -4724,28 +5901,36 @@ public final class Messages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\024proto/messages.proto\"G\n\010SaveFile\022\016\n\006si" +
-      "ze_x\030\001 \001(\r\022\016\n\006size_y\030\002 \001(\r\022\033\n\010particle\030\003" +
-      " \003(\0132\t.Particle\"\036\n\017ParticleSpecial\022\013\n\003va" +
-      "l\030\001 \001(\r\"\345\001\n\010Particle\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001" +
-      "(\002\022\r\n\005x_vel\030\003 \001(\021\022\r\n\005y_vel\030\004 \001(\021\022\014\n\004heat" +
-      "\030\005 \001(\r\022!\n\007special\030\t \003(\0132\020.ParticleSpecia" +
-      "l\022$\n\014element_type\030\006 \001(\0162\016.Particle.Type\022" +
-      "\025\n\relement_index\030\007 \001(\004\022\030\n\020element_filena" +
-      "me\030\010 \001(\t\"\035\n\004Type\022\t\n\005BASIC\020\000\022\n\n\006CUSTOM\020\001\"" +
-      "\031\n\tCollision\022\014\n\004type\030\001 \001(\004\"$\n\007Special\022\014\n",
-      "\004type\030\001 \001(\r\022\013\n\003val\030\002 \001(\r\"\217\003\n\rCustomEleme" +
-      "nt\022\032\n\022base_element_index\030\001 \001(\r\022\014\n\004name\030\002" +
-      " \001(\t\022\020\n\010filename\030\022 \001(\t\022\037\n\027allow_moving_t" +
-      "ransition\030\003 \001(\010\022\r\n\005state\030\004 \001(\r\022\025\n\rstarti" +
-      "ng_temp\030\005 \001(\r\022\023\n\013lowest_temp\030\006 \001(\r\022\024\n\014hi" +
-      "ghest_temp\030\007 \001(\r\022\033\n\023lower_element_index\030" +
-      "\010 \001(\r\022\034\n\024higher_element_index\030\t \001(\r\022\013\n\003r" +
-      "ed\030\n \001(\r\022\r\n\005green\030\013 \001(\r\022\014\n\004blue\030\014 \001(\r\022\017\n" +
-      "\007density\030\r \001(\r\022\017\n\007fallvel\030\016 \001(\021\022\017\n\007inert" +
-      "ia\030\017 \001(\r\022\035\n\tcollision\030\020 \003(\0132\n.Collision\022",
-      "\031\n\007special\030\021 \003(\0132\010.SpecialB(\n\034com.idkjav" +
-      "a.thelements.protoB\010Messages"
+      "\n\024proto/messages.proto\"\242\001\n\010SaveFile\022\016\n\006s" +
+      "ize_x\030\001 \001(\r\022\016\n\006size_y\030\002 \001(\r\022\033\n\010particle\030" +
+      "\003 \003(\0132\t.Particle\022\036\n\005world\030\004 \001(\0162\017.SaveFi" +
+      "le.World\022\032\n\010grav_obj\030\005 \003(\0132\010.GravObj\"\035\n\005" +
+      "World\022\t\n\005EARTH\020\000\022\t\n\005SPACE\020\001\"\036\n\017ParticleS" +
+      "pecial\022\013\n\003val\030\001 \001(\r\"\223\002\n\010Particle\022\t\n\001x\030\001 " +
+      "\001(\002\022\t\n\001y\030\002 \001(\002\022\025\n\rDELETED_x_vel\030\003 \001(\021\022\025\n" +
+      "\rDELETED_y_vel\030\004 \001(\021\022\014\n\004heat\030\005 \001(\r\022\r\n\005x_" +
+      "vel\030\n \001(\002\022\r\n\005y_vel\030\013 \001(\002\022!\n\007special\030\t \003(" +
+      "\0132\020.ParticleSpecial\022$\n\014element_type\030\006 \001(",
+      "\0162\016.Particle.Type\022\025\n\relement_index\030\007 \001(\004" +
+      "\022\030\n\020element_filename\030\010 \001(\t\"\035\n\004Type\022\t\n\005BA" +
+      "SIC\020\000\022\n\n\006CUSTOM\020\001\"\031\n\tCollision\022\014\n\004type\030\001" +
+      " \001(\004\"$\n\007Special\022\014\n\004type\030\001 \001(\r\022\013\n\003val\030\002 \001" +
+      "(\r\"\217\003\n\rCustomElement\022\032\n\022base_element_ind" +
+      "ex\030\001 \001(\r\022\014\n\004name\030\002 \001(\t\022\020\n\010filename\030\022 \001(\t" +
+      "\022\037\n\027allow_moving_transition\030\003 \001(\010\022\r\n\005sta" +
+      "te\030\004 \001(\r\022\025\n\rstarting_temp\030\005 \001(\r\022\023\n\013lowes" +
+      "t_temp\030\006 \001(\r\022\024\n\014highest_temp\030\007 \001(\r\022\033\n\023lo" +
+      "wer_element_index\030\010 \001(\r\022\034\n\024higher_elemen",
+      "t_index\030\t \001(\r\022\013\n\003red\030\n \001(\r\022\r\n\005green\030\013 \001(" +
+      "\r\022\014\n\004blue\030\014 \001(\r\022\017\n\007density\030\r \001(\r\022\017\n\007fall" +
+      "vel\030\016 \001(\021\022\017\n\007inertia\030\017 \001(\r\022\035\n\tcollision\030" +
+      "\020 \003(\0132\n.Collision\022\031\n\007special\030\021 \003(\0132\010.Spe" +
+      "cial\"\251\001\n\007GravObj\022\033\n\004type\030\001 \001(\0162\r.GravObj" +
+      ".Type\022\t\n\001x\030\002 \001(\r\022\t\n\001y\030\003 \001(\r\022\n\n\002ex\030\004 \001(\r\022" +
+      "\n\n\002ey\030\005 \001(\r\"S\n\004Type\022\021\n\rGO_BLACK_HOLE\020\000\022\021" +
+      "\n\rGO_WHITE_HOLE\020\001\022\020\n\014GO_CURL_HOLE\020\002\022\023\n\017G" +
+      "O_NULL_GRAVITY\020\003B(\n\034com.idkjava.thelemen" +
+      "ts.protoB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4757,7 +5942,7 @@ public final class Messages {
           internal_static_SaveFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_SaveFile_descriptor,
-              new java.lang.String[] { "SizeX", "SizeY", "Particle", },
+              new java.lang.String[] { "SizeX", "SizeY", "Particle", "World", "GravObj", },
               com.idkjava.thelements.proto.Messages.SaveFile.class,
               com.idkjava.thelements.proto.Messages.SaveFile.Builder.class);
           internal_static_ParticleSpecial_descriptor =
@@ -4773,7 +5958,7 @@ public final class Messages {
           internal_static_Particle_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Particle_descriptor,
-              new java.lang.String[] { "X", "Y", "XVel", "YVel", "Heat", "Special", "ElementType", "ElementIndex", "ElementFilename", },
+              new java.lang.String[] { "X", "Y", "DELETEDXVel", "DELETEDYVel", "Heat", "XVel", "YVel", "Special", "ElementType", "ElementIndex", "ElementFilename", },
               com.idkjava.thelements.proto.Messages.Particle.class,
               com.idkjava.thelements.proto.Messages.Particle.Builder.class);
           internal_static_Collision_descriptor =
@@ -4800,6 +5985,14 @@ public final class Messages {
               new java.lang.String[] { "BaseElementIndex", "Name", "Filename", "AllowMovingTransition", "State", "StartingTemp", "LowestTemp", "HighestTemp", "LowerElementIndex", "HigherElementIndex", "Red", "Green", "Blue", "Density", "Fallvel", "Inertia", "Collision", "Special", },
               com.idkjava.thelements.proto.Messages.CustomElement.class,
               com.idkjava.thelements.proto.Messages.CustomElement.Builder.class);
+          internal_static_GravObj_descriptor =
+            getDescriptor().getMessageTypes().get(6);
+          internal_static_GravObj_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_GravObj_descriptor,
+              new java.lang.String[] { "Type", "X", "Y", "Ex", "Ey", },
+              com.idkjava.thelements.proto.Messages.GravObj.class,
+              com.idkjava.thelements.proto.Messages.GravObj.Builder.class);
           return null;
         }
       };

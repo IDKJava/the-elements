@@ -81,6 +81,7 @@
     <string name="space_world_purchase">Buy Space World: $5.00</string>
     <string name="space_world_owned">Space World: OWNED!</string>
     <string name="space_world_owned_error">Error: You already own the space world!</string>
+    <string name="space_world_not_owned_error">Error: You do not own the space world!</string>
     <string name="item_owned_error">Error: You already own that item!</string>
     <string name="bullet">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
