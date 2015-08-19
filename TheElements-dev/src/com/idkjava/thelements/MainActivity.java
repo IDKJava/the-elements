@@ -104,8 +104,27 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.null_gravity_zone, R.drawable.ng_tex),
             new IconListItem(R.string.remove_gravity_object, R.drawable.eraser)
     ));
+    static ArrayList<IconListItem> toolPackList = new ArrayList<>(Arrays.asList(
+            new IconListItem(R.string.draw_rectangle, R.drawable.rect_tool),
+            new IconListItem(R.string.draw_circle, R.drawable.circle_tool),
+            new IconListItem(R.string.draw_triangle, R.drawable.tri_tool),
+            new IconListItem(R.string.draw_line, R.drawable.line_tool),
+            new IconListItem(R.string.draw_dashed_line, R.drawable.line_dashed_tool),
+            new IconListItem(R.string.slingshot, R.drawable.slingshot_tool),
+            new IconListItem(R.string.spray, R.drawable.spray_tool)
+    ));
+    private ArrayList<IconListItem> getLockedToolPackList() {
+        ArrayList<IconListItem> locked = new ArrayList<>(toolPackList);
+        for (IconListItem i : locked) {
+            i.iconRes = R.drawable.lock;
+            i.locked = true;
+            i.sku = ProductManager.SKU_TOOL_PACK;
+        }
+        return locked;
+    }
     ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);
     private void refreshToolList() {
+        // Add world-specific tools
         if (curWorld == WORLD_EARTH) {
             toolList = new ArrayList<>(baseToolList);
         }
@@ -115,6 +134,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         else {
             throw new RuntimeException("Tool set unspecified for world: " + curWorld);
+        }
+
+        if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
+            toolList.addAll(toolPackList);
+        }
+        else {
+            toolList.addAll(getLockedToolPackList());
         }
 
         if (mToolAdapter != null) {
@@ -426,10 +452,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setOnCancelListener(this);
             builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
-                    // TODO(gkanwar): Set tool to brush
                     setElement((char) (item + NORMAL_ELEMENT));
-                    sand_view.setTool(SandView.Tool.BRUSH_TOOL);
-                    menu_bar.setToolIcon(R.drawable.palette);
+                    // Set tool to brush if not currently a draw tool
+                    if (!sand_view.isDrawTool()) {
+                        sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                        menu_bar.setToolIcon(R.drawable.palette);
+                    }
                     setPlaying(play);
                     dialog.dismiss();
                 }
@@ -448,6 +476,16 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     IconListItem item = toolList.get(which);
+
+                    // Check locked
+                    if (item.locked) {
+                        Intent i = new Intent(MainActivity.this, PurchaseActivity.class);
+                        i.putExtra("purchase_sku", item.sku);
+                        startActivity(i);
+                        finish();
+                        return;
+                    }
+
                     menu_bar.setToolIcon(item.iconRes);
                     switch (item.nameRes) {
                         case R.string.brush_tool: {
@@ -490,6 +528,37 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             sand_view.setTool(SandView.Tool.REMOVE_GRAV_TOOL);
                             break;
                         }
+
+                        // Tool pack
+                        case R.string.draw_rectangle: {
+                            sand_view.setTool(SandView.Tool.RECT_TOOL);
+                            break;
+                        }
+                        case R.string.draw_circle: {
+                            sand_view.setTool(SandView.Tool.CIRCLE_TOOL);
+                            break;
+                        }
+                        case R.string.draw_line: {
+                            sand_view.setTool(SandView.Tool.LINE_TOOL);
+                            break;
+                        }
+                        case R.string.slingshot: {
+                            sand_view.setTool(SandView.Tool.SLINGSHOT_TOOL);
+                            break;
+                        }
+                        case R.string.spray: {
+                            sand_view.setTool(SandView.Tool.SPRAY_TOOL);
+                            break;
+                        }
+                        case R.string.draw_triangle: {
+                            sand_view.setTool(SandView.Tool.TRIANGLE_TOOL);
+                            break;
+                        }
+                        case R.string.draw_dashed_line: {
+                            sand_view.setTool(SandView.Tool.DASHED_LINE_TOOL);
+                            break;
+                        }
+
                         default : {
                             throw new RuntimeException("Unknown tool selected.");
                         }

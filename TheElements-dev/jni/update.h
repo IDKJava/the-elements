@@ -22,6 +22,9 @@
 //Include the clear funtion (rsetup)
 #include "setup.h"
 
+void drawCircle(int x, int y);
+void drawCircleyLine(int startx, int starty, int endx, int endy);
+
 void startUpdateThread();
 void killUpdateThread();
 

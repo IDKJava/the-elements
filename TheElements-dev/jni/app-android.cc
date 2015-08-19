@@ -50,6 +50,15 @@
 extern "C" {
 #endif
 
+void convertMouseCoords(int x, int y, float* gameX, float* gameY) {
+    float modViewWidth = viewWidth * zoomScale;
+    float modViewHeight = viewHeight * zoomScale;
+    *gameX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
+    *gameY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
+    *gameX /= zoomFactor;
+    *gameY /= zoomFactor;
+}
+
 //Called from SandViewRenderer
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height)
@@ -341,25 +350,25 @@ Java_com_idkjava_thelements_ElementsApplication_setNGTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, ngArr, 0);
 }
 JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setBrushProps(JNIEnv* env, jobject thiz, jint brushType) {
+    brushProps = brushType;
+}
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_setDragProps(JNIEnv* env, jobject thiz, jint renderType) {
+    renderOverlayType = renderType;
+}
+JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jobject thiz, jint x, jint y) {
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     rectValid = true;
     rectSX = rectEX = mX;
     rectSY = rectEY = mY;
 }
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_rectMove(JNIEnv* env, jobject thiz, jint x, jint y) {
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     rectEX = mX;
     rectEY = mY;
 }
@@ -370,12 +379,8 @@ Java_com_idkjava_thelements_game_SandView_rectEnd(JNIEnv* env, jobject thiz) {
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     brushLocX = mX;
     brushLocY = mY;
     brushOn = true;
@@ -384,12 +389,8 @@ Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobjec
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     brushNextLocX = mX;
     brushNextLocY = mY;
     pthread_mutex_unlock(&brush_mutex);
@@ -397,12 +398,8 @@ Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     brushNextLocX = mX;
     brushNextLocY = mY;
     brushOn = false;
@@ -414,12 +411,8 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
     if (world != WORLD_SPACE) {
         return false;
     }
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     return makeBlackHole(mX, mY);
 }
 
@@ -428,12 +421,8 @@ Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thi
     if (world != WORLD_SPACE) {
         return false;
     }
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     return makeWhiteHole(mX, mY);
 }
 
@@ -442,12 +431,8 @@ Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz
     if (world != WORLD_SPACE) {
         return false;
     }
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
     return makeCurlHole(mX, mY);
 }
 
@@ -457,16 +442,9 @@ Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject t
     if (world != WORLD_SPACE) {
         return false;
     }
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float startX = ((float)sx/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float startY = ((float)sy/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    float endX = ((float)ex/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float endY = ((float)ey/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    startX /= zoomFactor;
-    startY /= zoomFactor;
-    endX /= zoomFactor;
-    endY /= zoomFactor;
+    float startX, startY, endX, endY;
+    convertMouseCoords(sx, sy, &startX, &startY);
+    convertMouseCoords(ex, ey, &endX, &endY);
     return makeNullGravity(startX, startY, endX, endY);
 }
 
@@ -475,12 +453,8 @@ Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject 
     if (world != WORLD_SPACE) {
         return false;
     }
-    float modViewWidth = viewWidth * zoomScale;
-    float modViewHeight = viewHeight * zoomScale;
-    float mX = ((float)x/(float)screenWidth)*modViewWidth + ((float)centerX - (modViewWidth/2.0));
-    float mY = ((float)y/(float)screenHeight)*modViewHeight + ((float)centerY - (float)(modViewHeight/2.0));
-    mX /= zoomFactor;
-    mY /= zoomFactor;
+    float mX, mY;
+    convertMouseCoords(x, y, &mX, &mY);
 
     int closest = -1;
     float dist;
@@ -514,9 +488,102 @@ Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject 
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
-{
-  filterType = mode;
+Java_com_idkjava_thelements_game_SandView_drawRect(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    pthread_mutex_lock(&update_mutex);
+    drawCircleyLine(sx, sy, sx, ey);
+    drawCircleyLine(sx, ey, ex, ey);
+    drawCircleyLine(ex, ey, ex, sy);
+    drawCircleyLine(ex, sy, sx, sy);
+    pthread_mutex_unlock(&update_mutex);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_drawTri(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    pthread_mutex_lock(&update_mutex);
+    drawCircleyLine(sx, sy, sx, ey);
+    drawCircleyLine(sx, ey, ex, ey);
+    drawCircleyLine(ex, ey, sx, sy);
+    pthread_mutex_unlock(&update_mutex);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_drawCircle(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    float dx = fabs(sx-ex), dy = fabs(sy-ey);
+    float r = sqrt(dx*dx+dy*dy)*0.5;
+    float cx = (sx+ex)/2.0, cy = (sy+ey)/2.0;
+    pthread_mutex_lock(&update_mutex);
+    // 20-sided poly loop
+    float lastX = cx + r, lastY = cy;
+    for (int i = 1; i < 21; ++i) {
+        float nextX = r*cos(i*2*M_PI/20) + cx;
+        float nextY = r*sin(i*2*M_PI/20) + cy;
+        drawCircleyLine(lastX, lastY, nextX, nextY);
+        lastX = nextX;
+        lastY = nextY;
+    }
+    pthread_mutex_unlock(&update_mutex);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_drawLine(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    pthread_mutex_lock(&update_mutex);
+    drawCircleyLine(sx, sy, ex, ey);
+    pthread_mutex_unlock(&update_mutex);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_drawLineDashed(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+
+    int deltaX = ex-sx;
+    int deltaY = ey-sy;
+    if (deltaX == 0 && deltaY == 0) {
+        return;
+    }
+    int curX = sx, curY = sy;
+    float dx = deltaX/10.0, dy = deltaY/10.0;
+    // Multiply the comparison by the delta to fix the signs
+    pthread_mutex_lock(&update_mutex);
+    while (curX*deltaX < ex*deltaX && curY*deltaY < ey*deltaY) {
+        drawCircleyLine(curX, curY, curX+dx, curY+dy);
+        curX += dx*2;
+        curY += dy*2;
+    }
+    pthread_mutex_unlock(&update_mutex);
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_drawSlingshot(JNIEnv* env, jobject thiz,
+    jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    pthread_mutex_lock(&update_mutex);
+    brushProps = BRUSH_SLINGSHOT;
+    slingshotX = (ex-sx)/10.0;
+    slingshotY = (ey-sy)/10.0;
+    drawCircle(sx, sy);
+    brushProps = BRUSH_NORMAL;
+    pthread_mutex_unlock(&update_mutex);
 }
 
 JNIEXPORT void JNICALL

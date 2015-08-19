@@ -20,6 +20,7 @@ public class PurchaseActivity extends Activity {
     private static final int OWNED_COLOR = Color.rgb(0, 255, 50);
 
     TextView spaceWorldTitle;
+    TextView toolPackTitle;
 
     private void firePurchase(String sku, ErrorHandler handler) {
         // Fire off the purchase workflow
@@ -38,6 +39,7 @@ public class PurchaseActivity extends Activity {
         mHandler = handler;
 
         spaceWorldTitle = (TextView) findViewById(R.id.space_world_title);
+        toolPackTitle = (TextView) findViewById(R.id.tool_pack_title);
         View spaceWorldButton = findViewById(R.id.space_world_button);
         spaceWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +49,18 @@ public class PurchaseActivity extends Activity {
                 }
                 else {
                     firePurchase(ProductManager.SKU_GRAVITY_PACK, handler);
+                }
+            }
+        });
+        View toolPackButton = findViewById(R.id.tool_pack_button);
+        toolPackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
+                    handler.error(R.string.tool_pack_owned_error);
+                }
+                else {
+                    firePurchase(ProductManager.SKU_TOOL_PACK, handler);
                 }
             }
         });
@@ -71,6 +85,10 @@ public class PurchaseActivity extends Activity {
         if (ElementsApplication.checkOwned(ProductManager.SKU_GRAVITY_PACK)) {
             spaceWorldTitle.setText(R.string.space_world_owned);
             spaceWorldTitle.setTextColor(OWNED_COLOR);
+        }
+        if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
+            toolPackTitle.setText(R.string.tool_pack_owned);
+            toolPackTitle.setTextColor(OWNED_COLOR);
         }
     }
 

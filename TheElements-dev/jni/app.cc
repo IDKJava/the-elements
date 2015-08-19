@@ -63,6 +63,8 @@ SpaceObj spaceObjs[MAX_SPACE_OBJS];
 
 short brushLocX = -1, brushLocY = -1, brushNextLocX = -1, brushNextLocY = -1;
 bool brushOn = false;
+int brushProps = BRUSH_NORMAL;
+float slingshotX = 0.0, slingshotY = 0.0;
 
 int randOffset = 0;
 
@@ -108,6 +110,8 @@ int chTexWidth = 0, chTexHeight = 0;
 char *chTexPixels;
 int ngTexWidth = 0, ngTexHeight = 0;
 char *ngTexPixels;
+
+int renderOverlayType = RT_RECT;
 
 /*Network stuff taken out for now
 //Buffer building variables

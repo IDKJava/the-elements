@@ -123,6 +123,17 @@
 #define NULL_GRAVITY 3
 #define MAX_SPACE_OBJS 100
 
+// Brush props
+#define BRUSH_NORMAL 0
+#define BRUSH_SPRAY 1
+#define BRUSH_SLINGSHOT 2
+
+// Render overlay type
+#define RT_RECT 0
+#define RT_LINE 1
+#define RT_CIRCLE 2
+#define RT_TRI 3
+
 /*
  * LOGGING
  */

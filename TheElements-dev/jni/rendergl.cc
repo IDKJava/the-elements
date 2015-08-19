@@ -647,31 +647,104 @@ void glRender() {
 
     // Currently drawing overlay
     if (rectValid) {
-        float *rectCoords = new float[8];
         float sx = rectSX/workWidth, sy = 1.0 - rectSY/workHeight,
             ex = rectEX/workWidth, ey = 1.0 - rectEY/workHeight;
-        rectCoords[0] = sx;
-        rectCoords[1] = sy;
-        rectCoords[2] = sx;
-        rectCoords[3] = ey;
-        rectCoords[4] = ex;
-        rectCoords[5] = ey;
-        rectCoords[6] = ex;
-        rectCoords[7] = sy;
-        // Mag chosen for a slightly different color than the null gravity rect
-        float *magVals = new float[4];
-        magVals[0] = magVals[1] = magVals[2] = magVals[3] = 0.1;
-        glUseProgram(gGravProgram);
-        glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
-        glEnableVertexAttribArray(gGravVPositionHandle);
-        glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, rectCoords);
-        glEnableVertexAttribArray(gGravVMagHandle);
-        glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
+        if (renderOverlayType == RT_RECT) {
+            float *rectCoords = new float[8];
+            rectCoords[0] = sx;
+            rectCoords[1] = sy;
+            rectCoords[2] = sx;
+            rectCoords[3] = ey;
+            rectCoords[4] = ex;
+            rectCoords[5] = ey;
+            rectCoords[6] = ex;
+            rectCoords[7] = sy;
+            // Mag chosen for a slightly different color than the null gravity rect
+            float *magVals = new float[4];
+            magVals[0] = magVals[1] = magVals[2] = magVals[3] = 0.1;
+            glUseProgram(gGravProgram);
+            glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, rectCoords);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
 
-        glDrawArrays(GL_LINE_LOOP, 0, 4);
+            glDrawArrays(GL_LINE_LOOP, 0, 4);
 
-        free(rectCoords);
-        free(magVals);
+            free(rectCoords);
+            free(magVals);
+        }
+        else if (renderOverlayType == RT_LINE) {
+            float *lineCoords = new float[4];
+            lineCoords[0] = sx;
+            lineCoords[1] = sy;
+            lineCoords[2] = ex;
+            lineCoords[3] = ey;
+            float *magVals = new float[2];
+            magVals[0] = magVals[1] = 0.1;
+
+            glUseProgram(gGravProgram);
+            glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, lineCoords);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
+
+            glDrawArrays(GL_LINES, 0, 2);
+
+            free(lineCoords);
+            free(magVals);
+        }
+        else if (renderOverlayType == RT_CIRCLE) {
+            float cx = (sx+ex)/2.0;
+            float cy = (sy+ey)/2.0;
+            float dx = fabs(rectSX-rectEX), dy = fabs(rectSY-rectEY);
+            float r = sqrt(dx*dx+dy*dy)*0.5;
+            float rX = r/workWidth, rY = r/workHeight;
+            // Circle is actually a 20-sided poly
+            float *circleCoords = new float[20*2];
+            float *magVals = new float[20];
+            for (int i = 0; i < 20; ++i) {
+                magVals[i] = 0.1;
+                circleCoords[2*i] = rX*cos(i*2*M_PI/20)+cx;
+                circleCoords[2*i+1] = rY*sin(i*2*M_PI/20)+cy;
+            }
+
+            glUseProgram(gGravProgram);
+            glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, circleCoords);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
+
+            glDrawArrays(GL_LINE_LOOP, 0, 20);
+
+            free(circleCoords);
+            free(magVals);
+        }
+        else if (renderOverlayType == RT_TRI) {
+            float *triCoords = new float[6];
+            triCoords[0] = sx;
+            triCoords[1] = sy;
+            triCoords[2] = sx;
+            triCoords[3] = ey;
+            triCoords[4] = ex;
+            triCoords[5] = ey;
+            float *magVals = new float[3];
+            magVals[0] = magVals[1] = magVals[2] = 0.1;
+
+            glUseProgram(gGravProgram);
+            glUniformMatrix4fv(mGravProjMatrixUniformHandle, 1, GL_FALSE, &proj[0]);
+            glEnableVertexAttribArray(gGravVPositionHandle);
+            glVertexAttribPointer(gGravVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, triCoords);
+            glEnableVertexAttribArray(gGravVMagHandle);
+            glVertexAttribPointer(gGravVMagHandle, 1, GL_FLOAT, GL_FALSE, 0, magVals);
+
+            glDrawArrays(GL_LINE_LOOP, 0, 3);
+
+            free(triCoords);
+            free(magVals);
+        }
     }
 }
 

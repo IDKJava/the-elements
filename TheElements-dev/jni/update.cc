@@ -27,6 +27,23 @@
 static int shouldKillUpdateThread = TRUE;
 pthread_t updateThread;
 
+inline void brushSetPtVel(int pt) {
+    if (brushProps == BRUSH_NORMAL) {
+        // -1.0 to 1.0
+        a_xVel[pt] = ((rand()%11)-5)*0.2;
+        a_yVel[pt] = ((rand()%11)-5)*0.2;
+    }
+    else if (brushProps == BRUSH_SPRAY) {
+        // -5.0 to 5.0
+        a_xVel[pt] = ((rand()%11)-5);
+        a_yVel[pt] = ((rand()%11)-5);
+    }
+    else if (brushProps == BRUSH_SLINGSHOT) {
+        a_xVel[pt] = slingshotX;
+        a_yVel[pt] = slingshotY;
+    }
+}
+
 
 // Draws a circle of particles around (mx, my) using brushSize as the radius.
 void drawCircle(int mx, int my)
@@ -59,9 +76,7 @@ void drawCircle(int mx, int my)
                             {
                                 int pt = createPoint(mx + dx, my + dy, cElement);
                                 if (pt >= 0) {
-                                    // -1.0 to 1.0
-                                    a_xVel[pt] = ((rand()%11)-5)*0.2;
-                                    a_yVel[pt] = ((rand()%11)-5)*0.2;
+                                    brushSetPtVel(pt);
                                 }
                             }
                         }
@@ -114,9 +129,7 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
                 {
                     int pt = createPoint(x, y, cElement);
                     if (pt >= 0) {
-                        // -1.0 to 1.0
-                        a_xVel[pt] = ((rand()%11)-5)*0.2;
-                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                        brushSetPtVel(pt);
                     }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
@@ -145,9 +158,7 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
                 {
                     int pt = createPoint(x, y, cElement);
                     if (pt >= 0) {
-                        // -1.0 to 1.0
-                        a_xVel[pt] = ((rand()%11)-5)*0.2;
-                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                        brushSetPtVel(pt);
                     }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
@@ -226,9 +237,7 @@ void drawCircleyLine(int startx, int starty, int endx, int endy)
                 {
                     int pt = createPoint(x, y, cElement);
                     if (pt >= 0) {
-                        // -1.0 to 1.0
-                        a_xVel[pt] = ((rand()%11)-5)*0.2;
-                        a_yVel[pt] = ((rand()%11)-5)*0.2;
+                        brushSetPtVel(pt);
                     }
                 }
                 else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)

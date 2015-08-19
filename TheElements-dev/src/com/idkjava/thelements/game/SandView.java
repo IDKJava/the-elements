@@ -22,9 +22,27 @@ public class SandView extends GLSurfaceView
         WH_TOOL,
         CH_TOOL,
         NG_TOOL,
-        REMOVE_GRAV_TOOL
+        REMOVE_GRAV_TOOL,
+        RECT_TOOL,
+        CIRCLE_TOOL,
+        LINE_TOOL,
+        SLINGSHOT_TOOL,
+        SPRAY_TOOL,
+        TRIANGLE_TOOL,
+        DASHED_LINE_TOOL
     }
     private Tool mTool = Tool.BRUSH_TOOL;
+
+    // Integer constants reflecting drag render in native
+    // NOTE: Must match macros in native
+    private static final int RT_RECT = 0;
+    private static final int RT_LINE = 1;
+    private static final int RT_CIRCLE = 2;
+    private static final int RT_TRI = 3;
+
+    // Boolean constants for brush props
+    private static final int BRUSH_NORMAL = 0;
+    private static final int BRUSH_SPRAY = 1;
 
 	//Constructor
 	public SandView(Context context, AttributeSet attrs)
@@ -38,24 +56,75 @@ public class SandView extends GLSurfaceView
 	}
 
 	public void setTool(Tool tool) {
-      mTool = tool;
+        mTool = tool;
+
+        // Initialize tool rendering properties in native
+        switch (mTool) {
+            case BRUSH_TOOL:
+                setBrushProps(BRUSH_NORMAL);
+                break;
+            case SPRAY_TOOL:
+                setBrushProps(BRUSH_SPRAY);
+                break;
+            case NG_TOOL:
+            case RECT_TOOL:
+                setDragProps(RT_RECT);
+                break;
+            case TRIANGLE_TOOL:
+                setDragProps(RT_TRI);
+                break;
+            case CIRCLE_TOOL:
+                setDragProps(RT_CIRCLE);
+                break;
+            case LINE_TOOL:
+            case DASHED_LINE_TOOL:
+            case SLINGSHOT_TOOL:
+                setDragProps(RT_LINE);
+                break;
+        }
 	}
+
+    public boolean isDrawTool() {
+        switch (mTool) {
+            case BRUSH_TOOL:
+            case SPRAY_TOOL:
+            case RECT_TOOL:
+            case TRIANGLE_TOOL:
+            case CIRCLE_TOOL:
+            case LINE_TOOL:
+            case DASHED_LINE_TOOL:
+            case SLINGSHOT_TOOL:
+                return true;
+            default:
+                return false;
+        }
+    }
 
   // When a touch screen event occurs
   public boolean onTouchEvent(final MotionEvent event)
   {
       switch (mTool) {
-          case BRUSH_TOOL: return handleBrushTouch(event);
-          case HAND_TOOL: return handlePanTouch(event);
+          case BRUSH_TOOL:
+          case SPRAY_TOOL:
+              return handleBrushTouch(event);
+          case HAND_TOOL:
+              return handlePanTouch(event);
           case BH_TOOL:
           case WH_TOOL:
           case CH_TOOL:
           case REMOVE_GRAV_TOOL:
               return handlePointTouch(event);
           case NG_TOOL:
+          case RECT_TOOL:
+          case TRIANGLE_TOOL:
+          case CIRCLE_TOOL:
+          case LINE_TOOL:
+          case SLINGSHOT_TOOL:
+          case DASHED_LINE_TOOL:
               return handleRectTouch(event);
+          default:
+              throw new RuntimeException("Unknown tool selected!");
       }
-      return true;
   }
 
   private boolean handleBrushTouch(final MotionEvent event) {
@@ -102,6 +171,7 @@ public class SandView extends GLSurfaceView
         return true;
     }
 
+    // Handles all point-to-point drag type tools
     private int mRectStartX, mRectStartY;
     private boolean handleRectTouch(final MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -111,9 +181,29 @@ public class SandView extends GLSurfaceView
         }
         else if (event.getAction() == MotionEvent.ACTION_UP) {
             rectEnd();
+            int ex = (int)event.getX();
+            int ey = (int)event.getY();
             switch (mTool) {
                 case NG_TOOL:
-                    makeNullGravity(mRectStartX, mRectStartY, (int) event.getX(), (int) event.getY());
+                    makeNullGravity(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case RECT_TOOL:
+                    drawRect(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case TRIANGLE_TOOL:
+                    drawTri(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case CIRCLE_TOOL:
+                    drawCircle(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case LINE_TOOL:
+                    drawLine(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case SLINGSHOT_TOOL:
+                    drawSlingshot(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case DASHED_LINE_TOOL:
+                    drawLineDashed(mRectStartX, mRectStartY, ex, ey);
                     break;
                 default:
                     throw new RuntimeException("Invalid handler for tool: " + mTool);
@@ -182,6 +272,8 @@ public class SandView extends GLSurfaceView
   }
 
   //@formatter:off
+  private static native void setBrushProps(int brushType);
+  private static native void setDragProps(int renderType);
   private static native void rectStart(int x, int y);
   private static native void rectMove(int x, int y);
   private static native void rectEnd();
@@ -192,6 +284,12 @@ public class SandView extends GLSurfaceView
   private static native boolean makeWhiteHole(int x, int y);
   private static native boolean makeCurlHole(int x, int y);
   private static native boolean makeNullGravity(int sx, int sy, int ex, int ey);
+  private static native void drawRect(int sx, int sy, int ex, int ey);
+    private static native void drawTri(int sx, int sy, int ex, int ey);
+    private static native void drawCircle(int sx, int sy, int ex, int ey);
+    private static native void drawLine(int sx, int sy, int ex, int ey);
+    private static native void drawLineDashed(int sx, int sy, int ex, int ey);
+    private static native void drawSlingshot(int sx, int sy, int ex, int ey);
   private static native void removeGravObject(int x, int y);
   private static native void panView(int dx, int dy);
   private static native void setPinchScale(float scale);

@@ -124,6 +124,8 @@
     extern unsigned char brushSize;
     extern short brushLocX, brushLocY, brushNextLocX, brushNextLocY;
     extern bool brushOn;
+    extern int brushProps;
+    extern float slingshotX, slingshotY;
 
     extern unsigned char filterType;
 
@@ -194,6 +196,8 @@
     extern char *chTexPixels;
     extern int ngTexWidth, ngTexHeight;
     extern char *ngTexPixels;
+
+    extern int renderOverlayType;
 
 
 /*Network stuff taken out for now

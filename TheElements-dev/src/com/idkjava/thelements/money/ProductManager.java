@@ -25,10 +25,7 @@ import com.idkjava.thelements.keys.APIKeys;
  */
 public class ProductManager {
     public static String SKU_GRAVITY_PACK = "gravity_pack"; // includes all gravity tools
-    public static String SKU_GRAVITY_BH = "gravity_black_hole"; // black hole
-    public static String SKU_GRAVITY_WH = "gravity_white_hole"; // white hole
-    public static String SKU_GRAVITY_CH = "gravity_whirlpool"; // whirlpool
-    public static String SKU_GRAVITY_NG = "gravity_null_gravity"; // null gravity
+    public static String SKU_TOOL_PACK = "tool_pack"; // includes a large set of extra tools
 
     public ProductManager(Context ctx, SharedPreferences prefs) {
         // Only ever use the application context, because this transcends
@@ -81,44 +78,18 @@ public class ProductManager {
             // Gravity pack
             Purchase gravityPurchase = inventory.getPurchase(SKU_GRAVITY_PACK);
             if (gravityPurchase != null && verify(gravityPurchase)) {
+                Log.d("TheElements", "Gravity pack owned: " + gravityPurchase.getPurchaseState());
                 SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(SKU_GRAVITY_BH, true);
-                editor.putBoolean(SKU_GRAVITY_CH, true);
-                editor.putBoolean(SKU_GRAVITY_NG, true);
-                editor.putBoolean(SKU_GRAVITY_WH, true);
                 editor.putBoolean(SKU_GRAVITY_PACK, true);
                 editor.commit();
             }
 
-            // Black hole
-            Purchase gravityBHPurchase = inventory.getPurchase(SKU_GRAVITY_BH);
-            if (gravityBHPurchase != null && verify(gravityBHPurchase)) {
+            // Tool pack
+            Purchase toolPurchase = inventory.getPurchase(SKU_TOOL_PACK);
+            if (toolPurchase != null && verify(toolPurchase)) {
+                Log.d("TheElements", "Tools pack owned: " + toolPurchase.getPurchaseState());
                 SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(SKU_GRAVITY_BH, true);
-                editor.commit();
-            }
-
-            // White hole
-            Purchase gravityWHPurchase = inventory.getPurchase(SKU_GRAVITY_WH);
-            if (gravityWHPurchase != null && verify(gravityWHPurchase)) {
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(SKU_GRAVITY_WH, true);
-                editor.commit();
-            }
-
-            // Curl hole
-            Purchase gravityCHPurchase = inventory.getPurchase(SKU_GRAVITY_CH);
-            if (gravityCHPurchase != null && verify(gravityCHPurchase)) {
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(SKU_GRAVITY_CH, true);
-                editor.commit();
-            }
-
-            // Null gravity
-            Purchase gravityNGPurchase = inventory.getPurchase(SKU_GRAVITY_NG);
-            if (gravityNGPurchase != null && verify(gravityNGPurchase)) {
-                SharedPreferences.Editor editor = mPrefs.edit();
-                editor.putBoolean(SKU_GRAVITY_NG, true);
+                editor.putBoolean(SKU_TOOL_PACK, true);
                 editor.commit();
             }
         }
@@ -138,11 +109,8 @@ public class ProductManager {
             }
 
             // Any one-time purchase
-            if (purchase.getSku() == SKU_GRAVITY_BH ||
-                purchase.getSku() == SKU_GRAVITY_CH ||
-                purchase.getSku() == SKU_GRAVITY_NG ||
-                purchase.getSku() == SKU_GRAVITY_PACK ||
-                purchase.getSku() == SKU_GRAVITY_WH) {
+            if (purchase.getSku() == SKU_GRAVITY_PACK ||
+                purchase.getSku() == SKU_TOOL_PACK) {
                 // Update inventory status asynchronously
                 mHelper.queryInventoryAsync(mGotInventoryListener);
             }
