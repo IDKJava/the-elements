@@ -79,9 +79,7 @@ public class PurchaseActivity extends Activity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void refreshUI() {
         if (ElementsApplication.checkOwned(ProductManager.SKU_GRAVITY_PACK)) {
             spaceWorldTitle.setText(R.string.space_world_owned);
             spaceWorldTitle.setTextColor(OWNED_COLOR);
@@ -90,6 +88,18 @@ public class PurchaseActivity extends Activity {
             toolPackTitle.setText(R.string.tool_pack_owned);
             toolPackTitle.setTextColor(OWNED_COLOR);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mProductManager = ElementsApplication.getProductManager();
+        mProductManager.refreshInventory(new Runnable() {
+            @Override
+            public void run() {
+                refreshUI();
+            }
+        });
     }
 
     @Override
@@ -113,6 +123,13 @@ public class PurchaseActivity extends Activity {
         if (!mProductManager.handleActivityResult(requestCode, resultCode, data)) {
             super.onActivityResult(requestCode, resultCode, data);
         }
+
+        mProductManager.refreshInventory(new Runnable() {
+            @Override
+            public void run() {
+                refreshUI();
+            }
+        });
     }
 
     private ProductManager mProductManager;

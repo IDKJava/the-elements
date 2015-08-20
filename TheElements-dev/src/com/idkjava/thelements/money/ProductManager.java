@@ -139,6 +139,22 @@ public class ProductManager {
         return (state && payload);
     }
 
+    public void refreshInventory(final Runnable callback) {
+        new Thread() {
+            @Override
+            public void run() {
+                if (!waitSetup()) return;
+                // queryInventoryAsync creates a handler, so we need to prepare
+                // a looper for this thread
+                Looper.prepare();
+                mHelper.queryInventoryAsync(mGotInventoryListener);
+                if (callback != null) {
+                    callback.run();
+                }
+            }
+        }.start();
+    }
+
     public void launchPurchase(Activity act, String sku) {
         final Activity threadAct = act;
         final String threadSku = sku;

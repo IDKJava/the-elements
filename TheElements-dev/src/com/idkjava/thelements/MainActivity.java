@@ -426,6 +426,15 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Log.v("TheElements", "sand_view.onResume()");
         sand_view.onResume();
         // Log.v("TheElements", "sand_view.onResume() done");
+
+        // Refresh our product inventory with a callback to update
+        // relevant UI bits
+        ElementsApplication.getProductManager().refreshInventory(new Runnable () {
+            @Override
+            public void run() {
+                refreshToolList();
+            }
+        });
     }
 
     protected Dialog onCreateDialog(int id) // This is called when showDialog is called
