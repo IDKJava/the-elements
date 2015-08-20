@@ -258,8 +258,11 @@ void specialWander(int particle)
 
 bool specialFlow(int particle, int sp) {
     struct Element* tempElement = a_element[particle];
+    int thisDensity = tempElement->density;
     float gx, gy;
     float x = a_x[particle], y = a_y[particle];
+    float oldX = a_oldX[particle], oldY = a_oldY[particle];
+    int oldInd = getIndex((int)oldX, (int)oldY);
     getFallField(x, y, &gx, &gy, NULL);
     int curInd = getIndex(x, y);
     float ang = atan2(gy, gx);
@@ -267,44 +270,95 @@ bool specialFlow(int particle, int sp) {
     int dir = (rand()%2 == 0) ? -1 : 1;
     float leftAng = ang+dir*M_PI/2.0, rightAng = ang-dir*M_PI/2.0,
           leftUpAng = ang+dir*M_PI*3.0/4.0, rightUpAng = ang-dir*M_PI*3.0/4.0;
-    float leftX = x+cos(leftAng), leftY = y+sin(leftAng);
+    float leftX = x+sqrt(2.0)*cos(leftAng), leftY = y+sqrt(2.0)*sin(leftAng);
     int leftInd = getIndex(leftX, leftY);
-    float rightX = x+cos(rightAng), rightY = y+sin(rightAng);
+    int leftPart = allCoords[leftInd];
+    float rightX = x+sqrt(2.0)*cos(rightAng), rightY = y+sqrt(2.0)*sin(rightAng);
     int rightInd = getIndex(rightX, rightY);
-    float leftUpX = x+cos(leftUpAng), leftUpY = y+sin(leftUpAng);
+    int rightPart = allCoords[rightInd];
+    float leftUpX = x+sqrt(2.0)*cos(leftUpAng), leftUpY = y+sqrt(2.0)*sin(leftUpAng);
     int leftUpInd = getIndex(leftUpX, leftUpY);
-    float rightUpX = x+cos(rightUpAng), rightUpY = y+sin(rightUpAng);
+    int leftUpPart = allCoords[leftUpInd];
+    float rightUpX = x+sqrt(2.0)*cos(rightUpAng), rightUpY = y+sqrt(2.0)*sin(rightUpAng);
     int rightUpInd = getIndex(rightUpX, rightUpY);
-    if (coordInBounds(leftX, leftY) && allCoords[leftInd] == -1) {
-        a_hasMoved[particle] = true;
+    int rightUpPart = allCoords[rightUpInd];
+
+    // If movement is possible, we do the allcoords update ourselves, because
+    // this extends outside the simple 2-particle collision
+    if (coordInBounds(leftX, leftY) &&
+        (leftPart == -1 || a_element[leftPart]->density < thisDensity)) {
         a_x[particle] = leftX;
         a_y[particle] = leftY;
-        a_xVel[particle] += cos(leftAng);
-        a_yVel[particle] += sin(leftAng);
+        if (leftPart == -1) {
+            a_hasMoved[particle] = true;
+        }
+        else {
+            // Swap the two particles
+            a_hasMoved[particle] = false;
+            a_x[leftPart] = oldX;
+            a_y[leftPart] = oldY;
+            allCoords[oldInd] = leftPart;
+            setBitmapColor(oldX, oldY, a_element[leftPart]);
+            allCoords[leftInd] = particle;
+            setBitmapColor(leftX, leftY, tempElement);
+        }
         return true;
     }
-    else if (coordInBounds(rightX, rightY) && allCoords[rightInd] == -1) {
-        a_hasMoved[particle] = true;
+    else if (coordInBounds(rightX, rightY) &&
+        (rightPart == -1 || a_element[rightPart]->density < thisDensity)) {
         a_x[particle] = rightX;
         a_y[particle] = rightY;
-        a_xVel[particle] += cos(rightAng);
-        a_yVel[particle] += sin(rightAng);
+        if (rightPart == -1) {
+            a_hasMoved[particle] = true;
+        }
+        else {
+            // Swap the two particles
+            a_hasMoved[particle] = false;
+            a_x[rightPart] = oldX;
+            a_y[rightPart] = oldY;
+            allCoords[oldInd] = rightPart;
+            setBitmapColor(oldX, oldY, a_element[rightPart]);
+            allCoords[rightInd] = particle;
+            setBitmapColor(rightX, rightY, tempElement);
+        }
         return true;
     }
-    else if (coordInBounds(leftUpX, leftUpY) && allCoords[leftUpInd] == -1) {
-        a_hasMoved[particle] = true;
+    else if (coordInBounds(leftUpX, leftUpY) && leftUpPart != sp &&
+        (leftUpPart == -1 || a_element[leftUpPart]->density < thisDensity)) {
         a_x[particle] = leftUpX;
         a_y[particle] = leftUpY;
-        a_xVel[particle] += cos(leftUpAng);
-        a_yVel[particle] += sin(leftUpAng);
+        if (leftUpPart == -1) {
+            a_hasMoved[particle] = true;
+        }
+        else {
+            // Swap the two particles
+            a_hasMoved[particle] = false;
+            a_x[leftUpPart] = oldX;
+            a_y[leftUpPart] = oldY;
+            allCoords[oldInd] = leftUpPart;
+            setBitmapColor(oldX, oldY, a_element[leftUpPart]);
+            allCoords[leftUpInd] = particle;
+            setBitmapColor(leftUpX, leftUpY, tempElement);
+        }
         return true;
     }
-    else if (coordInBounds(rightUpX, rightUpY) && allCoords[rightUpInd] == -1) {
-        a_hasMoved[particle] = true;
+    else if (coordInBounds(rightUpX, rightUpY) &&
+        (rightUpPart == -1 || a_element[rightUpPart]->density < thisDensity)) {
         a_x[particle] = rightUpX;
         a_y[particle] = rightUpY;
-        a_xVel[particle] += cos(rightUpAng);
-        a_yVel[particle] += sin(rightUpAng);
+        if (rightUpPart == -1) {
+            a_hasMoved[particle] = true;
+        }
+        else {
+            // Swap the two particles
+            a_hasMoved[particle] = false;
+            a_x[rightUpPart] = oldX;
+            a_y[rightUpPart] = oldY;
+            allCoords[oldInd] = rightUpPart;
+            setBitmapColor(oldX, oldY, a_element[rightUpPart]);
+            allCoords[rightUpInd] = particle;
+            setBitmapColor(rightUpX, rightUpY, tempElement);
+        }
         return true;
     }
     return false;

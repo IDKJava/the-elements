@@ -88,16 +88,14 @@ void collide(int firstParticle, int secondParticle)
 
             break;
         }
-        //The less dense element bounces back and adds some velocities
+        //The less dense element bounces back
         else
         {
-            bounceFp(oldXFirst, oldYFirst, firstParticle);
-
-            //-5/3 to 5/3
-            float perpDelta = ((rand() % 101) - 50)/30.0;
+            // -1/2 to 1/2
+            float perpDelta = ((rand() % 11) - 5)/10.0;
             a_xVel[firstParticle] += perpXVel*perpDelta;
             a_yVel[firstParticle] += perpYVel*perpDelta;
-
+            bounceFp(oldXFirst, oldYFirst, firstParticle);
             break;
         }
     }
