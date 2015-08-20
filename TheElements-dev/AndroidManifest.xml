@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.idkjava.thelements"
     android:installLocation="auto"
-    android:versionCode="97"
+    android:versionCode="98"
     android:versionName="6.7">
 
     <uses-sdk
