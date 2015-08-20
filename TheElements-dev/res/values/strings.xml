@@ -26,7 +26,7 @@
     <string name="greentext">Greeness:</string>
     <string name="densitytext">Density:</string>
     <string name="reaction_prompt">Select Reaction Type?</string>
-<string name="app_intro">&lt;font color=&quot;white&quot;&gt;&lt;b&gt;Welcome to The Elements, now with Custom Elements!&lt;/b&gt;&lt;br/&gt;&lt;br/&gt; Keep in mind that Custom Elements is still experimental, so help us out by reporting all crashes, and emailing us at idkjava@gmail.com with issues or comments. Also, check out our recommended apps to help keep The Elements free!&lt;/font&gt;</string>
+<string name="app_intro">&lt;font color=&quot;white&quot;&gt;&lt;b&gt;Welcome to The Elements!&lt;/b&gt;&lt;br/&gt;&lt;br/&gt; With Custom Elements we give you the power to make what you want! Be sure to check out the new Space world, a simulation of a proper gravity field with placeable sources and sinks. Finally, please email idkjava@gmail.com with any bugs you may find.&lt;/font&gt;</string>
 <string name="brush_size_picker">Brush Size Picker</string>
 <string name="element_picker">Palette</string>
 <string name="proceed">Proceed</string>
