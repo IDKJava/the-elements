@@ -559,8 +559,8 @@ Java_com_idkjava_thelements_game_SandView_drawLineDashed(JNIEnv* env, jobject th
     if (deltaX == 0 && deltaY == 0) {
         return;
     }
-    int curX = sx, curY = sy;
-    float dx = deltaX/10.0, dy = deltaY/10.0;
+    float curX = sx, curY = sy;
+    float dx = deltaX/11.0, dy = deltaY/11.0;
     // Multiply the comparison by the delta to fix the signs
     pthread_mutex_lock(&update_mutex);
     while (curX*deltaX < ex*deltaX && curY*deltaY < ey*deltaY) {
