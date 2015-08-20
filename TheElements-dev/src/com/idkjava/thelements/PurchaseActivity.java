@@ -94,7 +94,7 @@ public class PurchaseActivity extends Activity {
     protected void onResume() {
         super.onResume();
         mProductManager = ElementsApplication.getProductManager();
-        mProductManager.refreshInventory(new Runnable() {
+        mProductManager.refreshInventory(this, new Runnable() {
             @Override
             public void run() {
                 refreshUI();
@@ -124,7 +124,7 @@ public class PurchaseActivity extends Activity {
             super.onActivityResult(requestCode, resultCode, data);
         }
 
-        mProductManager.refreshInventory(new Runnable() {
+        mProductManager.refreshInventory(this, new Runnable() {
             @Override
             public void run() {
                 refreshUI();

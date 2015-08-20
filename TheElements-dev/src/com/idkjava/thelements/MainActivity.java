@@ -429,7 +429,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Refresh our product inventory with a callback to update
         // relevant UI bits
-        ElementsApplication.getProductManager().refreshInventory(new Runnable () {
+        ElementsApplication.getProductManager().refreshInventory(this, new Runnable () {
             @Override
             public void run() {
                 refreshToolList();

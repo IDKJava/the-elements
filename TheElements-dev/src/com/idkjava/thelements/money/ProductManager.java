@@ -139,7 +139,7 @@ public class ProductManager {
         return (state && payload);
     }
 
-    public void refreshInventory(final Runnable callback) {
+    public void refreshInventory(final Activity act, final Runnable callback) {
         new Thread() {
             @Override
             public void run() {
@@ -149,7 +149,7 @@ public class ProductManager {
                 Looper.prepare();
                 mHelper.queryInventoryAsync(mGotInventoryListener);
                 if (callback != null) {
-                    callback.run();
+                    act.runOnUiThread(callback);
                 }
             }
         }.start();
