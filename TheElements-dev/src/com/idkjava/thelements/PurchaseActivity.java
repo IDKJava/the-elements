@@ -24,7 +24,7 @@ public class PurchaseActivity extends Activity {
 
     private void firePurchase(String sku, ErrorHandler handler) {
         // Fire off the purchase workflow
-        ProductManager mProductManager = ElementsApplication.getProductManager();
+        mProductManager = ElementsApplication.getProductManager();
         mProductManager.bindErrorHandler(handler);
         mProductManager.launchPurchase(this, sku);
     }

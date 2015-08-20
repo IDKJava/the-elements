@@ -83,6 +83,11 @@ public class ProductManager {
                 editor.putBoolean(SKU_GRAVITY_PACK, true);
                 editor.commit();
             }
+            else {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_GRAVITY_PACK, false);
+                editor.commit();
+            }
 
             // Tool pack
             Purchase toolPurchase = inventory.getPurchase(SKU_TOOL_PACK);
@@ -90,6 +95,11 @@ public class ProductManager {
                 Log.d("TheElements", "Tools pack owned: " + toolPurchase.getPurchaseState());
                 SharedPreferences.Editor editor = mPrefs.edit();
                 editor.putBoolean(SKU_TOOL_PACK, true);
+                editor.commit();
+            }
+            else {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_TOOL_PACK, false);
                 editor.commit();
             }
         }
