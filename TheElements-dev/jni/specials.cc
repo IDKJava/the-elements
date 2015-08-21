@@ -40,8 +40,8 @@ bool collisionSpecials(int firstParticle, int secondParticle)
 
         return TRUE;
     }
-    // Liquids flow around obstacles
-    else if (a_element[firstParticle]->state == 1) {
+    // Fluids flow around obstacles
+    else if (a_element[firstParticle]->state > 0) {
         return specialFlow(firstParticle, secondParticle);
     }
 
@@ -266,6 +266,10 @@ bool specialFlow(int particle, int sp) {
     getFallField(x, y, &gx, &gy, NULL);
     int curInd = getIndex(x, y);
     float ang = atan2(gy, gx);
+    // Invert fall angle if fallVel is negative
+    if (tempElement->fallVel < 0) {
+        ang *= -1;
+    }
     // Randomize direction check order
     int dir = (rand()%2 == 0) ? -1 : 1;
     float leftAng = ang+dir*M_PI/2.0, rightAng = ang-dir*M_PI/2.0,

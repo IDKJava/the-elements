@@ -93,6 +93,10 @@ void collide(int firstParticle, int secondParticle)
         {
             // -1/2 to 1/2
             float perpDelta = ((rand() % 11) - 5)/10.0;
+            if (a_element[firstParticle]->state == 2) {
+                // Much more velocity for gases
+                perpDelta *= 3;
+            }
             a_xVel[firstParticle] += perpXVel*perpDelta;
             a_yVel[firstParticle] += perpYVel*perpDelta;
             bounceFp(oldXFirst, oldYFirst, firstParticle);

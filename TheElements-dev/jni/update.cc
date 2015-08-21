@@ -555,7 +555,7 @@ int updateSpecials(int index)
 void UpdateView(void)
 {
     //For speed we're going to create temp variables to store stuff
-    int tempOldX, tempOldY;
+    float tempOldX, tempOldY;
     float *tempX, *tempY;
     float *tempXVel, *tempYVel;
     char tempInertia;
@@ -634,8 +634,8 @@ void UpdateView(void)
                 tempY = &(a_y[tempParticle]);
                 a_oldX[tempParticle] = a_x[tempParticle];
                 a_oldY[tempParticle] = a_y[tempParticle];
-                tempOldX = (int) a_x[tempParticle];
-                tempOldY = (int) a_y[tempParticle];
+                tempOldX = a_x[tempParticle];
+                tempOldY = a_y[tempParticle];
                 tempElement = a_element[tempParticle];
                 tempInertia = tempElement->inertia;
                 tempXVel = &(a_xVel[tempParticle]);
@@ -760,11 +760,10 @@ void UpdateView(void)
                     if(*heat < a_element[tempParticle]->lowestTemp)
                     {
                         struct Element* tempLowerElement = a_element[tempParticle]->lowerElement;
-                        if (tempLowerElement->state < a_element[tempParticle]->state ||
-                                tempLowerElement->inertia == INERTIA_UNMOVABLE)
+                        if (tempLowerElement->inertia == INERTIA_UNMOVABLE)
                         {
                             //Don't go to more solid element if the particle is moving
-                            if (*tempX == tempOldX && *tempY == tempOldY &&
+                            if (fabs(*tempX-tempOldX) < 0.5 && fabs(*tempY-tempOldY) < 0.5 &&
                                 *tempXVel < 0.5 && *tempYVel < 0.5)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
@@ -781,11 +780,10 @@ void UpdateView(void)
                     else if(*heat > a_element[tempParticle]->highestTemp)
                     {
                         struct Element* tempHigherElement = a_element[tempParticle]->higherElement;
-                        if (tempHigherElement->state < a_element[tempParticle]->state ||
-                                tempHigherElement->inertia == INERTIA_UNMOVABLE)
+                        if (tempHigherElement->inertia == INERTIA_UNMOVABLE)
                         {
                             //Don't go to more solid element if the particle is moving
-                            if (*tempX == tempOldX && *tempY == tempOldY &&
+                            if (fabs(*tempX-tempOldX) < 0.5 && fabs(*tempY-tempOldY) < 0.5 &&
                                 *tempXVel < 0.5 && *tempYVel < 0.5)
                             {
                                 if ( rand() % HEAT_CHANGE_PROB == 0 )
