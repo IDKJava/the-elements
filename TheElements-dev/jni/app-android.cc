@@ -65,6 +65,7 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
 {
     __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
 
+    pthread_mutex_lock(&update_mutex);
     //These variable change from pinch to zoom
     viewWidth = width;
     viewHeight = height;
@@ -87,6 +88,9 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
     arraySetup();
     glInit();
     gameSetup();
+    pthread_mutex_unlock(&update_mutex);
+
+    // Start the update thread if needed
     startUpdateThread();
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now

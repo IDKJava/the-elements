@@ -54,7 +54,7 @@ char saveState2(char* saveLoc)
 
 char loadState2(char* loadLoc)
 {
-    LOGI("loadState2");
+    LOGI("loadState2: %s", loadLoc);
     // Hold the update mutex to prevent mid-load updates
     pthread_mutex_lock(&update_mutex);
 
