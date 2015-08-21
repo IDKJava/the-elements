@@ -510,7 +510,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             break;
                         }
                         case R.string.eraser: {
-                            sand_view.setTool(SandView.Tool.BRUSH_TOOL);
+                            sand_view.setTool(SandView.Tool.ERASE_TOOL);
                             lastElement = getElement();
                             setElement(ERASER_ELEMENT);
                             break;

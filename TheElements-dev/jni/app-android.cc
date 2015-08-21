@@ -591,6 +591,12 @@ Java_com_idkjava_thelements_game_SandView_drawSlingshot(JNIEnv* env, jobject thi
 }
 
 JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
+{
+  filterType = mode;
+}
+
+JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setWorld(JNIEnv* env, jobject thiz, jint newWorld) {
   world = newWorld;
 }

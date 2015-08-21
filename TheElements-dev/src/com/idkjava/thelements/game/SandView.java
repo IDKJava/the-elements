@@ -17,6 +17,7 @@ public class SandView extends GLSurfaceView
 {
     public enum Tool {
         BRUSH_TOOL,
+        ERASE_TOOL,
         HAND_TOOL,
         BH_TOOL,
         WH_TOOL,
@@ -61,6 +62,7 @@ public class SandView extends GLSurfaceView
         // Initialize tool rendering properties in native
         switch (mTool) {
             case BRUSH_TOOL:
+            case ERASE_TOOL:
                 setBrushProps(BRUSH_NORMAL);
                 break;
             case SPRAY_TOOL:
@@ -105,6 +107,7 @@ public class SandView extends GLSurfaceView
   {
       switch (mTool) {
           case BRUSH_TOOL:
+          case ERASE_TOOL:
           case SPRAY_TOOL:
               return handleBrushTouch(event);
           case HAND_TOOL:
