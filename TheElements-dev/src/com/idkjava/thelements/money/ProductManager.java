@@ -1,21 +1,22 @@
 package com.idkjava.thelements.money;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.idkjava.thelements.BuildConfig;
 import com.idkjava.thelements.error.ErrorHandler;
+import com.idkjava.thelements.iab.IabException;
 import com.idkjava.thelements.iab.IabHelper;
 import com.idkjava.thelements.iab.IabResult;
 import com.idkjava.thelements.iab.Inventory;
 import com.idkjava.thelements.iab.Purchase;
 import com.idkjava.thelements.keys.APIKeys;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 /**
  * Class to manage Google Play billing services: initialization, purchasing in-game items,
@@ -34,21 +35,36 @@ public class ProductManager {
         mPrefs = prefs;
         mHelper = new IabHelper(mCtx, APIKeys.googlePlayPublicKey);
         mHelper.enableDebugLogging(BuildConfig.DEBUG);
-        mSetup = false;
-        Log.d("TheElements", "Product manager starting helper setup");
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+        mInPurchase = false;
+        mExec = Executors.newSingleThreadExecutor();
+        mExec.execute(new Runnable() {
             @Override
-            public void onIabSetupFinished(IabResult result) {
-                Log.d("TheElements", "Helper setup complete.");
-                if (!result.isSuccess()) {
-                    makeError("Failed to set up in-app billing: " + result);
-                    return;
-                }
+            public void run() {
+                Log.d("TheElements", "Product manager starting helper setup");
+                mInSetup = true;
+                mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                    @Override
+                    public void onIabSetupFinished(IabResult result) {
+                        Log.d("TheElements", "Helper setup complete.");
+                        mInSetup = false;
+                        if (!result.isSuccess()) {
+                            makeError("Failed to set up in-app billing: " + result);
+                            return;
+                        }
 
-                if (mHelper == null) return;
-                mHelper.queryInventoryAsync(mGotInventoryListener);
+                        if (mHelper == null) return;
+                        refreshInventory(null, null);
+                    }
+                });
+                while (mInSetup) {
+                    try {
+                        Thread.sleep(500);
+                    }
+                    catch (InterruptedException e) {}
+                }
             }
         });
+
     }
 
     public void bindErrorHandler(ErrorHandler handler) {
@@ -69,8 +85,6 @@ public class ProductManager {
                 makeError("Failed to get in-app inventory: " + result);
                 return;
             }
-
-            mSetup = true;
 
             // Check items and resolve purchases into in-app settings
             // TODO: Use a more secure item tracking method in the future
@@ -121,8 +135,7 @@ public class ProductManager {
             // Any one-time purchase
             if (purchase.getSku() == SKU_GRAVITY_PACK ||
                 purchase.getSku() == SKU_TOOL_PACK) {
-                // Update inventory status asynchronously
-                mHelper.queryInventoryAsync(mGotInventoryListener);
+                refreshInventory(null, null);
             }
             else {
                 makeError("Error, unknown purchase type.");
@@ -140,41 +153,51 @@ public class ProductManager {
     }
 
     public void refreshInventory(final Activity act, final Runnable callback) {
-        new Thread() {
+        mExec.execute(new Runnable() {
             @Override
             public void run() {
-                if (!waitSetup()) return;
-                // queryInventoryAsync creates a handler, so we need to prepare
-                // a looper for this thread
-                Looper.prepare();
-                mHelper.queryInventoryAsync(mGotInventoryListener);
-                if (callback != null) {
+                try {
+                    Inventory i = mHelper.queryInventory(false, null);
+                    IabResult success = new IabResult(
+                            IabHelper.BILLING_RESPONSE_RESULT_OK,
+                            "Inventory refresh successful.");
+                    mGotInventoryListener.onQueryInventoryFinished(success, i);
+                }
+                catch (IabException e) {}
+                if (act != null && callback != null) {
                     act.runOnUiThread(callback);
                 }
             }
-        }.start();
+        });
     }
 
     public void launchPurchase(Activity act, String sku) {
         final Activity threadAct = act;
         final String threadSku = sku;
         Log.d("TheElements", "launchPurchase");
-        new Thread() {
+        mExec.execute(new Runnable() {
             @Override
             public void run() {
+                mInPurchase = true;
                 // Arbitrary request code
                 int rc = 10001;
-                if (!waitSetup()) return;
                 mHelper.launchPurchaseFlow(threadAct, threadSku, rc, mPurchaseFinishedListener);
+                while (mInPurchase) {
+                    try {
+                        Thread.sleep(500);
+                    }
+                    catch (InterruptedException e) {}
+                }
             }
-        }.start();
+        });
     }
 
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
         // Pass through to IabHelper
         Log.d("TheElements", "handleActivityResult");
-        if (!waitSetup()) return false;
-        return mHelper.handleActivityResult(requestCode, resultCode, data);
+        boolean out = mHelper.handleActivityResult(requestCode, resultCode, data);
+        mInPurchase = false;
+        return out;
     }
 
     // IMPORTANT: Call this before the wrapping activity closes, to avoid circular references
@@ -188,22 +211,6 @@ public class ProductManager {
         mHelper = null;
     }
 
-    private boolean waitSetup() {
-        int tries = 0;
-        while (!mSetup) {
-            try {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e) {}
-            tries++;
-            if (tries > 30) {
-                makeError("Waiting for purchase setup timed out.");
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void makeError(String msg) {
         Log.e("TheElements", msg);
         if (mHandler != null) {
@@ -212,8 +219,10 @@ public class ProductManager {
     }
 
     private IabHelper mHelper;
-    private boolean mSetup;
+    private boolean mInPurchase;
+    private boolean mInSetup;
     private Context mCtx;
     private SharedPreferences mPrefs;
     private ErrorHandler mHandler;
+    private Executor mExec;
 }
