@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.idkjava.thelements.BuildConfig;
+import com.idkjava.thelements.R;
 import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.iab.IabException;
 import com.idkjava.thelements.iab.IabHelper;
@@ -48,9 +49,11 @@ public class ProductManager {
                         Log.d("TheElements", "Helper setup complete.");
                         mInSetup = false;
                         if (!result.isSuccess()) {
+                            mBillingSupported = false;
                             makeError("Failed to set up in-app billing: " + result);
                             return;
                         }
+                        mBillingSupported = true;
 
                         if (mHelper == null) return;
                         refreshInventory(null, null);
@@ -153,6 +156,10 @@ public class ProductManager {
     }
 
     public void refreshInventory(final Activity act, final Runnable callback) {
+        if (!mBillingSupported) {
+            makeError(R.string.billing_not_supported);
+            return;
+        }
         mExec.execute(new Runnable() {
             @Override
             public void run() {
@@ -172,6 +179,10 @@ public class ProductManager {
     }
 
     public void launchPurchase(Activity act, String sku) {
+        if (!mBillingSupported) {
+            makeError(R.string.billing_not_supported);
+            return;
+        }
         final Activity threadAct = act;
         final String threadSku = sku;
         Log.d("TheElements", "launchPurchase");
@@ -211,16 +222,22 @@ public class ProductManager {
         mHelper = null;
     }
 
+    // TODO: Deprecate and remove string literal error messages. Move to
+    // strings.xml instead.
     private void makeError(String msg) {
         Log.e("TheElements", msg);
         if (mHandler != null) {
             mHandler.error(msg);
         }
     }
+    private void makeError(int resId) {
+        makeError(mCtx.getResources().getString(resId));
+    }
 
     private IabHelper mHelper;
     private boolean mInPurchase;
     private boolean mInSetup;
+    private boolean mBillingSupported;
     private Context mCtx;
     private SharedPreferences mPrefs;
     private ErrorHandler mHandler;

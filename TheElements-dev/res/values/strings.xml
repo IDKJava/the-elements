@@ -96,6 +96,7 @@
     <string name="tool_pack_desc_2">Rectangle, circle, triangle, line, dashed line, slingshot, and spray tools.</string>
 
     <string name="purchase_item">Unlock In-Game Item</string>
+    <string name="billing_not_supported">Billing is not supported on this device. You will not be able to make purchases.</string>
 
     <string name="draw_rectangle">Draw Rectangle</string>
     <string name="draw_circle">Draw Circle</string>
