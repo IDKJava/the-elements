@@ -6,8 +6,19 @@
  */
 
 #include "rendergl.h"
-#include <android/log.h>
+
+//Include the GLES 2.0 functions
+#include <GLES2/gl2.h>
+//Include pthread functions
+#include <pthread.h>
 #include <vector>
+
+//Include the global variables
+#include "app.h"
+//Include the update function
+#include "update.h"
+#include "macros.h"
+
 
 #ifndef NDEBUG
 #define LOGGING 0 // Debug

@@ -33,6 +33,7 @@
 //Include the rendering functions
 #include "rendergl.h"
 #include "gravity.h"
+#include "update.h"
 //Include pthread functions
 #include <pthread.h>
 
