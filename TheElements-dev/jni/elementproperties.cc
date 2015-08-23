@@ -103,7 +103,7 @@ unsigned char baseBlue[] =  {255, 0, 0, 85, 255, 225, 255, 157, 164,   0,   0,  
 signed char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1,1,1,0};
 
 //Defines the density of each base element
-char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10,  4, 10,  4,  10,  4, 8,1,10};
+unsigned char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10,  4, 10,  4,  10,  4, 8,1,10};
 
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
 char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0};
@@ -195,15 +195,15 @@ int baseSpecialValue[][MAX_SPECIALS] =
 };
 
 //Defines the inertia of each element
-char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1, 1, 1, 1, 255, 1, 1,1,255};
+unsigned char baseInertia[] = {255, 255, 255, 1, 1, 1, 255, 255, 255, 255, 1, 1, 3, 1, 255, 255, 255, 1, 1, 1, 255, 1, 255, 1, 1, 1, 1, 255, 1, 1,1,255};
 
 //Defines the initial temp of anything of that element that is spawned (0 = atmosphere)
-char baseStartingTemp[] = {0, 0, 0, 0, 100, 160, 1, 0, 0, 0, 255, 205, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 100, 0, 200, 0};
+unsigned char baseStartingTemp[] = {0, 0, 0, 0, 100, 160, 1, 0, 0, 0, 255, 205, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 100, 0, 100, 0, 200, 0};
 
 //Defines the highest and lowest temps that the element exists at
-char baseHighestTemp[] = {255, 255, 255, 154, 150, 255, 75, 255, 200, 170, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 175, 175, 125, 175, 150, 175, 255, 255, 205};
-char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 25, 0, 25, 0, 25, 0, 0, 0};
+unsigned char baseHighestTemp[] = {255, 255, 255, 154, 150, 255, 75, 255, 200, 170, 255, 255, 200, 125, 125, 125, 125, 150, 255, 150, 255, 150, 255, 175, 175, 125, 175, 150, 175, 255, 255, 205};
+unsigned char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 25, 0, 25, 0, 25, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
-char baseHigherElement[] = {0, 0, 0, 20, 5, 0, 4, 0, 11, 10, 0, 0, 11, 10, 10, 10, 10, 5, 0, 5, 0, 3, 0, 10, 10, 10, 10, 10, 10, 0, 0, 11};
-char baseLowerElement[] = {0, 0, 0, 0, 6, 4, 0, 0, 0, 0, 23, 12, 0, 0, 0, 0, 0, 0, 0, 6, 0, 0, 0, 0, 3, 0, 3, 0, 3, 0, 0, 0};
+char baseHigherElement[] = {3, 3, 3, 20, 5, 5, 4, 7, 11, 10, 10, 11, 11, 10, 10, 10, 10, 5, 18, 5, 20, 3, 22, 10, 10, 10, 10, 10, 10, 29, 30, 11};
+char baseLowerElement[] = {3, 3, 3, 3, 6, 4, 6, 7, 8, 9, 23, 12, 12, 13, 14, 15, 16, 17, 18, 6, 20, 21, 22, 23, 3, 25, 3, 27, 3, 29, 30, 31};

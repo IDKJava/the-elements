@@ -45,9 +45,9 @@
         int specialVals[MAX_SPECIALS];
         char collisions[NUM_BASE_ELEMENTS];  // Only for customs
         char base; //Only for customs
-        char density;
+        unsigned char density;
         int fallVel;
-        char inertia;
+        unsigned char inertia;
     };
 
     struct Atmosphere

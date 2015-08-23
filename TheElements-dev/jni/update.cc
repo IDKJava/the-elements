@@ -553,7 +553,7 @@ void UpdateView(void)
     float tempOldX, tempOldY;
     float *tempX, *tempY;
     float *tempXVel, *tempYVel;
-    char tempInertia;
+    unsigned char tempInertia;
     int tempParticle;
     int tempAllCoords;
     struct Element* tempElement;

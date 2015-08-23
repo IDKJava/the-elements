@@ -321,7 +321,7 @@ char* stringifyElement(const CustomElement& customProto, int index)
                       (char)customProto.base_element_index(),
                       (char)customProto.density(),
                       (char)customProto.fallvel(),
-                      (char)customProto.inertia());
+                      (unsigned char)customProto.inertia());
     buffer[offset] = 0;
     return buffer;
 }
