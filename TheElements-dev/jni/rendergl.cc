@@ -147,6 +147,7 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
         GLint compiled = 0;
         glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
         if (!compiled) {
+            LOGE("Shader compile failed.");
             GLint infoLen = 0;
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLen);
             if (infoLen) {
@@ -162,17 +163,23 @@ GLuint loadShader(GLenum shaderType, const char* pSource) {
             }
         }
     }
+    else {
+      checkGlError("Create shader");
+      LOGE("Create shader failed.");
+    }
     return shader;
 }
 
-GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
+GLuint buildProgram(const char* pVertexSource, const char* pFragmentSource) {
     GLuint vertexShader = loadShader(GL_VERTEX_SHADER, pVertexSource);
     if (!vertexShader) {
+        LOGE("Create vertex shader failed.");
         return 0;
     }
 
     GLuint pixelShader = loadShader(GL_FRAGMENT_SHADER, pFragmentSource);
     if (!pixelShader) {
+        LOGE("Create fragment shader failed.");
         return 0;
     }
 
@@ -184,6 +191,7 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
         GLint linkStatus = GL_FALSE;
         glGetProgramiv(program, GL_LINK_STATUS, &linkStatus);
         if (linkStatus != GL_TRUE) {
+            LOGE("Link program failed.");
             GLint bufLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &bufLength);
             if (bufLength) {
@@ -197,12 +205,16 @@ GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
             glDeleteProgram(program);
             program = 0;
         }
-
-        mTextureCoordinateHandle = glGetAttribLocation(program, "a_TexCoordinate");
-        mScreenSizeHandle = glGetUniformLocation(program, "u_screenSize");
-        mTextureUniformHandle = glGetUniformLocation(program, "u_Texture");
-        mProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
     }
+    return program;
+}
+
+GLuint createProgram(const char* pVertexSource, const char* pFragmentSource) {
+    GLuint program = buildProgram(pVertexSource, pFragmentSource);
+    mTextureCoordinateHandle = glGetAttribLocation(program, "a_TexCoordinate");
+    mScreenSizeHandle = glGetUniformLocation(program, "u_screenSize");
+    mTextureUniformHandle = glGetUniformLocation(program, "u_Texture");
+    mProjMatrixUniformHandle = glGetUniformLocation(program, "u_MVPMatrix");
     return program;
 }
 

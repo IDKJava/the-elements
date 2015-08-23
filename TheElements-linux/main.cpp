@@ -22,7 +22,7 @@ const EGLint configAttribs[] = {
   EGL_BLUE_SIZE, BLUE_DEPTH,
   EGL_DEPTH_SIZE, RENDER_DEPTH,
   EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
-  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES_BIT,
+  EGL_RENDERABLE_TYPE, EGL_OPENGL_ES2_BIT,
   EGL_BIND_TO_TEXTURE_RGBA, EGL_TRUE,
   EGL_NONE
 };
@@ -76,8 +76,8 @@ void initOpenGL(SDL_Window* window) {
   }
 
   eglBindAPI(EGL_OPENGL_ES_API);
-  EGLint contextParams[] = {EGL_CONTEXT_CLIENT_VERSION, 1, EGL_NONE};
-  eglContext = eglCreateContext(eglDisplay, eglConfig, NULL, NULL);
+  EGLint contextParams[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
+  eglContext = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT,contextParams);
   if (eglContext == EGL_NO_CONTEXT) {
     throwErr("Unable to create GLES context.");
   }
@@ -104,6 +104,17 @@ void swapBuffers() {
   eglSwapBuffers(eglDisplay, eglSurface);
 }
 
+static const char gTestVShader[] =
+                 "attribute vec4 vPosition;\n"
+                 "void main() {\n"
+                 "  gl_Position = vPosition;\n"
+                 "}\n";
+static const char gTestFShader[] =
+                 "precision mediump float;"
+                 "void main() {"
+                 "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);"
+                 "}";
+
 int main(int argc, char **argv) {
   SDL_Window* window = NULL;
   SDL_Surface* screen = NULL;
@@ -120,6 +131,7 @@ int main(int argc, char **argv) {
   }
 
   screen = SDL_GetWindowSurface(window);
+  
   initOpenGL(window);
 
   // Main drawing stuff
@@ -127,6 +139,23 @@ int main(int argc, char **argv) {
   printGLString("Vendor", GL_VENDOR);
   printGLString("Renderer", GL_RENDERER);
   printGLString("Extensions", GL_EXTENSIONS);
+
+  glClearColor(0.0, 1.0, 0.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  GLuint prog = buildProgram(gTestVShader, gTestFShader);
+  glUseProgram(prog);
+  float vertices[] = { 0.0, 0.5, 0.0,
+                       -0.5, -0.5, 0.0,
+                       0.5, -0.5, 0.0 };
+  GLuint posAttrib = glGetAttribLocation(prog, "vPosition");
+  glEnableVertexAttribArray(posAttrib);
+  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, vertices);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+
+  swapBuffers();
+
+  SDL_Delay(2000);
 
   // Cleanup
   termOpenGL();

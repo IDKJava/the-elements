@@ -13,6 +13,9 @@
 void glInit(void);
 void glRender(void);
 void glRenderThreaded(void);
+
 void printGLString(const char *name, GLenum s);
+GLuint buildProgram(const char* pVertexSource, const char* pFragmentSource);
+
 
 #endif //!GL_H_INCLUDED
