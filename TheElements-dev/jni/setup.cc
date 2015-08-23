@@ -7,8 +7,6 @@
 
 #include "setup.h"
 
-#include <android/log.h>
-
 #include "saveload2.h"
 
 // Per-file logging
@@ -176,7 +174,7 @@ void elementSetup()
         }
     }
     loadCustomElements2();
-    __android_log_write(ANDROID_LOG_INFO, "LOG", "End element setup");
+    LOGI("End element setup");
 }
 
 void particleSetup()

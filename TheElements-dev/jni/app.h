@@ -16,8 +16,6 @@
 #include "server.h"
 //Include the pthread functions
 #include <pthread.h>
-//Include KamCord stuff
-#include <Kamcord-C-Interface.h>
 
 /*
  * STRUCTS
@@ -35,7 +33,7 @@
         //Dealing with phases
         char allowMovingTransition;
         char state;
-        char startingTemp, lowestTemp, highestTemp;
+        unsigned char startingTemp, lowestTemp, highestTemp;
         struct Element* lowerElement;
         struct Element* higherElement;
 
@@ -47,9 +45,9 @@
         int specialVals[MAX_SPECIALS];
         char collisions[NUM_BASE_ELEMENTS];  // Only for customs
         char base; //Only for customs
-        char density;
+        unsigned char density;
         int fallVel;
-        char inertia;
+        unsigned char inertia;
     };
 
     struct Atmosphere
@@ -89,7 +87,7 @@
     extern float a_oldY[];
     extern float a_xVel[];
     extern float a_yVel[];
-    extern char a_heat[];
+    extern unsigned char a_heat[];
     extern int* a_specialVals[];
     extern struct Element* a_element[];
     extern char a_frozen[];

@@ -137,11 +137,25 @@
 /*
  * LOGGING
  */
+#if __ANDROID__
+// ANDROID logging
+#include <android/log.h>
 #define LOG_STR "TheElements"
 #define LOGI(...) if (LOGGING) __android_log_print(ANDROID_LOG_INFO, LOG_STR, __VA_ARGS__)
 #define LOGD(...) if (LOGGING) __android_log_print(ANDROID_LOG_DEBUG, LOG_STR, __VA_ARGS__)
 #define LOGW(...) if (LOGGING) __android_log_print(ANDROID_LOG_WARN, LOG_STR, __VA_ARGS__)
 #define LOGE(...) if (LOGGING) __android_log_print(ANDROID_LOG_ERROR, LOG_STR, __VA_ARGS__)
+
+#else
+// PC logging
+#include <stdio.h>
+#define LOGI(...) if (LOGGING) {printf("INFO: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGD(...) if (LOGGING) {printf("DEBUG: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGW(...) if (LOGGING) {printf("WARN: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGE(...) if (LOGGING) {printf("ERROR: "); printf(__VA_ARGS__); printf("\n");}
+
+#endif
+
 
 
 //Sample log call

@@ -65,7 +65,7 @@ extern unsigned char baseBlue[];
 //Define each base element's fall velocity
 extern signed char baseFallVel[];
 //Defines the density of each base element
-extern char baseDensity[];
+extern unsigned char baseDensity[];
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
 extern char baseState[];
 /*
@@ -82,12 +82,12 @@ extern int baseSpecial[][MAX_SPECIALS];
 //Defines the special value for each base element
 extern int baseSpecialValue[][MAX_SPECIALS];
 //Defines the inertia of each element
-extern char baseInertia[];
+extern unsigned char baseInertia[];
 //Defines the starting temp of the element (-1 = atmosphere)
-extern char baseStartingTemp[];
+extern unsigned char baseStartingTemp[];
 //Defines the highest and lowest temps that the element exists at
-extern char baseHighestTemp[];
-extern char baseLowestTemp[];
+extern unsigned char baseHighestTemp[];
+extern unsigned char baseLowestTemp[];
 //Defines the higher and lower elements to change to outside of the correct temp range
 extern char baseHigherElement[];
 extern char baseLowerElement[];

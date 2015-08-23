@@ -8,15 +8,13 @@
 
 #include "update.h"
 
-#include <android/log.h>
-
 #include "specials.h"
 #include "gravity.h"
 
 // Per-file logging
 #ifndef NDEBUG
 //Debug
-#define LOGGING 0
+#define LOGGING 1
 #else
 //Release
 #define LOGGING 0
@@ -365,7 +363,6 @@ int updateKinetic(int index)
     float *yvel_ptr = &(a_yVel[index]);
     float diffx, diffy;
 
-    //__android_log_write(ANDROID_LOG_INFO, "LOG", "Start update coords");
     int fallVel = a_element[index]->fallVel;
     float gx, gy, gmag;
     getFallField(*x_ptr, *y_ptr, &gx, &gy, &gmag);
@@ -410,8 +407,8 @@ int updateKinetic(int index)
 // Update the heat when p1 collides into p2
 void updateCollisionHeat(int index1, int index2)
 {
-    char *p1heat = &(a_heat[index1]);
-    char *p2heat = &(a_heat[index2]);
+    unsigned char *p1heat = &(a_heat[index1]);
+    unsigned char *p2heat = &(a_heat[index2]);
 
     int heatChange = (*p1heat - *p2heat)/5;
     //The hotter particle should be cooled, while the cooler particle is heated
@@ -432,7 +429,7 @@ int updateSpecials(int index)
 
     if (!tempElement)
     {
-        __android_log_write(ANDROID_LOG_ERROR, "TheElements", "Null tempElement in specials");
+        LOGE("Null tempElement in specials");
         return shouldResolveHeatChanges;
     }
 
@@ -539,8 +536,6 @@ int updateSpecials(int index)
             break;
         }
 
-        //__android_log_write(ANDROID_LOG_INFO, "LOG", "End special");
-
         // If we changed elements, exit the loop
         if (a_element[index] != tempElement)
         {
@@ -558,7 +553,7 @@ void UpdateView(void)
     float tempOldX, tempOldY;
     float *tempX, *tempY;
     float *tempXVel, *tempYVel;
-    char tempInertia;
+    unsigned char tempInertia;
     int tempParticle;
     int tempAllCoords;
     struct Element* tempElement;
@@ -610,7 +605,6 @@ void UpdateView(void)
     pthread_mutex_unlock(&brush_mutex);
 
 
-    //__android_log_write(ANDROID_LOG_INFO, "TheElements", "WE GOT TO PARTICLES UPDATE");
     //Particles update
     if (play)
     {
@@ -626,7 +620,6 @@ void UpdateView(void)
             //If the particle is set and unfrozen
             if (a_set[tempParticle])// && tempParticle->frozen < 4)
             {
-                //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Processing a set particle");
                 //TODO: Life property cycle
 
                 //Set the temp and old variables
@@ -706,7 +699,6 @@ void UpdateView(void)
                         a_hasMoved[tempParticle] = FALSE;
                     }
 
-                    //__android_log_write(ANDROID_LOG_INFO, "LOG", "End resolve collisions");
                 }
                 //Inertia unmovable object still need to deal with velocities
                 else
@@ -737,7 +729,7 @@ void UpdateView(void)
                 }
 
                 //Update heat
-                char *heat = &(a_heat[tempParticle]);
+                unsigned char *heat = &(a_heat[tempParticle]);
                 if(*heat != cAtmosphere->heat)
                 {
                     if(rand() % ((3 - tempElement->state)*16)  != 0)

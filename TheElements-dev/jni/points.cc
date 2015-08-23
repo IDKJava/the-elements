@@ -8,10 +8,8 @@
 
 #include "points.h"
 
-#include <android/log.h>
-
 #ifndef NDEBUG // Debug
-#define LOGGING 0
+#define LOGGING 1
 #else // Release
 #define LOGGING 0
 #endif
@@ -35,7 +33,7 @@ int createPoint(int xCoord, int yCoord, struct Element* element)
         a_y[i] = yCoord+0.5;
 
         //Put it in the allcoords array
-        allCoords[getIndex(xCoord, yCoord)] = i;
+        allCoords[getIndex(a_x[i], a_y[i])] = i;
 
         // Set the element of the point
         a_element[i] = element;
@@ -53,12 +51,10 @@ int createPoint(int xCoord, int yCoord, struct Element* element)
         //Set the initial heat
         if(element->startingTemp == 0)
         {
-            //__android_log_write(ANDROID_LOG_INFO, "TheElements", "Atmosphere temp");
             a_heat[i] = cAtmosphere->heat; //To be a variable later on
         }
         else
         {
-            //__android_log_write(ANDROID_LOG_ERROR, "TheElements", "Element temp");
             a_heat[i] = element->startingTemp;
         }
 
@@ -147,7 +143,7 @@ void unFreezeParticles(int xCoord, int yCoord)
 }
 
 //Change a particle's heat and fix it
-void changeHeat(char *heat, int heatChange)
+void changeHeat(unsigned char *heat, int heatChange)
 {
     if (heatChange < 0)
     {
