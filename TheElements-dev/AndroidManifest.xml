@@ -17,6 +17,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <uses-feature android:glEsVersion="0x00020000" />
 

@@ -1,5 +1,7 @@
 package com.idkjava.thelements;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,15 +15,20 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -92,6 +99,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static CharSequence[] baseElementsList;
     static ArrayList<String> elementsList;
 
+    // For photo loading
+    public static boolean disableLoad = false;
+    public static boolean shouldSetFromPhoto;
+
     static ArrayList<IconListItem> baseToolList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
@@ -122,6 +133,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         return locked;
     }
+    static ArrayList<IconListItem> photoToolList = new ArrayList<>(Arrays.asList(
+            new IconListItem(R.string.photo_tool, R.drawable.camera_icon)
+    ));
+
     ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);
     private void refreshToolList() {
         // Add world-specific tools
@@ -136,12 +151,15 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             throw new RuntimeException("Tool set unspecified for world: " + curWorld);
         }
 
+
         if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
             toolList.addAll(toolPackList);
         }
         else {
             toolList.addAll(getLockedToolPackList());
         }
+
+        toolList.addAll(photoToolList);
 
         if (mToolAdapter != null) {
             mToolAdapter.clear();
@@ -281,6 +299,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
                 .getMetrics(dm);
         mDPI = dm.densityDpi;
+        if (shouldSetFromPhoto) {
+            setGameToPhoto();
+        }
+        shouldSetFromPhoto = false;
     }
 
     private final SensorEventListener mySensorListener = new SensorEventListener() {
@@ -435,6 +457,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 refreshToolList();
             }
         });
+
+        if (shouldSetFromPhoto) {
+            setGameToPhoto();
+        }
+        shouldSetFromPhoto = false;
     }
 
     protected Dialog onCreateDialog(int id) // This is called when showDialog is called
@@ -507,6 +534,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         }
                         case R.string.zoom_tool: {
                             sand_view.setTool(SandView.Tool.HAND_TOOL);
+                            break;
+                        }
+                        case R.string.photo_tool: {
+                            play = false;
+                            setPlaying(play);
+                            dispatchTakePictureIntent();
                             break;
                         }
                         case R.string.eraser: {
@@ -882,12 +915,114 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         startActivity(tempIntent);
     }
 
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private static String mImageLoc;
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createTemporaryFile("element_photo", ".jpg");
+            } catch (Exception ex) {
+                // Error occurred while creating the File
+                Log.e("MainActivity", "error creating photo file", ex);
+            }
+            mImageLoc = photoFile.getAbsolutePath();
+
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            disableLoad = true;
+            shouldSetFromPhoto = true;
+        }
+    }
+
+
+    private File createTemporaryFile(String part, String ext) throws Exception
+    {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath()+"/.temp/");
+        if(!tempDir.exists()) {
+            tempDir.mkdir();
+        }
+        return File.createTempFile(part, ext, tempDir);
+    }
+
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
+
+    public static void setGameToPhoto() {
+        // Get the dimensions of the View
+
+        int zoomLevel = Preferences.getZoom();
+        int targetW = sand_view.getWidth() / zoomLevel;
+        int targetH = sand_view.getHeight() / zoomLevel;
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(mImageLoc, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        ExifInterface exif = null;
+        try {
+            exif = new ExifInterface(mImageLoc);
+        } catch (IOException e) {
+            Log.e("MainActivity", "exif lookup fail", e);
+            return;
+        }
+
+        int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+        int rotationInDegrees = exifToDegrees(rotation);
+        if (rotationInDegrees % 180 != 0) {
+            photoW ^= photoH;
+            photoH ^= photoW;
+            photoW ^= photoH;
+        }
+        double scaleFactor = Math.max((double) photoW / (double) targetW, (double) photoH / (double) targetH);
+
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mImageLoc, bmOptions);
+        Matrix matrix = new Matrix();
+        if (rotation != 0f) {
+            matrix.preRotate(rotationInDegrees);
+        }
+        matrix.postScale((float)(1f/scaleFactor), (float)(1f/scaleFactor));
+        Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+        int[] pixels = new int[targetW * targetH];
+        adjustedBitmap.getPixels(pixels, 0, adjustedBitmap.getWidth(), 0, 0, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+        loadFromImage(pixels, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+    }
+
     // Converts dp to pixels
     public static int toPx(int dp) {
         return (int) ((dp * mDPI) / 160f);
     }
 
     public static void setPlaying(boolean playState) {
+        if (playState) {
+            disableLoad = false;
+        }
         if (Kamcord.isPaused() || Kamcord.isRecording()) {
             if (playState) {
                 Kamcord.resumeRecording();
@@ -895,6 +1030,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 Kamcord.pauseRecording();
             }
         }
+        menu_bar.setPlayState(playState);
         setPlayState(playState);
     }
 
@@ -935,6 +1071,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static native void setXGravity(float xGravity);
     public static native void setYGravity(float yGravity);
 
+    private static native void loadFromImage(int[] pixels, int w, int h);
     // @formatter:on
 
     static {

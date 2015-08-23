@@ -317,8 +317,9 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 	public void onSurfaceChanged(GL10 gl, int w, int h)
 	{
 		nativeResize(w, h);
-		nativeLoadState(MainActivity.shouldLoadDemo);
-
+        if (!MainActivity.disableLoad) {
+            nativeLoadState(MainActivity.shouldLoadDemo);
+        }
 		MainActivity.shouldLoadDemo = false;
 	}
 

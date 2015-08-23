@@ -29,7 +29,11 @@ public class Preferences
 		setAtmosphereTemp((char) sharedPreferences.getInt("atmosphere_temp", 100));
 		setAtmosphereGravity(sharedPreferences.getFloat("atmosphere_gravity", 1));
 		setBorderState(sharedPreferences.getBoolean("border_left", true), sharedPreferences.getBoolean("border_top", true), sharedPreferences.getBoolean("border_right", true), sharedPreferences.getBoolean("border_bottom", true));
-		setZoom(Integer.parseInt(sharedPreferences.getString("screen_zoom", "4")));
+		setZoom(getZoom());
+	}
+
+	public static int getZoom() {
+		return Integer.parseInt(sharedPreferences.getString("screen_zoom", "4"));
 	}
 
 	public static void loadScreenState()

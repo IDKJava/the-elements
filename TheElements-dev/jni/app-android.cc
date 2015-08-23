@@ -32,6 +32,10 @@
 #include "rendergl.h"
 #include "gravity.h"
 #include "update.h"
+
+//Include camera parsing functions
+#include "camera.h"
+
 //Include pthread functions
 #include <pthread.h>
 
@@ -65,11 +69,17 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
     LOGI("nativeResize()");
 
     pthread_mutex_lock(&update_mutex);
+
     //These variable change from pinch to zoom
     viewWidth = width;
     viewHeight = height;
     centerX = width/2;
     centerY = height/2;
+
+    int changed = 0;
+    if ( width != screenWidth || height != screenHeight) {
+      changed = 1;
+    }
 
     //These variables remain constant unless the screen size changes
     screenWidth = width;
@@ -84,13 +94,21 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
     while((stupidTegra = stupidTegra << 1) < workWidth);
     dimensionsChanged = TRUE;
 
-    arraySetup();
-    glInit();
-    gameSetup();
-    pthread_mutex_unlock(&update_mutex);
 
-    // Start the update thread if needed
-    startUpdateThread();
+    glInit();
+
+    if (changed) {
+      __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize(), changed dim");
+      arraySetup();
+      gameSetup();
+      pthread_mutex_unlock(&update_mutex);
+      startUpdateThread();
+    }
+    else {
+      pthread_mutex_unlock(&update_mutex);
+    }
+
+
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now
 JNIEXPORT void JNICALL
@@ -212,6 +230,8 @@ Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
     atmosphereSetup();
     elementSetup();
     particleSetup();
+    preCalculateHSL();
+    calculateClosestElement();
 
     // Profiling
 #ifdef USE_PROFILING
@@ -716,6 +736,18 @@ JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, float yGravityIn)
 {
     yGravity = yGravityIn;
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_loadFromImage(JNIEnv* env,
+                                                            jobject thiz,
+                                                            jintArray pixels,
+                                                            jint w,
+                                                            jint h)
+{
+  LOGI("loading from image");
+  int* bitPixels = env->GetIntArrayElements(pixels, 0);
+  setGameToImage(bitPixels, w, h);
 }
 
 //Upgrading save files (for backwards compatibility)

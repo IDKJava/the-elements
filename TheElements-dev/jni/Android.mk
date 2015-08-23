@@ -222,7 +222,8 @@ LOCAL_SRC_FILES := \
     saveload2.cc \
     setup.cc \
     specials.cc \
-    update.cc	
+    update.cc \
+    camera.cc
 
 $(LOCAL_PATH)/messages.pb.h: $(LOCAL_PATH)/../proto/messages.proto
 	echo "Build messages.pb.h"
