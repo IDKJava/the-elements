@@ -8,7 +8,6 @@
 
 #include "saveload.h"
 
-#include <android/log.h>
 #include <stdio.h>
 
 // Per-file logging

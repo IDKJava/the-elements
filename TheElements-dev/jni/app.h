@@ -33,7 +33,7 @@
         //Dealing with phases
         char allowMovingTransition;
         char state;
-        char startingTemp, lowestTemp, highestTemp;
+        unsigned char startingTemp, lowestTemp, highestTemp;
         struct Element* lowerElement;
         struct Element* higherElement;
 
@@ -87,7 +87,7 @@
     extern float a_oldY[];
     extern float a_xVel[];
     extern float a_yVel[];
-    extern char a_heat[];
+    extern unsigned char a_heat[];
     extern int* a_specialVals[];
     extern struct Element* a_element[];
     extern char a_frozen[];

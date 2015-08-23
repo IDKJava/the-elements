@@ -23,7 +23,7 @@ float a_oldX[MAX_POINTS];
 float a_oldY[MAX_POINTS];
 float a_xVel[MAX_POINTS];
 float a_yVel[MAX_POINTS];
-char a_heat[MAX_POINTS];
+unsigned char a_heat[MAX_POINTS];
 int* a_specialVals[MAX_POINTS];
 struct Element* a_element[MAX_POINTS];
 char a_frozen[MAX_POINTS];

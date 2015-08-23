@@ -14,7 +14,6 @@
 #include "points.h"
 #include "saveload.h"
 
-#include <android/log.h>
 #include <dirent.h>
 #include <pthread.h>
 

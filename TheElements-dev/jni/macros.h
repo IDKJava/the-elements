@@ -149,10 +149,10 @@
 #else
 // PC logging
 #include <stdio.h>
-#define LOGI(...) printf("INFO: "); printf(__VA_ARGS__); printf("\n")
-#define LOGD(...) printf("DEBUG: "); printf(__VA_ARGS__); printf("\n")
-#define LOGW(...) printf("WARN: "); printf(__VA_ARGS__); printf("\n")
-#define LOGE(...) printf("ERROR: "); printf(__VA_ARGS__); printf("\n")
+#define LOGI(...) if (LOGGING) {printf("INFO: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGD(...) if (LOGGING) {printf("DEBUG: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGW(...) if (LOGGING) {printf("WARN: "); printf(__VA_ARGS__); printf("\n");}
+#define LOGE(...) if (LOGGING) {printf("ERROR: "); printf(__VA_ARGS__); printf("\n");}
 
 #endif
 

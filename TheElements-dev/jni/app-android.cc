@@ -11,8 +11,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <android/log.h>
-
 //Include the global variables
 #include "app.h"
 //Include the global macros
@@ -64,7 +62,7 @@ void convertMouseCoords(int x, int y, float* gameX, float* gameY) {
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height)
 {
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize()");
+    LOGI("nativeResize()");
 
     pthread_mutex_lock(&update_mutex);
     //These variable change from pinch to zoom
@@ -144,7 +142,7 @@ Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz
     }
     saveLoc3[len] = 0;
 
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", saveLoc3);
+    LOGI(saveLoc3);
 
     char tempLoc[256];
     strcpy(tempLoc, ROOT_FOLDER);
@@ -169,7 +167,7 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
     }
     loadLoc3[len] = 0;
 
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", loadLoc3);
+    LOGI(loadLoc3);
 
     char tempLoc[256];
     strcpy(tempLoc, ROOT_FOLDER);
@@ -187,7 +185,7 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
 JNIEXPORT char JNICALL
 Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz)
 {
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", "saveTempState");
+    LOGI("saveTempState");
     char saveLoc[256];
     strcpy(saveLoc, ROOT_FOLDER);
     strcat(saveLoc, SAVES_FOLDER);
@@ -211,7 +209,6 @@ JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
 {
     // Initialization
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeInit()");
     atmosphereSetup();
     elementSetup();
     particleSetup();
@@ -260,10 +257,6 @@ Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* e
     cAtmosphere->backgroundRed = redValue;
     cAtmosphere->backgroundGreen = greenValue;
     cAtmosphere->backgroundBlue = blueValue;
-
-    char buffer[100];
-    sprintf(buffer, "blue: %d", blueValue);
-    __android_log_write(ANDROID_LOG_INFO, "TheElements", buffer);
 
     //Call setup again
     //gameSetup();

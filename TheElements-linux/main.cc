@@ -5,7 +5,20 @@
 #include <unistd.h>
 #include <iostream>
 
+#include <jni.h>
+
 #include "rendergl.h"
+#include "macros.h"
+
+// Per-file logging
+#ifndef NDEBUG
+// Debug
+#define LOGGING 1
+#else
+// Release
+#define LOGGING 0
+#endif
+
 
 #define RED_DEPTH 5
 #define GREEN_DEPTH 6
@@ -115,6 +128,16 @@ static const char gTestFShader[] =
                  "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);"
                  "}";
 
+extern "C" {
+  void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz);
+  void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar element);
+  void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height);
+  void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject thiz);
+  void Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y);
+  void Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y);
+  void Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y);
+}
+
 int main(int argc, char **argv) {
   SDL_Window* window = NULL;
   SDL_Surface* screen = NULL;
@@ -134,28 +157,40 @@ int main(int argc, char **argv) {
   
   initOpenGL(window);
 
-  // Main drawing stuff
-  printGLString("Version", GL_VERSION);
-  printGLString("Vendor", GL_VENDOR);
-  printGLString("Renderer", GL_RENDERER);
-  printGLString("Extensions", GL_EXTENSIONS);
-
-  glClearColor(0.0, 1.0, 0.0, 1.0);
-  glClear(GL_COLOR_BUFFER_BIT);
-
-  GLuint prog = buildProgram(gTestVShader, gTestFShader);
-  glUseProgram(prog);
-  float vertices[] = { 0.0, 0.5, 0.0,
-                       -0.5, -0.5, 0.0,
-                       0.5, -0.5, 0.0 };
-  GLuint posAttrib = glGetAttribLocation(prog, "vPosition");
-  glEnableVertexAttribArray(posAttrib);
-  glVertexAttribPointer(posAttrib, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
-
-  swapBuffers();
-
-  SDL_Delay(2000);
+  // Main drawing stuff -- uses JNI interface for now
+  Java_com_idkjava_thelements_MainActivity_nativeInit(NULL, NULL);
+  Java_com_idkjava_thelements_MainActivity_setElement(NULL, NULL, NORMAL_ELEMENT);
+  Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize
+    (NULL, NULL, SCREEN_WIDTH, SCREEN_HEIGHT);
+  SDL_Event event;
+  bool running = true;
+  while (running) {
+    Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(NULL, NULL);
+    swapBuffers();
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        running = false;
+      }
+      else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        if (event.button.button = SDL_BUTTON_LEFT) {
+          Java_com_idkjava_thelements_game_SandView_brushStartLocation
+            (NULL, NULL, event.button.x, event.button.y);
+        }
+      }
+      else if (event.type == SDL_MOUSEBUTTONUP) {
+        if (event.button.button = SDL_BUTTON_LEFT) {
+          Java_com_idkjava_thelements_game_SandView_brushEndLocation
+            (NULL, NULL, event.button.x, event.button.y);
+        }
+      }
+      else if (event.type == SDL_MOUSEMOTION) {
+        if (event.motion.state & SDL_BUTTON_LMASK) {
+          Java_com_idkjava_thelements_game_SandView_brushMoveLocation
+            (NULL, NULL, event.motion.x, event.motion.y);
+        }
+      }
+    }
+  }
 
   // Cleanup
   termOpenGL();
