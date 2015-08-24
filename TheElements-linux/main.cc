@@ -5,9 +5,11 @@
 #include <unistd.h>
 #include <iostream>
 
-#include <jni.h>
+#include "palette.h"
+#include "interface.h"
 
 #include "rendergl.h"
+#include "app.h"
 #include "macros.h"
 
 // Per-file logging
@@ -27,8 +29,8 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 360;
-const int SCREEN_HEIGHT = 540;
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 800;
 const EGLint configAttribs[] = {
   EGL_RED_SIZE, RED_DEPTH,
   EGL_GREEN_SIZE, GREEN_DEPTH,
@@ -39,7 +41,6 @@ const EGLint configAttribs[] = {
   EGL_BIND_TO_TEXTURE_RGBA, EGL_TRUE,
   EGL_NONE
 };
-
 
 void sdlErr(string err) {
   cerr << err << ": " << SDL_GetError() << endl;
@@ -52,11 +53,13 @@ void throwErr(string err) {
 
 EGLDisplay eglDisplay;
 EGLConfig eglConfig;
-EGLContext eglContext;
-EGLSurface eglSurface;
+EGLContext eglContextMain;
+EGLContext eglContextPalette;
+EGLSurface eglSurfaceMain;
+EGLSurface eglSurfacePalette;
 Display *x11Display;
 
-void initOpenGL(SDL_Window* window) {
+void initOpenGL(SDL_Window* window, SDL_Window* palette) {
   x11Display = XOpenDisplay(NULL);
   if (!x11Display) {
     throwErr("Unable to get display");
@@ -82,39 +85,65 @@ void initOpenGL(SDL_Window* window) {
     sdlErr("Unable to get window handle.");
   }
 
-  eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig,
+  eglSurfaceMain = eglCreateWindowSurface(eglDisplay, eglConfig,
                                       (EGLNativeWindowType)sysInfo.info.x11.window, 0);
-  if (eglSurface == EGL_NO_SURFACE) {
-    throwErr("Unable to create EGL surface.");
+  if (eglSurfaceMain == EGL_NO_SURFACE) {
+    throwErr("Unable to create EGL main surface.");
+  }
+
+  if (SDL_GetWindowWMInfo(palette, &sysInfo) != SDL_TRUE) {
+    sdlErr("Unable to get palette window handle.");
+  }
+  eglSurfacePalette = eglCreateWindowSurface(eglDisplay, eglConfig,
+                                             (EGLNativeWindowType)sysInfo.info.x11.window, 0);
+  if (eglSurfacePalette == EGL_NO_SURFACE) {
+    throwErr("Unable to create EGL palette surface.");
   }
 
   eglBindAPI(EGL_OPENGL_ES_API);
   EGLint contextParams[] = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE};
-  eglContext = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT,contextParams);
-  if (eglContext == EGL_NO_CONTEXT) {
+  eglContextMain = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, contextParams);
+  if (eglContextMain == EGL_NO_CONTEXT) {
+    throwErr("Unable to create GLES context.");
+  }
+  eglContextPalette = eglCreateContext(eglDisplay, eglConfig, EGL_NO_CONTEXT, contextParams);
+  if (eglContextPalette == EGL_NO_CONTEXT) {
     throwErr("Unable to create GLES context.");
   }
 
-  if (eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext) == EGL_FALSE) {
+  // Start off with main as the current EGL context
+  if (eglMakeCurrent(eglDisplay, eglSurfaceMain, eglSurfaceMain, eglContextMain) == EGL_FALSE) {
+    throwErr("Unable to make GLES context current.");
+  }
+}
+
+void makeMainCurrent() {
+  if (eglMakeCurrent(eglDisplay, eglSurfaceMain, eglSurfaceMain, eglContextMain) == EGL_FALSE) {
+    throwErr("Unable to make GLES context current.");
+  }
+}
+
+void makePaletteCurrent() {
+  if (eglMakeCurrent(eglDisplay, eglSurfacePalette, eglSurfacePalette, eglContextPalette) == EGL_FALSE) {
     throwErr("Unable to make GLES context current.");
   }
 }
 
 void termOpenGL() {
   eglMakeCurrent(eglDisplay, NULL, NULL, EGL_NO_CONTEXT);
-  eglDestroySurface(eglDisplay, eglSurface);
-  eglDestroyContext(eglDisplay, eglContext);
-  eglSurface = NULL;
-  eglContext = NULL;
+  eglDestroySurface(eglDisplay, eglSurfaceMain);
+  eglDestroySurface(eglDisplay, eglSurfacePalette);
+  eglDestroyContext(eglDisplay, eglContextMain);
+  eglDestroyContext(eglDisplay, eglContextPalette);
+  eglSurfaceMain = NULL;
+  eglSurfacePalette = NULL;
+  eglContextMain = NULL;
+  eglContextPalette = NULL;
   eglConfig = NULL;
   eglTerminate(eglDisplay);
   eglDisplay = NULL;
   XCloseDisplay(x11Display);
   x11Display = NULL;
-}
-
-void swapBuffers() {
-  eglSwapBuffers(eglDisplay, eglSurface);
 }
 
 static const char gTestVShader[] =
@@ -128,73 +157,111 @@ static const char gTestFShader[] =
                  "  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);"
                  "}";
 
-extern "C" {
-  void Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz);
-  void Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar element);
-  void Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height);
-  void Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject thiz);
-  void Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y);
-  void Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y);
-  void Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y);
+void renderMain() {
+  makeMainCurrent();
+  nativeRender();
+  eglSwapBuffers(eglDisplay, eglSurfaceMain);
+}
+
+void renderPalette() {
+  makePaletteCurrent();
+
+  glClearColor(1.0, 1.0, 1.0, 1.0);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  drawPalette();
+
+  eglSwapBuffers(eglDisplay, eglSurfacePalette);
 }
 
 int main(int argc, char **argv) {
-  SDL_Window* window = NULL;
-  SDL_Surface* screen = NULL;
+  SDL_Window* mainWindow = NULL;
+  SDL_Window* paletteWindow = NULL;
+  Uint32 mainID, paletteID;
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     sdlErr("SDLInit failed");
   }
 
-  window = SDL_CreateWindow("The Elements",
+  // Make main window
+  mainWindow = SDL_CreateWindow("The Elements",
                             SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                             SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-  if (window == NULL) {
-    sdlErr("Window create failed");
+  if (mainWindow == NULL) {
+    sdlErr("Main window create failed");
   }
+  mainID = SDL_GetWindowID(mainWindow);
 
-  screen = SDL_GetWindowSurface(window);
-  
-  initOpenGL(window);
+  // Make palette window
+  paletteWindow = SDL_CreateWindow("The Elements - Palette",
+                               SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                               PALETTE_WIDTH, PALETTE_HEIGHT, SDL_WINDOW_SHOWN);
+  if (paletteWindow == NULL) {
+    sdlErr("Palette window create failed");
+  }
+  paletteID = SDL_GetWindowID(paletteWindow);
+
+  initOpenGL(mainWindow, paletteWindow);
+  makePaletteCurrent(); // Palette GL must be initialized in the palette context
+  initPalette();
 
   // Main drawing stuff -- uses JNI interface for now
-  Java_com_idkjava_thelements_MainActivity_nativeInit(NULL, NULL);
-  Java_com_idkjava_thelements_MainActivity_setElement(NULL, NULL, NORMAL_ELEMENT);
-  Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize
-    (NULL, NULL, SCREEN_WIDTH, SCREEN_HEIGHT);
+  makeMainCurrent(); // Native init must happen in main context
+  nativeInit();
+  setElement(NORMAL_ELEMENT);
+  nativeResize(SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_Event event;
   bool running = true;
   while (running) {
-    Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(NULL, NULL);
-    swapBuffers();
+    // Render main window
+    renderMain();
+    
+    // Render palette
+    renderPalette();
+
+    // Handle events
     while (SDL_PollEvent(&event)) {
-      if (event.type == SDL_QUIT) {
+      switch (event.type) {
+      case SDL_QUIT:
         running = false;
-      }
-      else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        break;
+      case SDL_MOUSEBUTTONDOWN:
         if (event.button.button = SDL_BUTTON_LEFT) {
-          Java_com_idkjava_thelements_game_SandView_brushStartLocation
-            (NULL, NULL, event.button.x, event.button.y);
+          if (event.button.windowID == mainID) {
+            brushStartLocation(event.button.x, event.button.y);
+          }
+          else if (event.button.windowID == paletteID) {
+            paletteLeftClick(event.button.x, event.button.y);
+          }
         }
-      }
-      else if (event.type == SDL_MOUSEBUTTONUP) {
+        break;
+      case SDL_MOUSEBUTTONUP:
         if (event.button.button = SDL_BUTTON_LEFT) {
-          Java_com_idkjava_thelements_game_SandView_brushEndLocation
-            (NULL, NULL, event.button.x, event.button.y);
+          if (event.button.windowID == mainID) {
+            brushEndLocation(event.button.x, event.button.y);
+          }
         }
-      }
-      else if (event.type == SDL_MOUSEMOTION) {
+        break;
+      case SDL_MOUSEMOTION:
         if (event.motion.state & SDL_BUTTON_LMASK) {
-          Java_com_idkjava_thelements_game_SandView_brushMoveLocation
-            (NULL, NULL, event.motion.x, event.motion.y);
+          if (event.button.windowID == mainID) {
+            brushMoveLocation(event.motion.x, event.motion.y);
+          }
         }
+        break;
+      case SDL_KEYDOWN:
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+          running = false;
+        }
+        break;
       }
     }
   }
 
   // Cleanup
   termOpenGL();
-  SDL_DestroyWindow(window);
+  SDL_DestroyWindow(paletteWindow);
+  SDL_DestroyWindow(mainWindow);
   SDL_Quit();
   return 0;
 }

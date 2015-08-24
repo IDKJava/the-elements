@@ -15,6 +15,7 @@ void glRender(void);
 void glRenderThreaded(void);
 
 void printGLString(const char *name, GLenum s);
+void checkGlError(const char* op);
 GLuint buildProgram(const char* pVertexSource, const char* pFragmentSource);
 
 

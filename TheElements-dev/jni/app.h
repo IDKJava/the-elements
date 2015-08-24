@@ -38,7 +38,7 @@
         struct Element* higherElement;
 
         //Dealing with drawing
-        char red, green, blue;
+        unsigned char red, green, blue;
 
         //Properties
         int specials[MAX_SPECIALS];

@@ -4,7 +4,8 @@ CC = g++
 MKDIR = mkdir
 JNI_DIR = ../TheElements-dev/jni
 
-LOCAL_SRCS = main.cc
+LOCAL_SRCS = main.cc \
+             palette.cc
 EXT_BARE_SRCS = app.cc \
            app-android.cc \
            camera.cc \
