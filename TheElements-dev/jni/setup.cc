@@ -146,7 +146,8 @@ void elementSetup()
             elements[i] = tempElement;
             tempElement->index = i;
             tempElement->base = i;
-            tempElement->name = baseName[i];
+            tempElement->name = (char*) malloc(sizeof(char)*(strlen(baseName[i])+1));
+            strcpy(tempElement->name, baseName[i]);
             tempElement->red = baseRed[i];
             tempElement->green = baseGreen[i];
             tempElement->blue = baseBlue[i];

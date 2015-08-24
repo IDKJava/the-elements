@@ -160,7 +160,7 @@ Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz
     }
     saveLoc3[len] = 0;
 
-    LOGI(saveLoc3);
+    LOGI("Save to: %s", saveLoc3);
 
     char tempLoc[256];
     strcpy(tempLoc, ROOT_FOLDER);
@@ -185,7 +185,7 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
     }
     loadLoc3[len] = 0;
 
-    LOGI(loadLoc3);
+    LOGI("Load from: %s", loadLoc3);
 
     char tempLoc[256];
     strcpy(tempLoc, ROOT_FOLDER);

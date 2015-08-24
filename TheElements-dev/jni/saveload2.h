@@ -20,7 +20,7 @@
 #define ELEMENT_EXTENSION ".ele"
 
 // Root must be changeable
-extern char* ROOT_FOLDER;
+extern const char* ROOT_FOLDER;
 
 using namespace std;
 

@@ -57,7 +57,7 @@
 #include "elementproperties.h"
 
 // Define the names of the elements
-char* baseName[] = {
+const char* baseName[] = {
     // ----Special----
     "Spawn",               // 0 = Spawn
     "Drag",                // 1 = Drag

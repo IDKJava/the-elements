@@ -55,7 +55,7 @@
 #include "app.h"
 
 // Define the names of the elements
-extern char* baseName[];
+extern const char* baseName[];
 
 //Define the color of the element
 extern unsigned char baseRed[];

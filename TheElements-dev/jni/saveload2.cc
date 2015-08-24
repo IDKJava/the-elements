@@ -26,7 +26,7 @@
 #define LOGGING 0
 #endif
 
-char* ROOT_FOLDER = "/sdcard/thelements/";
+const char* ROOT_FOLDER = "/sdcard/thelements/";
 
 char saveState2(char* saveLoc)
 {
@@ -302,7 +302,7 @@ bool loadStateLogic2(ifstream& in)
                     particle.element_index() < 0 ||
                     particle.element_index() >= numElements)
             {
-                LOGW("Invalid basic element index %d, defaulting to sand");
+                LOGW("Invalid basic element index, defaulting to sand");
                 a_element[tempParticle] = elements[SAND_ELEMENT];
             }
             else

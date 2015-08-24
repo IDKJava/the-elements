@@ -114,7 +114,7 @@ char upgradeStateV1(FILE* fp, SaveFile* saveProto)
             }
             else
             {
-                LOGW("Custom element not found: %ul", elementHash);
+                LOGW("Custom element not found: %lu", elementHash);
                 // Fail to a default of sand
                 part->set_element_type(Particle::BASIC);
                 part->set_element_index(SAND_ELEMENT);
@@ -263,7 +263,7 @@ unsigned long hashElement(const CustomElement& customProto, int index)
     //Stringify the element
     char* stringified = stringifyElement(customProto, index);
     unsigned long hash = hashStr(stringified);
-    LOGI("Hashing %s[%d]: [%ul] %s",
+    LOGI("Hashing %s[%d]: [%lu] %s",
             customProto.name().c_str(), index, hash, stringified);
     free(stringified);
     return hash;
