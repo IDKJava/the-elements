@@ -226,31 +226,24 @@ void specialWander(int particle)
     int wanderVal = getElementSpecialVal(tempElement, SPECIAL_WANDER);
     if (randVal <= wanderVal)
     {
-        // Check below (can't wander if we're not standing on something)
-        int curX = a_x[particle];
-        int curY = a_y[particle];
-        if (!coordInBounds(curX, curY+1) ||
-            allCoords[getIndex(curX, curY)] != -1)
+        float curX = a_x[particle];
+        float curY = a_y[particle];
+        // Random direction starting at bottom left, going clockwise.
+        // Straight up or down are ignored as possible wander directions.
+        int randDir = rand()%6;
+        float diffX = randDir < 3 ? -1.0 : 1.0;
+        float diffY = randDir%3 - 1.0;
+        // Desired point and below
+        if (coordInBounds(curX+diffX, curY+diffY) &&
+            allCoords[getIndex(curX+diffX, curY+diffY)] == -1)
         {
-            // Random direction starting at bottom left, going clockwise.
-            // Straight up or down are ignored as possible wander directions.
-            int randDir = rand()%6;
-            int diffX = randDir < 3 ? -1 : 1;
-            int diffY = randDir%3 - 1;
-            // Desired point and below
-            if (coordInBounds(curX+diffX, curY+diffY) &&
-                allCoords[getIndex(curX+diffX, curY+diffY)] == -1 &&
-                (!coordInBounds(curX+diffX, curY+diffY+1) || // Either occupied or out of bounds
-                 allCoords[getIndex(curX+diffX, curY+diffY+1)] != -1))
-            {
-                // Good! Let's move
-                allCoords[getIndex(curX+diffX, curY+diffY)] = particle;
-                setBitmapColor(curX+diffX, curY+diffY, tempElement);
-                allCoords[getIndex(curX, curY)] = -1;
-                clearBitmapColor(curX, curY);
-                a_x[particle] = curX+diffX;
-                a_y[particle] = curY+diffY;
-            }
+            // Good! Let's move
+            allCoords[getIndex(curX+diffX, curY+diffY)] = particle;
+            setBitmapColor(curX+diffX, curY+diffY, tempElement);
+            allCoords[getIndex(curX, curY)] = -1;
+            clearBitmapColor(curX, curY);
+            a_x[particle] = curX+diffX;
+            a_y[particle] = curY+diffY;
         }
     }
 }
