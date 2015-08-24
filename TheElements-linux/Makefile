@@ -7,6 +7,7 @@ JNI_DIR = ../TheElements-dev/jni
 LOCAL_SRCS = main.cc
 EXT_BARE_SRCS = app.cc \
            app-android.cc \
+           camera.cc \
            collide.cc \
            collisions.cc \
            elementproperties.cc \

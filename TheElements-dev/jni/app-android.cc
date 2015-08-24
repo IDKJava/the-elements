@@ -98,7 +98,7 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
     glInit();
 
     if (changed) {
-      __android_log_write(ANDROID_LOG_INFO, "TheElements", "nativeResize(), changed dim");
+      LOGI("nativeResize(), changed dim");
       arraySetup();
       gameSetup();
       pthread_mutex_unlock(&update_mutex);

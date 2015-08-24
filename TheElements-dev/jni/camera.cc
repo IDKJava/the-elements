@@ -4,7 +4,6 @@
 #include "points.h"
 #include "setup.h"
 
-#include <android/log.h>
 #include <cmath>
 #include <algorithm>
 
