@@ -319,8 +319,8 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 		nativeResize(w, h);
         if (!MainActivity.disableLoad) {
             nativeLoadState(MainActivity.shouldLoadDemo);
+            MainActivity.shouldLoadDemo = false;
         }
-		MainActivity.shouldLoadDemo = false;
 	}
 
 	public void onDrawFrame(GL10 gl)

@@ -101,7 +101,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     // For photo loading
     public static boolean disableLoad = false;
-    public static boolean shouldSetFromPhoto;
+    public static boolean shouldSetFromPhoto = false;
 
     static ArrayList<IconListItem> baseToolList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
@@ -289,9 +289,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         elementsList = new ArrayList<String>();
 
-        // Start unpaused
-        play = true;
-        menu_bar.setPlayState(play);
+        // No saved instance state
+        if (savedInstanceState == null) {
+            // Start unpaused
+            play = true;
+            menu_bar.setPlayState(play);
+        }
 
         // Get DPI from screen -- TODO: Sometimes this lies, add custom function
         // to do this with hardcoded values
@@ -971,8 +974,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Get the dimensions of the View
 
         int zoomLevel = Preferences.getZoom();
-        int targetW = sand_view.getWidth() / zoomLevel;
-        int targetH = sand_view.getHeight() / zoomLevel;
+        int targetW = getSurfaceWidth() / zoomLevel;
+        int targetH = getSurfaceHeight() / zoomLevel;
 
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
@@ -1066,6 +1069,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static native int getElementGreen(int index);
     public static native int getElementBlue(int index);
     public static native int getWorld();
+    public static native int getSurfaceWidth();
+    public static native int getSurfaceHeight();
 
     // Accelerometer related
     public static native void setXGravity(float xGravity);

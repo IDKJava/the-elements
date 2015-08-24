@@ -725,6 +725,14 @@ JNIEXPORT int JNICALL
 Java_com_idkjava_thelements_MainActivity_getWorld(JNIEnv* env, jobject thiz) {
     return world;
 }
+JNIEXPORT int JNICALL
+Java_com_idkjava_thelements_MainActivity_getSurfaceWidth(JNIEnv* env, jobject thiz) {
+    return screenWidth;
+}
+JNIEXPORT int JNICALL
+Java_com_idkjava_thelements_MainActivity_getSurfaceHeight(JNIEnv* env, jobject thiz) {
+    return screenHeight;
+}
 
 //Accelerometer related
 JNIEXPORT void JNICALL
