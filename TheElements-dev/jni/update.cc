@@ -14,7 +14,7 @@
 // Per-file logging
 #ifndef NDEBUG
 //Debug
-#define LOGGING 1
+#define LOGGING 0
 #else
 //Release
 #define LOGGING 0
