@@ -197,6 +197,8 @@
 
     extern int renderOverlayType;
 
+    extern int paidCameraOn;
+
 
 /*Network stuff taken out for now
 //Buffer building variables

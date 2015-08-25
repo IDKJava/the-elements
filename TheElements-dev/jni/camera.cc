@@ -16,6 +16,46 @@
 hsl elementHSL[NUM_BASE_ELEMENTS];
 int closestElementForHL[SIZE][SIZE][SIZE];
 
+const char freeElements[] = {
+    // ----Special----
+    false,               // 0 = Spawn
+    false,                // 1 = Drag
+    false,              // 2 = Eraser
+    // ----Normal----
+    true,                // 3 = Sand
+    true,               // 4 = Water
+    false,               // 5 = Steam
+    false,                 // 6 = Ice
+    true,                // 7 = Wall
+    false, // 8 = Destructible Wall
+    true,               // 9 = Plant
+    false,                // 10 = Fire
+    false,               // 11 = Magma
+    false,               // 12 = Stone
+    true,                 // 13 = Oil
+    false,                  // 14 = C4
+    false,                // 15 = C4++
+    false,                // 16 = Fuse
+    false,                // 17 = Acid
+    false,                // 18 = Salt
+    false,  // 19 = Salt-Water
+    false,               // 20 = Glass
+    false,                 // 21 = Mud
+    false,   // 22 = Generator
+    false,                // 23 = Coal
+    false,                 // 24 = Ant
+    false,   // 25 = Gunpowder
+    false,    // 26 = Mosquito
+    false,                // 27 = Wood
+    false,             // 28 = Termite
+    false, // 29 = Insect Killer
+    false,  // 30 = Electricity
+    false,        // 31 = Metal
+};
+
+
+
+
 
 #ifndef NDEBUG
 //Debug
@@ -28,7 +68,7 @@ int closestElementForHL[SIZE][SIZE][SIZE];
 
 
 void preCalculateHSL() {
-  for (int i = 0; i < NUM_BASE_ELEMENTS; i++) {
+  for (int i = NORMAL_ELEMENT; i < NUM_BASE_ELEMENTS; i++) {
     Element* curElement = elements[i];
     elementHSL[i] = rgbToHsl(curElement->red, curElement->green, curElement->blue);
   }
@@ -40,7 +80,12 @@ void calculateClosestElement() {
       for ( int s = 0; s < SIZE; s++) {
         int lowestDiff = 1 << 30;
         int lowestElement = -1;
-        for (int i = 0; i < NUM_BASE_ELEMENTS; i++) {
+        for (int i = NORMAL_ELEMENT; i < NUM_BASE_ELEMENTS; i++) {
+          if (!paidCameraOn) {
+            if (!freeElements[i]) {
+              continue;
+            }
+          }
           hsl curEleHsl = elementHSL[i];
           int diffH = abs(curEleHsl.h - h);
           int diffS = abs(curEleHsl.s - s);
@@ -99,7 +144,7 @@ hsl rgbToHsl(char r, char g, char b) {
   return out;
 }
 
-void setGameToImage(int* pixels, int w, int h) {
+void setGameToImage(int* pixels, int offsetX, int offsetY, int w, int h) {
   pthread_mutex_lock(&update_mutex);
   gameSetup();
   for (int y = 0; y < h; y++) {
@@ -111,7 +156,7 @@ void setGameToImage(int* pixels, int w, int h) {
       char b = color & 255;
       hsl pixelHsl = rgbToHsl(r,g,b);
       int element = closestElementForHL[pixelHsl.h][pixelHsl.s][pixelHsl.l];
-      createPoint(x, y, elements[element]);
+      createPoint(offsetX + x, offsetY + y, elements[element]);
     }
   }
   pthread_mutex_unlock(&update_mutex);

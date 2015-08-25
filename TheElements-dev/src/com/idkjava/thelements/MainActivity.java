@@ -1010,11 +1010,17 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             matrix.preRotate(rotationInDegrees);
         }
         matrix.postScale((float)(1f/scaleFactor), (float)(1f/scaleFactor));
-        Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 
-        int[] pixels = new int[targetW * targetH];
-        adjustedBitmap.getPixels(pixels, 0, adjustedBitmap.getWidth(), 0, 0, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
-        loadFromImage(pixels, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+
+        if (bitmap != null) {
+            Bitmap adjustedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+
+            int[] pixels = new int[targetW * targetH];
+            adjustedBitmap.getPixels(pixels, 0, adjustedBitmap.getWidth(), 0, 0, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+            int offsetX = (targetW - adjustedBitmap.getWidth())/2;
+            int offsetY = (targetH - adjustedBitmap.getHeight())/2;
+            loadFromImage(pixels, offsetX, offsetY, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+        }
     }
 
     // Converts dp to pixels
@@ -1076,7 +1082,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static native void setXGravity(float xGravity);
     public static native void setYGravity(float yGravity);
 
-    private static native void loadFromImage(int[] pixels, int w, int h);
+    private static native void loadFromImage(int[] pixels, int offsetx, int offsety, int w, int h);
+    private static native void setPaidCameraOn(int cameraOn);
+
     // @formatter:on
 
     static {

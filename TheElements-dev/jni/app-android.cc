@@ -750,12 +750,14 @@ JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_loadFromImage(JNIEnv* env,
                                                             jobject thiz,
                                                             jintArray pixels,
+                                                            jint offsetx,
+                                                            jint offsety,
                                                             jint w,
                                                             jint h)
 {
   LOGI("loading from image");
   int* bitPixels = env->GetIntArrayElements(pixels, 0);
-  setGameToImage(bitPixels, w, h);
+  setGameToImage(bitPixels, offsetx, offsety, w, h);
 }
 
 //Upgrading save files (for backwards compatibility)
@@ -824,6 +826,13 @@ Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jobject thiz,
     ROOT_FOLDER = nativeRootCpy;
     env->ReleaseStringUTFChars(newRoot, nativeRoot);
 }
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_MainActivity_setPaidCameraOn(JNIEnv* env, jobject thiz, jint cameraOn)
+{
+    paidCameraOn = cameraOn;
+}
+
 
 // extern "C"
 #if __cplusplus

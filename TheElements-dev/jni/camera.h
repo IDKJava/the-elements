@@ -12,6 +12,6 @@ struct hsl{
 void preCalculateHSL();
 void calculateClosestElement();
 hsl rgbToHsl(char r, char g, char b);
-void setGameToImage(int* pixels, int w, int h);
+void setGameToImage(int* pixels, int offsetx, int offsety, int w, int h);
 
 #endif
