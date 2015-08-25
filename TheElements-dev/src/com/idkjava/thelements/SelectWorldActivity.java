@@ -6,13 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.money.ProductManager;
 
 /**
  * Activity to offer the user the choice of world to start in. Displays locked worlds differently,
  * and links to the buy page if the user selects them.
  */
-public class SelectWorldActivity extends Activity {
+public class SelectWorldActivity extends ReportingActivity {
     View earthWorldButton;
     View spaceWorldButton;
 
@@ -26,6 +27,7 @@ public class SelectWorldActivity extends Activity {
         earthWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent("Select world: Earth");
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_EARTH);
                 startActivity(mainIntent);
@@ -36,6 +38,7 @@ public class SelectWorldActivity extends Activity {
         spaceWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FlurryAgent.logEvent("Select world: Space");
                 // World owned check is done in MainActivity
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_SPACE);

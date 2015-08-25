@@ -1,21 +1,18 @@
 package com.idkjava.thelements;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.error.ActivityErrorHandler;
 import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.money.ProductManager;
 
 
-public class PurchaseActivity extends Activity {
+public class PurchaseActivity extends ReportingActivity {
 
     private static final int OWNED_COLOR = Color.rgb(0, 255, 50);
 
@@ -50,6 +47,7 @@ public class PurchaseActivity extends Activity {
                     handler.error(R.string.space_world_owned_error);
                 }
                 else {
+                    FlurryAgent.logEvent("Fire purchase: Space World");
                     firePurchase(ProductManager.SKU_GRAVITY_PACK, handler);
                 }
             }
@@ -62,6 +60,7 @@ public class PurchaseActivity extends Activity {
                     handler.error(R.string.tool_pack_owned_error);
                 }
                 else {
+                    FlurryAgent.logEvent("Fire purchase: Tool Pack");
                     firePurchase(ProductManager.SKU_TOOL_PACK, handler);
                 }
             }
@@ -74,6 +73,7 @@ public class PurchaseActivity extends Activity {
                     handler.error(R.string.camera_tool_owned_error);
                 }
                 else {
+                    FlurryAgent.logEvent("Fire purchase: Camera Tool");
                     firePurchase(ProductManager.SKU_CAMERA_TOOL, handler);
                 }
             }
