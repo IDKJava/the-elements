@@ -86,6 +86,9 @@
     <string name="tool_pack_purchase">Buy Tool Pack: $3.00</string>
     <string name="tool_pack_owned">Tool Pack: OWNED!</string>
     <string name="tool_pack_owned_error">Error: You already own the tool pack!</string>
+    <string name="camera_tool_purchase">Buy Full Camera Tool: $1.00</string>
+    <string name="camera_tool_owned">Full Camera Tool: OWNED!</string>
+    <string name="camera_tool_owned_error">Error: You already own the camera tool!</string>
     <string name="bullet">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
     <string name="earth_world_desc_2">Average Earth atomspheric temperature.</string>
@@ -94,8 +97,9 @@
     <string name="space_world_desc_3">Box out null gravity zones.</string>
     <string name="tool_pack_desc_1">Adds several new tools allowing precise design.</string>
     <string name="tool_pack_desc_2">Rectangle, circle, triangle, line, dashed line, slingshot, and spray tools.</string>
+    <string name="camera_tool_desc_1">Expands the camera tool to use ALL elements when setting the scene from the camera.</string>
 
-    <string name="photo_tool">Set from camera</string>
+    <string name="photo_tool">Set scene from camera</string>
 
     <string name="purchase_item">Unlock In-Game Item</string>
     <string name="billing_not_supported">Billing is not supported on this device. You will not be able to make purchases.</string>

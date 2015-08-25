@@ -13,170 +13,232 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:layout_marginTop="100dip"
-        android:layout_marginBottom="50dip"
+        android:layout_marginBottom="20dip"
         android:textColor="#444444" android:textSize="32sp"/>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Space world -->
+        android:fadingEdge="vertical">
         <LinearLayout
-            android:id="@+id/space_world_button"
-            android:clickable="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/btn_mm"
-            android:layout_marginTop="20dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:padding="3dip">
-            <ImageView
-                android:id="@+id/space_world_icon"
-                android:layout_height="100dip"
-                android:layout_width="100dip"
-                android:src="@drawable/space_icon"
-                android:layout_marginRight="5dip"
-                android:layout_margin="3dip"
-                android:layout_gravity="center_vertical" />
+            android:orientation="vertical">
+
+            <!-- Space world -->
             <LinearLayout
+                android:id="@+id/space_world_button"
+                android:clickable="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dip"
-                android:layout_marginLeft="5dip"
-                android:layout_marginBottom="5dip">
-                <TextView
-                    android:id="@+id/space_world_title"
-                    android:text="@string/space_world_purchase"
-                    android:textSize="24sp"
+                android:orientation="horizontal"
+                android:background="@drawable/btn_mm"
+                android:layout_marginBottom="20dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:padding="3dip">
+                <ImageView
+                    android:id="@+id/space_world_icon"
+                    android:layout_height="100dip"
+                    android:layout_width="100dip"
+                    android:src="@drawable/space_icon"
+                    android:layout_marginRight="5dip"
+                    android:layout_margin="3dip"
+                    android:layout_gravity="center_vertical" />
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#ffffff" />
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginBottom="5dip">
+                    <TextView
+                        android:id="@+id/space_world_title"
+                        android:text="@string/space_world_purchase"
+                        android:textSize="24sp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff" />
 
-                <TableLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#999999"
-                    android:layout_marginLeft="5dip">
-                    <TableRow>
-                        <TextView
-                            android:text="@string/bullet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="@string/space_world_desc_1"
-                            android:layout_marginLeft="3dip"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
-                    </TableRow>
-                    <TableRow
-                        android:layout_marginTop="1dip">
-                        <TextView
-                            android:text="@string/bullet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="@string/space_world_desc_2"
-                            android:layout_marginLeft="3dip"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
-                    </TableRow>
-                    <TableRow
-                        android:layout_marginTop="1dip">
-                        <TextView
-                            android:text="@string/bullet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="@string/space_world_desc_3"
-                            android:layout_marginLeft="3dip"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
-                    </TableRow>
-                </TableLayout>
+                    <TableLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#999999"
+                        android:layout_marginLeft="5dip">
+                        <TableRow>
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/space_world_desc_1"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_marginTop="1dip">
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/space_world_desc_2"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_marginTop="1dip">
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/space_world_desc_3"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-        <!-- Tool pack -->
-        <LinearLayout
-            android:id="@+id/tool_pack_button"
-            android:clickable="true"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@drawable/btn_mm"
-            android:layout_marginTop="20dip"
-            android:layout_marginLeft="10dip"
-            android:layout_marginRight="10dip"
-            android:padding="3dip">
-            <ImageView
-                android:id="@+id/tool_pack_icon"
-                android:layout_height="100dip"
-                android:layout_width="100dip"
-                android:src="@drawable/tool_pack"
-                android:layout_marginRight="5dip"
-                android:layout_margin="3dip"
-                android:layout_gravity="center_vertical" />
+            <!-- Tool pack -->
             <LinearLayout
+                android:id="@+id/tool_pack_button"
+                android:clickable="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="5dip"
-                android:layout_marginLeft="5dip"
-                android:layout_marginBottom="5dip">
-                <TextView
-                    android:id="@+id/tool_pack_title"
-                    android:text="@string/tool_pack_purchase"
-                    android:textSize="24sp"
+                android:orientation="horizontal"
+                android:background="@drawable/btn_mm"
+                android:layout_marginBottom="20dip"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:padding="3dip">
+                <ImageView
+                    android:id="@+id/tool_pack_icon"
+                    android:layout_height="100dip"
+                    android:layout_width="100dip"
+                    android:src="@drawable/tool_pack"
+                    android:layout_marginRight="5dip"
+                    android:layout_margin="3dip"
+                    android:layout_gravity="center_vertical" />
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#ffffff" />
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginBottom="5dip">
+                    <TextView
+                        android:id="@+id/tool_pack_title"
+                        android:text="@string/tool_pack_purchase"
+                        android:textSize="24sp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff" />
 
-                <TableLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#999999"
-                    android:layout_marginLeft="5dip">
-                    <TableRow>
-                        <TextView
-                            android:text="@string/bullet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="@string/tool_pack_desc_1"
-                            android:layout_marginLeft="3dip"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
-                    </TableRow>
-                    <TableRow
-                        android:layout_marginTop="1dip">
-                        <TextView
-                            android:text="@string/bullet"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                        <TextView
-                            android:text="@string/tool_pack_desc_2"
-                            android:layout_marginLeft="3dip"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:singleLine="false"/>
-                    </TableRow>
-                </TableLayout>
+                    <TableLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#999999"
+                        android:layout_marginLeft="5dip">
+                        <TableRow>
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/tool_pack_desc_1"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                        <TableRow
+                            android:layout_marginTop="1dip">
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/tool_pack_desc_2"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
 
-    </LinearLayout>
+            <!-- Camera Tool -->
+            <LinearLayout
+                android:id="@+id/camera_tool_button"
+                android:clickable="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/btn_mm"
+                android:layout_marginLeft="10dip"
+                android:layout_marginRight="10dip"
+                android:layout_marginBottom="20dip"
+                android:padding="3dip">
+                <ImageView
+                    android:id="@+id/camera_icon"
+                    android:layout_height="100dip"
+                    android:layout_width="100dip"
+                    android:src="@drawable/camera_icon"
+                    android:layout_marginRight="5dip"
+                    android:layout_margin="3dip"
+                    android:layout_gravity="center_vertical" />
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dip"
+                    android:layout_marginLeft="5dip"
+                    android:layout_marginBottom="5dip">
+                    <TextView
+                        android:id="@+id/camera_tool_title"
+                        android:text="@string/camera_tool_purchase"
+                        android:textSize="24sp"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff" />
+
+                    <TableLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#999999"
+                        android:layout_marginLeft="5dip">
+                        <TableRow>
+                            <TextView
+                                android:text="@string/bullet"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                            <TextView
+                                android:text="@string/camera_tool_desc_1"
+                                android:layout_marginLeft="3dip"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:singleLine="false"/>
+                        </TableRow>
+                    </TableLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

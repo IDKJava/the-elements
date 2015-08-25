@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 public class ProductManager {
     public static String SKU_GRAVITY_PACK = "gravity_pack"; // includes all gravity tools
     public static String SKU_TOOL_PACK = "tool_pack"; // includes a large set of extra tools
+    public static String SKU_CAMERA_TOOL = "camera_tool"; // a tool to convert pictures to sand
 
     public ProductManager(Context ctx, SharedPreferences prefs) {
         // Only ever use the application context, because this transcends
@@ -119,6 +120,19 @@ public class ProductManager {
                 editor.putBoolean(SKU_TOOL_PACK, false);
                 editor.commit();
             }
+
+            Purchase cameraPurchase = inventory.getPurchase(SKU_CAMERA_TOOL);
+            if (cameraPurchase != null && verify(cameraPurchase)) {
+                Log.d("TheElements", "Camera pack owned: " + cameraPurchase.getPurchaseState());
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_CAMERA_TOOL, true);
+                editor.commit();
+            }
+            else {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_CAMERA_TOOL, false);
+                editor.commit();
+            }
         }
     };
 
@@ -137,7 +151,8 @@ public class ProductManager {
 
             // Any one-time purchase
             if (purchase.getSku() == SKU_GRAVITY_PACK ||
-                purchase.getSku() == SKU_TOOL_PACK) {
+                purchase.getSku() == SKU_TOOL_PACK ||
+                purchase.getSku() == SKU_CAMERA_TOOL) {
                 refreshInventory(null, null);
             }
             else {

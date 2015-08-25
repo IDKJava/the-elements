@@ -151,6 +151,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             throw new RuntimeException("Tool set unspecified for world: " + curWorld);
         }
 
+        toolList.addAll(photoToolList);
 
         if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
             toolList.addAll(toolPackList);
@@ -158,8 +159,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         else {
             toolList.addAll(getLockedToolPackList());
         }
-
-        toolList.addAll(photoToolList);
 
         if (mToolAdapter != null) {
             mToolAdapter.clear();
