@@ -100,6 +100,8 @@
     <string name="camera_tool_desc_1">Expands the camera tool to use ALL elements when setting the scene from the camera.</string>
 
     <string name="photo_tool">Set scene from camera</string>
+    <string name="photo_tool_locked">Set scene from camera</string>
+    <string name="camera_tool_limited">You are using the limited camera tool. Unlock from the main menu to generate scenes with all elements.</string>
 
     <string name="purchase_item">Unlock In-Game Item</string>
     <string name="billing_not_supported">Billing is not supported on this device. You will not be able to make purchases.</string>

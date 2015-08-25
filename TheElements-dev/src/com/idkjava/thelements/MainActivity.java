@@ -136,6 +136,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static ArrayList<IconListItem> photoToolList = new ArrayList<>(Arrays.asList(
             new IconListItem(R.string.photo_tool, R.drawable.camera_icon)
     ));
+    static ArrayList<IconListItem> photoToolLockedList = new ArrayList<>(Arrays.asList(
+            new IconListItem(R.string.photo_tool_locked, R.drawable.camera_icon_locked)
+    ));
 
     ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);
     private void refreshToolList() {
@@ -151,7 +154,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             throw new RuntimeException("Tool set unspecified for world: " + curWorld);
         }
 
-        toolList.addAll(photoToolList);
+        if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
+            toolList.addAll(photoToolList);
+        }
+        else {
+            toolList.addAll(photoToolLockedList);
+        }
 
         if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
             toolList.addAll(toolPackList);
@@ -546,6 +554,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             sand_view.setTool(SandView.Tool.HAND_TOOL);
                             break;
                         }
+                        case R.string.photo_tool_locked:
+                            Toast.makeText(getApplicationContext(), R.string.camera_tool_limited, Toast.LENGTH_LONG).show();
+                            // Purposeful fall-through to normal photo tool
                         case R.string.photo_tool: {
                             play = false;
                             setPlaying(play);
