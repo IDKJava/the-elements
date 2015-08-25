@@ -197,7 +197,7 @@
 
     extern int renderOverlayType;
 
-    extern int paidCameraOn;
+    extern bool paidCameraOn;
 
 
 /*Network stuff taken out for now

@@ -348,6 +348,14 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             setCurWorld(nativeWorld);
         }
 
+        // Update camera paid status
+        if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
+            setPaidCameraOn(true);
+        }
+        else {
+            setPaidCameraOn(false);
+        }
+
         // Load the settings shared preferences which deals with if we're
         // resuming from pause or not
         SharedPreferences settings = ElementsApplication.getPrefs();
@@ -1082,7 +1090,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static native void setYGravity(float yGravity);
 
     private static native void loadFromImage(int[] pixels, int offsetx, int offsety, int w, int h);
-    private static native void setPaidCameraOn(int cameraOn);
+    private static native void setPaidCameraOn(boolean cameraOn);
 
     // @formatter:on
 

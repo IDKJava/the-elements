@@ -16,7 +16,7 @@
 hsl elementHSL[NUM_BASE_ELEMENTS];
 int closestElementForHL[SIZE][SIZE][SIZE];
 
-const char freeElements[] = {
+const bool freeElements[] = {
     // ----Special----
     false,               // 0 = Spawn
     false,                // 1 = Drag

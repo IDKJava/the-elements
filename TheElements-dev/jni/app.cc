@@ -113,7 +113,7 @@ char *ngTexPixels;
 
 int renderOverlayType = RT_RECT;
 
-int paidCameraOn = 0;
+bool paidCameraOn = false;
 
 /*Network stuff taken out for now
 //Buffer building variables

@@ -828,7 +828,7 @@ Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setPaidCameraOn(JNIEnv* env, jobject thiz, jint cameraOn)
+Java_com_idkjava_thelements_MainActivity_setPaidCameraOn(JNIEnv* env, jobject thiz, jboolean cameraOn)
 {
     paidCameraOn = cameraOn;
 }
