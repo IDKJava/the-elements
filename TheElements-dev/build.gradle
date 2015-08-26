@@ -33,7 +33,7 @@ tasks.whenTaskAdded { task ->
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(include: '*.jar', dir: 'libs')
     compile project(':android-color-picker:AmbilWarna')
     compile project(':kamcord-android-sdk:kamcord')
     compile project(':Android-WVersionManager:library')
@@ -41,7 +41,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 10
     buildToolsVersion "22.0.1"
 
     sourceSets {
