@@ -58,4 +58,10 @@ public class IconListAdapter extends ArrayAdapter {
 
         return convertView;
     }
+
+    public void addAll(ArrayList<IconListItem> items) {
+        for (IconListItem i : items) {
+            this.add(i);
+        }
+    }
 }

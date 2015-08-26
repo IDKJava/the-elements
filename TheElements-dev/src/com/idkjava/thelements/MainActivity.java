@@ -103,19 +103,19 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     public static boolean disableLoad = false;
     public static boolean shouldSetFromPhoto = false;
 
-    static ArrayList<IconListItem> baseToolList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> baseToolList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
             new IconListItem(R.string.zoom_tool, R.drawable.hand_icon),
             new IconListItem(R.string.eraser, R.drawable.eraser_on)
     ));
-    static ArrayList<IconListItem> gravToolList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> gravToolList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.make_black_hole, R.drawable.bh_tex),
             new IconListItem(R.string.make_white_hole, R.drawable.wh_tex),
             new IconListItem(R.string.make_curl_hole, R.drawable.ch_tex),
             new IconListItem(R.string.null_gravity_zone, R.drawable.ng_tex),
             new IconListItem(R.string.remove_gravity_object, R.drawable.eraser)
     ));
-    static ArrayList<IconListItem> toolPackList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> toolPackList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.draw_rectangle, R.drawable.rect_tool),
             new IconListItem(R.string.draw_circle, R.drawable.circle_tool),
             new IconListItem(R.string.draw_triangle, R.drawable.tri_tool),
@@ -125,7 +125,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.spray, R.drawable.spray_tool)
     ));
     private ArrayList<IconListItem> getLockedToolPackList() {
-        ArrayList<IconListItem> locked = new ArrayList<>(toolPackList);
+        ArrayList<IconListItem> locked = new ArrayList<IconListItem>(toolPackList);
         for (IconListItem i : locked) {
             i.iconRes = R.drawable.lock;
             i.locked = true;
@@ -133,21 +133,21 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         return locked;
     }
-    static ArrayList<IconListItem> photoToolList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> photoToolList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.photo_tool, R.drawable.camera_icon)
     ));
-    static ArrayList<IconListItem> photoToolLockedList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> photoToolLockedList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.photo_tool_locked, R.drawable.camera_icon_locked)
     ));
 
-    ArrayList<IconListItem> toolList = new ArrayList<>(baseToolList);
+    ArrayList<IconListItem> toolList = new ArrayList<IconListItem>(baseToolList);
     private void refreshToolList() {
         // Add world-specific tools
         if (curWorld == WORLD_EARTH) {
-            toolList = new ArrayList<>(baseToolList);
+            toolList = new ArrayList<IconListItem>(baseToolList);
         }
         else if (curWorld == WORLD_SPACE) {
-            toolList = new ArrayList<>(baseToolList);
+            toolList = new ArrayList<IconListItem>(baseToolList);
             toolList.addAll(gravToolList);
         }
         else {
@@ -175,18 +175,18 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
     }
 
-    static ArrayList<IconListItem> utilList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> utilList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.clear_screen, R.drawable.clear_icon_normal),
             new IconListItem(R.string.save, R.drawable.save),
             new IconListItem(R.string.load, R.drawable.load),
             new IconListItem(R.string.trails_on, R.drawable.fade_icon)
     ));
-    static ArrayList<IconListItem> recordList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> recordList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.start_recording, R.drawable.record_icon),
             new IconListItem(R.string.watch_videos, R.drawable.kamcord_view_button)
     ));
     // TODO: Fix UI for world selection
-    static ArrayList<IconListItem> worldList = new ArrayList<>(Arrays.asList(
+    static ArrayList<IconListItem> worldList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.earth_world, R.drawable.earth_icon_button),
             new IconListItem(R.string.space_world, R.drawable.space_icon_button)
     ));
