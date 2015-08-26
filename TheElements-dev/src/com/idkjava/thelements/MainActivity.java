@@ -951,10 +951,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 // Error occurred while creating the File
                 Log.e("MainActivity", "error creating photo file", ex);
             }
-            mImageLoc = photoFile.getAbsolutePath();
 
             // Continue only if the File was successfully created
             if (photoFile != null) {
+                mImageLoc = photoFile.getAbsolutePath();
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
