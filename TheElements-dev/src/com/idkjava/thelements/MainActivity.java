@@ -100,8 +100,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static ArrayList<String> elementsList;
 
     // For photo loading
-    public static boolean disableLoad = false;
-    public static boolean shouldSetFromPhoto = false;
+    public static boolean shouldLoadPhoto = false;
 
     static ArrayList<IconListItem> baseToolList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.brush_tool, R.drawable.palette),
@@ -309,10 +308,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay()
                 .getMetrics(dm);
         mDPI = dm.densityDpi;
-        if (shouldSetFromPhoto) {
-            setGameToPhoto();
-        }
-        shouldSetFromPhoto = false;
     }
 
     private final SensorEventListener mySensorListener = new SensorEventListener() {
@@ -475,11 +470,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 refreshToolList();
             }
         });
-
-        if (shouldSetFromPhoto) {
-            setGameToPhoto();
-        }
-        shouldSetFromPhoto = false;
     }
 
     protected Dialog onCreateDialog(int id) // This is called when showDialog is called
@@ -646,24 +636,10 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             clearScreen();
                             break;
                         case R.string.save:
-                            if (Environment.getExternalStorageState().equals(
-                                    Environment.MEDIA_MOUNTED)) {
-                                saveState();
-                            }
-                            else {
-                                Toast.makeText(MainActivity.this, R.string.sdcard_not_found,
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            saveState();
                             break;
                         case R.string.load:
-                            if (Environment.getExternalStorageState().equals(
-                                    Environment.MEDIA_MOUNTED)) {
-                                loadState();
-                            }
-                            else {
-                                Toast.makeText(MainActivity.this, R.string.sdcard_not_found,
-                                        Toast.LENGTH_SHORT).show();
-                            }
+                            loadState();
                             break;
                         case R.string.trails_on:
                             setFilterMode((char) 1);
@@ -965,8 +941,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            disableLoad = true;
-            shouldSetFromPhoto = true;
+            shouldLoadPhoto = true;
         }
     }
 
@@ -1038,7 +1013,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             int offsetX = (targetW - adjustedBitmap.getWidth())/2;
             int offsetY = (targetH - adjustedBitmap.getHeight())/2;
             loadFromImage(pixels, offsetX, offsetY, adjustedBitmap.getWidth(), adjustedBitmap.getHeight());
+            // Save the loaded state, so that we reload this image if the game resizes repeatedly
+            saveTempState();
         }
+
+        shouldLoadPhoto = false;
     }
 
     // Converts dp to pixels
@@ -1047,9 +1026,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     }
 
     public static void setPlaying(boolean playState) {
-        if (playState) {
-            disableLoad = false;
-        }
         if (Kamcord.isPaused() || Kamcord.isRecording()) {
             if (playState) {
                 Kamcord.resumeRecording();

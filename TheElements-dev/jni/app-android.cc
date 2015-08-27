@@ -96,19 +96,11 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
 
 
     glInit();
+    arraySetup();
+    gameSetup();
 
-    if (changed) {
-      LOGI("nativeResize(), changed dim");
-      arraySetup();
-      gameSetup();
-      pthread_mutex_unlock(&update_mutex);
-      startUpdateThread();
-    }
-    else {
-      pthread_mutex_unlock(&update_mutex);
-    }
-
-
+    pthread_mutex_unlock(&update_mutex);
+    startUpdateThread();
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now
 JNIEXPORT void JNICALL

@@ -447,35 +447,30 @@ int updateSpecials(int index)
         //Spawn
         case SPECIAL_SPAWN:
         {
-            LOGD("Special spawn");
             specialSpawn(index);
             break;
         }
         //Breakable
         case SPECIAL_BREAK:
         {
-            LOGD("Special break");
             specialBreak(index);
             break;
         }
         //Growing
         case SPECIAL_GROW:
         {
-            LOGD("Special grow");
             specialGrow(index);
             break;
         }
         //Heater
         case SPECIAL_HEAT:
         {
-            LOGD("Special heat");
             specialHeat(index);
             break;
         }
         //Explosive
         case SPECIAL_EXPLODE:
         {
-            LOGD("Special explode");
             specialExplode(index);
             break;
 
@@ -483,28 +478,24 @@ int updateSpecials(int index)
         //Disappearing
         case SPECIAL_LIFE:
         {
-            LOGD("Special life");
             specialLife(index);
             break;
         }
         //Wander
         case SPECIAL_WANDER:
         {
-            LOGD("Special wander");
             specialWander(index);
             break;
         }
         //Jump
         case SPECIAL_JUMP:
         {
-            LOGD("Special jump");
             specialJump(index);
             break;
         }
         // Tunnel
         case SPECIAL_TUNNEL:
         {
-            LOGD("Special tunnel");
             specialTunnel(index);
             break;
         }
@@ -512,21 +503,18 @@ int updateSpecials(int index)
         // FIXME: This very rarely causes stuck particles
         case SPECIAL_BURN:
         {
-            LOGD("Special burn");
             shouldResolveHeatChanges = (shouldResolveHeatChanges && specialBurn(index));
             break;
         }
         // Conduct
         case SPECIAL_CONDUCTIVE:
         {
-            LOGD("Special conductive");
             specialConductive(index);
             break;
         }
         // Trail
         case SPECIAL_TRAIL:
         {
-            LOGD("Special trail");
             specialTrail(index);
             break;
         }

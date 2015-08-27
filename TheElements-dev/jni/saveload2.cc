@@ -413,7 +413,7 @@ bool loadCustomElement2(ifstream& in)
     // Malloc size of string + 1 for NUL byte
     custom->filename = (char*) malloc((customProto.filename().length()+1) * sizeof(char));
     strcpy(custom->filename, customProto.filename().c_str());
-    custom->allowMovingTransition = customProto.allow_moving_transition();
+//    custom->allowMovingTransition = customProto.allow_moving_transition();
     custom->state = customProto.state();
     custom->startingTemp = customProto.starting_temp();
     custom->lowestTemp = customProto.lowest_temp();

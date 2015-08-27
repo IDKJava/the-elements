@@ -31,8 +31,7 @@
         char* filename;
 
         //Dealing with phases
-        char allowMovingTransition;
-        char state;
+        unsigned char state;
         unsigned char startingTemp, lowestTemp, highestTemp;
         struct Element* lowerElement;
         struct Element* higherElement;
@@ -43,8 +42,8 @@
         //Properties
         int specials[MAX_SPECIALS];
         int specialVals[MAX_SPECIALS];
-        char collisions[NUM_BASE_ELEMENTS];  // Only for customs
-        char base; //Only for customs
+        unsigned char collisions[NUM_BASE_ELEMENTS];  // Only for customs
+        unsigned char base; //Only for customs
         unsigned char density;
         int fallVel;
         unsigned char inertia;

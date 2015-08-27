@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.money.ProductManager;
 
 import java.io.IOException;
@@ -21,6 +22,9 @@ public class ElementsApplication extends Application {
         super.onCreate();
 
         initAppSingletons();
+
+        // Find files root dir
+        FileManager.ROOT_DIR = getFilesDir().getAbsolutePath() + "/";
 
         // Load textures
         AssetManager am = getAssets();

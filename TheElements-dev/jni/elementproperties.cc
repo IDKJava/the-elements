@@ -106,7 +106,7 @@ signed char baseFallVel[] = {0, 0, 0, 1, 1, -1, 0, 0, 0, 0, -1, 1, 1, 1, 0, 0, 0
 unsigned char baseDensity[] = {10, 10, 10, 10,  5,  1, 10, 10, 10, 10,  1,  7, 10,  3, 10, 10, 10,  4, 10,  4, 10,  9, 10, 10,  4, 10,  4,  10,  4, 8,1,10};
 
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
-char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0};
+unsigned char baseState[] = {0, 0, 0, 0, 1, 2, 0, 0, 0, 0, 2, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0};
 
 /*
  * Specials list:
@@ -205,5 +205,5 @@ unsigned char baseHighestTemp[] = {255, 255, 255, 154, 150, 255, 75, 255, 200, 1
 unsigned char baseLowestTemp[] = {0, 0, 0, 0, 76, 151, 0, 0, 0, 0, 110, 201, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 25, 0, 25, 0, 25, 0, 0, 0};
 
 //Defines the higher and lower elements to change to outside of the correct temp range
-char baseHigherElement[] = {3, 3, 3, 20, 5, 5, 4, 7, 11, 10, 10, 11, 11, 10, 10, 10, 10, 5, 18, 5, 20, 3, 22, 10, 10, 10, 10, 10, 10, 29, 30, 11};
-char baseLowerElement[] = {3, 3, 3, 3, 6, 4, 6, 7, 8, 9, 23, 12, 12, 13, 14, 15, 16, 17, 18, 6, 20, 21, 22, 23, 3, 25, 3, 27, 3, 29, 30, 31};
+unsigned char baseHigherElement[] = {3, 3, 3, 20, 5, 5, 4, 7, 11, 10, 10, 11, 11, 10, 10, 10, 10, 5, 18, 5, 20, 3, 22, 10, 10, 10, 10, 10, 10, 29, 30, 11};
+unsigned char baseLowerElement[] = {3, 3, 3, 3, 6, 4, 6, 7, 8, 9, 23, 12, 12, 13, 14, 15, 16, 17, 18, 6, 20, 21, 22, 23, 3, 25, 3, 27, 3, 29, 30, 31};

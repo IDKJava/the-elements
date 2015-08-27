@@ -316,8 +316,11 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onSurfaceChanged(GL10 gl, int w, int h)
 	{
-		nativeResize(w, h);
-        if (!MainActivity.disableLoad) {
+        nativeResize(w, h);
+        if (MainActivity.shouldLoadPhoto) {
+            MainActivity.setGameToPhoto();
+        }
+        else {
             nativeLoadState(MainActivity.shouldLoadDemo);
             MainActivity.shouldLoadDemo = false;
         }

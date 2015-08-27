@@ -67,7 +67,7 @@ extern signed char baseFallVel[];
 //Defines the density of each base element
 extern unsigned char baseDensity[];
 //Defines the state of each base element (0 = Solid, 1 = Liquid, 2 = Gaseous)
-extern char baseState[];
+extern unsigned char baseState[];
 /*
  * Specials list:
  *         -1 = None;
@@ -89,7 +89,7 @@ extern unsigned char baseStartingTemp[];
 extern unsigned char baseHighestTemp[];
 extern unsigned char baseLowestTemp[];
 //Defines the higher and lower elements to change to outside of the correct temp range
-extern char baseHigherElement[];
-extern char baseLowerElement[];
+extern unsigned char baseHigherElement[];
+extern unsigned char baseLowerElement[];
 
 #endif //!ELEMENTPROPERTIES_H_INCLUDED
