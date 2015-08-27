@@ -113,4 +113,14 @@
     <string name="spray">Spray Tool</string>
     <string name="draw_triangle">Draw Triangle</string>
     <string name="draw_dashed_line">Draw Dashed Line</string>
+
+    <string name="ok">OK</string>
+    <string name="iab_setup_failed">Failed to set up in-app billing: </string>
+    <string name="iab_inventory_failed">Failed to get in-app inventory: </string>
+    <string name="iab_purchase_failed">Error purchasing: </string>
+    <string name="iab_purchase_failed_auth">Error purchasing, auth failure.</string>
+    <string name="iab_inventory_success">Inventory refresh successful.</string>
+
+    <string name="upgrading_save_files">Upgrading save files...</string>
+    <string name="upgrading">Upgrading </string>
 </resources>

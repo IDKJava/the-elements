@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.os.Handler;
 import android.os.Looper;
 
+import com.idkjava.thelements.R;
+
 /**
  * Error handler using an activity to display an alert dialog.
  * Important: This object must be destroyed in the onDestroy method of
@@ -26,7 +28,7 @@ public class ActivityErrorHandler implements ErrorHandler {
             public void run() {
                 AlertDialog.Builder b = new AlertDialog.Builder(mAct);
                 b.setMessage(threadMsg);
-                b.setNeutralButton("OK", null);
+                b.setNeutralButton(R.string.ok, null);
                 b.create().show();
             }
         });

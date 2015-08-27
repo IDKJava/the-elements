@@ -274,7 +274,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         EasyTracker curTracker = EasyTracker.getInstance(this);
         ExceptionReporter handler = new ExceptionReporter(curTracker,
                 GAServiceManager.getInstance(), Thread.getDefaultUncaughtExceptionHandler(), this);
-        handler.setExceptionParser(new CustomExceptionParser());
         Thread.setDefaultUncaughtExceptionHandler(handler);
 
         // Init the shared preferences and set the ui state

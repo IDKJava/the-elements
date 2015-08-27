@@ -30,6 +30,10 @@ public class ProductManager {
     public static String SKU_TOOL_PACK = "tool_pack"; // includes a large set of extra tools
     public static String SKU_CAMERA_TOOL = "camera_tool"; // a tool to convert pictures to sand
 
+    public String getStr(int resId) {
+        return mCtx.getResources().getString(resId);
+    }
+
     public ProductManager(Context ctx, SharedPreferences prefs) {
         // Only ever use the application context, because this transcends
         // Activity boundaries
@@ -51,7 +55,7 @@ public class ProductManager {
                         mInSetup = false;
                         if (!result.isSuccess()) {
                             mBillingSupported = false;
-                            makeError("Failed to set up in-app billing: " + result);
+                            makeError(getStr(R.string.iab_setup_failed) + result);
                             return;
                         }
                         mBillingSupported = true;
@@ -86,7 +90,7 @@ public class ProductManager {
         public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
             if (mHelper == null) return;
             if (result.isFailure()) {
-                makeError("Failed to get in-app inventory: " + result);
+                makeError(getStr(R.string.iab_inventory_failed) + result);
                 return;
             }
 
@@ -141,23 +145,16 @@ public class ProductManager {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             if (mHelper == null) return;
             if (result.isFailure()) {
-                makeError("Error purchasing: " + result);
+                makeError(getStr(R.string.iab_purchase_failed) + result);
                 return;
             }
             if (!verify(purchase)) {
-                makeError("Error purchasing, auth failure.");
+                makeError(getStr(R.string.iab_purchase_failed_auth));
                 return;
             }
 
             // Any one-time purchase
-            if (purchase.getSku() == SKU_GRAVITY_PACK ||
-                purchase.getSku() == SKU_TOOL_PACK ||
-                purchase.getSku() == SKU_CAMERA_TOOL) {
-                refreshInventory(null, null);
-            }
-            else {
-                makeError("Error, unknown purchase type.");
-            }
+            refreshInventory(null, null);
         }
     };
 
@@ -172,7 +169,7 @@ public class ProductManager {
 
     public void refreshInventory(final Activity act, final Runnable callback) {
         if (!mBillingSupported) {
-            makeError(R.string.billing_not_supported);
+            makeError(getStr(R.string.billing_not_supported));
             return;
         }
         mExec.execute(new Runnable() {
@@ -182,7 +179,7 @@ public class ProductManager {
                     Inventory i = mHelper.queryInventory(false, null);
                     IabResult success = new IabResult(
                             IabHelper.BILLING_RESPONSE_RESULT_OK,
-                            "Inventory refresh successful.");
+                            getStr(R.string.iab_inventory_success));
                     mGotInventoryListener.onQueryInventoryFinished(success, i);
                 }
                 catch (IabException e) {}
@@ -195,7 +192,7 @@ public class ProductManager {
 
     public void launchPurchase(Activity act, String sku) {
         if (!mBillingSupported) {
-            makeError(R.string.billing_not_supported);
+            makeError(getStr(R.string.billing_not_supported));
             return;
         }
         final Activity threadAct = act;
@@ -244,9 +241,6 @@ public class ProductManager {
         if (mHandler != null) {
             mHandler.error(msg);
         }
-    }
-    private void makeError(int resId) {
-        makeError(mCtx.getResources().getString(resId));
     }
 
     private IabHelper mHelper;

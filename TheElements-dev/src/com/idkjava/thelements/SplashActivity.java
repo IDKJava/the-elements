@@ -43,6 +43,10 @@ public class SplashActivity extends ReportingActivity
 		    }
 		}.start();
 	}
+
+	private String getStr(int resId) {
+		return getResources().getString(resId);
+	}
 	
 	private void setTextOnUiThread(final String text) {
 	    runOnUiThread(new Runnable() {
@@ -70,7 +74,7 @@ public class SplashActivity extends ReportingActivity
 	private void maybeUpgradeFiles()
 	{
 	    String oldText = mLoadingText.getText().toString();
-	    setTextOnUiThread("Upgrading save files...");
+	    setTextOnUiThread(getStr(R.string.upgrading_save_files));
 	    try {
             Thread.sleep(100);
         } catch (InterruptedException e) {}
@@ -95,7 +99,7 @@ public class SplashActivity extends ReportingActivity
 			for (File elementFile : elementFiles) {
 				if (elementFile.getAbsolutePath().endsWith(FileManager.ELEMENT_EXT)) {
 					Log.i("TheElements", "Upgrading " + elementFile.getAbsolutePath());
-					setTextOnUiThread("Upgrading " + elementFile.getAbsolutePath());
+					setTextOnUiThread(getStr(R.string.upgrading) + elementFile.getAbsolutePath());
 					upgradeCustomElement(elementFile.getAbsolutePath());
 					File elementFileBak = new File(elementFile.getAbsolutePath() + FileManager.BACKUP_EXT);
 					elementFile.renameTo(elementFileBak);
@@ -136,7 +140,7 @@ public class SplashActivity extends ReportingActivity
 	            if (saveFile.getAbsolutePath().endsWith(FileManager.SAVE_EXT))
 	            {
 	                Log.i("TheElements", "Upgrading " + saveFile.getAbsolutePath());
-	                setTextOnUiThread("Upgrading " + saveFile.getAbsolutePath());
+	                setTextOnUiThread(getStr(R.string.upgrading) + saveFile.getAbsolutePath());
 	                upgradeSaveFile(saveFile.getAbsolutePath());
 	                File saveFileBak = new File(saveFile.getAbsolutePath() + FileManager.BACKUP_EXT);
 	                saveFile.renameTo(saveFileBak);
