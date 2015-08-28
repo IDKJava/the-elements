@@ -51,15 +51,14 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		Spinner spinner;
 		ArrayAdapter<CharSequence> collisions = ArrayAdapter.createFromResource(this,
 											R.array.collisions_list,
-											android.R.layout.simple_spinner_item);
-		collisions.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+											R.layout.multiline_spinner_dropdown_item);
 		
 		for (int i = 0; i < elementsList.length; i++)
 		{
 			String element = elementsList[i];
 			label = new TextView(this);
 			label.setText(element);
-			spinner = new Spinner(this);
+			spinner = new Spinner(this, Spinner.MODE_DIALOG);
 			spinner.setAdapter(collisions);
 			collisionsSpinnerList.add(spinner);
 			collisionsLayout.addView(label);
@@ -70,8 +69,7 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		maxSpecials = MainActivity.MAX_SPECIALS;
 		ArrayAdapter<CharSequence> specials = ArrayAdapter.createFromResource(this,
 											R.array.specials_list,
-											android.R.layout.simple_spinner_item);
-		specials.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+											R.layout.multiline_spinner_dropdown_item);
 		LinearLayout specialsLayout = (LinearLayout) findViewById(R.id.ce_specials_layout);
 		LinearLayout container;
 		// We want to skip maxSpecials listener calls for initialization
@@ -184,7 +182,7 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		{
 			container = new LinearLayout(this);
 			container.setOrientation(LinearLayout.VERTICAL);
-			spinner = new Spinner(this);
+			spinner = new Spinner(this, Spinner.MODE_DIALOG);
 			spinner.setAdapter(specials);
 			spinner.setOnItemSelectedListener(spinnerListener);
 			container.addView(spinner);
@@ -275,9 +273,9 @@ public class CustomElementAdvancedActivity extends ReportingActivity
 		case 9:
 		{
 			// Element spinner
-			Spinner spinner = new Spinner(this);
-			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.elements_list, android.R.layout.simple_spinner_item);
-			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			Spinner spinner = new Spinner(this, Spinner.MODE_DIALOG);
+			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
+					this, R.array.elements_list, R.layout.multiline_spinner_dropdown_item);
 			spinner.setAdapter(adapter);
 			return spinner;
 		}

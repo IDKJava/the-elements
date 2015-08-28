@@ -117,8 +117,8 @@ public class CustomElementBasicActivity extends ReportingActivity
         mColorArea = (LinearLayout) findViewById(R.id.color_text_and_image);
 
         // Make the elements adapter, and assign it to the appropriate field
-        elementAdapter = ArrayAdapter.createFromResource(this, R.array.elements_list, android.R.layout.simple_spinner_item);
-        elementAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        elementAdapter = ArrayAdapter.createFromResource(
+                this, R.array.elements_list, R.layout.multiline_spinner_dropdown_item);
         baseElementField.setAdapter(elementAdapter);
         lowerElementField.setAdapter(elementAdapter);
         higherElementField.setAdapter(elementAdapter);
