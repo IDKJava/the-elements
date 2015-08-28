@@ -7,7 +7,7 @@
 
 
 <string name="accel_state">Accelerometer Enabled</string>
-<string name="accel_state_summary">Use the tilt to change the motion of the particles.</string><string name="other_options">Other</string>
+<string name="accel_state_summary">Use phone tilt to change how particles fall.</string><string name="other_options">Other</string>
 
 <string name="flipped_state">Flip Screen</string>
 <string name="flipped_state_summary">Shifts viewport (only use if nothing is drawing).</string>

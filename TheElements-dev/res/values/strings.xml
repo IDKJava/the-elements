@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">The Elements</string>
     <string name="sand_prompt">How to react with sand:</string>
     <string name="water_prompt">How to react with water:</string>
     <string name="wall_prompt">How to react with wall:</string>
@@ -31,7 +32,7 @@
 <string name="element_picker">Palette</string>
 <string name="proceed">Proceed</string>
 <string name="exit">Exit</string>
-<string name="about_text">The Elements is created by IDKJava, Copyright 2010 - 2014\n\nSome icons by Momenticons.\nWorld icons designed by Freepik.</string>
+<string name="about_text">The Elements is created by IDKJava, Copyright 2010 - 2015\n\nSome icons by Momenticons.\nWorld icons designed by Freepik.</string>
 <string name="how_to_play_title">How to Play The Elements</string>
 <string name="start_game_button">Play Game</string>
 <string name="how_to_play_button">How to Play</string>
@@ -50,8 +51,9 @@
 <string name="skip_version">Skip This Version</string>
 <string name="update_avail">A new version of The Elements is available now on the play store!</string>
 <string name="rate_prompt">Enjoying "The Elements"? Rate us!</string>
+    <string name="rate">Rate</string>
 <string name="couldnt_launch_market">Sorry, looks like you don\'t have the Google Play store installed.</string>
-    <string name="title_activity_purchase">PurchaseActivity</string>
+    <string name="title_activity_purchase" translatable="false">PurchaseActivity</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -89,7 +91,7 @@
     <string name="camera_tool_purchase">Buy Full Camera Tool: $1.00</string>
     <string name="camera_tool_owned">Full Camera Tool: OWNED!</string>
     <string name="camera_tool_owned_error">Error: You already own the camera tool!</string>
-    <string name="bullet">&#8226;</string>
+    <string name="bullet" translatable="false">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
     <string name="earth_world_desc_2">Average Earth atomspheric temperature.</string>
     <string name="space_world_desc_1">Dynamic gravity field determined by objects placed in the scene.</string>

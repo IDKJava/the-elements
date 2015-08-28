@@ -11,7 +11,7 @@
 <string name="ce_base_element_prompt">Base Element</string>
 <string name="ce_base_element_desc">Choose an element to base your custom on.</string>
 <string name="ce_starting_temp_prompt">Starting temperature</string>
-<string name="ce_starting_temp_desc">Temperature that particles of this element start at. Pull all the way left to start the particles at the atmospheric temperature.</string>
+<string name="ce_starting_temp_desc">Temperature that particles of this element start at. Pull slider all the way left to default to atmosphere temperature.</string>
 <string name="ce_lowest_temp_prompt">Lowest Temperature</string>
 <string name="ce_lowest_temp_desc">Temperature below which the element freezes into the chosen lower element.</string>
 <string name="ce_highest_temp_prompt">Highest Temperature</string>

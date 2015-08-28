@@ -510,7 +510,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         else if (id == TOOL_PICKER) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Tools");
+            builder.setTitle(R.string.tool_button_text);
             builder.setOnCancelListener(this);
 
             refreshToolList();
@@ -622,7 +622,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         else if (id == UTIL_DIALOG) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Utils");
+            builder.setTitle(R.string.util_button_text);
             builder.setOnCancelListener(this);
 
             mUtilAdapter = new IconListAdapter(this, utilList);
@@ -662,7 +662,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         else if (id == RECORD_DIALOG) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Record");
+            builder.setTitle(R.string.record_button_text);
             builder.setOnCancelListener(this);
 
             mRecordAdapter = new IconListAdapter(this, recordList);
@@ -697,7 +697,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         }
         else if (id == WORLD_DIALOG) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Select World");
+            builder.setTitle(R.string.select_world);
             builder.setOnCancelListener(this);
 
             mWorldAdapter = new IconListAdapter(this, worldList);
@@ -771,7 +771,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             TextView tv = (TextView) rateDialog.findViewById(R.id.message);
             tv.setText(R.string.rate_prompt);
             Button positiveButton = (Button) rateDialog.findViewById(R.id.button2);
-            positiveButton.setText("Rate");
+            positiveButton.setText(R.string.rate);
             positiveButton.setOnClickListener(new Button.OnClickListener() {
                 @Override
                 public void onClick(View v) {
