@@ -46,6 +46,7 @@
 <string name="play_pause">Play/Pause</string>
 <string name="load">Load</string>
 <string name="preferences">Preferences</string>
+    <string name="loading">Loading...</string>
 <string name="update_now">Update Now!</string>
 <string name="remind_later">Remind Later</string>
 <string name="skip_version">Skip This Version</string>

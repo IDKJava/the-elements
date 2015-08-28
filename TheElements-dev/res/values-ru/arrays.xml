@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="elements_list">
+        <item>Песок</item>
+        <item>Вода</item>
+        <item>Пар</item>
+        <item>Лед</item>
+        <item>Стена</item>
+        <item>Разрушаемые Стена</item>
+        <item>Растение</item>
+        <item>Огонь</item>
+        <item>Магма</item>
+        <item>Камень</item>
+        <item>Нефть</item>
+        <item>C4</item>
+        <item>C4++</item>
+        <item>Взрыватель</item>
+        <item>Кислота</item>
+        <item>Соль</item>
+        <item>Соленая вода</item>
+        <item>Стакан</item>
+        <item>Грязь</item>
+        <item>Производитель</item>
+        <item>Уголь</item>
+        <item>Муравей</item>
+        <item>Порох</item>
+        <item>Москит</item>
+        <item>Дерево</item>
+        <item>Термит</item>
+        <item>Средство от насекомых</item>
+        <item>Электричество</item>
+        <item>Металл</item>
+    </string-array>
+    <string-array name="brush_size_list">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+    </string-array>
+    <string-array name="collisions_list">
+        <item>Твердотельный отказов</item>
+        <item>Плотность основе</item>
+        <item>Производитель (другой элемент становится продюсер)</item>
+        <item>Производитель (этот элемент становится продюсер)</item>
+        <item>Кислота - растворимая (растворяется другой элемент)</item>
+        <item>Растворимые - кислота (этот элемент растворяется)</item>
+        <item>Кислота - Нейтрализатор (этот элемент нейтрализуют)</item>
+        <item>Нейтрализатор - кислота (другой элемент нейтрализуется)</item>
+        <item>Соль-Вода (превращается в соленой воде на столкновения)</item>
+        <item>Смерть (превращается в песок на столкновения)</item>
+        <item>Грязь (превращается в грязь на столкновения)</item>
+        <item>Уничтожение (другой элемент удаляется)</item>
+        <item>Стек (это элемент подпрыгивает и стеки на другой элемент)</item>
+    </string-array>
+    <string-array name="specials_list">
+        <item>Нет особое свойство</item>
+        <item>"Порождать" (генерировать частицы)</item>
+        <item>"Перерыв" (превратиться в песок на высокой скорости)</item>
+        <item>"Расти" (дублировать столкновения)</item>
+        <item>"Тепло" (отдает тепло)</item>
+        <item>"Взорвать"</item>
+        <item>"Жизнь" (исчезает в течение долгого времени)</item>
+        <item>"Вандер" (ходит по сравнению с другими частицами)</item>
+        <item>"Перейти" (отскоков вверх и вниз)</item>
+        <item>"Туннель" (роет в другой элемент)</item>
+        <item>"Сжечь" (сжигает при высоких температурах)</item>
+        <item>"Проводящий"</item>
+        <item>"Может быть проведено"</item>
+        <item>"Трассы" (падает в шаблон молнии)</item>
+    </string-array>
+    <string-array name="specials_description_list">
+        <item></item>
+        <item>Какой тип частиц для генерации</item>
+        <item>Скорость Порог (выше, тем меньше хрупкие)</item>
+        <item>Какой элемент вызывает этот расти</item>
+        <item>Сколько тепла для генерации</item>
+        <item>Как это взрывное</item>
+        <item>Как долго он живет для</item>
+        <item>Сколько бродит</item>
+        <item>Как часто он прыгает</item>
+        <item>Какой элемент он туннели в</item>
+        <item>Как долго он горит для</item>
+        <item>Нет особое значение.</item>
+        <item>Нет особое значение.</item>
+        <item>Как хаотическим путь</item>
+    </string-array>
+
+</resources>

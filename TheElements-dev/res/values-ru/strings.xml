@@ -113,7 +113,8 @@
     <string name="iab_setup_failed">Не удалось настроить биллинг: </string>
     <string name="ice_prompt"> Как реагировать со льдом: </string>
     <string name="item_owned_error">ошибка: Вы уже имеете этот пункт!</string>
-    <string name="load"> нагрузка</string>
+    <string name="load">нагрузка</string>
+    <string name="loading">Загрузка ...</string>
     <string name="load_state_failed"> Ошибка загрузки! Сохранить файл поврежден или не имеют SD карту.</string>
     <string name="look_and_feel_options"> Внешность</string>
     <string name="magma_prompt">Как реагировать с магмы: </string>
@@ -123,13 +124,13 @@
     <string name="no_elements">Там нет элементов для редактирования.</string>
     <string name="no_saves">Там нет экономит сработал.</string>
     <string name="null_gravity_zone">Нулевой гравитации зона</string>
-    <string name="oil_prompt">Как реагировать с маслом: </string>
+    <string name="oil_prompt">как реагировать с нефтью: </string>
     <string name="ok">ХОРОШО</string>
     <string name="other_options">другой</string>
     <string name="photo_tool">Загрузить игру с камеры</string>
     <string name="photo_tool_locked">Загрузить игру с камеры</string>
     <string name="physical_properties">Физические свойства</string>
-    <string name="plant_prompt">Как реагировать с завода: </string>
+    <string name="plant_prompt">Как реагировать с Растение: </string>
     <string name="play_pause">играть/пауза</string>
     <string name="preferences"> предпочтения</string>
     <string name="preferences_button"> предпочтения</string>

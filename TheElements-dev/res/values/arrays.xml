@@ -76,7 +76,7 @@
         <item></item>
         <item>Which type of particles to generate</item>
         <item>Threshold velocity (higher = less breakable)</item>
-        <item>Which element does this element grow with</item>
+        <item>Which element causes this one to grow</item>
         <item>How much heat to generate</item>
         <item>How explosive is it</item>
         <item>How long before it disappears (on average)</item>
