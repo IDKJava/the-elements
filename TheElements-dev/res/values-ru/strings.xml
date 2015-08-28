@@ -145,7 +145,7 @@
     <string name="remind_later"> Напомнить позже</string>
     <string name="remove_gravity_object">Удалить тяжести объект</string>
     <string name="sand_prompt"> Как реагировать с песком: </string>
-    <string name="save"> Сохранить</string>
+    <string name="save">Сохранить</string>
     <string name="save_state_failed"> Не удалось сохранить! Пожалуйста, убедитесь, что у вас есть SD-карту.</string>
     <string name="screen_sleep_state">Выключите экран-сон</string>
     <string name="screen_sleep_state_summary">Предотвращение экран от сна.</string>

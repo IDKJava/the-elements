@@ -149,7 +149,7 @@ public class MenuActivity extends ReportingActivity {
     public void how_to_play() {
         StringBuffer data = new StringBuffer();
         try {
-            InputStream stream = getAssets().open("instructions.html");
+            InputStream stream = getResources().openRawResource(R.raw.instructions);
             BufferedReader in = new BufferedReader(new InputStreamReader(stream), 8192);
             while (true) {
                 String line = in.readLine();
@@ -165,7 +165,7 @@ public class MenuActivity extends ReportingActivity {
 
         WebView how_to_play = new WebView(this);
         how_to_play.setBackgroundColor(0x00000000);
-        how_to_play.loadData(data.toString(), "text/html", "ascii");
+        how_to_play.loadData(data.toString(), "text/html; charset=utf-8", "utf-8");
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(true);
