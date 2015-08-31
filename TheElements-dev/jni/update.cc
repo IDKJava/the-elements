@@ -357,37 +357,37 @@ void updateVelocities(float *xvel, float *yvel, float inertia, float lowDragThre
 //          FALSE if we deleted it.
 int updateKinetic(int index)
 {
-    float *x_ptr = &(a_x[index]);
-    float *y_ptr = &(a_y[index]);
-    float *xvel_ptr = &(a_xVel[index]);
-    float *yvel_ptr = &(a_yVel[index]);
+    float x = a_x[index];
+    float y = a_y[index];
+    float xvel = a_xVel[index];
+    float yvel = a_yVel[index];
     float diffx, diffy;
 
     int fallVel = a_element[index]->fallVel;
     float gx, gy, gmag;
-    getFallField(*x_ptr, *y_ptr, &gx, &gy, &gmag);
+    getFallField(x, y, &gx, &gy, &gmag);
     float gravX = gx*gmag*fallVel, gravY = gy*gmag*fallVel;
     // How much the gravitational field couples to velocity
     float velFactor = (world == WORLD_SPACE) ? 0.2 : 0.0;
-    diffy = (1.0-velFactor)*gravY + *yvel_ptr;
-    diffx = (1.0-velFactor)*gravX + *xvel_ptr;
+    diffy = (1.0-velFactor)*gravY + yvel;
+    diffx = (1.0-velFactor)*gravX + xvel;
     // Add scaled acceleration factor. Acceleration adds less at higher velocities
     // (heuristic drag factor).
-    if (gy > 0.0 && velFactor*gravY > *yvel_ptr) {
-        *yvel_ptr += velFactor*gravY;
+    if (gy > 0.0 && velFactor*gravY > yvel) {
+        yvel += velFactor*gravY;
     }
-    else if (gy < 0.0 && velFactor*gravY < *yvel_ptr) {
-        *yvel_ptr += velFactor*gravY;
+    else if (gy < 0.0 && velFactor*gravY < yvel) {
+        yvel += velFactor*gravY;
     }
-    if (gx > 0.0 && velFactor*gravX > *xvel_ptr) {
-        *xvel_ptr += velFactor*gravX;
+    if (gx > 0.0 && velFactor*gravX > xvel) {
+        xvel += velFactor*gravX;
     }
-    else if (gx < 0.0 && velFactor*gravX < *xvel_ptr) {
-        *xvel_ptr += velFactor*gravX;
+    else if (gx < 0.0 && velFactor*gravX < xvel) {
+        xvel += velFactor*gravX;
     }
 
     //Boundary checking
-    if (!checkBoundariesAndMove(x_ptr, y_ptr, diffx, diffy))
+    if (!checkBoundariesAndMove(&x, &y, diffx, diffy))
     {
         // Delete the particle
         deletePoint(index);
@@ -396,7 +396,13 @@ int updateKinetic(int index)
     //Reduce velocities
     float inertiaScale = (world == WORLD_SPACE) ? 0.3 : 1.0;
     float lowDragThresh = (world == WORLD_SPACE) ? 0.4 : 0.0;
-    updateVelocities(xvel_ptr, yvel_ptr, inertiaScale*a_element[index]->inertia, lowDragThresh);
+    updateVelocities(&xvel, &yvel, inertiaScale*a_element[index]->inertia, lowDragThresh);
+
+    // Write-back
+    a_xVel[index] = xvel;
+    a_yVel[index] = yvel;
+    a_x[index] = x;
+    a_y[index] = y;
 
     //Indicate that the particle has moved
     a_hasMoved[index] = TRUE;
