@@ -534,6 +534,75 @@ int updateSpecials(int index)
     return shouldResolveHeatChanges;
 }
 
+// hashText should be a preallocated char[9] (last byte will be NUL)
+inline unsigned long hashSurround(int tempX, int tempY, char* hashText) {
+    // Hash surroundings (topLeft -> CCW)
+    bool left = (tempX-1 >= 0),
+        right = (tempX+1 < workWidth),
+        top = (tempY-1 >= 0),
+        bottom = (tempY+1 < workHeight);
+    int part;
+    if (left && top) {
+        part = allCoords[getIndex(tempX-1, tempY-1)];
+        hashText[0] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[0] = 0xff;
+    }
+    if (left) {
+        part = allCoords[getIndex(tempX-1, tempY)];
+        hashText[1] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[1] = 0xff;
+    }
+    if (left && bottom) {
+        part = allCoords[getIndex(tempX-1, tempY+1)];
+        hashText[2] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[2] = 0xff;
+    }
+    if (bottom) {
+        part = allCoords[getIndex(tempX, tempY+1)];
+        hashText[3] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[3] = 0xff;
+    }
+    if (right && bottom) {
+        part = allCoords[getIndex(tempX+1, tempY+1)];
+        hashText[4] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[4] = 0xff;
+    }
+    if (right) {
+        part = allCoords[getIndex(tempX+1, tempY)];
+        hashText[5] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[5] = 0xff;
+    }
+    if (right && top) {
+        part = allCoords[getIndex(tempX+1, tempY-1)];
+        hashText[6] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[6] = 0xff;
+    }
+    if (top) {
+        part =  allCoords[getIndex(tempX, tempY-1)];
+        hashText[7] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+    }
+    else {
+        hashText[7] = 0xff;
+    }
+    hashText[8] = 0;
+
+    return hashStr(hashText);
+}
+
 
 void UpdateView(void)
 {
@@ -592,6 +661,12 @@ void UpdateView(void)
     }
     pthread_mutex_unlock(&brush_mutex);
 
+    // Compute the empty hash, so we never freeze on this
+    char txt[9];
+    txt[0] = txt[1] = txt[2] = txt[3] = txt[4] = txt[5] = txt[6] = txt[7] = 0xff;
+    txt[8] = 0;
+    unsigned long emptyHash = hashStr(txt);
+
 
     //Particles update
     if (play)
@@ -603,6 +678,7 @@ void UpdateView(void)
         }
 
         //Physics update
+        char hashText[9];
         for (tempParticle = 0; tempParticle < MAX_POINTS; ++tempParticle)
         {
             //If the particle is set and unfrozen
@@ -622,8 +698,10 @@ void UpdateView(void)
                 tempXVel = &(a_xVel[tempParticle]);
                 tempYVel = &(a_yVel[tempParticle]);
 
+                unsigned long h = hashSurround(*tempX, *tempY, hashText);
+
                 //Update coords
-                if(tempInertia != INERTIA_UNMOVABLE)
+                if(tempInertia != INERTIA_UNMOVABLE && (a_frozen[tempParticle] != h || h == emptyHash))
                 {
                     if (!updateKinetic(tempParticle))
                     {
@@ -685,6 +763,12 @@ void UpdateView(void)
                     else
                     {
                         a_hasMoved[tempParticle] = FALSE;
+                    }
+
+                    // Maybe freeze
+                    if ((int)tempOldX == (int)*tempX &&
+                        (int)tempOldY == (int)*tempY && rand()%10 == 0) {
+                        a_frozen[tempParticle] = h;
                     }
 
                 }

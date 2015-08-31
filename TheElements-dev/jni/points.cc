@@ -43,7 +43,7 @@ int createPoint(int xCoord, int yCoord, struct Element* element)
         a_yVel[i] = 0;
 
         //Set the frozen state
-        a_frozen[i] = FALSE;
+        a_frozen[i] = 0;
 
         //Clear all particle special vals
         clearSpecialValsToElementDefault(i);

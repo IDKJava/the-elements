@@ -26,7 +26,7 @@ float a_yVel[MAX_POINTS];
 unsigned char a_heat[MAX_POINTS];
 int* a_specialVals[MAX_POINTS];
 struct Element* a_element[MAX_POINTS];
-char a_frozen[MAX_POINTS];
+unsigned long a_frozen[MAX_POINTS];
 char a_hasMoved[MAX_POINTS];
 int avail[MAX_POINTS];
 int loq;

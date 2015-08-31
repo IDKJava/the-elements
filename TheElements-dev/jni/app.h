@@ -89,7 +89,7 @@
     extern unsigned char a_heat[];
     extern int* a_specialVals[];
     extern struct Element* a_element[];
-    extern char a_frozen[];
+    extern unsigned long a_frozen[];
     extern char a_hasMoved[];
 
 
