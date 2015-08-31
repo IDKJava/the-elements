@@ -49,9 +49,11 @@ void gameSetup()
             {
                 allCoords[getIndex(i, j)] = -1;
             }
+            /*
             colors[3 * getColorIndex(i, j)] = backgroundRed;
             colors[3 * getColorIndex(i, j) + 1] = backgroundGreen;
             colors[3 * getColorIndex(i, j) + 2] = backgroundBlue;
+            */
         }
     }
 
@@ -79,8 +81,8 @@ void gameSetup()
 void arraySetup()
 {
     //Make sure everything is deallocated
-    free(colors);
-    free(colorsFrameBuffer);
+    //free(colors);
+    //free(colorsFrameBuffer);
     free(allCoords);
     free(gravityFieldX);
     free(gravityFieldY);
@@ -89,8 +91,8 @@ void arraySetup()
     free(gravMag);
 
     //Allocate memory
-    colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
-    colorsFrameBuffer = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
+    //colors = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
+    //colorsFrameBuffer = (unsigned char*)malloc(3 * stupidTegra * workHeight * sizeof(char));
     allCoords = (int*)malloc(workWidth * workHeight * sizeof(int)); //Two dimensional array, so when calling use allcoords[getIndex(x, y)];
     // Two dimensional array, use getGravityIndex(x,y) for indexing
     gravityFieldX = (float*)malloc(gfWidth*gfHeight*sizeof(float));

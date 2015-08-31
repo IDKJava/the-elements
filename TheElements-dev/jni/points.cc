@@ -105,17 +105,21 @@ void setElement(int particle, struct Element* newElement)
 
 void setBitmapColor(int xCoord, int yCoord, struct Element* element)
 {
+    /*
     unsigned char* pixel = colors + (getColorIndex(xCoord,yCoord) *3);
     pixel[0] = element->red;
     pixel[1] = element->green;
     pixel[2] = element->blue;
+    */
 }
 void clearBitmapColor(int xCoord, int yCoord)
 {
+    /*
     unsigned char* pixel = colors +  (getColorIndex(xCoord, yCoord) * 3);
     pixel[0] = cAtmosphere->backgroundRed;
     pixel[1] = cAtmosphere->backgroundGreen;
     pixel[2] = cAtmosphere->backgroundBlue;
+    */
 }
 void unFreezeParticles(int xCoord, int yCoord)
 {

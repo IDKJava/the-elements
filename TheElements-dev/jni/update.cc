@@ -8,6 +8,8 @@
 
 #include "update.h"
 
+#include <sched.h>
+
 #include "specials.h"
 #include "gravity.h"
 
@@ -881,28 +883,30 @@ void *updateThreadFunc(void *args)
         pthread_mutex_unlock(&update_mutex);
 
         // Synchronization
-        pthread_mutex_lock(&buffer_free_mutex);
+        //pthread_mutex_lock(&buffer_free_mutex);
         while (!bufferFree)
         {
-            pthread_cond_wait(&buffer_free_cond, &buffer_free_mutex);
+            //pthread_cond_wait(&buffer_free_cond, &buffer_free_mutex);
+            sched_yield();
         }
         bufferFree = FALSE;
-        pthread_mutex_unlock(&buffer_free_mutex);
+        //pthread_mutex_unlock(&buffer_free_mutex);
 
         // Copy the frame into the colorsFrameBuffer
-        pthread_mutex_lock(&update_mutex);
+        //pthread_mutex_lock(&update_mutex);
 
+            /*
+             * This does a motion blur effect by composing previous value
+             * and new value together.  Checks for if current color is background
+             * color so that particles only fade out, not fade in.
+             */
+        /*
         switch(filterType) {
         case FILTER_NONE:
           memcpy(colorsFrameBuffer, colors, 3 * stupidTegra * workHeight);
           break;
         case FILTER_MOTION:
         {
-            /*
-             * This does a motion blur effect by composing previous value
-             * and new value together.  Checks for if current color is background
-             * color so that particles only fade out, not fade in.
-             */
             int i = 0;
             for ( i = 0; i < stupidTegra * workHeight; i++) {
                 if ( colorsFrameBuffer[3*i] == cAtmosphere->backgroundRed &&
@@ -924,15 +928,16 @@ void *updateThreadFunc(void *args)
             break;
         }
         }
-        pthread_mutex_unlock(&update_mutex);
+        */
+        //pthread_mutex_unlock(&update_mutex);
 
-        pthread_mutex_lock(&frame_ready_mutex);
+        //pthread_mutex_lock(&frame_ready_mutex);
         if (!frameReady)
         {
             frameReady = TRUE;
-            pthread_cond_signal(&frame_ready_cond);
+            //pthread_cond_signal(&frame_ready_cond);
         }
-        pthread_mutex_unlock(&frame_ready_mutex);
+        //pthread_mutex_unlock(&frame_ready_mutex);
     }
 }
 

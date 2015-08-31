@@ -11,6 +11,7 @@
 #include <GLES2/gl2.h>
 //Include pthread functions
 #include <pthread.h>
+#include <sched.h>
 #include <vector>
 
 //Include the global variables
@@ -46,6 +47,12 @@ int mScreenSizeHandle;
 int mProjMatrixUniformHandle;
 
 int mGravProjMatrixUniformHandle;
+
+GLuint gPointProgram;
+GLuint gPointVPositionHandle;
+GLuint gPointVColorHandle;
+GLuint gPointUSizeHandle;
+
 
 float vertices[] = {0.0f,1.0f,
                     1.0f,1.0f,
@@ -138,6 +145,28 @@ static const char gMagFragShader[] =
     "void main() {\n"
     "  gl_FragColor = vMag[0]*vec4(10.0, 5.0, 0.0, 0.0) + vec4(0.2, 0.2, 0.2, 1.0);\n"
     "}\n";
+
+static const char gPointVertexShader[] =
+    "attribute vec4 vPosition;\n"
+    "attribute vec3 vColor;\n"
+    "varying vec4 fColor;\n"
+    "uniform float uPtSize;\n"
+    "void main() {\n"
+    "  fColor = vec4(vColor, 1.0);\n"
+    "  gl_PointSize = uPtSize;\n"
+    "  gl_Position = vPosition*mat4(\n" // Matrix in column-major
+    "      2.0, 0.0, 0.0, -1.0,\n"
+    "      0.0, -2.0, 0.0, 1.0,\n"
+    "      0.0, 0.0, 1.0, 0.0,\n"
+    "      0.0, 0.0, 0.0, 1.0);\n"
+    "}";
+
+static const char gPointFragShader[] =
+    "precision lowp float;"
+    "varying vec4 fColor;\n"
+    "void main() {\n"
+    "  gl_FragColor = fColor;\n"
+    "}";
 
 GLuint loadShader(GLenum shaderType, const char* pSource) {
     GLuint shader = glCreateShader(shaderType);
@@ -257,6 +286,14 @@ GLuint createGravityProgram(const char* pVertexSource, const char* pFragmentSour
     return program;
 }
 
+GLuint createPointProgram() {
+    GLuint program = buildProgram(gPointVertexShader, gPointFragShader);
+    gPointVPositionHandle = glGetAttribLocation(program, "vPosition");
+    gPointVColorHandle = glGetAttribLocation(program, "vColor");
+    gPointUSizeHandle = glGetUniformLocation(program, "uPtSize");
+    return program;
+}
+
 
 //Makes an orthographic projection matrix
 void setOthographicMat(float l, float r, float t, float b, float n, float f,  float mat[])
@@ -316,6 +353,11 @@ void glInit() {
     gvPositionHandle = glGetAttribLocation(gProgram, "vPosition");
     gGravVPositionHandle = glGetAttribLocation(gGravProgram, "vPosition");
     gGravVMagHandle = glGetAttribLocation(gGravProgram, "aMag");
+    gPointProgram = createPointProgram();
+    if (!gPointProgram) {
+        LOGE("Could not create point program.");
+        return;
+    }
 
     glViewport(0, 0, screenWidth, screenHeight);
     //Generate the new texture
@@ -435,6 +477,7 @@ void makeLineRect(float sx, float sy, float ex, float ey,
 }
 
 void glRender() {
+    /*
     // Update dimensions
     texture[2] = (float) workWidth/texWidth;
     texture[4] = (float) workWidth/texWidth;
@@ -770,25 +813,65 @@ void glRender() {
             free(magVals);
         }
     }
+    */
+}
+
+static float pts[MAX_POINTS*2];
+static unsigned char cols[MAX_POINTS*3];
+void glRenderPoints() {
+
+    glClearColor(cAtmosphere->backgroundRed/255.0,
+                 cAtmosphere->backgroundGreen/255.0,
+                 cAtmosphere->backgroundBlue/255.0,
+                 1.0);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+    // Make interleaved array of locations
+    int count = 0;
+    for (int i = 0; i < MAX_POINTS; ++i) {
+        if (a_set[i]) {
+            struct Element* ele = a_element[i];
+            pts[2*count] = ((int)a_x[i])/(float)workWidth;
+            pts[2*count+1] = ((int)a_y[i])/(float)workHeight;
+            cols[3*count] = ele->red;
+            cols[3*count+1] = ele->green;
+            cols[3*count+2] = ele->blue;
+            count++;
+        }
+    }
+
+    glUseProgram(gPointProgram);
+
+    glUniform1f(gPointUSizeHandle, (float)zoomFactor);
+
+    glEnableVertexAttribArray(gPointVPositionHandle);
+    glVertexAttribPointer(gPointVPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, pts);
+
+    glEnableVertexAttribArray(gPointVColorHandle);
+    glVertexAttribPointer(gPointVColorHandle, 3, GL_UNSIGNED_BYTE, GL_TRUE, 0, cols);
+
+    glDrawArrays(GL_POINTS, 0, count);
 }
 
 void glRenderThreaded()
 {
     // Synchronization
-    pthread_mutex_lock(&frame_ready_mutex);
+    //pthread_mutex_lock(&frame_ready_mutex);
     while (!frameReady)
     {
-        pthread_cond_wait(&frame_ready_cond, &frame_ready_mutex);
+        sched_yield();
+        //pthread_cond_wait(&frame_ready_cond, &frame_ready_mutex);
     }
     frameReady = FALSE;
-    pthread_mutex_unlock(&frame_ready_mutex);
+    //pthread_mutex_unlock(&frame_ready_mutex);
 
-    glRender();
-    pthread_mutex_lock(&buffer_free_mutex);
+    //glRender();
+    glRenderPoints();
+    //pthread_mutex_lock(&buffer_free_mutex);
     if (!bufferFree)
     {
         bufferFree = TRUE;
-        pthread_cond_signal(&buffer_free_cond);
+        //pthread_cond_signal(&buffer_free_cond);
     }
-    pthread_mutex_unlock(&buffer_free_mutex);
+    //pthread_mutex_unlock(&buffer_free_mutex);
 }

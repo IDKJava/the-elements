@@ -141,8 +141,8 @@
     extern int randOffset;
 
 //Array for bitmap drawing
-    extern unsigned char* colors;
-    extern unsigned char* colorsFrameBuffer;
+    //extern unsigned char* colors;
+    //extern unsigned char* colorsFrameBuffer;
 
 //Currently drawing rect
     extern int rectValid;

@@ -66,8 +66,8 @@ float slingshotX = 0.0, slingshotY = 0.0;
 
 int randOffset = 0;
 
-unsigned char* colors = NULL;
-unsigned char* colorsFrameBuffer = NULL;
+//unsigned char* colors = NULL;
+//unsigned char* colorsFrameBuffer = NULL;
 
 int rectValid = false;
 float rectSX, rectSY, rectEX, rectEY;
