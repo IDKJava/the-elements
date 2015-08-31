@@ -81,15 +81,15 @@
 
     <string name="earth_world">Earth</string>
     <string name="space_world">Space</string>
-    <string name="space_world_purchase">Buy Space World: $5.00</string>
+    <string name="space_world_purchase">Buy Space World: </string>
     <string name="space_world_owned">Space World: OWNED!</string>
     <string name="space_world_owned_error">Error: You already own the space world!</string>
     <string name="space_world_not_owned_error">Error: You do not own the space world!</string>
     <string name="item_owned_error">Error: You already own that item!</string>
-    <string name="tool_pack_purchase">Buy Tool Pack: $3.00</string>
+    <string name="tool_pack_purchase">Buy Tool Pack: </string>
     <string name="tool_pack_owned">Tool Pack: OWNED!</string>
     <string name="tool_pack_owned_error">Error: You already own the tool pack!</string>
-    <string name="camera_tool_purchase">Buy Full Camera Tool: $1.00</string>
+    <string name="camera_tool_purchase">Buy Full Camera Tool: </string>
     <string name="camera_tool_owned">Full Camera Tool: OWNED!</string>
     <string name="camera_tool_owned_error">Error: You already own the camera tool!</string>
     <string name="bullet" translatable="false">&#8226;</string>

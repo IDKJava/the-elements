@@ -14,8 +14,13 @@ import com.idkjava.thelements.iab.IabHelper;
 import com.idkjava.thelements.iab.IabResult;
 import com.idkjava.thelements.iab.Inventory;
 import com.idkjava.thelements.iab.Purchase;
+import com.idkjava.thelements.iab.SkuDetails;
 import com.idkjava.thelements.keys.APIKeys;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -29,6 +34,12 @@ public class ProductManager {
     public static String SKU_GRAVITY_PACK = "gravity_pack"; // includes all gravity tools
     public static String SKU_TOOL_PACK = "tool_pack"; // includes a large set of extra tools
     public static String SKU_CAMERA_TOOL = "camera_tool"; // a tool to convert pictures to sand
+    public static ArrayList<String> ALL_SKUS = new ArrayList<String>(Arrays.asList(
+            SKU_GRAVITY_PACK,
+            SKU_TOOL_PACK,
+            SKU_CAMERA_TOOL
+    ));
+    public Map<String, SkuDetails> mSkuDetails = new HashMap<String, SkuDetails>();
 
     public String getStr(int resId) {
         return mCtx.getResources().getString(resId);
@@ -92,6 +103,11 @@ public class ProductManager {
             if (result.isFailure()) {
                 makeError(getStr(R.string.iab_inventory_failed) + result);
                 return;
+            }
+
+            // Add all sku details to the map
+            for (String sku : ALL_SKUS) {
+                mSkuDetails.put(sku, inventory.getSkuDetails(sku));
             }
 
             // Check items and resolve purchases into in-app settings
@@ -176,7 +192,7 @@ public class ProductManager {
             @Override
             public void run() {
                 try {
-                    Inventory i = mHelper.queryInventory(false, null);
+                    Inventory i = mHelper.queryInventory(true, ALL_SKUS);
                     IabResult success = new IabResult(
                             IabHelper.BILLING_RESPONSE_RESULT_OK,
                             getStr(R.string.iab_inventory_success));
@@ -221,6 +237,16 @@ public class ProductManager {
         boolean out = mHelper.handleActivityResult(requestCode, resultCode, data);
         mInPurchase = false;
         return out;
+    }
+
+    public String getPrice(String sku) {
+        SkuDetails details = mSkuDetails.get(sku);
+        if (details == null) {
+            return "";
+        }
+        else {
+            return details.getPrice();
+        }
     }
 
     // IMPORTANT: Call this before the wrapping activity closes, to avoid circular references

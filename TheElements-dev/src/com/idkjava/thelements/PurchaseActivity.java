@@ -98,13 +98,28 @@ public class PurchaseActivity extends ReportingActivity {
             spaceWorldTitle.setText(R.string.space_world_owned);
             spaceWorldTitle.setTextColor(OWNED_COLOR);
         }
+        else {
+            spaceWorldTitle.setText(R.string.space_world_purchase);
+            spaceWorldTitle.append(mProductManager.getPrice(ProductManager.SKU_GRAVITY_PACK));
+            spaceWorldTitle.setTextColor(Color.WHITE);
+        }
         if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
             toolPackTitle.setText(R.string.tool_pack_owned);
             toolPackTitle.setTextColor(OWNED_COLOR);
         }
+        else {
+            toolPackTitle.setText(R.string.tool_pack_purchase);
+            toolPackTitle.append(mProductManager.getPrice(ProductManager.SKU_TOOL_PACK));
+            toolPackTitle.setTextColor(Color.WHITE);
+        }
         if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
             cameraToolTitle.setText(R.string.camera_tool_owned);
             cameraToolTitle.setTextColor(OWNED_COLOR);
+        }
+        else {
+            cameraToolTitle.setText(R.string.camera_tool_purchase);
+            cameraToolTitle.append(mProductManager.getPrice(ProductManager.SKU_CAMERA_TOOL));
+            cameraToolTitle.setTextColor(Color.WHITE);
         }
     }
 

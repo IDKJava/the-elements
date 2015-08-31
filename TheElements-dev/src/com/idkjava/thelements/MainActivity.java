@@ -124,11 +124,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.spray, R.drawable.spray_tool)
     ));
     private ArrayList<IconListItem> getLockedToolPackList() {
-        ArrayList<IconListItem> locked = new ArrayList<IconListItem>(toolPackList);
-        for (IconListItem i : locked) {
-            i.iconRes = R.drawable.lock;
-            i.locked = true;
-            i.sku = ProductManager.SKU_TOOL_PACK;
+        // Deep copy the list, so we can change the icons and locked status
+        ArrayList<IconListItem> locked = new ArrayList<IconListItem>();
+        for (IconListItem i : toolPackList) {
+            IconListItem newI = new IconListItem(i.nameRes, R.drawable.lock);
+            newI.locked = true;
+            newI.sku = ProductManager.SKU_TOOL_PACK;
+            locked.add(newI);
         }
         return locked;
     }
@@ -462,7 +464,9 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Log.v("TheElements", "sand_view.onResume() done");
 
         // Refresh our product inventory with a callback to update
-        // relevant UI bits
+        // relevant UI bits. Also, refresh tool list immediately, in case our background
+        // inventory refresh fails; we can at least be correct on app restart.
+        refreshToolList();
         ElementsApplication.getProductManager().refreshInventory(this, new Runnable () {
             @Override
             public void run() {
