@@ -24,18 +24,17 @@ inline void bounceFp(float ox, float oy, int p) {
     a_hasMoved[p] = FALSE;
 }
 
-void collide(int firstParticle, int secondParticle)
+void collide(int firstParticle, int secondParticle, float oldXFirst, float oldYFirst)
 {
     //Specials hook on collision
-    bool collisionOverridden = collisionSpecials(firstParticle, secondParticle);
+    bool collisionOverridden = collisionSpecials(firstParticle, secondParticle, oldXFirst, oldYFirst);
     if (collisionOverridden)
     {
         return;
     }
 
     //Temporary variables
-    float oldXFirst = a_oldX[firstParticle], oldYFirst = a_oldY[firstParticle];
-    float dx = (a_oldX[firstParticle]-a_x[firstParticle]), dy = (a_oldY[firstParticle]-a_y[firstParticle]);
+    float dx = (oldXFirst-a_x[firstParticle]), dy = (oldYFirst-a_y[firstParticle]);
     float velMag = sqrt((float)dx*dx+dy*dy);
     float perpXVel = -dy/velMag;
     float perpYVel = dx/velMag;

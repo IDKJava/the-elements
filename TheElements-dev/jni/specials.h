@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-bool collisionSpecials(int firstParticle, int secondParticle);
+bool collisionSpecials(int firstParticle, int secondParticle, float oldXFirst, float oldYFirst);
 void specialSpawn(int particle);
 void specialBreak(int particle);
 void specialGrow(int particle);
@@ -27,6 +27,6 @@ void specialTunnel(int particle);
 int specialBurn(int particle);
 void specialConductive(int particle);
 void specialTrail(int particle);
-bool specialFlow(int particle, int sp);
+bool specialFlow(int particle, int sp, float oldX, float oldY);
 
 #endif

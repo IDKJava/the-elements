@@ -23,6 +23,6 @@
 //Include collision data
 //#include "collisions.h"
 
-void collide (int firstParticle, int secondParticle);
+void collide (int firstParticle, int secondParticle, float oldXFirst, float oldYFirst);
 
 #endif //!COLLIDE_H_INCLUDED

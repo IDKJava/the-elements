@@ -22,15 +22,15 @@
 // updated yet, so the location fp and sp both point to is actually sp still.
 // If returning true, fp and sp must have consistent coords and allcoords.
 // Set hasMoved for fp, if it's allcoords has changed.
-bool collisionSpecials(int firstParticle, int secondParticle)
+bool collisionSpecials(int firstParticle, int secondParticle, float firstOldX, float firstOldY)
 {
     // If the conduction specials match on the particles, override the collision
     if (hasSpecial(firstParticle, SPECIAL_CONDUCTABLE)
         && hasSpecial(secondParticle, SPECIAL_CONDUCTIVE))
     {
         //Delete first Particle
-        a_x[firstParticle] = a_oldX[firstParticle];
-        a_y[firstParticle] = a_oldY[firstParticle];
+        a_x[firstParticle] = firstOldX;
+        a_y[firstParticle] = firstOldY;
         deletePoint(firstParticle);
         a_hasMoved[firstParticle] = FALSE;
 
@@ -41,7 +41,7 @@ bool collisionSpecials(int firstParticle, int secondParticle)
     }
     // Fluids flow around obstacles
     else if (a_element[firstParticle]->state > 0) {
-        return specialFlow(firstParticle, secondParticle);
+        return specialFlow(firstParticle, secondParticle, firstOldX, firstOldY);
     }
 
     return FALSE;
@@ -248,12 +248,11 @@ void specialWander(int particle)
     }
 }
 
-bool specialFlow(int particle, int sp) {
+bool specialFlow(int particle, int sp, float oldX, float oldY) {
     struct Element* tempElement = a_element[particle];
     int thisDensity = tempElement->density;
     float gx, gy;
     float x = a_x[particle], y = a_y[particle];
-    float oldX = a_oldX[particle], oldY = a_oldY[particle];
     int oldInd = getIndex((int)oldX, (int)oldY);
     getFallField(x, y, &gx, &gy, NULL);
     int curInd = getIndex(x, y);

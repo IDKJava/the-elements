@@ -19,8 +19,6 @@ unsigned char numElements;
 char a_set[MAX_POINTS];
 float a_x[MAX_POINTS];
 float a_y[MAX_POINTS];
-float a_oldX[MAX_POINTS];
-float a_oldY[MAX_POINTS];
 float a_xVel[MAX_POINTS];
 float a_yVel[MAX_POINTS];
 unsigned char a_heat[MAX_POINTS];

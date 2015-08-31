@@ -695,8 +695,6 @@ void UpdateView(void)
                 //Set the temp and old variables
                 tempX = &(a_x[tempParticle]);
                 tempY = &(a_y[tempParticle]);
-                a_oldX[tempParticle] = a_x[tempParticle];
-                a_oldY[tempParticle] = a_y[tempParticle];
                 tempOldX = a_x[tempParticle];
                 tempOldY = a_y[tempParticle];
                 tempElement = a_element[tempParticle];
@@ -727,7 +725,7 @@ void UpdateView(void)
                         updateCollisionHeat(tempParticle, tempAllCoords);
 
                         //Resolve the collision (this updates the state of the particle, but lets this function resolve later)
-                        collide(tempParticle, tempAllCoords);
+                        collide(tempParticle, tempAllCoords, tempOldX, tempOldY);
 
                         //Update the particles and the bitmap colors if the hasMoved flag is set
                         if(a_hasMoved[tempParticle])
@@ -743,10 +741,10 @@ void UpdateView(void)
                         if(a_hasMoved[tempAllCoords])
                         {
                             // Clear the old location only if it's still this particle
-                            if (allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] == tempAllCoords)
+                            if (allCoords[getIndex(tempOldX, tempOldY)] == tempAllCoords)
                             {
-                                allCoords[getIndex(a_oldX[tempAllCoords], a_oldY[tempAllCoords])] = -1;
-                                clearBitmapColor(a_oldX[tempAllCoords], a_oldY[tempAllCoords]);
+                                allCoords[getIndex(tempOldX, tempOldY)] = -1;
+                                clearBitmapColor(tempOldX, tempOldY);
                             }
                             allCoords[getIndex((int)a_x[tempAllCoords], (int)a_y[tempAllCoords])] = tempAllCoords;
                             setBitmapColor(a_x[tempAllCoords], a_y[tempAllCoords], a_element[tempAllCoords]);

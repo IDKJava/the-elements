@@ -82,8 +82,6 @@
     extern char a_set[];
     extern float a_x[];
     extern float a_y[];
-    extern float a_oldX[];
-    extern float a_oldY[];
     extern float a_xVel[];
     extern float a_yVel[];
     extern unsigned char a_heat[];
