@@ -39,17 +39,21 @@ public class CustomElementManager
 			if (elementFiles[i].endsWith(FileManager.ELEMENT2_EXT))
 			{
 				Log.v("TheElements", "..." + elementFiles[i]);
+				String absPath = elementDir.getAbsolutePath() + File.separator + elementFiles[i];
 				// Cut off the element extension when saving the filename
 				CustomElement custom;
 				try {
-				    custom = CustomElement.parseFrom(new FileInputStream(
-				            elementDir.getAbsolutePath() + File.separator + elementFiles[i]));
+				    custom = CustomElement.parseFrom(new FileInputStream(absPath));
 				}
 				catch (IOException e) {
-				    Log.w("TheElements", "IOException on parsing "
-				            + elementDir.getAbsolutePath() + File.separator + elementFiles[i]);
+				    Log.w("TheElements", "IOException on parsing " + absPath);
 				    continue;
 				}
+
+				// Update filename
+				CustomElement.Builder cBuild = custom.toBuilder();
+				cBuild.setFilename(absPath);
+				custom = cBuild.build();
 
                 sCustomElements.add(custom);
 			}
@@ -76,6 +80,7 @@ public class CustomElementManager
 	    {
 	        test = new File(FileManager.ROOT_DIR + FileManager.ELEMENTS_DIR +
 	                name + "(" + copy + ")" + FileManager.ELEMENT2_EXT);
+			copy++;
 	    }
 	    custom.setFilename(test.getAbsolutePath());
 	}
