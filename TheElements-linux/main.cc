@@ -11,6 +11,8 @@
 #include "rendergl.h"
 #include "app.h"
 #include "macros.h"
+#include "saveload2.h"
+#include "setup.h"
 
 // Per-file logging
 #ifndef NDEBUG
@@ -26,6 +28,7 @@
 #define GREEN_DEPTH 6
 #define BLUE_DEPTH 5
 #define RENDER_DEPTH 16
+#define FRAME_VALUES 10
 
 using namespace std;
 
@@ -209,12 +212,21 @@ int main(int argc, char **argv) {
   makeMainCurrent(); // Native init must happen in main context
   nativeInit();
   setElement(NORMAL_ELEMENT);
+  setZoom(1);
   nativeResize(SCREEN_WIDTH, SCREEN_HEIGHT);
   SDL_Event event;
   bool running = true;
+  Uint32 ticks = SDL_GetTicks();
+  int frames = 0;
   while (running) {
     // Render main window
     renderMain();
+    frames++;
+    if (frames % 10 == 0) {
+      Uint32 diff = SDL_GetTicks() - ticks;
+      ticks += diff;
+      cout << "Avg framerate: " << 10/(0.001*diff) << endl;
+    }
     
     // Render palette
     renderPalette();
@@ -252,6 +264,15 @@ int main(int argc, char **argv) {
       case SDL_KEYDOWN:
         if (event.key.keysym.sym == SDLK_ESCAPE) {
           running = false;
+        }
+        else if (event.key.keysym.sym == SDLK_F9) {
+          // Save temp
+          saveState2("temp.sav2");
+        }
+        else if (event.key.keysym.sym == SDLK_F10) {
+          // Clear and reload temp
+          gameSetup();
+          loadState2("temp.sav2");
         }
         break;
       }

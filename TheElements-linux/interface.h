@@ -11,6 +11,7 @@ extern "C" {
   void Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y);
   void Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y);
   void Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y);
+  void Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject thiz, jint zoom);
 }
 
 inline void nativeInit() {
@@ -33,6 +34,9 @@ inline void brushMoveLocation(int x, int y) {
 }
 inline void brushEndLocation(int x, int y) {
   Java_com_idkjava_thelements_game_SandView_brushEndLocation(NULL, NULL, x, y);
+}
+inline void setZoom(int zoom) {
+  Java_com_idkjava_thelements_preferences_Preferences_setZoom(NULL, NULL, zoom);
 }
                           
 

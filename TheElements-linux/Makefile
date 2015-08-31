@@ -150,7 +150,8 @@ LINKER_FLAGS += -L$(BIN_DIR) -lprotobuf
 COMPILE_FLAGS += -I$(JNI_DIR) \
                  -I$(JNI_DIR)/google \
                  -I$(JAVA_HOME)/include/ \
-                 -I$(JAVA_HOME)/include/linux
+                 -I$(JAVA_HOME)/include/linux \
+                 -O3
 
 .PHONY: all
 $(PROTOBUF_OUT): $(PROTOBUF_SRCS)
@@ -160,4 +161,4 @@ $(PROTOBUF_OUT): $(PROTOBUF_SRCS)
 
 all: $(SRCS) $(PROTOBUF_OUT)
 	$(MKDIR) -p $(BIN_DIR)
-	$(CC) $(SRCS) $(COMPILE_FLAGS) $(LINKER_FLAGS) -o $(BIN_DIR)/$(OUT)
+	$(CC) $(SRCS) $(COMPILE_FLAGS) -g -pg $(LINKER_FLAGS) -o $(BIN_DIR)/$(OUT)
