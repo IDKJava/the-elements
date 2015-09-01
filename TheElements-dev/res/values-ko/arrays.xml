@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="elements_list">
+        <item>모래</item>
+        <item>물</item>
+        <item>증기</item>
+        <item>얼음</item>
+        <item>벽</item>
+        <item>파괴 벽</item>
+        <item>식물</item>
+        <item>화재</item>
+        <item>마그마</item>
+        <item>돌</item>
+        <item>기름</item>
+        <item>C4</item>
+        <item>C4++</item>
+        <item>신관</item>
+        <item>산</item>
+        <item>소금</item>
+        <item>소금물</item>
+        <item>유리</item>
+        <item>진흙</item>
+        <item>복사기</item>
+        <item>석탄</item>
+        <item>개미</item>
+        <item>화약</item>
+        <item>모기</item>
+        <item>나무</item>
+        <item>흰개미</item>
+        <item>곤충 킬러</item>
+        <item>번개</item>
+        <item>금속</item>
+    </string-array>
+    <string-array name="brush_size_list">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>4</item>
+        <item>8</item>
+        <item>16</item>
+        <item>32</item>
+    </string-array>
+    <string-array name="collisions_list">
+        <item>고체 - 고체</item>
+        <item>밀도 기반</item>
+        <item>복사기 (복사기를 생성)</item>
+        <item>복사기 (가 복사기)</item>
+        <item>산 - 용융</item>
+        <item>용융 - 산</item>
+        <item>산 - 중화제</item>
+        <item>중화제 - 산</item>
+        <item>바닷물로 변신</item>
+        <item>죽음</item>
+        <item>진흙으로 전환</item>
+        <item>파괴</item>
+        <item>스택</item>
+    </string-array>
+    <string-array name="specials_list">
+        <item>특별한 없습니다</item>
+        <item>복사</item>
+        <item>단절</item>
+        <item>성장</item>
+        <item>열 (열을)</item>
+        <item>폭발</item>
+        <item>생활</item>
+        <item>방황</item>
+        <item>점프</item>
+        <item>터널</item>
+        <item>굽기</item>
+        <item>구울</item>
+        <item>전도성</item>
+        <item>흔적</item>
+    </string-array>
+    <string-array name="specials_description_list">
+        <item></item>
+        <item>입자의 유형은 복사</item>
+        <item>임계 속도</item>
+        <item>요소의 원인 성장</item>
+        <item>열 수준</item>
+        <item>폭발성</item>
+        <item>일생</item>
+        <item>얼마나 많은 방황</item>
+        <item>점프 수준</item>
+        <item>터널 요소로</item>
+        <item>시간을 구울</item>
+        <item>없음</item>
+        <item>없음</item>
+        <item>임의성</item>
+    </string-array>
+
+</resources>
