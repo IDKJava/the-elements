@@ -337,7 +337,16 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         SharedPreferences.Editor editor = ElementsApplication.getPrefs().edit();
         editor.putBoolean("paused", true);
         editor.commit();
+    }
 
+    private void updatePaidCameraStatus(){
+        // Update camera paid status
+        if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
+            setPaidCameraOn(true);
+        }
+        else {
+            setPaidCameraOn(false);
+        }
     }
 
     @Override
@@ -352,13 +361,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             setCurWorld(nativeWorld);
         }
 
-        // Update camera paid status
-        if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
-            setPaidCameraOn(true);
-        }
-        else {
-            setPaidCameraOn(false);
-        }
+        updatePaidCameraStatus();
 
         // Load the settings shared preferences which deals with if we're
         // resuming from pause or not
@@ -471,6 +474,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             @Override
             public void run() {
                 refreshToolList();
+                updatePaidCameraStatus();
             }
         });
     }
