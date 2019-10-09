@@ -22,17 +22,16 @@
 // updated yet, so the location fp and sp both point to is actually sp still.
 // If returning true, fp and sp must have consistent coords and allcoords.
 // Set hasMoved for fp, if it's allcoords has changed.
-bool collisionSpecials(int firstParticle, int secondParticle, float firstOldX, float firstOldY)
+bool collisionSpecials(int firstParticle, int secondParticle, int *old, float firstOldX, float firstOldY)
 {
     // If the conduction specials match on the particles, override the collision
     if (hasSpecial(firstParticle, SPECIAL_CONDUCTABLE)
         && hasSpecial(secondParticle, SPECIAL_CONDUCTIVE))
     {
         //Delete first Particle
-        a_x[firstParticle] = firstOldX;
-        a_y[firstParticle] = firstOldY;
-        deletePoint(firstParticle);
-        a_hasMoved[firstParticle] = FALSE;
+        unSetPoint(firstParticle);
+        *old = -1;
+//        a_hasMoved[firstParticle] = FALSE;
 
         //Electrify the second particle
         setParticleSpecialVal(secondParticle, SPECIAL_CONDUCTIVE, ELECTRIC_NO_DIR);
@@ -285,17 +284,17 @@ bool specialFlow(int particle, int sp, float oldX, float oldY) {
         a_x[particle] = leftX;
         a_y[particle] = leftY;
         if (leftPart == -1) {
-            a_hasMoved[particle] = true;
+            allCoords[oldInd] = -1;
+            allCoords[leftInd] = particle;
         }
         else {
             // Swap the two particles
-            a_hasMoved[particle] = false;
             a_x[leftPart] = oldX;
             a_y[leftPart] = oldY;
+            a_oldX[leftPart] = oldX;
+            a_oldY[leftPart] = oldY;
             allCoords[oldInd] = leftPart;
-            setBitmapColor(oldX, oldY, a_element[leftPart]);
             allCoords[leftInd] = particle;
-            setBitmapColor(leftX, leftY, tempElement);
         }
         return true;
     }
@@ -304,17 +303,17 @@ bool specialFlow(int particle, int sp, float oldX, float oldY) {
         a_x[particle] = rightX;
         a_y[particle] = rightY;
         if (rightPart == -1) {
-            a_hasMoved[particle] = true;
+            allCoords[oldInd] = -1;
+            allCoords[rightInd] = particle;
         }
         else {
             // Swap the two particles
-            a_hasMoved[particle] = false;
             a_x[rightPart] = oldX;
             a_y[rightPart] = oldY;
+            a_oldX[rightPart] = oldX;
+            a_oldY[rightPart] = oldY;
             allCoords[oldInd] = rightPart;
-            setBitmapColor(oldX, oldY, a_element[rightPart]);
             allCoords[rightInd] = particle;
-            setBitmapColor(rightX, rightY, tempElement);
         }
         return true;
     }
@@ -323,17 +322,17 @@ bool specialFlow(int particle, int sp, float oldX, float oldY) {
         a_x[particle] = leftUpX;
         a_y[particle] = leftUpY;
         if (leftUpPart == -1) {
-            a_hasMoved[particle] = true;
+            allCoords[oldInd] = -1;
+            allCoords[leftUpInd] = particle;
         }
         else {
             // Swap the two particles
-            a_hasMoved[particle] = false;
             a_x[leftUpPart] = oldX;
             a_y[leftUpPart] = oldY;
+            a_oldX[leftUpPart] = oldX;
+            a_oldY[leftUpPart] = oldY;
             allCoords[oldInd] = leftUpPart;
-            setBitmapColor(oldX, oldY, a_element[leftUpPart]);
             allCoords[leftUpInd] = particle;
-            setBitmapColor(leftUpX, leftUpY, tempElement);
         }
         return true;
     }
@@ -342,17 +341,17 @@ bool specialFlow(int particle, int sp, float oldX, float oldY) {
         a_x[particle] = rightUpX;
         a_y[particle] = rightUpY;
         if (rightUpPart == -1) {
-            a_hasMoved[particle] = true;
+            allCoords[oldInd] = -1;
+            allCoords[rightUpInd] = particle;
         }
         else {
             // Swap the two particles
-            a_hasMoved[particle] = false;
             a_x[rightUpPart] = oldX;
             a_y[rightUpPart] = oldY;
+            a_oldX[rightUpPart] = oldX;
+            a_oldY[rightUpPart] = oldY;
             allCoords[oldInd] = rightUpPart;
-            setBitmapColor(oldX, oldY, a_element[rightUpPart]);
             allCoords[rightUpInd] = particle;
-            setBitmapColor(rightUpX, rightUpY, tempElement);
         }
         return true;
     }

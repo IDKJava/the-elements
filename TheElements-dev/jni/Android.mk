@@ -196,9 +196,10 @@ LOCAL_SHARED_LIBRARIES += libstlport
 endif
 
 # optimization level = 3
-LOCAL_CFLAGS += -O3
+LOCAL_CFLAGS += -O3 -ffast-math
 LOCAL_CFLAGS += -w
 LOCAL_CFLAGS += -Wall -Wextra
+#LOCAL_CFLAGS += -ftree-vectorizer-verbose=6
 
 LOCAL_CPP_EXTENSION := .cc
 

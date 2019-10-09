@@ -29,5 +29,6 @@ char upgradeCustomElementV1(FILE* fp, CustomElement* customProto,
 unsigned long hashElement(const CustomElement& customProto, int index);
 char* stringifyElement(const CustomElement& customProto, int index);
 unsigned long hashStr(char* str);
+unsigned long hashBytes(char* bytes, int num);
 
 #endif //!SAVELOAD_H_INCLUDED

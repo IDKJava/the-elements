@@ -12,6 +12,7 @@
 //Include pthread functions
 #include <pthread.h>
 #include <sched.h>
+#include <time.h>
 #include <vector>
 
 //Include the global variables
@@ -22,17 +23,11 @@
 
 
 #ifndef NDEBUG
-#define LOGGING 0 // Debug
+#define LOGGING 1 // Debug
 #else
 #define LOGGING 0 // Release
 #endif
 
-#if LOGGING
-// Timing of frames
-#include <sys/time.h>
-
-static struct timeval time1;
-#endif
 unsigned int fb;
 unsigned int depthRb;
 unsigned int textureID;
@@ -820,6 +815,7 @@ static float pts[MAX_POINTS*2];
 static unsigned char cols[MAX_POINTS*3];
 void glRenderPoints() {
 
+    // Clear to atmospheric background
     glClearColor(cAtmosphere->backgroundRed/255.0,
                  cAtmosphere->backgroundGreen/255.0,
                  cAtmosphere->backgroundBlue/255.0,
@@ -831,8 +827,8 @@ void glRenderPoints() {
     for (int i = 0; i < MAX_POINTS; ++i) {
         if (a_set[i]) {
             struct Element* ele = a_element[i];
-            pts[2*count] = ((int)a_x[i])/(float)workWidth;
-            pts[2*count+1] = ((int)a_y[i])/(float)workHeight;
+            pts[2*count] = (((int)a_x[i])+0.5)/(float)workWidth;
+            pts[2*count+1] = (((int)a_y[i])+0.5)/(float)workHeight;
             cols[3*count] = ele->red;
             cols[3*count+1] = ele->green;
             cols[3*count+2] = ele->blue;
@@ -853,8 +849,13 @@ void glRenderPoints() {
     glDrawArrays(GL_POINTS, 0, count);
 }
 
+// Declare UpdateView
+void UpdateView(void);
+static int fpsCount = 0;
+static float totalMs = 0;
 void glRenderThreaded()
 {
+    /*
     // Synchronization
     //pthread_mutex_lock(&frame_ready_mutex);
     while (!frameReady)
@@ -864,9 +865,23 @@ void glRenderThreaded()
     }
     frameReady = FALSE;
     //pthread_mutex_unlock(&frame_ready_mutex);
+    */
+    clock_t begin = clock();
+    UpdateView();
+    clock_t next = clock();
 
     //glRender();
     glRenderPoints();
+    clock_t final = clock();
+    totalMs += 1000.0*(next-begin)/(float)CLOCKS_PER_SEC;
+    fpsCount++;
+    if (fpsCount == 10) {
+        // __android_log_print(ANDROID_LOG_INFO, "TheElements", "Update: %f ms", totalMs/fpsCount);
+        fpsCount = 0;
+        totalMs = 0;
+    }
+
+    /*
     //pthread_mutex_lock(&buffer_free_mutex);
     if (!bufferFree)
     {
@@ -874,4 +889,5 @@ void glRenderThreaded()
         //pthread_cond_signal(&buffer_free_cond);
     }
     //pthread_mutex_unlock(&buffer_free_mutex);
+    */
 }

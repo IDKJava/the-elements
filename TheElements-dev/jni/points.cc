@@ -76,7 +76,7 @@ void deletePoint(int particle)
     //Unfreeze the particles around it
     //unFreezeParticles(tempX, tempY);
     //Clear it in the pixels array
-    clearBitmapColor(tempX, tempY);
+    //clearBitmapColor(tempX, tempY);
     //Clear it in the points array
     allCoords[getIndex(tempX, tempY)] = -1;
 
@@ -149,27 +149,17 @@ void unFreezeParticles(int xCoord, int yCoord)
 //Change a particle's heat and fix it
 void changeHeat(unsigned char *heat, int heatChange)
 {
-    if (heatChange < 0)
+    if (heatChange < 0 && -heatChange >= (int)*heat)
     {
-        if (*heat + heatChange < 0)
-        {
-            *heat = 0;
-        }
-        else
-        {
-            *heat += heatChange;
-        }
+        *heat = 0;
+    }
+    else if (heatChange > 0 && (int)*heat + heatChange > 255)
+    {
+        *heat = 255;
     }
     else
     {
-        if (*heat + heatChange > 255)
-        {
-            *heat = 255;
-        }
-        else
-        {
-            *heat += heatChange;
-        }
+        *heat += heatChange;
     }
 }
 

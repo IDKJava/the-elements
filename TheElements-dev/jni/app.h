@@ -51,12 +51,9 @@
 
     struct Atmosphere
     {
-        char heat;
-        char gravity;
-
+        int heat;
         unsigned char backgroundRed, backgroundGreen, backgroundBlue;
-
-        char borderLeft, borderTop, borderRight, borderBottom;
+        bool borderLeft, borderTop, borderRight, borderBottom;
     };
 
     struct SpaceObj
@@ -79,16 +76,18 @@
 //The number of elements available
     extern unsigned char numElements;
 
-    extern char a_set[];
-    extern float a_x[];
-    extern float a_y[];
-    extern float a_xVel[];
-    extern float a_yVel[];
-    extern unsigned char a_heat[];
-    extern int* a_specialVals[];
-    extern struct Element* a_element[];
-    extern unsigned long a_frozen[];
-    extern char a_hasMoved[];
+    extern char a_set[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_x[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_y[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_oldX[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_oldY[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_xVel[MAX_POINTS] __attribute__((aligned(64)));
+    extern float a_yVel[MAX_POINTS] __attribute__((aligned(64)));
+    extern unsigned char a_heat[MAX_POINTS] __attribute__((aligned(64)));
+    extern int* a_specialVals[MAX_POINTS] __attribute__((aligned(64)));
+    extern struct Element* a_element[MAX_POINTS] __attribute__((aligned(64)));
+    extern unsigned long a_frozen[MAX_POINTS] __attribute__((aligned(64)));
+//    extern char a_hasMoved[MAX_POINTS] __attribute__((aligned(64)));
 
 
 
@@ -96,7 +95,7 @@
     
 
 //A stack of available particles
-    extern int avail[];
+    extern int avail[MAX_POINTS];
 //Points to the index AFTER the top of the stack
     extern int loq;
 //Current element selected

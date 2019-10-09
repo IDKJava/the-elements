@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-bool collisionSpecials(int firstParticle, int secondParticle, float oldXFirst, float oldYFirst);
+bool collisionSpecials(int firstParticle, int secondParticle, int *old, float firstOldX, float firstOldY);
 void specialSpawn(int particle);
 void specialBreak(int particle);
 void specialGrow(int particle);

@@ -337,3 +337,16 @@ unsigned long hashStr(char *str)
 
     return hash;
 }
+
+
+unsigned long hashBytes(char* bytes, int num) {
+    unsigned long hash = 5381;
+    int c;
+
+    for (int i = 0; i < num; ++i) {
+        c = bytes[i];
+        hash = ((hash << 5) + hash) + c; /* hash * 33 + c*/
+    }
+
+    return hash;
+}

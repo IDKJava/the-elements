@@ -162,7 +162,7 @@ static const char gTestFShader[] =
 
 void renderMain() {
   makeMainCurrent();
-  nativeRender();
+  // nativeRender();
   eglSwapBuffers(eglDisplay, eglSurfaceMain);
 }
 

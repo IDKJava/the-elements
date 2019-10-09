@@ -289,11 +289,6 @@ Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* en
     cAtmosphere->heat = temp;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject thiz, jfloat gravity)
-{
-    cAtmosphere->gravity = gravity;
-}
-JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject thiz, jint zoom)
 {
     if(zoom != zoomFactor)

@@ -108,7 +108,6 @@ void atmosphereSetup()
     cAtmosphere = (struct Atmosphere*) malloc (sizeof(struct Atmosphere));
 
     cAtmosphere->heat = DEFAULT_ATMOSPHERE_TEMP;
-    cAtmosphere->gravity = DEFAULT_ATMOSPHERE_GRAVITY;
     cAtmosphere->backgroundRed = DEFAULT_RED;
     cAtmosphere->backgroundGreen = DEFAULT_GREEN;
     cAtmosphere->backgroundBlue = DEFAULT_BLUE;

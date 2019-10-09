@@ -23,6 +23,12 @@
 //Include collision data
 //#include "collisions.h"
 
-void collide (int firstParticle, int secondParticle, float oldXFirst, float oldYFirst);
+// Resolves a collision between the first particle and the particle located in
+// *target. `old` points to the allCoords location the first particle is coming
+// from. After this function, target and old should point to valid particles or
+// be empty if some particles were deleted.
+// Returns whether the first particle was bounced to its old location (used to
+// determine look-around freezing).
+bool collide(int firstParticle, int* target, int* old, float oldXFirst, float oldYFirst);
 
 #endif //!COLLIDE_H_INCLUDED

@@ -355,9 +355,13 @@ void updateVelocities(float *xvel, float *yvel, float inertia, float lowDragThre
 }
 
 // Update the positions of the particle
+// velFactor: How much the gravitational field couples to velocity
+// inertiaScale: How much to scale particle's inertia by (actually it's drag profile...)
+//               Larger values mean the particles slow down faster, i.e. the env has more drag.
+// lowDragThresh: Threshold below which velocities will not be reduced.
 // Returns: TRUE if we should continue with the particle,
 //          FALSE if we deleted it.
-int updateKinetic(int index)
+int updateKinetic(int index, float velFactor, float inertiaScale, float lowDragThresh)
 {
     float x = a_x[index];
     float y = a_y[index];
@@ -369,8 +373,6 @@ int updateKinetic(int index)
     float gx, gy, gmag;
     getFallField(x, y, &gx, &gy, &gmag);
     float gravX = gx*gmag*fallVel, gravY = gy*gmag*fallVel;
-    // How much the gravitational field couples to velocity
-    float velFactor = (world == WORLD_SPACE) ? 0.2 : 0.0;
     diffy = (1.0-velFactor)*gravY + yvel;
     diffx = (1.0-velFactor)*gravX + xvel;
     // Add scaled acceleration factor. Acceleration adds less at higher velocities
@@ -396,8 +398,6 @@ int updateKinetic(int index)
         return FALSE;
     }
     //Reduce velocities
-    float inertiaScale = (world == WORLD_SPACE) ? 0.3 : 1.0;
-    float lowDragThresh = (world == WORLD_SPACE) ? 0.4 : 0.0;
     updateVelocities(&xvel, &yvel, inertiaScale*a_element[index]->inertia, lowDragThresh);
 
     // Write-back
@@ -407,7 +407,7 @@ int updateKinetic(int index)
     a_y[index] = y;
 
     //Indicate that the particle has moved
-    a_hasMoved[index] = TRUE;
+//    a_hasMoved[index] = TRUE;
 
     return TRUE;
 }
@@ -415,42 +415,48 @@ int updateKinetic(int index)
 // Update the heat when p1 collides into p2
 void updateCollisionHeat(int index1, int index2)
 {
-    unsigned char *p1heat = &(a_heat[index1]);
-    unsigned char *p2heat = &(a_heat[index2]);
+    unsigned char p1heatTmp = a_heat[index1];
+    unsigned char p2heatTmp = a_heat[index2];
+    int p1heat = (int)p1heatTmp;
+    int p2heat = (int)p2heatTmp;
 
-    int heatChange = (*p1heat - *p2heat)/5;
+    int heatChange = (p1heat - p2heat)/5;
     //The hotter particle should be cooled, while the cooler particle is heated
-    changeHeat(p1heat, -heatChange);
-    changeHeat(p2heat, heatChange);
+    p1heat -= heatChange;
+    p2heat += heatChange;
+    int p1heatClamp = p1heat > 255 ? 255 : (p1heat < 0 ? 0 : p1heat);
+    int p2heatClamp = p2heat > 255 ? 255 : (p2heat < 0 ? 0 : p2heat);
+    a_heat[index1] = (unsigned char) p1heatClamp;
+    a_heat[index2] = (unsigned char) p2heatClamp;
 }
 
 // Perform specials actions
 // Assumes particle is set.
 // Assumes that SPECIAL_NONE means everything beyond is also SPECIAL_NONE.
-int updateSpecials(int index)
+inline int updateSpecials(int index)
 {
     struct Element* tempElement = a_element[index];
-    int tempX = (int) a_x[index];
-    int tempY = (int) a_y[index];
     int shouldResolveHeatChanges = TRUE;
-    unsigned int i;
 
+#ifndef NDEBUG
+    // Debug only
     if (!tempElement)
     {
         LOGE("Null tempElement in specials");
         return shouldResolveHeatChanges;
     }
+#endif
 
     char specialLoopDone = FALSE;
-    for (i = MAX_SPECIALS; i != 0; i--)
+    for (int i = 0; i < MAX_SPECIALS; i++)
     {
         // Short-circuit if we see SPECIAL_NONE
-        if(tempElement->specials[MAX_SPECIALS-i] == SPECIAL_NONE)
+        if(tempElement->specials[i] == SPECIAL_NONE)
         {
             break;
         }
 
-        switch(tempElement->specials[MAX_SPECIALS-i])
+        switch(tempElement->specials[i])
         {
         //Spawn
         case SPECIAL_SPAWN:
@@ -542,84 +548,115 @@ int updateSpecials(int index)
     return shouldResolveHeatChanges;
 }
 
-// hashText should be a preallocated char[9] (last byte will be NUL)
-inline unsigned long hashSurround(int tempX, int tempY, char* hashText) {
+#define HASH_INIT 5381
+#define HASH_STREAM(hash, c) hash = ((hash << 5) + hash) + (c)
+
+// hashText should be a preallocated int[8]
+inline unsigned long hashSurround(int tempX, int tempY) {
     // Hash surroundings (topLeft -> CCW)
     bool left = (tempX-1 >= 0),
         right = (tempX+1 < workWidth),
         top = (tempY-1 >= 0),
         bottom = (tempY+1 < workHeight);
     int part;
+    unsigned long hash = HASH_INIT;
     if (left && top) {
         part = allCoords[getIndex(tempX-1, tempY-1)];
-        hashText[0] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[0] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (left) {
         part = allCoords[getIndex(tempX-1, tempY)];
-        hashText[1] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[1] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (left && bottom) {
         part = allCoords[getIndex(tempX-1, tempY+1)];
-        hashText[2] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[2] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (bottom) {
         part = allCoords[getIndex(tempX, tempY+1)];
-        hashText[3] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[3] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (right && bottom) {
         part = allCoords[getIndex(tempX+1, tempY+1)];
-        hashText[4] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[4] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (right) {
         part = allCoords[getIndex(tempX+1, tempY)];
-        hashText[5] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[5] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (right && top) {
         part = allCoords[getIndex(tempX+1, tempY-1)];
-        hashText[6] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[6] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
     if (top) {
-        part =  allCoords[getIndex(tempX, tempY-1)];
-        hashText[7] = (part == -1) ? 0xff : a_element[part]->index & 0xff;
+        part = allCoords[getIndex(tempX, tempY-1)];
+        if (part == -1) return 0;
+        HASH_STREAM(hash, part & 0xff);
+        HASH_STREAM(hash, (part >> 1) & 0xff);
+        //HASH_STREAM(hash, (part >> 2) & 0xff);
+        //HASH_STREAM(hash, (part >> 3) & 0xff);
     }
     else {
-        hashText[7] = 0xff;
+        for (int i = 0; i < 2; ++i) HASH_STREAM(hash, 0xff);
     }
-    hashText[8] = 0;
 
-    return hashStr(hashText);
+    //return (unsigned long) hashText[0] + hashText[1] + hashText[2] + hashText[3] + hashText[4] + hashText[5] + hashText[6] + hashText[7];
+    //return hashBytes((char*)hashText, 8*sizeof(int));
+    return hash;
 }
-
 
 void UpdateView(void)
 {
     //For speed we're going to create temp variables to store stuff
-    float tempOldX, tempOldY;
-    float *tempX, *tempY;
-    float *tempXVel, *tempYVel;
-    unsigned char tempInertia;
-    int tempParticle;
     int tempAllCoords;
     struct Element* tempElement;
     struct Element* tempElement2;
@@ -654,26 +691,31 @@ void UpdateView(void)
     }
 
     // Draw update
-    pthread_mutex_lock(&brush_mutex);
     if (brushNextLocX >= 0) {
+        pthread_mutex_lock(&brush_mutex);
         // Draw a line to next brush position
         drawCircleyLine(brushLocX, brushLocY, brushNextLocX, brushNextLocY);
         brushLocX = brushNextLocX;
         brushLocY = brushNextLocY;
         brushNextLocX = -1;
         brushNextLocY = -1;
+        pthread_mutex_unlock(&brush_mutex);
     }
     else if (brushOn) {
+        pthread_mutex_lock(&brush_mutex);
         // Continuous draw
         drawCircle(brushLocX, brushLocY);
+        pthread_mutex_unlock(&brush_mutex);
     }
-    pthread_mutex_unlock(&brush_mutex);
 
     // Compute the empty hash, so we never freeze on this
-    char txt[9];
-    txt[0] = txt[1] = txt[2] = txt[3] = txt[4] = txt[5] = txt[6] = txt[7] = 0xff;
-    txt[8] = 0;
-    unsigned long emptyHash = hashStr(txt);
+    unsigned long emptyHash = HASH_INIT;
+    for (int i = 0; i < 8; ++i) {
+        int part = -1;
+        HASH_STREAM(emptyHash, part & 0xff);
+        HASH_STREAM(emptyHash, (part >> 1) & 0xff);
+    }
+    //__android_log_print(ANDROID_LOG_INFO, "TheElements", "Empty hash %lu", emptyHash);
 
 
     //Particles update
@@ -686,186 +728,291 @@ void UpdateView(void)
         }
 
         //Physics update
-        char hashText[9];
-        for (tempParticle = 0; tempParticle < MAX_POINTS; ++tempParticle)
+        int hashText[8];
+
+        // How much the gravitational field couples to velocity
+        const float velFactor = (world == WORLD_SPACE) ? 0.2 : 0.0;
+        // Drag factor of the environment
+        const float inertiaScale = (world == WORLD_SPACE) ? 0.3 : 1.0;
+        // Threshold below which particles will not lose velocity
+        const float lowDragThresh = (world == WORLD_SPACE) ? 0.4 : 0.0;
+
+        // DEBUG: Blocked update kinetic
+        for (int i = 0; i < MAX_POINTS/32; ++i) {
+            // Skip blocks that are completely unset
+            int blockSet = 0;
+            int *set __attribute__ ((__aligned__(16))) = (int*)&a_set[32*i];
+            const int STEP = sizeof(int)/sizeof(char);
+            for (int j = 0; j < 32/STEP; ++j) {
+                blockSet += set[j];
+            }
+            if (!blockSet) continue;
+
+            // Load all fall-vels
+            int fv[32] __attribute__ ((__aligned__(16)));
+            struct Element** elements __attribute__ ((__aligned__(16))) = &a_element[32*i];
+            for (int j = 0; j < 32; ++j) {
+                if (elements[j]) {
+                    fv[j] = elements[j]->fallVel;
+                }
+            }
+
+            // Update positions and velocities, applying fixed gravity and drag
+            float *x __attribute__ ((__aligned__(16))) = &a_x[32*i];
+            float *y __attribute__ ((__aligned__(16))) = &a_y[32*i];
+            float *oldx __attribute__ ((__aligned__(16))) = &a_oldX[32*i];
+            float *oldy __attribute__ ((__aligned__(16))) = &a_oldY[32*i];
+            float *xv __attribute__ ((__aligned__(16))) = &a_xVel[32*i];
+            float *yv __attribute__ ((__aligned__(16))) = &a_yVel[32*i];
+            for (int j = 0; j < 32; ++j) {
+                oldx[j] = x[j];
+                oldy[j] = y[j];
+                x[j] += xv[j];
+                y[j] += yv[j];
+                float dvx = -xv[j]*0.75;
+                float dvy = -yv[j]*0.75 + 0.75*fv[j];
+                xv[j] += dvx;
+                yv[j] += dvy;
+            }
+            // Clamp position values
+            for (int j = 0; j < 32; ++j) {
+                x[j] = x[j] < 0.0 ? 0.0 : (x[j] >= workWidth ? workWidth-0.5 : x[j]);
+                y[j] = y[j] < 0.0 ? 0.0 : (y[j] >= workHeight ? workHeight-0.5 : y[j]);
+            }
+        }
+
+        int frozenCount = 0;
+        for (int tempParticle = 0; tempParticle < MAX_POINTS; ++tempParticle) // DEBUG: Loop is killed
         {
-            //If the particle is set and unfrozen
-            if (a_set[tempParticle])// && tempParticle->frozen < 4)
+//            // Try blocked skips
+//            if (tempParticle%sizeof(int) == 0) {
+//                int blockSet = ((int*)a_set)[tempParticle/sizeof(int)];
+//                if (blockSet == 0) {
+//                    // Skip the whole block
+//                    tempParticle += 3;
+//                    continue;
+//                }
+//            }
+
+            // Normal skips
+            if (!a_set[tempParticle]) continue;
+
+            // Randomly unfreeze a small percentage of particles, to avoid
+            // weird sticky bugs
+//            if (rand() % 100 == 0) {
+//                a_frozen[tempParticle] = 0;
+//            }
+
+            unsigned long h = hashSurround(a_oldX[tempParticle], a_oldY[tempParticle]);
+            struct Element* tempElement = a_element[tempParticle];
+            // Frozen due to inertia or look-around
+            if (tempElement->inertia == INERTIA_UNMOVABLE ||
+                (a_frozen[tempParticle] == h && h != emptyHash && h != 0)) {
+                // Perform a cheap bounce
+                a_x[tempParticle] = a_oldX[tempParticle];
+                a_y[tempParticle] = a_oldY[tempParticle];
+                continue;
+            }
+
+            // Full collision
+            int *target = &allCoords[getIndex(a_x[tempParticle], a_y[tempParticle])];
+            int *old = &allCoords[getIndex(a_oldX[tempParticle], a_oldY[tempParticle])];
+            // Check collision
+            if (*target == -1) {
+                *target = tempParticle;
+                *old = -1;
+            }
+            else if (target != old) {
+                // Heat transfer
+                updateCollisionHeat(tempParticle, *target);
+
+                // Resolve the collision
+                bool bounce = collide(tempParticle, target, old, a_oldX[tempParticle], a_oldY[tempParticle]);
+            }
+
+            // Maybe freeze
+            if ((int)a_x[tempParticle] == (int)a_oldX[tempParticle] &&
+                (int)a_y[tempParticle] == (int)a_oldY[tempParticle] &&
+                rand()%10 == 0) {
+                a_frozen[tempParticle] = h;
+            }
+
+            //Set the temp and old variables
+//            float *tempX = &(a_x[tempParticle]);
+//            float *tempY = &(a_y[tempParticle]);
+//            float tempOldX = a_x[tempParticle];
+//            float tempOldY = a_y[tempParticle];
+//            struct Element* tempElement = a_element[tempParticle];
+//            unsigned char tempInertia = tempElement->inertia;
+//            float *tempXVel = &(a_xVel[tempParticle]);
+//            float *tempYVel = &(a_yVel[tempParticle]);
+
+            //
+
+            //Update coords
+            //if(tempInertia != INERTIA_UNMOVABLE)// && (a_frozen[tempParticle] != h || h == emptyHash))
             {
-                //TODO: Life property cycle
+//                if (!updateKinetic(tempParticle, velFactor, inertiaScale, lowDragThresh))
+//                {
+//                    // If we ended up deleting the particle, continue
+//                    continue;
+//                }
 
-                //Set the temp and old variables
-                tempX = &(a_x[tempParticle]);
-                tempY = &(a_y[tempParticle]);
-                tempOldX = a_x[tempParticle];
-                tempOldY = a_y[tempParticle];
-                tempElement = a_element[tempParticle];
-                tempInertia = tempElement->inertia;
-                tempXVel = &(a_xVel[tempParticle]);
-                tempYVel = &(a_yVel[tempParticle]);
+                /*
+                //Updating allCoords and collision resolution
+                tempAllCoords = allCoords[getIndex((int)(*tempX), (int)(*tempY))];
 
-                unsigned long h = hashSurround(*tempX, *tempY, hashText);
-
-                //Update coords
-                if(tempInertia != INERTIA_UNMOVABLE && (a_frozen[tempParticle] != h || h == emptyHash))
+                //If the space the particle is trying to move to is taken and isn't itself
+                if (tempAllCoords != -1 && tempAllCoords != tempParticle)
                 {
-                    if (!updateKinetic(tempParticle))
-                    {
-                        // If we ended up deleting the particle, continue
-                        continue;
-                    }
+                    tempElement2 = a_element[tempAllCoords];
 
-                    //Updating allCoords and collision resolution
-                    tempAllCoords = allCoords[getIndex((int)(*tempX), (int)(*tempY))];
+                    //Update heat
+                    updateCollisionHeat(tempParticle, tempAllCoords);
 
-                    //If the space the particle is trying to move to is taken and isn't itself
-                    if (tempAllCoords != -1 && tempAllCoords != tempParticle)
-                    {
-                        tempElement2 = a_element[tempAllCoords];
+                    //Resolve the collision (this updates the state of the particle, but lets this function resolve later)
+                    collide(tempParticle, tempAllCoords, tempOldX, tempOldY);
 
-                        //Update heat
-                        updateCollisionHeat(tempParticle, tempAllCoords);
-
-                        //Resolve the collision (this updates the state of the particle, but lets this function resolve later)
-                        collide(tempParticle, tempAllCoords, tempOldX, tempOldY);
-
-                        //Update the particles and the bitmap colors if the hasMoved flag is set
-                        if(a_hasMoved[tempParticle])
-                        {
-                            allCoords[getIndex(tempOldX, tempOldY)] = -1;
-                            clearBitmapColor(tempOldX, tempOldY);
-                            allCoords[getIndex((int)(*tempX), (int)(*tempY))] = tempParticle;
-                            setBitmapColor((int)(*tempX), (int)(*tempY), a_element[tempParticle]);
-
-                            //unFreezeParticles(tempOldX, tempOldY);
-                            a_hasMoved[tempParticle] = FALSE;
-                        }
-                        if(a_hasMoved[tempAllCoords])
-                        {
-                            // Clear the old location only if it's still this particle
-                            if (allCoords[getIndex(tempOldX, tempOldY)] == tempAllCoords)
-                            {
-                                allCoords[getIndex(tempOldX, tempOldY)] = -1;
-                                clearBitmapColor(tempOldX, tempOldY);
-                            }
-                            allCoords[getIndex((int)a_x[tempAllCoords], (int)a_y[tempAllCoords])] = tempAllCoords;
-                            setBitmapColor(a_x[tempAllCoords], a_y[tempAllCoords], a_element[tempAllCoords]);
-
-                            //unFreezeParticles(tempOldX, tempOldY);
-                            a_hasMoved[tempAllCoords] = FALSE;
-                        }
-                    }
-                    //Space particle is trying to move to is free
-                    else if (tempAllCoords != tempParticle)
+                    //Update the particles and the bitmap colors if the hasMoved flag is set
+                    if(a_hasMoved[tempParticle])
                     {
                         allCoords[getIndex(tempOldX, tempOldY)] = -1;
                         clearBitmapColor(tempOldX, tempOldY);
                         allCoords[getIndex((int)(*tempX), (int)(*tempY))] = tempParticle;
                         setBitmapColor((int)(*tempX), (int)(*tempY), a_element[tempParticle]);
 
+                        //unFreezeParticles(tempOldX, tempOldY);
                         a_hasMoved[tempParticle] = FALSE;
                     }
-                    //Space particle is trying to move to is itself
-                    else
+                    if(a_hasMoved[tempAllCoords])
                     {
-                        a_hasMoved[tempParticle] = FALSE;
-                    }
+                        // Clear the old location only if it's still this particle
+                        if (allCoords[getIndex(tempOldX, tempOldY)] == tempAllCoords)
+                        {
+                            allCoords[getIndex(tempOldX, tempOldY)] = -1;
+                            clearBitmapColor(tempOldX, tempOldY);
+                        }
+                        allCoords[getIndex((int)a_x[tempAllCoords], (int)a_y[tempAllCoords])] = tempAllCoords;
+                        setBitmapColor(a_x[tempAllCoords], a_y[tempAllCoords], a_element[tempAllCoords]);
 
-                    // Maybe freeze
-                    if ((int)tempOldX == (int)*tempX &&
-                        (int)tempOldY == (int)*tempY && rand()%10 == 0) {
-                        a_frozen[tempParticle] = h;
+                        //unFreezeParticles(tempOldX, tempOldY);
+                        a_hasMoved[tempAllCoords] = FALSE;
                     }
-
                 }
-                //Inertia unmovable object still need to deal with velocities
+                //Space particle is trying to move to is free
+                else if (tempAllCoords != tempParticle)
+                {
+                    allCoords[getIndex(tempOldX, tempOldY)] = -1;
+                    clearBitmapColor(tempOldX, tempOldY);
+                    allCoords[getIndex((int)(*tempX), (int)(*tempY))] = tempParticle;
+                    setBitmapColor((int)(*tempX), (int)(*tempY), a_element[tempParticle]);
+
+                    a_hasMoved[tempParticle] = FALSE;
+                }
+                //Space particle is trying to move to is itself
                 else
                 {
-                    //Reduce velocities
-                    if(*tempXVel < 0)
-                    {
-                        (*tempXVel)++;
-                    }
-                    else if(*tempXVel > 0)
-                    {
-                        (*tempXVel)--;
-                    }
-                    if(*tempYVel < 0)
-                    {
-                        (*tempYVel)++;
-                    }
-                    else if(*tempYVel > 0)
-                    {
-                        (*tempYVel)--;
-                    }
+                    a_hasMoved[tempParticle] = FALSE;
                 }
 
-                //Check for particle destroyed
-                if (!a_set[tempParticle])
-                {
-                    continue;
+                // Maybe freeze
+                if ((int)tempOldX == (int)*tempX &&
+                    (int)tempOldY == (int)*tempY && rand()%10 == 0) {
+                    a_frozen[tempParticle] = h;
                 }
+                */
 
-                //Update heat
-                unsigned char *heat = &(a_heat[tempParticle]);
-                if(*heat != cAtmosphere->heat)
+            }
+            //Inertia unmovable object still need to deal with velocities
+            //else
+            {
+                //Reduce velocities
+//                if(*tempXVel < 0)
+//                {
+//                    (*tempXVel)++;
+//                }
+//                else if(*tempXVel > 0)
+//                {
+//                    (*tempXVel)--;
+//                }
+//                if(*tempYVel < 0)
+//                {
+//                    (*tempYVel)++;
+//                }
+//                else if(*tempYVel > 0)
+//                {
+//                    (*tempYVel)--;
+//                }
+            }
+
+            //Check for particle destroyed
+//                if (!a_set[tempParticle])
+//                {
+//                    continue;
+//                }
+        }
+        //__android_log_print(ANDROID_LOG_INFO, "TheElements", "Update frozen count %d", frozenCount);
+
+        // Heat update loop
+        int heatWiggle = rand()%3 - 1;
+        int heatAtmo = cAtmosphere->heat;
+        unsigned long hash = rand();
+        for (int tempParticle = 0; tempParticle < MAX_POINTS; ++tempParticle) {
+            if (!a_set[tempParticle]) continue;
+            //Update heat
+            unsigned char tmpHeat = a_heat[tempParticle];
+            int heat = (int)tmpHeat;
+            if (hash%10 == 0) {
+                heatChange = (heat - heatAtmo)/16 + heatWiggle;
+            }
+            else {
+                heatChange = 0;
+            }
+            HASH_STREAM(hash, tempParticle & 0xff);
+            heat -= heatChange;
+            int heatClamp = heat > 255 ? 255 : heat;
+            int heatClamp2 = heatClamp < 0 ? 0 : heatClamp;
+            //If tempParticle is hotter than the atmosphere, we want to subtract temperature
+            //changeHeat(heat, -heatChange);
+            a_heat[tempParticle] = (unsigned char)heatClamp2;
+
+            int shouldResolveHeatChanges = updateSpecials(tempParticle);
+
+            //Resolve heat changes
+            if (shouldResolveHeatChanges)
+            {
+                if(heatClamp2 < a_element[tempParticle]->lowestTemp)
                 {
-                    if(rand() % ((3 - tempElement->state)*16)  != 0)
+                    struct Element* tempLowerElement = a_element[tempParticle]->lowerElement;
+                    if (tempLowerElement->inertia == INERTIA_UNMOVABLE)
                     {
-                        heatChange = 0;
-                    }
-                    else
-                    {
-                        heatChange = (*heat - cAtmosphere->heat)/16 + rand()%3 - 1;
-                    }
-                    //If tempParticle is hotter than the atmosphere, we want to subtract temperature
-                    changeHeat(heat, -heatChange);
-                }
-
-                int shouldResolveHeatChanges = updateSpecials(tempParticle);
-
-                //Resolve heat changes
-                if (shouldResolveHeatChanges)
-                {
-                    if(*heat < a_element[tempParticle]->lowestTemp)
-                    {
-                        struct Element* tempLowerElement = a_element[tempParticle]->lowerElement;
-                        if (tempLowerElement->inertia == INERTIA_UNMOVABLE)
-                        {
-                            //Don't go to more solid element if the particle is moving
-                            if (fabs(*tempX-tempOldX) < 0.5 && fabs(*tempY-tempOldY) < 0.5 &&
-                                *tempXVel < 0.5 && *tempYVel < 0.5)
-                            {
-                                if ( rand() % HEAT_CHANGE_PROB == 0 )
-                                {
-                                    setElement(tempParticle, tempLowerElement);
-                                }
-                            }
-                        }
-                        else
+                        //Don't go to more solid element if the particle is moving
+                        if (fabs(a_x[tempParticle]-a_oldX[tempParticle]) < 0.5 &&
+                            fabs(a_y[tempParticle]-a_oldY[tempParticle]) < 0.5)
                         {
                             setElement(tempParticle, tempLowerElement);
                         }
                     }
-                    else if(*heat > a_element[tempParticle]->highestTemp)
+                    else
                     {
-                        struct Element* tempHigherElement = a_element[tempParticle]->higherElement;
-                        if (tempHigherElement->inertia == INERTIA_UNMOVABLE)
-                        {
-                            //Don't go to more solid element if the particle is moving
-                            if (fabs(*tempX-tempOldX) < 0.5 && fabs(*tempY-tempOldY) < 0.5 &&
-                                *tempXVel < 0.5 && *tempYVel < 0.5)
-                            {
-                                if ( rand() % HEAT_CHANGE_PROB == 0 )
-                                {
-                                    setElement(tempParticle, tempHigherElement);
-                                }
-                            }
-                        }
-                        else
+                        setElement(tempParticle, tempLowerElement);
+                    }
+                }
+                else if(heatClamp2 > a_element[tempParticle]->highestTemp)
+                {
+                    struct Element* tempHigherElement = a_element[tempParticle]->higherElement;
+                    if (tempHigherElement->inertia == INERTIA_UNMOVABLE)
+                    {
+                        //Don't go to more solid element if the particle is moving
+                        if (fabs(a_x[tempParticle]-a_oldX[tempParticle]) < 0.5 &&
+                            fabs(a_y[tempParticle]-a_oldY[tempParticle]) < 0.5)
                         {
                             setElement(tempParticle, tempHigherElement);
                         }
+                    }
+                    else
+                    {
+                        setElement(tempParticle, tempHigherElement);
                     }
                 }
             }
@@ -947,7 +1094,7 @@ void startUpdateThread()
     if (shouldKillUpdateThread)
     {
         shouldKillUpdateThread = FALSE;
-        pthread_create(&updateThread, NULL, &updateThreadFunc, NULL);
+        //pthread_create(&updateThread, NULL, &updateThreadFunc, NULL);
     }
 }
 
@@ -957,6 +1104,6 @@ void killUpdateThread()
     if (!shouldKillUpdateThread)
     {
         shouldKillUpdateThread = TRUE;
-        pthread_join(updateThread, NULL);
+        //pthread_join(updateThread, NULL);
     }
 }
