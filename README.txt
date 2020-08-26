@@ -14,7 +14,7 @@ Installing
 5. Set IDKJAVA_KEYSTORE to point to the keystore file location, and
    IDKJAVA_KEYALIAS to the key alias within the keystore.
 6. If using Android Studio GUI to build the gradle project, then create
-   a gradle.properties file under TheElements-dev, with ndkdir=path/to/ndk
+   a local.properties file at the top level with ndk.dir=path/to/ndk
    to ensure that the gradle spawned under Android Studio can find the NDK.
 
 Updating

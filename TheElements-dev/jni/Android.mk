@@ -132,14 +132,7 @@ LOCAL_C_INCLUDES := \
     $(LOCAL_PATH)/google \
     $(JNI_H_INCLUDE)
 
-LOCAL_SHARED_LIBRARIES := \
-    libz libcutils libutils
 LOCAL_LDLIBS := -lz
-# stlport conflicts with the host stl library
-ifneq ($(TARGET_SIMULATOR),true)
-LOCAL_C_INCLUDES += external/stlport/stlport
-LOCAL_SHARED_LIBRARIES += libstlport
-endif
 
 LOCAL_CFLAGS := -DGOOGLE_PROTOBUF_NO_RTTI
 
@@ -173,26 +166,10 @@ endif
 # Print some build info
 $(warning $(APP_OPTIM) build for $(TARGET_ARCH_ABI), profiling: $(USE_PROFILING))
 
-LOCAL_CFLAGS := -DANDROID_NDK
+LOCAL_CFLAGS := -DANDROID_NDK -DGOOGLE_PROTOBUF_NO_RTTI
 LOCAL_LDLIBS +=  -llog -ldl -landroid -lEGL -lGLESv2
 ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
-endif
-
-KAMCORD = yes
-ifeq ($(KAMCORD),yes)
-    LOCAL_CFLAGS += -DUSE_KAMCORD
-    LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
-    # This is warned against, but with LOCAL_SHARED_LIBRARIES I cannot get ndk-build to find the
-    # actual shared library for linking...
-    LOCAL_LDLIBS += -L$(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
-    LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
-endif
-
-# stlport conflicts with the host stl library
-ifneq ($(TARGET_SIMULATOR),true)
-LOCAL_C_INCLUDES += external/stlport/stlport
-LOCAL_SHARED_LIBRARIES += libstlport
 endif
 
 # optimization level = 3

@@ -1,30 +1,28 @@
 apply plugin: 'com.android.application'
 
 task buildProto(type: Exec) {
+//    println 'setting ANDROID_NDK_HOME='
+//    println android.ndkDirectory
+//    environment ANDROID_NDK_HOME:android.ndkDirectory
     commandLine './buildscript.sh'
-    if (project.ndkdir) {
-        println 'ndkdir set.'
-        println ndkdir
-        environment ANDROID_NDK_HOME:ndkdir
-    }
-    else {
-        println 'WARNING: ndkdir not set, ensure ANDROID_NDK_HOME is set in the environment.'
-    }
-    doLast {
-      println './buildscript.sh complete.'
-    }
+    println './buildscript.sh complete.'
 }
-assembleDebug.dependsOn(buildProto)
-assembleRelease.dependsOn(buildProto)
 
-task keystoreInfo << {
-    def console = System.console()
-    if (console == null)
-        throw new IllegalStateException('no console available, use --no-daemon flag')
+afterEvaluate {
+    assembleDebug.dependsOn(buildProto)
+    assembleRelease.dependsOn(buildProto)
+}
 
-    def pass = new String(console.readPassword('\n\nEnter keystore password: '))
-    android.signingConfigs.release.storePassword = pass
-    android.signingConfigs.release.keyPassword = pass
+task keystoreInfo {
+    doLast {
+        def console = System.console()
+        if (console == null)
+            throw new IllegalStateException('no console available, use --no-daemon flag')
+
+        def pass = new String(console.readPassword('\n\nEnter keystore password: '))
+        android.signingConfigs.release.storePassword = pass
+        android.signingConfigs.release.keyPassword = pass
+    }
 }
 
 tasks.whenTaskAdded { task ->
@@ -33,25 +31,30 @@ tasks.whenTaskAdded { task ->
 }
 
 dependencies {
-    compile fileTree(include: '*.jar', dir: 'libs')
-    compile project(':android-color-picker:AmbilWarna')
-    compile project(':kamcord-android-sdk:kamcord')
-    compile project(':Android-WVersionManager:library')
-    compile project(':android-ColorPickerPreference')
+    implementation fileTree(include: '*.jar', dir: 'libs')
+    implementation project(':android-color-picker:AmbilWarna')
+    implementation project(':Android-WVersionManager:library')
+    implementation project(':android-ColorPickerPreference')
 }
 
 android {
-    buildToolsVersion "22.0.1"
+    buildToolsVersion = '29.0.3'
     defaultConfig {
         minSdkVersion 10
-        compileSdkVersion 22
-        targetSdkVersion 22
+        compileSdkVersion 29
+        targetSdkVersion 29
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path 'jni/Android.mk'
+        }
     }
 
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
-	                java.srcDirs = ['src']
+            java.srcDirs = ['src']
             resources.srcDirs = ['src']
             aidl.srcDirs = ['src']
             renderscript.srcDirs = ['src']
@@ -61,7 +64,7 @@ android {
         }
 
         // Move the tests to tests/java, tests/res, etc...
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         // Move the build types to build-types/<type>
         // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...

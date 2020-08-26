@@ -135,9 +135,7 @@ JNIEXPORT char JNICALL
 Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz, jbyteArray saveLoc)
 {
 #ifdef USE_PROFILING
-    // Stop profiling
-    // this saves to /sdcard/gmon.out
-    moncleanup();
+    // TODO
 #endif
 
     jsize len = env->GetArrayLength(saveLoc);
@@ -227,7 +225,7 @@ Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
 
     // Profiling
 #ifdef USE_PROFILING
-    monstartup("libthelements.so");
+    // TODO
 #endif
 }
 JNIEXPORT void JNICALL

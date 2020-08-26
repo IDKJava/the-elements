@@ -64,7 +64,6 @@ import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.idkjava.thelements.proto.Messages.CustomElement;
-import com.kamcord.android.Kamcord;
 
 public class MainActivity extends ReportingActivity implements DialogInterface.OnCancelListener {
     // Constants for dialogue ids
@@ -280,9 +279,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
-        // Init kamcord recording framework
-        Kamcord.initKeyAndSecret(APIKeys.kamcordAPIKey, APIKeys.kamcordAPISecret, "TheElements");
-        Kamcord.initActivity(this);
         // Set Sensor + Manager
         myManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         accSensor = myManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -668,41 +664,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
             return builder.create();
         }
-        else if (id == RECORD_DIALOG) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.record_button_text);
-            builder.setOnCancelListener(this);
-
-            mRecordAdapter = new IconListAdapter(this, recordList);
-            builder.setAdapter(mRecordAdapter, new OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    IconListItem item = recordList.get(which);
-                    switch (item.nameRes) {
-                        case R.string.start_recording:
-                            Kamcord.startRecording();
-                            item.nameRes = R.string.stop_recording;
-                            item.iconRes = R.drawable.stop_icon;
-                            mRecordAdapter.notifyDataSetChanged();
-                            break;
-                        case R.string.stop_recording:
-                            Kamcord.stopRecording();
-                            item.nameRes = R.string.start_recording;
-                            item.iconRes = R.drawable.record_icon;
-                            mRecordAdapter.notifyDataSetChanged();
-                            Kamcord.showView();
-                            break;
-                        case R.string.watch_videos:
-                            Kamcord.showWatchView();
-                            break;
-                        default:
-                            throw new RuntimeException("Unsupported record operation.");
-                    }
-                }
-            });
-
-            return builder.create();
-        }
         else if (id == WORLD_DIALOG) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.select_world);
@@ -1033,13 +994,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     }
 
     public static void setPlaying(boolean playState) {
-        if (Kamcord.isPaused() || Kamcord.isRecording()) {
-            if (playState) {
-                Kamcord.resumeRecording();
-            } else {
-                Kamcord.pauseRecording();
-            }
-        }
         menu_bar.setPlayState(playState);
         setPlayState(playState);
     }
