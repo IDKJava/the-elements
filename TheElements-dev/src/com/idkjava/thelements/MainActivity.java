@@ -59,7 +59,6 @@ import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.game.MenuBar;
 import com.idkjava.thelements.game.SandView;
 import com.idkjava.thelements.game.SaveManager;
-import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;

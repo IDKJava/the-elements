@@ -1,3 +1,4 @@
+include ':flurryAnalytics_12.5.0'
 include ':Android-WVersionManager:library', ':android-ColorPickerPreference'
 include ':android-color-picker:AmbilWarna'
 include ':TheElements-dev'

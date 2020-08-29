@@ -7,7 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import com.flurry.android.FlurryAgent;
+import com.flurry.android.FlurryPerformance;
 import com.idkjava.thelements.game.FileManager;
+import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.money.ProductManager;
 
 import java.io.IOException;
@@ -25,6 +28,14 @@ public class ElementsApplication extends Application {
 
         // Find files root dir
         FileManager.ROOT_DIR = getFilesDir().getAbsolutePath() + "/";
+
+        new FlurryAgent.Builder()
+                .withDataSaleOptOut(false) //CCPA - the default value is false
+                .withCaptureUncaughtExceptions(true)
+                .withIncludeBackgroundSessionsInMetrics(true)
+                .withLogLevel(Log.VERBOSE)
+                .withPerformanceMetrics(FlurryPerformance.ALL)
+                .build(this, APIKeys.flurryAPIKey);
 
         // Load textures
         AssetManager am = getAssets();
