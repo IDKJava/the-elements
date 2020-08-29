@@ -184,12 +184,7 @@ public class SplashActivity extends ReportingActivity
     
     static
     {
-        System.loadLibrary("stlport_shared");
-        try {
-            System.loadLibrary("kamcord");
-        } catch (UnsatisfiedLinkError e) {
-            Log.d("TheElements", "Kamcord not supported");
-        }
+        System.loadLibrary("c++_shared");
         System.loadLibrary("protobuf");
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }

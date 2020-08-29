@@ -62,16 +62,6 @@
         <View android:layout_height="fill_parent"
             android:layout_width="1px"
             android:background="#90909090"/>
-
-        <Button
-            android:id="@+id/record_button"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="2"
-            android:textColor="#f3f3f3"
-            android:text="@string/record_button_text"/>
-
     </com.idkjava.thelements.game.MenuBar>
 
     <!-- Main viewing section -->

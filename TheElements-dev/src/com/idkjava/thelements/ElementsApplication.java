@@ -126,12 +126,7 @@ public class ElementsApplication extends Application {
     public static native void setNGTex(int w, int h, byte[] pixels);
 
     static {
-        System.loadLibrary("stlport_shared");
-        try {
-            System.loadLibrary("kamcord");
-        } catch (UnsatisfiedLinkError e) {
-            Log.d("TheElements", "Kamcord not supported");
-        }
+        System.loadLibrary("c++_shared");
         System.loadLibrary("protobuf");
         System.loadLibrary("thelements");
     }

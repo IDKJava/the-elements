@@ -98,4 +98,5 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    ndkVersion '21.0.6113669'
 }

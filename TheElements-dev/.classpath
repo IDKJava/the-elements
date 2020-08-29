@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="libs/libGoogleAnalyticsServices.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry kind="lib" path="/home/gkanwar/the-elements/kamcord-android-sdk/kamcord/libs/kamcord.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

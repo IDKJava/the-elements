@@ -16,8 +16,6 @@
 #include "server.h"
 //Include the pthread functions
 #include <pthread.h>
-//Include KamCord stuff
-#include <Kamcord-C-Interface.h>
 
 /*
  * STRUCTS

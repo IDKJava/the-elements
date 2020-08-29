@@ -11,7 +11,6 @@ import android.util.FloatMath;
 import android.view.MotionEvent;
 
 import com.idkjava.thelements.MainActivity;
-import com.kamcord.android.Kamcord;
 
 public class SandView extends GLSurfaceView
 {
@@ -236,7 +235,7 @@ public class SandView extends GLSurfaceView
       // Get the distance when the second pointer touch
       distx = event.getX(0) - event.getX(1);
       disty = event.getY(0) - event.getY(1);
-      m_dist0 = FloatMath.sqrt(distx * distx + disty * disty);
+      m_dist0 = (float) Math.sqrt(distx * distx + disty * disty);
       break;
     case MotionEvent.ACTION_MOVE:
       if (mHandState == HandState.PAN) {
@@ -248,7 +247,7 @@ public class SandView extends GLSurfaceView
         // Get the current distance
         distx = event.getX(0) - event.getX(1);
         disty = event.getY(0) - event.getY(1);
-        float distCurrent = FloatMath.sqrt(distx * distx + disty * disty);
+        float distCurrent = (float) Math.sqrt(distx * distx + disty * disty);
         setPinchScale(m_dist0 / distCurrent);
       }
       break;
@@ -301,7 +300,7 @@ public class SandView extends GLSurfaceView
 
   static
   {
-      System.loadLibrary("stlport_shared");
+      System.loadLibrary("c++_shared");
       System.loadLibrary("protobuf");
       System.loadLibrary("thelements");
   }
@@ -328,9 +327,7 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 
 	public void onDrawFrame(GL10 gl)
 	{
-      Kamcord.beginDraw();
       nativeRender();
-      Kamcord.endDraw();
 	}
 
 	//@formatter:off
@@ -342,7 +339,7 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 	static
 	{
 	    
-        System.loadLibrary("stlport_shared");
+        System.loadLibrary("c++_shared");
 	    System.loadLibrary("protobuf");
 		System.loadLibrary("thelements");
 	}

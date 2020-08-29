@@ -53,7 +53,7 @@ public class Preferences
 
 	static
 	{
-        System.loadLibrary("stlport_shared");
+        System.loadLibrary("c++_shared");
 	    System.loadLibrary("protobuf");
 		System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
 	}

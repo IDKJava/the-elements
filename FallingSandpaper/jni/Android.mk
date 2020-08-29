@@ -179,14 +179,6 @@ ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
 
-KAMCORD = yes
-ifeq ($(KAMCORD),yes)
-    LOCAL_CFLAGS += -DUSE_KAMCORD
-    LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
-    LOCAL_SHARED_LIBRARIES := libkamcord
-    LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
-    LOCAL_LD_LIBS += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)/ -lkamcord
-endif
 
 # stlport conflicts with the host stl library
 ifneq ($(TARGET_SIMULATOR),true)

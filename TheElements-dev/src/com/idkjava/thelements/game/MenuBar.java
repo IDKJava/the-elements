@@ -7,30 +7,23 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
-import com.kamcord.android.Kamcord;
 
 public class MenuBar extends LinearLayout {
 
     private Activity mAct;
-    private SandView m_sandView = null;
 
     private ImageButton mPlayPauseButton;
     private View mToolButton;
     private ImageView mToolButtonIcon;
     private Button mUtilButton;
-    private Button mRecordButton;
 
     // Constructor
     public MenuBar(Context context, AttributeSet attrs) {
@@ -38,10 +31,6 @@ public class MenuBar extends LinearLayout {
     }
 
     public void setActivity(Activity act) { mAct = act; }
-
-    public void setSandView(SandView sandView) {
-        m_sandView = sandView;
-    }
 
     public void setToolIcon(int toolIcon) {
         mToolButtonIcon.setImageResource(toolIcon);
@@ -65,7 +54,6 @@ public class MenuBar extends LinearLayout {
         mToolButton = findViewById(R.id.tool_button);
         mToolButtonIcon = (ImageView) findViewById(R.id.tool_button_icon);
         mUtilButton = (Button) findViewById(R.id.util_button);
-        mRecordButton = (Button) findViewById(R.id.record_button);
 
         // Set up the OnClickListener for the play/pause button
         mPlayPauseButton.setOnClickListener(new OnClickListener() {
@@ -102,11 +90,5 @@ public class MenuBar extends LinearLayout {
             }
         });
 
-        mRecordButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mAct.showDialog(MainActivity.RECORD_DIALOG);
-            }
-        });
     }
 }

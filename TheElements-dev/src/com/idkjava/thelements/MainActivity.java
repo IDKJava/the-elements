@@ -73,7 +73,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private static final int RATE_PROMPT = 4;
     public static final int TOOL_PICKER = 5;
     public static final int UTIL_DIALOG = 6;
-    public static final int RECORD_DIALOG = 7;
     public static final int WORLD_DIALOG = 8;
 
     // Constants for worlds (MUST match macros in native lib)
@@ -181,10 +180,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.load, R.drawable.load),
             new IconListItem(R.string.trails_on, R.drawable.fade_icon)
     ));
-    static ArrayList<IconListItem> recordList = new ArrayList<IconListItem>(Arrays.asList(
-            new IconListItem(R.string.start_recording, R.drawable.record_icon),
-            new IconListItem(R.string.watch_videos, R.drawable.kamcord_view_button)
-    ));
+
     // TODO: Fix UI for world selection
     static ArrayList<IconListItem> worldList = new ArrayList<IconListItem>(Arrays.asList(
             new IconListItem(R.string.earth_world, R.drawable.earth_icon_button),
@@ -205,7 +201,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     private ElementAdapter mElementAdapter;
     private IconListAdapter mToolAdapter;
     private IconListAdapter mUtilAdapter;
-    private IconListAdapter mRecordAdapter;
     private IconListAdapter mWorldAdapter;
 
     public static String last_state_loaded = null;
@@ -862,8 +857,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         sand_view = (SandView) findViewById(R.id.sand_view);
         control = (Control) findViewById(R.id.control);
 
-        menu_bar.setSandView(sand_view);
-
         // Set the screen state for sand_view now that it's defined
         Preferences.loadScreenState();
     }
@@ -1043,12 +1036,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     // @formatter:on
 
     static {
-        System.loadLibrary("stlport_shared");
-        try {
-            System.loadLibrary("kamcord");
-        } catch (UnsatisfiedLinkError e) {
-            Log.d("TheElements", "Kamcord not supported");
-        }
+        System.loadLibrary("c++_shared");
         System.loadLibrary("protobuf");
         System.loadLibrary("thelements");
     }
