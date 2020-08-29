@@ -1,11 +1,11 @@
 package com.idkjava.thelements;
 
-import android.app.Activity;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
 
-public class ReportingActivity extends Activity
+public class ReportingActivity extends AppCompatActivity
 {
 	@Override
 	public void onStart()

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -14,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,7 +28,6 @@ import android.hardware.SensorManager;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
@@ -43,6 +44,11 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
@@ -875,25 +881,50 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     static final int REQUEST_TAKE_PHOTO = 1;
     private static String mImageLoc;
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
-            File photoFile = null;
-            try {
-                photoFile = createTemporaryFile("element_photo", ".jpg");
-            } catch (Exception ex) {
-                // Error occurred while creating the File
-                Log.e("MainActivity", "error creating photo file", ex);
-            }
 
-            // Continue only if the File was successfully created
-            if (photoFile != null) {
-                mImageLoc = photoFile.getAbsolutePath();
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                        Uri.fromFile(photoFile));
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    private ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    dispatchTakePictureIntent();
+                } else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(R.string.permission_error);
+                    builder.show();
+                }
+            });
+
+    private void dispatchTakePictureIntent() {
+
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.CAMERA) !=
+                PackageManager.PERMISSION_GRANTED) {
+                        // You can directly ask for the permission.
+            // The registered ActivityResultCallback gets the result of this request.
+            requestPermissionLauncher.launch(
+                    Manifest.permission.CAMERA);
+        } else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // Ensure that there's a camera activity to handle the intent
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                // Create the File where the photo should go
+                File photoFile = null;
+                try {
+                    photoFile = createTemporaryFile("element_photo", ".jpg");
+                } catch (Exception ex) {
+                    // Error occurred while creating the File
+                    Log.e("MainActivity", "error creating photo file", ex);
+                }
+
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    mImageLoc = photoFile.getAbsolutePath();
+                    Uri photoURI = FileProvider.getUriForFile(this,
+                            "com.idkjava.thelements.fileprovider",
+                            photoFile);
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            photoURI);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
             }
         }
     }
@@ -908,7 +939,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
     private File createTemporaryFile(String part, String ext) throws Exception
     {
-        File tempDir = Environment.getExternalStorageDirectory();
+        File tempDir = getExternalFilesDir(null);
         tempDir = new File(tempDir.getAbsolutePath()+"/.temp/");
         if(!tempDir.exists()) {
             tempDir.mkdir();
