@@ -15,7 +15,7 @@
  * CONSTANTS
  */
 #define MAX_POINTS 300000
-#define NUM_BASE_ELEMENTS 32
+#define NUM_BASE_ELEMENTS 33
 #define MAX_SPECIALS 6
 #define MAX_ELEMENTS 256
 
@@ -68,6 +68,7 @@
 #define INSECT_KILLER_ELEMENT 29
 #define ELECTRICITY_ELEMENT 30
 #define METAL_ELEMENT 31
+#define PORTAL_ELEMENT 32
 
 #define GENERATOR_SPAWN_PROB 200
 
@@ -99,6 +100,7 @@
 #define SPECIAL_CONDUCTIVE 11
 #define SPECIAL_CONDUCTABLE 12
 #define SPECIAL_TRAIL 13
+#define SPECIAL_PORTAL 14
 
 #define ELECTRIC_NO_DIR 0 // 0000
 #define ELECTRIC_X1     1 // 0001
@@ -122,6 +124,11 @@
 #define CURL_HOLE 2
 #define NULL_GRAVITY 3
 #define MAX_SPACE_OBJS 100
+
+
+// Portal properties
+#define MAX_PORTALS 10
+#define NOT_PAIRED -1
 
 // Brush props
 #define BRUSH_NORMAL 0

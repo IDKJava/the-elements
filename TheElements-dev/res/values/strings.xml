@@ -127,4 +127,7 @@
     <string name="upgrading_save_files">Upgrading save files...</string>
     <string name="upgrading">Upgrading </string>
     <string name="permission_error">Please enable access to the camera, or the camera tool will not work.</string>
+
+    
+    <string name="portal">Add Portal</string>
 </resources>

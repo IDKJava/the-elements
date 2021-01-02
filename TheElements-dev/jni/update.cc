@@ -10,11 +10,12 @@
 
 #include "specials.h"
 #include "gravity.h"
+#include "portals.h"
 
 // Per-file logging
 #ifndef NDEBUG
 //Debug
-#define LOGGING 0
+#define LOGGING 1
 #else
 //Release
 #define LOGGING 0
@@ -80,12 +81,8 @@ void drawCircle(int mx, int my)
                         }
                     }
                     //Special Eraser case
-                    else if (cElement->index == ERASER_ELEMENT)
-                    {
-                        if (allCoords[getIndex((int) (dx + mx), (int) (dy + my))] != -1)
-                        {
-                            deletePoint(allCoords[getIndex(mx + dx, my + dy)]);
-                        }
+                    else if (cElement->index == ERASER_ELEMENT) {
+                        erasePoint(allCoords[getIndex(mx + dx, my + dy)]);
                     }
                 }
             }

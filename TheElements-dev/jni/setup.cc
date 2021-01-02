@@ -73,6 +73,10 @@ void gameSetup()
             gravMag[2*(j*gfWidth+i)+1] = 0.0;
         }
     }
+
+    // clear all portals
+    nextPortal = 0;
+    memset(portals, 0, sizeof(Portal) * MAX_PORTALS);
 }
 
 //Set up all the variable sized arrays

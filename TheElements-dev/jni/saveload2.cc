@@ -206,6 +206,21 @@ bool saveStateLogic2(ofstream& out)
         }
     }
 
+    for (int i = 0; i < MAX_PORTALS;++i) {
+        if (portals[i].isActive) {
+            PortalPb *pObj = save.add_portal();
+            Portal *p = &portals[i];
+            pObj->set_x(p->x);
+            pObj->set_y(p->y);
+            pObj->set_ex(p->ex);
+            pObj->set_ey(p->ey);
+            pObj->set_width(p->width);
+            pObj->set_index(i);
+            pObj->set_haspair(p->hasPair);
+            pObj->set_pairidx(p->pairIdx);
+        }
+    }
+
     // Write the file itself
     return save.SerializeToOstream(&out);
 }
@@ -390,6 +405,18 @@ bool loadStateLogic2(ifstream& in)
                 continue;
             }
         }
+    }
+
+    for (int i = 0; i < save.portal_size(); i++) {
+        const PortalPb& portalPb = save.portal(i);
+        Portal* portal = &portals[portalPb.index()];
+        portal->x = portalPb.x();
+        portal->y = portalPb.y();
+        portal->ex = portalPb.ex();
+        portal->ey = portalPb.ey();
+        portal->width = portalPb.width();
+        portal->hasPair = portalPb.haspair();
+        portal->pairIdx = portalPb.pairidx();
     }
 
     return true;

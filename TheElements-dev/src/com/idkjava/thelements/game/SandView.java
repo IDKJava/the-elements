@@ -29,7 +29,8 @@ public class SandView extends GLSurfaceView
         SLINGSHOT_TOOL,
         SPRAY_TOOL,
         TRIANGLE_TOOL,
-        DASHED_LINE_TOOL
+        DASHED_LINE_TOOL,
+        PORTAL_TOOL
     }
     private Tool mTool = Tool.BRUSH_TOOL;
 
@@ -80,6 +81,7 @@ public class SandView extends GLSurfaceView
             case LINE_TOOL:
             case DASHED_LINE_TOOL:
             case SLINGSHOT_TOOL:
+            case PORTAL_TOOL:
                 setDragProps(RT_LINE);
                 break;
         }
@@ -123,6 +125,7 @@ public class SandView extends GLSurfaceView
           case LINE_TOOL:
           case SLINGSHOT_TOOL:
           case DASHED_LINE_TOOL:
+          case PORTAL_TOOL:
               return handleRectTouch(event);
           default:
               throw new RuntimeException("Unknown tool selected!");
@@ -206,6 +209,9 @@ public class SandView extends GLSurfaceView
                     break;
                 case DASHED_LINE_TOOL:
                     drawLineDashed(mRectStartX, mRectStartY, ex, ey);
+                    break;
+                case PORTAL_TOOL:
+                    addPortal(mRectStartX, mRectStartY, ex, ey);
                     break;
                 default:
                     throw new RuntimeException("Invalid handler for tool: " + mTool);
@@ -292,6 +298,7 @@ public class SandView extends GLSurfaceView
     private static native void drawLine(int sx, int sy, int ex, int ey);
     private static native void drawLineDashed(int sx, int sy, int ex, int ey);
     private static native void drawSlingshot(int sx, int sy, int ex, int ey);
+    private static native void addPortal(int sx, int sy, int ex, int ey);
   private static native void removeGravObject(int x, int y);
   private static native void panView(int dx, int dy);
   private static native void setPinchScale(float scale);

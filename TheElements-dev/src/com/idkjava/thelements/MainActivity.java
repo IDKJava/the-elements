@@ -87,7 +87,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
     // Constants for elements
     public static final char ERASER_ELEMENT = 2;
     public static final char NORMAL_ELEMENT = 3;
-    public static final int NUM_BASE_ELEMENTS = 32;
+    public static final int NUM_BASE_ELEMENTS = 33;
+    public static final int PORTAL_ELEMENT = 32;
 
     // Constants for intents
     public static final char SAVE_STATE_ACTIVITY = 0;
@@ -126,6 +127,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.slingshot, R.drawable.slingshot_tool),
             new IconListItem(R.string.spray, R.drawable.spray_tool)
     ));
+    static ArrayList<IconListItem> portalToolList = new ArrayList<IconListItem>(Arrays.asList(
+            new IconListItem(R.string.portal, R.drawable.line_tool)
+    ));
+
+
     private ArrayList<IconListItem> getLockedToolPackList() {
         // Deep copy the list, so we can change the icons and locked status
         ArrayList<IconListItem> locked = new ArrayList<IconListItem>();
@@ -171,6 +177,8 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         else {
             toolList.addAll(getLockedToolPackList());
         }
+
+        toolList.addAll(portalToolList);
 
         if (mToolAdapter != null) {
             mToolAdapter.clear();
@@ -377,7 +385,11 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
 
         // Add the base elements
         for (int i = 0; i < baseElementsList.length; i++) {
-            elementsList.add(baseElementsList[i].toString());
+            // Portal is an element in the backend but shouldn't show up in element list
+            // since we only create it with the portal tool
+            if (i + NORMAL_ELEMENT != PORTAL_ELEMENT) {
+                elementsList.add(baseElementsList[i].toString());
+            }
         }
 
         // Load the custom elements list
@@ -499,6 +511,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             builder.setOnCancelListener(this);
             builder.setAdapter(mElementAdapter, new OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
+
+                    int elementIndex = (item + NORMAL_ELEMENT);
+                    if (elementIndex >= PORTAL_ELEMENT) {
+                        // The portal element does not show up in the picker
+                        elementIndex += 1;
+                    }
                     setElement((char) (item + NORMAL_ELEMENT));
                     // Set tool to brush if not currently a draw tool
                     if (!sand_view.isDrawTool()) {
@@ -614,9 +632,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                             sand_view.setTool(SandView.Tool.DASHED_LINE_TOOL);
                             break;
                         }
+                        case R.string.portal: {
+                            sand_view.setTool(SandView.Tool.PORTAL_TOOL);
+                            break;
+                        }
 
                         default : {
-                            throw new RuntimeException("Unknown tool selected.");
+                            throw new RuntimeException("Unknown tool selected: " + getString(item.nameRes));
                         }
                     }
                 }

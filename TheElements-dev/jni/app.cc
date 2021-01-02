@@ -61,6 +61,8 @@ float* gravMag = NULL;
 int numSpaceObjs = 0;
 SpaceObj spaceObjs[MAX_SPACE_OBJS];
 
+Portal portals[MAX_PORTALS];
+
 short brushLocX = -1, brushLocY = -1, brushNextLocX = -1, brushNextLocY = -1;
 bool brushOn = false;
 int brushProps = BRUSH_NORMAL;
@@ -114,6 +116,8 @@ char *ngTexPixels;
 int renderOverlayType = RT_RECT;
 
 bool paidCameraOn = false;
+
+int nextPortal = 0;
 
 /*Network stuff taken out for now
 //Buffer building variables

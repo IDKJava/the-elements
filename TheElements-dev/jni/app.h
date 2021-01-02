@@ -66,6 +66,16 @@
         int ex, ey; // Only used for null gravity
     };
 
+    struct Portal
+    {
+        float x, y;
+        float ex, ey;
+        bool isActive;  // Whether this portal is active
+        bool hasPair; // Whether this portal is paired with another
+        int pairIdx;  // The portal index this one is paired with
+        float width;  // The width that we drew the portal with
+    };
+
 /*
  * VARIABLES
  */
@@ -141,6 +151,10 @@
     extern SpaceObj spaceObjs[];
 
     extern int randOffset;
+
+// Array of all portals
+    extern int nextPortal;
+    extern Portal portals[];
 
 //Array for bitmap drawing
     extern unsigned char* colors;
@@ -227,6 +241,12 @@ inline int getIndex(int x, int y)
 {
     return y*workWidth + x;
 }
+inline int inBounds(int x, int y)
+{
+    return (x >= 0 && x < workWidth && y >= 0 && y < workHeight);
+
+}
+
 //Used specifically for colors
 inline int getColorIndex( int x, int y )
 {

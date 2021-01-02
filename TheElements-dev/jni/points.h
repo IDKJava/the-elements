@@ -16,7 +16,11 @@
 
 // Create a point and return the index of the created point, or -1
 int createPoint(int xCoord, int yCoord, struct Element* element);
+// Deletes the point given.
 void deletePoint(int particle);
+// Erases the point. Will call into deletePoint, but also handles portals.
+void erasePoint(int particle);
+
 void unSetPoint(int particle);
 void setElement(int particle, struct Element* newElement);
 void setBitmapColor(int xCoord, int yCoord, struct Element* element);

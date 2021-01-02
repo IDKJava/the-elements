@@ -36,6 +36,9 @@
 //Include camera parsing functions
 #include "camera.h"
 
+
+#include "portals.h"
+
 //Include pthread functions
 #include <pthread.h>
 
@@ -546,7 +549,7 @@ Java_com_idkjava_thelements_game_SandView_drawCircle(JNIEnv* env, jobject thiz,
 
 JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_game_SandView_drawLine(JNIEnv* env, jobject thiz,
-    jint startX, jint startY, jint endX, jint endY) {
+                                                   jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
     convertMouseCoords(endX, endY, &ex, &ey);
@@ -734,6 +737,17 @@ JNIEXPORT void JNICALL
 Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, float yGravityIn)
 {
     yGravity = yGravityIn;
+}
+
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_addPortal(JNIEnv* env, jobject thiz,
+                                                   jint startX, jint startY, jint endX, jint endY) {
+    float sx, sy, ex, ey;
+    convertMouseCoords(startX, startY, &sx, &sy);
+    convertMouseCoords(endX, endY, &ex, &ey);
+    pthread_mutex_lock(&update_mutex);
+    makePortal(sx,sy,ex,ey);
+    pthread_mutex_unlock(&update_mutex);
 }
 
 JNIEXPORT void JNICALL

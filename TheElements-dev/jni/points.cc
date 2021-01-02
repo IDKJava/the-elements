@@ -7,6 +7,7 @@
  */
 
 #include "points.h"
+#include "portals.h"
 
 #ifndef NDEBUG // Debug
 #define LOGGING 1
@@ -86,6 +87,20 @@ void deletePoint(int particle)
     avail[loq] = particle;
     ++loq;
 }
+
+
+void erasePoint(int particle) {
+    if (particle != -1)
+    {
+        if (hasSpecial(particle, SPECIAL_PORTAL)) {
+            deletePortal(getParticleSpecialVal(particle, SPECIAL_PORTAL));
+        } else {
+            deletePoint(particle);
+        }
+    }
+}
+
+
 void unSetPoint(int particle)
 {
     //Unset the particle

@@ -8,11 +8,13 @@
 #include "macros.h"
 #include "points.h"
 #include "gravity.h"
+#include "collide.h"
+#include "portals.h"
 
 #include <cmath>
 
 #ifndef NDEBUG // Debug
-#define LOGGING 0
+#define LOGGING 1
 #else // Release
 #define LOGGING 0
 #endif
@@ -38,6 +40,8 @@ bool collisionSpecials(int firstParticle, int secondParticle)
         setParticleSpecialVal(secondParticle, SPECIAL_CONDUCTIVE, ELECTRIC_NO_DIR);
 
         return TRUE;
+    } else if (specialPortal(firstParticle, secondParticle)) {
+        return TRUE;
     }
     // Fluids flow around obstacles
     else if (a_element[firstParticle]->state > 0) {
@@ -46,6 +50,7 @@ bool collisionSpecials(int firstParticle, int secondParticle)
 
     return FALSE;
 }
+
 
 void specialSpawn(int particle)
 {
