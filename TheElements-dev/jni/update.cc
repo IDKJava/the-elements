@@ -99,148 +99,48 @@ void drawCircle(int mx, int my)
 // startx, starty, endx, endy are all assumed to be within screen boundaries
 void drawCircleyLine(int startx, int starty, int endx, int endy)
 {
-    int x, y;
     // First, draw a circle at the start and end
     drawCircle(startx, starty);
     drawCircle(endx, endy);
+    int x, y;
 
-    // Now iterate over points in the relevant rectangular space, and create points in
-    // unoccupied locations that fall in the right area.
-    if (startx == endx) // Handle vertical case specially, since we can't compute slope
+    // We transform the point into the vector space parallel to the line, with perpendicular
+    // vector magnitude equal to the brush size, and then check that we're within bounds
+    float l_x = startx - endx;
+    float l_y = starty - endy;
+    float norm = sqrt(l_x*l_x + l_y * l_y);
+
+    float perp_x = -l_y * (brushSize/norm);
+    float perp_y = l_x * (brushSize/norm);
+
+    float det = (l_x * perp_y) - (l_y * perp_x);
+
+    int left = max(0, min(startx, endx) - brushSize);
+    int right = min(workWidth - 1, max(startx, endx) + brushSize);
+    int top = max(0, min(starty, endy) - brushSize);
+    int bottom = min(workHeight - 1, max(starty, endy) + brushSize);
+
+    // We check every point in a rectangle of possible area where the points could be
+    // This could be faster but seems fine for drawing
+    for (y = bottom; y >= top; --y)
     {
-        int left = startx - brushSize;
-        int right = startx + brushSize;
-        int top = starty > endy ? endy : starty;
-        int bottom = starty > endy ? starty : endy;
-
-        // Boundary checks (only left and right needed)
-        if (left < 0) left = 0;
-        if (right >= workWidth) right = workWidth-1;
-        if (bottom >= workHeight) bottom = workHeight-1;
-        if (top < 0 ) top = 0;
-
-        for (y = bottom; y >= top; --y)
+        for (x = left; x <= right; ++x)
         {
-            for (x = left; x <= right; ++x)
-            {
-                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
-                {
+            float adjX = startx - x;
+            float adjY = starty - y;
+
+            // Coordinates in the vector space of our line
+            float a_c_x = ((perp_y * adjX) - (perp_x * adjY))/det;
+            float a_c_y = (-(l_y * adjX) + (l_x * adjY))/det;
+
+            if (a_c_x >= 0 && a_c_y >= -1 && a_c_x <= 1 && a_c_y <= 1) {
+                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT) {
                     int pt = createPoint(x, y, cElement);
                     if (pt >= 0) {
                         brushSetPtVel(pt);
                     }
-                }
-                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
-                {
-                    deletePoint(allCoords[getIndex(x, y)]);
-                }
-            }
-        }
-    }
-    else if (starty == endy) // Handle horizontal case specially
-    {
-        int left = startx > endx ? endx : startx;
-        int right = startx > endx ? startx : endx;
-        int top = starty - brushSize;
-        int bottom = starty + brushSize;
-
-        // Boundary checks (only top and bottom needed)
-        if (top < 0) top = 0;
-        if (bottom >= workHeight) bottom = workHeight-1;
-
-        for (y = bottom; y >= top; --y)
-        {
-            for (x = left; x <= right; ++x)
-            {
-                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
-                {
-                    int pt = createPoint(x, y, cElement);
-                    if (pt >= 0) {
-                        brushSetPtVel(pt);
-                    }
-                }
-                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
-                {
-                    deletePoint(allCoords[getIndex(x, y)]);
-                }
-            }
-        }
-    }
-    else
-    {
-        double slope = (endy - starty) / (double)(endx - startx);
-        double inv_slope = -1/slope;
-
-        double dx = brushSize / sqrt(1 + inv_slope*inv_slope);
-        double dy = dx * inv_slope;
-
-        // We need three points to constrain the rectangle
-        int start_top_x, start_top_y, start_bottom_x, start_bottom_y, end_bottom_x, end_bottom_y;
-
-        if (dy > 0)
-        {
-            start_top_x = startx + dx;
-            start_top_y = starty + dy;
-            start_bottom_x = startx - dx;
-            start_bottom_y = starty - dy;
-            end_bottom_x = endx - dx;
-            end_bottom_y = endy - dy;
-        }
-        else
-        {
-            start_top_x = startx - dx;
-            start_top_y = starty - dy;
-            start_bottom_x = startx + dx;
-            start_bottom_y = starty + dy;
-            end_bottom_x = endx + dx;
-            end_bottom_y = endy + dy;
-        }
-
-        int top = starty > endy ? endy - brushSize : starty - brushSize;
-        int bottom = starty > endy ? starty + brushSize : endy + brushSize;
-        int left = startx > endx ? endx - brushSize: startx - brushSize;
-        int right = startx > endx ? startx + brushSize : endx + brushSize;
-
-        // Boundary checks
-        if (top < 0) top = 0;
-        if (bottom >= workHeight) bottom = workHeight-1;
-        if (left < 0) left = 0;
-        if (right >= workWidth) right = workWidth-1;
-
-        for (y = bottom; y >= top; --y)
-        {
-            for (x = left; x <= right; ++x)
-            {
-                // Check top and bottom constraints
-                if (!((start_top_y + (x - start_top_x) * slope >= y)
-                        && (start_bottom_y + (x - start_bottom_x) * slope <= y)))
-                    continue;
-
-                // Check left and right constraints
-                if (startx > endx) // Start on the right
-                {
-                    if (!((start_top_x + (y - start_top_y) / inv_slope >= x)
-                            && (end_bottom_x + (y - end_bottom_y) / inv_slope <= x)))
-                        continue;
-                }
-                else // Start on the left
-                {
-                    if (!((start_top_x + (y - start_top_y) / inv_slope <= x)
-                            && (end_bottom_x + (y - end_bottom_y) / inv_slope >= x)))
-                        continue;
-                }
-
-                // We passed all constraints
-                if (allCoords[getIndex(x, y)] == -1 && cElement->index >= NORMAL_ELEMENT)
-                {
-                    int pt = createPoint(x, y, cElement);
-                    if (pt >= 0) {
-                        brushSetPtVel(pt);
-                    }
-                }
-                else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT)
-                {
-                    deletePoint(allCoords[getIndex(x, y)]);
+                } else if (allCoords[getIndex(x, y)] != -1 && cElement->index == ERASER_ELEMENT) {
+                    erasePoint(allCoords[getIndex(x, y)]);
                 }
             }
         }
