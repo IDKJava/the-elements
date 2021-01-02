@@ -148,7 +148,7 @@ LOCAL_LDLIBS := -L$(LOCAL_PATH)/../libs/$(TARGET_ARCH_ABI)
 LOCAL_SHARED_LIBRARIES := protobuf
 
 # Use profiling or not?
-USE_PROFILING = yes
+USE_PROFILING = no
 ifneq ($(APP_OPTIM),debug)
     USE_PROFILING = no
 endif
