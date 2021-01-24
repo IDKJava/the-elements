@@ -2,6 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="black">#000000</color>
     <color name="custom_property_desc">#666</color>
+    <color name="light_grey">#d3d3d3</color>
     
     <!-- Holo theme -->
     <color name="dialog_color">#ff222222</color>

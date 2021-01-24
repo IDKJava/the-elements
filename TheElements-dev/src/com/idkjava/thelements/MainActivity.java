@@ -128,7 +128,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.spray, R.drawable.spray_tool)
     ));
     static ArrayList<IconListItem> portalToolList = new ArrayList<IconListItem>(Arrays.asList(
-            new IconListItem(R.string.portal, R.drawable.line_tool)
+            new IconListItem(R.string.portal, R.drawable.portal)
     ));
 
     private ArrayList<IconListItem> getLockedPortalToolList() {

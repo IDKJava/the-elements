@@ -101,6 +101,7 @@ public class CustomElementManagerActivity extends ReportingActivity
 		//Create a TextView to hold the element name
 		TextView nameTextView = new TextView(this);
 		nameTextView.setText(elementName);
+		nameTextView.setTextColor(getColor(R.color.light_grey));
 		nameTextView.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 1));
 		//filename.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
 		
