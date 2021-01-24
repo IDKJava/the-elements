@@ -131,6 +131,17 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             new IconListItem(R.string.portal, R.drawable.line_tool)
     ));
 
+    private ArrayList<IconListItem> getLockedPortalToolList() {
+        ArrayList<IconListItem> locked = new ArrayList<IconListItem>();
+        for (IconListItem i : portalToolList) {
+            IconListItem newI = new IconListItem(i.nameRes, R.drawable.lock);
+            newI.locked = true;
+            newI.sku = ProductManager.SKU_PORTAL_TOOL;
+            locked.add(newI);
+        }
+        return locked;
+    }
+
 
     private ArrayList<IconListItem> getLockedToolPackList() {
         // Deep copy the list, so we can change the icons and locked status
@@ -164,6 +175,12 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
             throw new RuntimeException("Tool set unspecified for world: " + curWorld);
         }
 
+        if (ElementsApplication.checkOwned(ProductManager.SKU_PORTAL_TOOL)) {
+            toolList.addAll(portalToolList);
+        } else {
+            toolList.addAll(getLockedPortalToolList());
+        }
+
         if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
             toolList.addAll(photoToolList);
         }
@@ -177,8 +194,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         else {
             toolList.addAll(getLockedToolPackList());
         }
-
-        toolList.addAll(portalToolList);
 
         if (mToolAdapter != null) {
             mToolAdapter.clear();
@@ -517,7 +532,7 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                         // The portal element does not show up in the picker
                         elementIndex += 1;
                     }
-                    setElement((char) (item + NORMAL_ELEMENT));
+                    setElement((char) elementIndex);
                     // Set tool to brush if not currently a draw tool
                     if (!sand_view.isDrawTool()) {
                         sand_view.setTool(SandView.Tool.BRUSH_TOOL);

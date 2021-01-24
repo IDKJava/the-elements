@@ -191,4 +191,8 @@
     <string name="app_intro">&lt;font color=&quot;white&quot;&gt;&lt;b&gt;Добро пожаловать в "Элементы"!&lt;/b&gt;&lt;br/&gt;&lt;br/&gt; С "пользовательских элементов" мы даем вам право сделать то, что вы хотите! Взгляните на новом мире пространство: моделирование реальной гравитационного поля с источниками и стоками. Наконец, пожалуйста, напишите idkjava@gmail.com с любыми ошибками вы найдете.&lt;/font&gt;</string>
     <string name="permission_error">"Пожалуйста, разрешите доступ к камере, иначе инструмент камеры не будет работать. "</string>
     <string name="portal">портал</string>
+    <string name="portal_tool_owned_error">"Ошибка: у вас уже есть инструмент портала! "</string>
+    <string name="portal_tool_owned">" Инструмент портала: ИМЕЕТСЯ!"</string>
+    <string name="portal_tool_purchase">Купить инструмент портала:</string>
+    <string name="portal_tool_desc">Добавляет портал! Создает порталы для телепортации элементов из одного места в другое!</string>
 </resources>

@@ -19,6 +19,7 @@ public class PurchaseActivity extends ReportingActivity {
     TextView spaceWorldTitle;
     TextView toolPackTitle;
     TextView cameraToolTitle;
+    TextView portalToolTitle;
 
     private void firePurchase(String sku, ErrorHandler handler) {
         // Fire off the purchase workflow
@@ -39,6 +40,8 @@ public class PurchaseActivity extends ReportingActivity {
         spaceWorldTitle = (TextView) findViewById(R.id.space_world_title);
         toolPackTitle = (TextView) findViewById(R.id.tool_pack_title);
         cameraToolTitle = (TextView) findViewById(R.id.camera_tool_title);
+        portalToolTitle = (TextView) findViewById(R.id.portal_tool_title);
+
         View spaceWorldButton = findViewById(R.id.space_world_button);
         spaceWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,6 +78,20 @@ public class PurchaseActivity extends ReportingActivity {
                 else {
                     FlurryAgent.logEvent("Fire purchase: Camera Tool");
                     firePurchase(ProductManager.SKU_CAMERA_TOOL, handler);
+                }
+            }
+        });
+
+        View portalToolButton = findViewById(R.id.portal_tool_button);
+        portalToolButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ElementsApplication.checkOwned(ProductManager.SKU_PORTAL_TOOL)) {
+                    handler.error(R.string.portal_tool_owned_error);
+                }
+                else {
+                    FlurryAgent.logEvent("Fire purchase: Portal Tool");
+                    firePurchase(ProductManager.SKU_PORTAL_TOOL, handler);
                 }
             }
         });
@@ -120,6 +137,15 @@ public class PurchaseActivity extends ReportingActivity {
             cameraToolTitle.setText(R.string.camera_tool_purchase);
             cameraToolTitle.append(mProductManager.getPrice(ProductManager.SKU_CAMERA_TOOL));
             cameraToolTitle.setTextColor(Color.WHITE);
+        }
+        if (ElementsApplication.checkOwned(ProductManager.SKU_PORTAL_TOOL)) {
+            portalToolTitle.setText(R.string.portal_tool_owned);
+            portalToolTitle.setTextColor(OWNED_COLOR);
+        }
+        else {
+            portalToolTitle.setText(R.string.portal_tool_purchase);
+            portalToolTitle.append(mProductManager.getPrice(ProductManager.SKU_PORTAL_TOOL));
+            portalToolTitle.setTextColor(Color.WHITE);
         }
     }
 

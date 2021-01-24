@@ -34,10 +34,12 @@ public class ProductManager {
     public static String SKU_GRAVITY_PACK = "gravity_pack"; // includes all gravity tools
     public static String SKU_TOOL_PACK = "tool_pack"; // includes a large set of extra tools
     public static String SKU_CAMERA_TOOL = "camera_tool"; // a tool to convert pictures to sand
+    public static String SKU_PORTAL_TOOL = "portals"; // a tool to make portals!
     public static ArrayList<String> ALL_SKUS = new ArrayList<String>(Arrays.asList(
             SKU_GRAVITY_PACK,
             SKU_TOOL_PACK,
-            SKU_CAMERA_TOOL
+            SKU_CAMERA_TOOL,
+            SKU_PORTAL_TOOL
     ));
     public Map<String, SkuDetails> mSkuDetails = new HashMap<String, SkuDetails>();
 
@@ -153,6 +155,20 @@ public class ProductManager {
                 editor.putBoolean(SKU_CAMERA_TOOL, false);
                 editor.commit();
             }
+
+            Purchase portalPurchase = inventory.getPurchase(SKU_PORTAL_TOOL);
+            if (portalPurchase != null && verify(portalPurchase)) {
+                Log.d("TheElements", "Portal tool owned: " + portalPurchase.getPurchaseState());
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_PORTAL_TOOL, true);
+                editor.commit();
+            }
+            else {
+                SharedPreferences.Editor editor = mPrefs.edit();
+                editor.putBoolean(SKU_PORTAL_TOOL, false);
+                editor.commit();
+            }
+
         }
     };
 

@@ -92,6 +92,9 @@
     <string name="camera_tool_purchase">Buy Full Camera Tool: </string>
     <string name="camera_tool_owned">Full Camera Tool: OWNED!</string>
     <string name="camera_tool_owned_error">Error: You already own the camera tool!</string>
+    <string name="portal_tool_purchase">Buy Portal Tool: </string>
+    <string name="portal_tool_owned">Portal Tool: OWNED!</string>
+    <string name="portal_tool_owned_error">Error: You already own the portal tool!</string>
     <string name="bullet" translatable="false">&#8226;</string>
     <string name="earth_world_desc_1">Uniform downwards gravity.</string>
     <string name="earth_world_desc_2">Average Earth atomspheric temperature.</string>
@@ -101,6 +104,7 @@
     <string name="tool_pack_desc_1">Adds several new tools allowing precise design.</string>
     <string name="tool_pack_desc_2">Rectangle, circle, triangle, line, dashed line, slingshot, and spray tools.</string>
     <string name="camera_tool_desc_1">Expands the camera tool to use ALL elements when setting the scene from the camera.</string>
+    <string name="portal_tool_desc">Adds portal tool! Creates portals to teleport elements from one spot to another!</string>
 
     <string name="photo_tool">Set scene from camera</string>
     <string name="photo_tool_locked">Set scene from camera</string>
