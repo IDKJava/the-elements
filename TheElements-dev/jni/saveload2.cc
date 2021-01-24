@@ -417,6 +417,7 @@ bool loadStateLogic2(ifstream& in)
         portal->width = portalPb.width();
         portal->hasPair = portalPb.haspair();
         portal->pairIdx = portalPb.pairidx();
+        portal->isActive = true;
     }
 
     return true;

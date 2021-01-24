@@ -139,6 +139,9 @@ bool specialPortal(int firstParticle, int secondParticle)
         float a_c_x = ((portal_perp_y * x) - (portal_perp_x * y))/det;
         float a_c_y = (-(portal_l_y * x) + (portal_l_x * y))/det;
 
+        // flip so that things come out on the other side.
+        a_c_y *= -1;
+
         Portal* secondPortal = &portals[firstPortal->pairIdx];
         // now get the second portal properties
         float portal2_l_x = secondPortal->x - secondPortal->ex;
