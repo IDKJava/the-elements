@@ -17,8 +17,7 @@
         android:layout_alignTop="@+id/customToggle"
         android:text="Name"
         android:id="@+id/nameText"
-        android:textSize="24sp"
-        android:textColor="@color/black" />
+        android:textSize="24sp"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
