@@ -13,6 +13,7 @@
 #include "messages.pb.h"
 #include "points.h"
 #include "saveload.h"
+#include "portals.h"
 
 #include <dirent.h>
 #include <pthread.h>
@@ -418,6 +419,9 @@ bool loadStateLogic2(ifstream& in)
         portal->hasPair = portalPb.haspair();
         portal->pairIdx = portalPb.pairidx();
         portal->isActive = true;
+    }
+    if (save.portal_size() > 0) {
+        advanceNextPortal();
     }
 
     return true;
