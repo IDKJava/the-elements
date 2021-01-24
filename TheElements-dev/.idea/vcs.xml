@@ -4,7 +4,6 @@
     <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../Android-WVersionManager" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/com/idkjava/thelements/keys" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../kamcord-android-sdk" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../protobuf" vcs="Git" />
   </component>
 </project>
