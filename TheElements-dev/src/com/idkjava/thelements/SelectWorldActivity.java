@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.money.ProductManager;
 
 /**
@@ -26,7 +26,12 @@ public class SelectWorldActivity extends ReportingActivity {
         earthWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Select world: Earth");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Select world Earth")
+                                .build()
+                );
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_EARTH);
                 startActivity(mainIntent);
@@ -37,7 +42,12 @@ public class SelectWorldActivity extends ReportingActivity {
         spaceWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Select world: Space");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Select world Space")
+                                .build()
+                );
                 // World owned check is done in MainActivity
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_SPACE);

@@ -134,4 +134,10 @@
 
     
     <string name="portal">Add Portal</string>
+    <string name="billing_product_not_supported">This product is not supported in the current version of the app. Please try upgrading.</string>
+    <string name="billing_unavailable">Google Billing service unavailable. Please check your connection or try again later.</string>
+    <string name="billing_error">Google Billing error.</string>
+    <string name="billing_item_owned">Error: item already owned.</string>
+    <string name="billing_item_unavailable">Error: item unavailable.</string>
+    <string name="billing_user_cancelled">Purchase cancelled.</string>
 </resources>

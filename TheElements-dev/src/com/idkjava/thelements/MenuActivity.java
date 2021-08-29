@@ -18,7 +18,7 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.preferences.PreferencesActivity;
@@ -61,7 +61,6 @@ public class MenuActivity extends ReportingActivity {
         start_game_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Start game button (main menu)");
                 // Start the main app activity
                 startActivity(new Intent(MenuActivity.this, SplashActivity.class));
             }
@@ -70,7 +69,6 @@ public class MenuActivity extends ReportingActivity {
         custom_elements_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Custom elements button (main menu)");
                 // Start the CustomElementManagerActivity
                 startActivity(new Intent(MenuActivity.this, CustomElementManagerActivity.class));
             }
@@ -79,7 +77,6 @@ public class MenuActivity extends ReportingActivity {
         store_button.setOnClickListener(new OnClickListener() {
            @Override
             public void onClick(View v) {
-               FlurryAgent.logEvent("Store button (main menu)");
                startActivity(new Intent(MenuActivity.this, PurchaseActivity.class));
            }
         });
@@ -94,7 +91,12 @@ public class MenuActivity extends ReportingActivity {
         fix_me_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Fix me button (main menu)");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Fix me button (main menu)")
+                                .build()
+                );
                 startActivity(new Intent(MenuActivity.this, FixMeActivity.class));
             }
         });
@@ -128,17 +130,32 @@ public class MenuActivity extends ReportingActivity {
 
             @Override
             public void onUpdateNowClicked() {
-                FlurryAgent.logEvent("Update Now Clicked");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Update Now Clicked")
+                                .build()
+                );
             }
 
             @Override
             public void onSkipVersionClicked() {
-                FlurryAgent.logEvent("Skip Version Clicked");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Skip Version Clicked")
+                                .build()
+                );
             }
 
             @Override
             public void onRemindLaterClicked() {
-                FlurryAgent.logEvent("Remind Later Clicked");
+                ((ElementsApplication)getApplication()).getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Remind Later Clicked")
+                                .build()
+                );
             }
         });
 

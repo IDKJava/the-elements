@@ -241,11 +241,6 @@ inline int getIndex(int x, int y)
 {
     return y*workWidth + x;
 }
-inline int inBounds(int x, int y)
-{
-    return (x >= 0 && x < workWidth && y >= 0 && y < workHeight);
-
-}
 
 //Used specifically for colors
 inline int getColorIndex( int x, int y )

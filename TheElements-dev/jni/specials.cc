@@ -440,6 +440,7 @@ void createTunnel(int curX, int curY,
 {
     // Assuming curX, curY is in bounds, this check should properly
     // guard all points below.
+    // FIXME: Check is not sufficient for horizontal/vertical tunnels
     if (coordInBounds(curX+2*diffX, curY+2*diffY))
     {
         int dx, dy;

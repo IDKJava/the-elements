@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.error.ActivityErrorHandler;
 import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.money.ProductManager;
@@ -15,6 +15,7 @@ import com.idkjava.thelements.money.ProductManager;
 public class PurchaseActivity extends ReportingActivity {
 
     private static final int OWNED_COLOR = Color.rgb(0, 255, 50);
+    private static final int UNOWNED_COLOR = Color.WHITE;
 
     TextView spaceWorldTitle;
     TextView toolPackTitle;
@@ -50,7 +51,12 @@ public class PurchaseActivity extends ReportingActivity {
                     handler.error(R.string.space_world_owned_error);
                 }
                 else {
-                    FlurryAgent.logEvent("Fire purchase: Space World");
+                    ElementsApplication.getTracker().send(
+                            new HitBuilders.EventBuilder()
+                                    .setCategory("ButtonPress")
+                                    .setAction("Purchase Space World")
+                                    .build()
+                    );
                     firePurchase(ProductManager.SKU_GRAVITY_PACK, handler);
                 }
             }
@@ -63,7 +69,12 @@ public class PurchaseActivity extends ReportingActivity {
                     handler.error(R.string.tool_pack_owned_error);
                 }
                 else {
-                    FlurryAgent.logEvent("Fire purchase: Tool Pack");
+                    ElementsApplication.getTracker().send(
+                            new HitBuilders.EventBuilder()
+                                    .setCategory("ButtonPress")
+                                    .setAction("Purchase Tool Pack")
+                                    .build()
+                    );
                     firePurchase(ProductManager.SKU_TOOL_PACK, handler);
                 }
             }
@@ -76,7 +87,12 @@ public class PurchaseActivity extends ReportingActivity {
                     handler.error(R.string.camera_tool_owned_error);
                 }
                 else {
-                    FlurryAgent.logEvent("Fire purchase: Camera Tool");
+                    ElementsApplication.getTracker().send(
+                            new HitBuilders.EventBuilder()
+                                    .setCategory("ButtonPress")
+                                    .setAction("Purchase Camera Tool")
+                                    .build()
+                    );
                     firePurchase(ProductManager.SKU_CAMERA_TOOL, handler);
                 }
             }
@@ -90,7 +106,12 @@ public class PurchaseActivity extends ReportingActivity {
                     handler.error(R.string.portal_tool_owned_error);
                 }
                 else {
-                    FlurryAgent.logEvent("Fire purchase: Portal Tool");
+                    ElementsApplication.getTracker().send(
+                            new HitBuilders.EventBuilder()
+                                    .setCategory("ButtonPress")
+                                    .setAction("Purchase Portal Tool")
+                                    .build()
+                    );
                     firePurchase(ProductManager.SKU_PORTAL_TOOL, handler);
                 }
             }
@@ -110,43 +131,27 @@ public class PurchaseActivity extends ReportingActivity {
         }
     }
 
+    private void updateProductUI(String sku, TextView view, int ownedTextRes, int purchaseTextRes) {
+        if (ElementsApplication.checkOwned(sku)) {
+            view.setText(ownedTextRes);
+            view.setTextColor(OWNED_COLOR);
+        }
+        else {
+            view.setText(purchaseTextRes);
+            view.append(mProductManager.getPrice(sku));
+            view.setTextColor(UNOWNED_COLOR);
+        }
+    }
+
     private void refreshUI() {
-        if (ElementsApplication.checkOwned(ProductManager.SKU_GRAVITY_PACK)) {
-            spaceWorldTitle.setText(R.string.space_world_owned);
-            spaceWorldTitle.setTextColor(OWNED_COLOR);
-        }
-        else {
-            spaceWorldTitle.setText(R.string.space_world_purchase);
-            spaceWorldTitle.append(mProductManager.getPrice(ProductManager.SKU_GRAVITY_PACK));
-            spaceWorldTitle.setTextColor(Color.WHITE);
-        }
-        if (ElementsApplication.checkOwned(ProductManager.SKU_TOOL_PACK)) {
-            toolPackTitle.setText(R.string.tool_pack_owned);
-            toolPackTitle.setTextColor(OWNED_COLOR);
-        }
-        else {
-            toolPackTitle.setText(R.string.tool_pack_purchase);
-            toolPackTitle.append(mProductManager.getPrice(ProductManager.SKU_TOOL_PACK));
-            toolPackTitle.setTextColor(Color.WHITE);
-        }
-        if (ElementsApplication.checkOwned(ProductManager.SKU_CAMERA_TOOL)) {
-            cameraToolTitle.setText(R.string.camera_tool_owned);
-            cameraToolTitle.setTextColor(OWNED_COLOR);
-        }
-        else {
-            cameraToolTitle.setText(R.string.camera_tool_purchase);
-            cameraToolTitle.append(mProductManager.getPrice(ProductManager.SKU_CAMERA_TOOL));
-            cameraToolTitle.setTextColor(Color.WHITE);
-        }
-        if (ElementsApplication.checkOwned(ProductManager.SKU_PORTAL_TOOL)) {
-            portalToolTitle.setText(R.string.portal_tool_owned);
-            portalToolTitle.setTextColor(OWNED_COLOR);
-        }
-        else {
-            portalToolTitle.setText(R.string.portal_tool_purchase);
-            portalToolTitle.append(mProductManager.getPrice(ProductManager.SKU_PORTAL_TOOL));
-            portalToolTitle.setTextColor(Color.WHITE);
-        }
+        updateProductUI(ProductManager.SKU_GRAVITY_PACK, spaceWorldTitle,
+                R.string.space_world_owned, R.string.space_world_purchase);
+        updateProductUI(ProductManager.SKU_TOOL_PACK, toolPackTitle,
+                R.string.tool_pack_owned, R.string.tool_pack_purchase);
+        updateProductUI(ProductManager.SKU_CAMERA_TOOL, cameraToolTitle,
+                R.string.camera_tool_owned, R.string.camera_tool_purchase);
+        updateProductUI(ProductManager.SKU_PORTAL_TOOL, portalToolTitle,
+                R.string.portal_tool_owned, R.string.portal_tool_purchase);
     }
 
     @Override
@@ -174,22 +179,22 @@ public class PurchaseActivity extends ReportingActivity {
         super.onDestroy();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mProductManager == null) return;
-
-        // Need to forward on the activity result to the product manager
-        if (!mProductManager.handleActivityResult(requestCode, resultCode, data)) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
-
-        mProductManager.refreshInventory(this, new Runnable() {
-            @Override
-            public void run() {
-                refreshUI();
-            }
-        });
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (mProductManager == null) return;
+//
+//        // Need to forward on the activity result to the product manager
+//        if (!mProductManager.handleActivityResult(requestCode, resultCode, data)) {
+//            super.onActivityResult(requestCode, resultCode, data);
+//        }
+//
+//        mProductManager.refreshInventory(this, new Runnable() {
+//            @Override
+//            public void run() {
+//                refreshUI();
+//            }
+//        });
+//    }
 
     private ProductManager mProductManager;
     private ErrorHandler mHandler;

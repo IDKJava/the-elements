@@ -1,6 +1,7 @@
 package com.idkjava.thelements.game;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.HitBuilders;
+import com.idkjava.thelements.ElementsApplication;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
@@ -63,7 +64,12 @@ public class Control extends LinearLayout {
         custom_elements_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FlurryAgent.logEvent("Custom elements button (app)");
+                ElementsApplication.getTracker().send(
+                        new HitBuilders.EventBuilder()
+                                .setCategory("ButtonPress")
+                                .setAction("Custom elements button (app)")
+                                .build()
+                );
                 activity.startActivity(new Intent(activity,
                         CustomElementManagerActivity.class));
             }

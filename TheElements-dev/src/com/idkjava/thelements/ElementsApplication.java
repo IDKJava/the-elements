@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 
-import com.flurry.android.FlurryAgent;
-import com.flurry.android.FlurryPerformance;
+import com.android.billingclient.api.BillingClient;
+
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.idkjava.thelements.game.FileManager;
 import com.idkjava.thelements.keys.APIKeys;
 import com.idkjava.thelements.money.ProductManager;
@@ -28,14 +31,6 @@ public class ElementsApplication extends Application {
 
         // Find files root dir
         FileManager.ROOT_DIR = getFilesDir().getAbsolutePath() + "/";
-
-        new FlurryAgent.Builder()
-                .withDataSaleOptOut(false) //CCPA - the default value is false
-                .withCaptureUncaughtExceptions(true)
-                .withIncludeBackgroundSessionsInMetrics(true)
-                .withLogLevel(Log.VERBOSE)
-                .withPerformanceMetrics(FlurryPerformance.ALL)
-                .build(this, APIKeys.flurryAPIKey);
 
         // Load textures
         AssetManager am = getAssets();
@@ -115,6 +110,13 @@ public class ElementsApplication extends Application {
         return sProductManager;
     }
 
+    public static Tracker getTracker() {
+        if (sTracker == null) {
+            sTracker = sAnalytics.newTracker(R.xml.analytics);
+        }
+        return sTracker;
+    }
+
     public static boolean checkOwned(String sku) {
         return sPrefs.getBoolean(sku, false);
     }
@@ -123,12 +125,20 @@ public class ElementsApplication extends Application {
         Log.d("TheElements", "Setting up app singletons: prefs, product manager");
         sPrefs = getSharedPreferences(PREFS_NAME, 0);
         sProductManager = new ProductManager(this, sPrefs);
+        sAnalytics = GoogleAnalytics.getInstance(this);
+        sBilling = BillingClient.newBuilder(this)
+                .setListener((PurchasesUpdatedListener)sProductManager)
+                .enablePendingPurchases()
+                .build();
     }
 
     private static final String PREFS_NAME = "MyPrefsfile";
 
     public static SharedPreferences sPrefs;
     public static ProductManager sProductManager;
+    public static GoogleAnalytics sAnalytics;
+    private static Tracker sTracker;
+    public static BillingClient sBilling;
 
     // Loading textures
     public static native void setBHTex(int w, int h, byte[] pixels);

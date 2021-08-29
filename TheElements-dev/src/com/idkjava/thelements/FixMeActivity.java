@@ -2,7 +2,6 @@ package com.idkjava.thelements;
 
 import java.io.File;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.idkjava.thelements.game.FileManager;
 
 import android.app.Activity;

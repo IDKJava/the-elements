@@ -2,10 +2,6 @@
 
 <resources>
   <string name="ga_trackingId" translatable="false">UA-52008645-1</string>
-
-  <!--Enable automatic activity tracking-->
   <bool name="ga_autoActivityTracking">true</bool>
-
-  <!--Enable automatic exception tracking-->
   <bool name="ga_reportUncaughtExceptions">true</bool>
 </resources>

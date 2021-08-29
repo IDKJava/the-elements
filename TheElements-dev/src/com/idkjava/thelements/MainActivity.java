@@ -50,11 +50,9 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.flurry.android.FlurryAgent;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.ExceptionReporter;
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.ExceptionReporter;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.idkjava.thelements.custom.CustomElementManager;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.dialog.ElementAdapter;
@@ -294,12 +292,6 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
         // Uses onCreate from the general Activity
         super.onCreate(savedInstanceState);
 
-        // Set up EasyTracker custom error reporting
-        EasyTracker curTracker = EasyTracker.getInstance(this);
-        ExceptionReporter handler = new ExceptionReporter(curTracker,
-                GAServiceManager.getInstance(), Thread.getDefaultUncaughtExceptionHandler(), this);
-        Thread.setDefaultUncaughtExceptionHandler(handler);
-
         // Init the shared preferences and set the ui state
         Preferences.initSharedPreferences(this);
         // Set Sensor + Manager
@@ -469,7 +461,13 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                 madeAnElement &&
                 !shownRatePrompt)
         {
-            FlurryAgent.logEvent("shown_rate_prompt");
+            ((ElementsApplication)getApplication()).getTracker().send(
+                    new HitBuilders.EventBuilder()
+                            .setCategory("Info")
+                            .setAction("shown_rate_prompt")
+                            .setNonInteraction(true)
+                            .build()
+            );
             editor.putBoolean("shown_rate_prompt", true);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -713,14 +711,23 @@ public class MainActivity extends ReportingActivity implements DialogInterface.O
                     IconListItem item = worldList.get(which);
                     switch (item.nameRes) {
                         case R.string.earth_world:
-                            FlurryAgent.logEvent("Earth world select");
+                            ((ElementsApplication)getApplication()).getTracker().send(
+                                new HitBuilders.EventBuilder()
+                                    .setCategory("ButtonPress")
+                                    .setAction("Earth world select")
+                                    .build()
+                            );
                             if (checkWorldOwned(WORLD_EARTH)) {
                                 setCurWorld(WORLD_EARTH);
                             }
                             break;
                         case R.string.space_world:
-                            FlurryAgent.logEvent("Space world select");
-                            if (checkWorldOwned(WORLD_SPACE)) {
+                            ((ElementsApplication)getApplication()).getTracker().send(
+                                    new HitBuilders.EventBuilder()
+                                            .setCategory("ButtonPress")
+                                            .setAction("Space world select")
+                                            .build()
+                            );                            if (checkWorldOwned(WORLD_SPACE)) {
                                 setCurWorld(WORLD_SPACE);
                             }
                             break;

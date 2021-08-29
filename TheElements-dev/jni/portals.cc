@@ -108,117 +108,124 @@ void deletePortalPoints(int portalIndex) {
 // should be a portal
 bool specialPortal(int firstParticle, int secondParticle)
 {
-    if (hasSpecial(secondParticle, SPECIAL_PORTAL)) {
-        int portalIdx = getParticleSpecialVal(secondParticle, SPECIAL_PORTAL);
-        Portal* firstPortal = &portals[portalIdx];
-
-        if (!firstPortal->hasPair) {
-            return FALSE;
-        }
-
-        // I had to look up how change of basis works for this code
-        // https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix
-
-        // Step one: change of basis so that we get the first particle's position in the vector
-        // space of the first portal.
-        float portal_l_x = firstPortal->x - firstPortal->ex;
-        float portal_l_y = firstPortal->y - firstPortal->ey;
-        float portal_norm = sqrt(portal_l_x*portal_l_x + portal_l_y*portal_l_y);
-
-        // Perpendicular is scaled to the width of the portal line
-        float portal_perp_x = -portal_l_y * (firstPortal->width/portal_norm);
-        float portal_perp_y = portal_l_x * (firstPortal->width/portal_norm);
-
-        // x and y relative to the first portal start
-        float x = a_x[firstParticle] - firstPortal->x;
-        float y = a_y[firstParticle] - firstPortal->y;
-
-        // Determinant needed to compute inverse of matrix
-        float det = (portal_l_x * portal_perp_y) - (portal_l_y * portal_perp_x);
-
-        float a_c_x = ((portal_perp_y * x) - (portal_perp_x * y))/det;
-        float a_c_y = (-(portal_l_y * x) + (portal_l_x * y))/det;
-
-        // flip so that things come out on the other side.
-        a_c_y *= -1;
-
-        Portal* secondPortal = &portals[firstPortal->pairIdx];
-        // now get the second portal properties
-        float portal2_l_x = secondPortal->x - secondPortal->ex;
-        float portal2_l_y = secondPortal->y - secondPortal->ey;
-        float portal2_norm = sqrt(portal2_l_x * portal2_l_x + portal2_l_y * portal2_l_y);
-
-        float portal2_extended_width;
-        float portal2_perp_x;
-        float portal2_perp_y;
-        int final_position_x;
-        int final_position_y;
-        int particleAtTarget;
-
-        // super hacky way of dealing with integer conversion issues
-        // just adjust the width until we don't hit the portal.
-        for (int i = 0; i < 8; i++) {
-            portal2_extended_width = secondPortal->width + (i/2.0);
-            portal2_perp_x = -portal2_l_y * (portal2_extended_width / portal2_norm);
-            portal2_perp_y = portal2_l_x * (portal2_extended_width / portal2_norm);
-
-            // get the offset in the original coordinate space after interpreting the coordinates
-            // as being in the space of the second portal.
-            float final_offset_x = portal2_l_x * a_c_x + portal2_perp_x * a_c_y;
-            float final_offset_y = portal2_l_y * a_c_x + portal2_perp_y * a_c_y;
-
-            final_position_x = (int) (secondPortal->x + final_offset_x);
-            final_position_y = (int) (secondPortal->y + final_offset_y);
-
-            particleAtTarget = allCoords[getIndex(final_position_x, final_position_y)];
-            if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
-                if(getParticleSpecialVal(particleAtTarget, SPECIAL_PORTAL) == firstPortal->pairIdx) {
-                    continue;
-                }
-            }
-            break;
-        }
-
-        // Move the particle if we can...
-        if (inBounds(final_position_x, final_position_y)) {
-            // you could create an infinite loop of portals which would freeze the game
-            if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
-                return false;
-            }
-            // If we moved, we need to adjust the velocity as well
-            // First we get the velocity vector in the vector space of the first portal
-            float xv = a_xVel[firstParticle];
-            float yv = a_yVel[firstParticle];
-
-            // For velocity, we don't want to adjust the magnitude of the vector, so normalize
-            // the length to be 1.
-            float perp_norm = sqrt(portal_perp_x*portal_perp_x +  portal_perp_y*portal_perp_y);
-            float l_norm = sqrt(portal_l_x*portal_l_x +  portal_l_y*portal_l_y);
-
-            float det_unit = det/(perp_norm*l_norm);
-            float v_c_x = ((portal_perp_y/perp_norm * xv) - (portal_perp_x/perp_norm * yv))/det_unit;
-            float v_c_y = (-(portal_l_y/l_norm * xv) + (portal_l_x/l_norm * yv))/det_unit;
-
-            float perp2_norm = sqrt(portal2_perp_x*portal2_perp_x +  portal2_perp_y*portal2_perp_y);
-            float l2_norm = sqrt(portal2_l_x*portal2_l_x +  portal2_l_y*portal2_l_y);
-
-            float final_vel_x = portal2_l_x/l2_norm * v_c_x + portal2_perp_x/perp2_norm * v_c_y;
-            float final_vel_y = portal2_l_y/l2_norm * v_c_x + portal2_perp_y/perp2_norm * v_c_y;
-
-            a_xVel[firstParticle] = final_vel_x;
-            a_yVel[firstParticle] = final_vel_y;
-
-            a_x[firstParticle] = (float) final_position_x;
-            a_y[firstParticle] = (float) final_position_y;
-            if (particleAtTarget != -1)
-            {
-                collide(firstParticle, particleAtTarget);
-            }
-            return true;
-        }
-
-        return false;
+    if (!hasSpecial(secondParticle, SPECIAL_PORTAL)) {
+        return FALSE;
     }
+
+    int portalIdx = getParticleSpecialVal(secondParticle, SPECIAL_PORTAL);
+    Portal* firstPortal = &portals[portalIdx];
+
+    if (!firstPortal->hasPair) {
+        return FALSE;
+    }
+
+    // I had to look up how change of basis works for this code
+    // https://www.khanacademy.org/math/linear-algebra/alternate-bases/change-of-basis/v/linear-algebra-change-of-basis-matrix
+
+    // Step one: change of basis so that we get the first particle's position in the vector
+    // space of the first portal.
+    float portal_l_x = firstPortal->x - firstPortal->ex;
+    float portal_l_y = firstPortal->y - firstPortal->ey;
+    float portal_norm = sqrt(portal_l_x*portal_l_x + portal_l_y*portal_l_y);
+
+    // Perpendicular is scaled to the width of the portal line
+    float portal_perp_x = -portal_l_y * (firstPortal->width/portal_norm);
+    float portal_perp_y = portal_l_x * (firstPortal->width/portal_norm);
+
+    // x and y relative to the first portal start
+    float x = a_x[firstParticle] - firstPortal->x;
+    float y = a_y[firstParticle] - firstPortal->y;
+
+    // Determinant needed to compute inverse of matrix
+    float det = (portal_l_x * portal_perp_y) - (portal_l_y * portal_perp_x);
+
+    float a_c_x = ((portal_perp_y * x) - (portal_perp_x * y))/det;
+    float a_c_y = (-(portal_l_y * x) + (portal_l_x * y))/det;
+
+    // flip so that things come out on the other side.
+    a_c_y *= -1;
+
+    Portal* secondPortal = &portals[firstPortal->pairIdx];
+    // now get the second portal properties
+    float portal2_l_x = secondPortal->x - secondPortal->ex;
+    float portal2_l_y = secondPortal->y - secondPortal->ey;
+    float portal2_norm = sqrt(portal2_l_x * portal2_l_x + portal2_l_y * portal2_l_y);
+
+    float portal2_extended_width;
+    float portal2_perp_x;
+    float portal2_perp_y;
+    int final_position_x;
+    int final_position_y;
+    int particleAtTarget;
+
+    // super hacky way of dealing with integer conversion issues
+    // just adjust the width until we don't hit the portal.
+    for (int i = 0; i < 8; i++) {
+        portal2_extended_width = secondPortal->width + (i/2.0);
+        portal2_perp_x = -portal2_l_y * (portal2_extended_width / portal2_norm);
+        portal2_perp_y = portal2_l_x * (portal2_extended_width / portal2_norm);
+
+        // get the offset in the original coordinate space after interpreting the coordinates
+        // as being in the space of the second portal.
+        float final_offset_x = portal2_l_x * a_c_x + portal2_perp_x * a_c_y;
+        float final_offset_y = portal2_l_y * a_c_x + portal2_perp_y * a_c_y;
+
+        final_position_x = (int) (secondPortal->x + final_offset_x);
+        final_position_y = (int) (secondPortal->y + final_offset_y);
+
+        // FIXME: in bounds check required
+        particleAtTarget = allCoords[getIndex(final_position_x, final_position_y)];
+        if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
+            if (getParticleSpecialVal(particleAtTarget, SPECIAL_PORTAL) == firstPortal->pairIdx) {
+                continue;
+            }
+        }
+        break;
+    }
+    // FIXME: if no valid space found we should just exit here (add a boolean flag or something?)
+
+    // Move the particle if we can...
+    if (coordInBounds(final_position_x, final_position_y)) {
+        // you could create an infinite loop of portals which would freeze the game
+        if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
+            return false;
+        }
+        // If we moved, we need to adjust the velocity as well
+        // First we get the velocity vector in the vector space of the first portal
+        float xv = a_xVel[firstParticle];
+        float yv = a_yVel[firstParticle];
+
+        // For velocity, we don't want to adjust the magnitude of the vector, so normalize
+        // the length to be 1.
+        float perp_norm = sqrt(portal_perp_x*portal_perp_x +  portal_perp_y*portal_perp_y);
+        float l_norm = sqrt(portal_l_x*portal_l_x +  portal_l_y*portal_l_y);
+
+        float det_unit = det/(perp_norm*l_norm);
+        float v_c_x = ((portal_perp_y/perp_norm * xv) - (portal_perp_x/perp_norm * yv))/det_unit;
+        float v_c_y = (-(portal_l_y/l_norm * xv) + (portal_l_x/l_norm * yv))/det_unit;
+
+        float perp2_norm = sqrt(portal2_perp_x*portal2_perp_x +  portal2_perp_y*portal2_perp_y);
+        float l2_norm = sqrt(portal2_l_x*portal2_l_x +  portal2_l_y*portal2_l_y);
+
+        float final_vel_x = portal2_l_x/l2_norm * v_c_x + portal2_perp_x/perp2_norm * v_c_y;
+        float final_vel_y = portal2_l_y/l2_norm * v_c_x + portal2_perp_y/perp2_norm * v_c_y;
+
+        a_xVel[firstParticle] = final_vel_x;
+        a_yVel[firstParticle] = final_vel_y;
+
+        a_x[firstParticle] = (float) final_position_x;
+        a_y[firstParticle] = (float) final_position_y;
+        // FIXME: our code doesn't support chaining collisions like this, and I don't think
+        // there is a nice way to do it in general. Maybe better to just return false
+        // when particleAtTarget == -1 is detected above.
+        if (particleAtTarget != -1)
+        {
+            collide(firstParticle, particleAtTarget);
+        }
+        // FIXME: we need to set a_hasMoved[firstParticle] = true so that allCoords is correctly updated
+        return true;
+    }
+
     return false;
 }
 

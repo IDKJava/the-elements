@@ -33,7 +33,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.android.FlurryAgent;
+import com.google.android.gms.analytics.HitBuilders;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.idkjava.thelements.ElementsApplication;
@@ -261,7 +261,12 @@ public class CustomElementBasicActivity extends ReportingActivity
                 if(CustomElementBasicActivity.this.saveElement())
                 {
                     dialog.dismiss();
-                    FlurryAgent.logEvent("made_element");
+                    ElementsApplication.getTracker().send(
+                            new HitBuilders.EventBuilder()
+                                    .setCategory("Action")
+                                    .setAction("made_element")
+                                    .build()
+                    );
                     SharedPreferences settings = ElementsApplication.getPrefs();
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putBoolean("made_element", true);
@@ -319,7 +324,12 @@ public class CustomElementBasicActivity extends ReportingActivity
         // Log the custom element name
         Hashtable<String, String> params = new Hashtable<String, String>();
         params.put("Name", custom.getFilename());
-        FlurryAgent.logEvent("Element saved", params);
+        ElementsApplication.getTracker().send(
+                new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("element_saved")
+                        .build()
+        );
         return true;
     }
     

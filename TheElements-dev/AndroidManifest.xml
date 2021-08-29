@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.idkjava.thelements"
     android:installLocation="auto"
-    android:versionCode="102"
-    android:versionName="6.7.2">
+    android:versionCode="106"
+    android:versionName="7.0.2">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -181,7 +180,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name="com.google.android.gms.analytics.service.AnalyticsService" />
+        <service android:name="com.google.android.gms.analytics.AnalyticsService" />
 
         <activity
             android:name=".PurchaseActivity"
