@@ -130,6 +130,7 @@ public class ElementsApplication extends Application {
                 .setListener((PurchasesUpdatedListener)sProductManager)
                 .enablePendingPurchases()
                 .build();
+        sProductManager.tryStartBillingConnection();
     }
 
     private static final String PREFS_NAME = "MyPrefsfile";

@@ -14,6 +14,7 @@ import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.BillingResponseCode;
+import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
@@ -68,6 +69,7 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
         mPrefs = prefs;
         // APIKeys.googlePlayPublicKey
         mInPurchase = false;
+        mBillingSupported = true;
 //        mExec = Executors.newSingleThreadExecutor();
 //        mExec.execute(new Runnable() {
 //            @Override
@@ -153,7 +155,6 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
                     Log.d("TheElements", "Got purchase in unsupported state: " + purchase);
                 }
             }
-            refreshInventory(null, null);
         }
         else {
             handleBillingResponse(billingResult.getResponseCode());
@@ -161,9 +162,12 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
     }
 
     private void handleSkuDetails(List<SkuDetails> skuDetails) {
+        Log.d("TheElements", "handleSkuDetails");
         // Add all sku details to the map
         for (SkuDetails details : skuDetails) {
+            Log.d("TheElements", "... checking SKU " + details.getSku());
             if (!ALL_SKUS.contains(details.getSku())) continue;
+            Log.d("TheElements", "... in list, adding details.");
             mSkuDetails.put(details.getSku(), details);
         }
     }
@@ -260,6 +264,25 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
 //        }
 //    };
 
+    public void tryStartBillingConnection() {
+        ElementsApplication.sBilling.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingServiceDisconnected() {
+                mBillingSupported = false;
+            }
+
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingResponseCode.OK) {
+                    mBillingSupported = true;
+                }
+            }
+        });
+    }
+
+    // TODO: Probably add a "stop billing connection" if we eventually tie this to an
+    // activity lifecycle rather than the whole appliation.
+
     public void refreshInventory(final Activity act, final Runnable callback) {
         if (!mBillingSupported) {
             makeError(getStr(R.string.billing_not_supported));
@@ -270,20 +293,28 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
         ElementsApplication.sBilling.querySkuDetailsAsync(params.build(),
                 new SkuDetailsResponseListener() {
                     @Override
-                    public void onSkuDetailsResponse(BillingResult billingResult,
+                    public void onSkuDetailsResponse(@NonNull BillingResult billingResult,
                                                      List<SkuDetails> skuDetailsList) {
-                        handleSkuDetails(skuDetailsList);
-                        ElementsApplication.sBilling.queryPurchasesAsync(
-                                BillingClient.SkuType.INAPP,
-                                new PurchasesResponseListener() {
-                                    @Override
-                                    public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> purchases) {
-                                        ProductManager.this.onPurchasesUpdated(billingResult, purchases);
-                                        if (act != null && callback != null) {
-                                            act.runOnUiThread(callback);
+                        Log.d("TheElements", "onSkuDetailsResponse, result: " + billingResult.toString());
+                        if (billingResult.getResponseCode() == BillingResponseCode.OK &&
+                            skuDetailsList != null) {
+                            handleSkuDetails(skuDetailsList);
+                            ElementsApplication.sBilling.queryPurchasesAsync(
+                                    BillingClient.SkuType.INAPP,
+                                    new PurchasesResponseListener() {
+                                        @Override
+                                        public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> purchases) {
+                                            ProductManager.this.onPurchasesUpdated(billingResult, purchases);
+                                            if (act != null && callback != null) {
+                                                act.runOnUiThread(callback);
+                                            }
                                         }
-                                    }
-                                });
+                                    });
+                        }
+                        else {
+                            Log.d("TheElements", "onSkuDetailsResponse bad billingResult");
+                            handleBillingResponse(billingResult.getResponseCode());
+                        }
                     }
                 });
 //        mExec.execute(new Runnable() {
@@ -340,6 +371,7 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
         }
         if (!mSkuDetails.containsKey(sku)) {
             makeError(getStr(R.string.billing_product_not_supported));
+            return;
         }
 //        final Activity threadAct = act;
 //        final String threadSku = sku;
