@@ -116,6 +116,7 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
     public boolean grantEntitlement(String sku) {
         if (!ALL_SKUS.contains(sku)) return false;
 
+        Log.d("TheElements", "grantEntitlement: " + sku);
         SharedPreferences.Editor editor = mPrefs.edit();
         editor.putBoolean(sku, true);
         editor.commit();
@@ -129,8 +130,10 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
 
     @Override
     public void onPurchasesUpdated(BillingResult billingResult, List<Purchase> purchases) {
+        Log.d("TheElements", "onPurchasesUpdated");
         if (billingResult.getResponseCode() == BillingResponseCode.OK &&
             purchases != null) {
+            Log.d("TheElements", "onPurchasesUpdated: got list of " + Integer.toString(purchases.size()) + " purchases");
             for (Purchase purchase : purchases) {
                 int state = purchase.getPurchaseState();
                 if (state == Purchase.PurchaseState.PURCHASED) {
@@ -304,6 +307,17 @@ public class ProductManager implements PurchasesUpdatedListener, AcknowledgePurc
                                     new PurchasesResponseListener() {
                                         @Override
                                         public void onQueryPurchasesResponse(BillingResult billingResult, List<Purchase> purchases) {
+                                            if (billingResult.getResponseCode() == BillingResponseCode.OK &&
+                                                purchases != null) {
+                                                Log.d("TheElements", "queryPurchasesAsync got nontrivial purchases list");
+                                                for (Purchase purchase : purchases) {
+                                                    List<String> skus = purchase.getSkus();
+                                                    if (skus == null) continue;
+                                                    for (String sku : skus) {
+                                                        grantEntitlement(sku);
+                                                    }
+                                                }
+                                            }
                                             ProductManager.this.onPurchasesUpdated(billingResult, purchases);
                                             if (act != null && callback != null) {
                                                 act.runOnUiThread(callback);
