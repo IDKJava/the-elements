@@ -140,4 +140,5 @@
     <string name="billing_item_owned">Error: item already owned.</string>
     <string name="billing_item_unavailable">Error: item unavailable.</string>
     <string name="billing_user_cancelled">Purchase cancelled.</string>
+    <string name="refund_policy">If you are unsatisfied with any feature, we are happy to offer a full refund. Please simply email idkjava@gmail.com with your order ID.</string>
 </resources>
