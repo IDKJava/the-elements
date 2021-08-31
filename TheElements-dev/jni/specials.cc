@@ -434,32 +434,34 @@ void getDiagonalDirection(int index, int* x, int* y)
 // Create a tunnel assuming we're tunneling from curX, curY
 // to curX+diffX, curY+diffY. Builds all particles around the
 // new point except directly back the way we came.
+// NOTE: (diffX, diffY) is assumed to be one of the 8 grid directions
+// (4 Cartesian or 4 diagonal).
 void createTunnel(int curX, int curY,
                   int diffX, int diffY,
                   struct Element* tunnelElt)
 {
-    // Assuming curX, curY is in bounds, this check should properly
-    // guard all points below.
-    // FIXME: Check is not sufficient for horizontal/vertical tunnels
-    if (coordInBounds(curX+2*diffX, curY+2*diffY))
+    int dx, dy;
+    for (int i = 0; i < 4; ++i)
     {
-        int dx, dy;
-        for (int i = 0; i < 4; ++i)
+        getCardinalDirection(i, &dx, &dy);
+        int x = curX + diffX + dx;
+        int y = curY + diffY + dy;
+        if (!(dx == -diffX && dy == -diffY) &&
+            coordInBounds(x, y) &&
+            allCoords[getIndex(x, y)] == -1)
         {
-            getCardinalDirection(i, &dx, &dy);
-            if (!(dx == -diffX && dy == -diffY) &&
-                allCoords[getIndex(curX+diffX+dx, curY+diffY+dy)] == -1)
-            {
-                createPoint(curX+diffX+dx, curY+diffY+dy, tunnelElt);
-            }
+            createPoint(x, y, tunnelElt);
+        }
 
-            getDiagonalDirection(i, &dx, &dy);
-            // Check for not backwards and empty
-            if (!(dx == -diffX && dy == -diffY) &&
-                allCoords[getIndex(curX+diffX+dx, curY+diffY+dy)] == -1)
-            {
-                createPoint(curX+diffX+dx, curY+diffY+dy, tunnelElt);
-            }
+        getDiagonalDirection(i, &dx, &dy);
+        x = curX + diffX + dx;
+        y = curY + diffY + dy;
+        // Check for not backwards and empty
+        if (!(dx == -diffX && dy == -diffY) &&
+            coordInBounds(x, y) &&
+            allCoords[getIndex(x, y)] == -1)
+        {
+            createPoint(x, y, tunnelElt);
         }
     }
 }
