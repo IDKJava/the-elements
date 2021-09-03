@@ -49,6 +49,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.analytics.ExceptionReporter;
 import com.google.android.gms.analytics.HitBuilders;
@@ -68,7 +69,7 @@ import com.idkjava.thelements.preferences.Preferences;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 
-public class MainActivity extends ReportingActivity implements DialogInterface.OnCancelListener {
+public class MainActivity extends FragmentActivity implements DialogInterface.OnCancelListener {
     // Constants for dialogue ids
     private static final int INTRO_MESSAGE = 1;
     public static final int ELEMENT_PICKER = 2;

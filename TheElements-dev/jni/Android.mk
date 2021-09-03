@@ -172,6 +172,9 @@ ifeq ($(USE_PROFILING),yes)
     LOCAL_CFLAGS += -DUSE_PROFILING
 endif
 
+# ASan stuff
+LOCAL_ARM_MODE := arm
+
 # optimization level = 3
 LOCAL_CFLAGS += -O3
 LOCAL_CFLAGS += -w
