@@ -33,18 +33,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.idkjava.thelements.ElementsApplication;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
-import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.proto.Messages.Collision;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 import com.idkjava.thelements.proto.Messages.Special;
 
-public class CustomElementBasicActivity extends ReportingActivity
+public class CustomElementBasicActivity extends FragmentActivity
 {
     private static final int COLOR_SQUARE_SIZE = 40;
 

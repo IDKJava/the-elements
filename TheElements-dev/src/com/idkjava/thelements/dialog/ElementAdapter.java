@@ -52,6 +52,11 @@ public class ElementAdapter extends ArrayAdapter {
 
         String name = (String) getItem(position);
         int realElementPosition = position + MainActivity.NORMAL_ELEMENT;
+        // HACK: We should really move Portal below the "normal element" cutoff so
+        // all systems handle it by default...
+        if (realElementPosition >= MainActivity.PORTAL_ELEMENT) {
+            realElementPosition++;
+        }
         holder.nameTxVw.setText(name);
         int theColor = Color.rgb(
                 MainActivity.getElementRed(realElementPosition),

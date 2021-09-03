@@ -8,6 +8,7 @@ import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.util.FloatMath;
+import android.util.Log;
 import android.view.MotionEvent;
 
 import com.idkjava.thelements.MainActivity;
@@ -307,7 +308,6 @@ public class SandView extends GLSurfaceView
 
   static
   {
-      System.loadLibrary("c++_shared");
       System.loadLibrary("protobuf");
       System.loadLibrary("thelements");
   }
@@ -344,9 +344,7 @@ class SandViewRenderer implements GLSurfaceView.Renderer
 	//@formatter:on
 
 	static
-	{
-	    
-        System.loadLibrary("c++_shared");
+    {
 	    System.loadLibrary("protobuf");
 		System.loadLibrary("thelements");
 	}

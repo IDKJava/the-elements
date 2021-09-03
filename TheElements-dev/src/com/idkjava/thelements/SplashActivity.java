@@ -12,9 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.idkjava.thelements.game.FileManager;
 
-public class SplashActivity extends ReportingActivity
+public class SplashActivity extends FragmentActivity
 {
     private TextView mLoadingText; 
     
@@ -184,8 +186,6 @@ public class SplashActivity extends ReportingActivity
     
     static
     {
-        System.loadLibrary("c++_shared");
-        System.loadLibrary("protobuf");
         System.loadLibrary("thelements"); // Load the JNI library (libthelements.so)
     }
 }

@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.error.ActivityErrorHandler;
 import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.money.ProductManager;
 
 
-public class PurchaseActivity extends ReportingActivity {
+public class PurchaseActivity extends FragmentActivity {
 
     private static final int OWNED_COLOR = Color.rgb(0, 255, 50);
     private static final int UNOWNED_COLOR = Color.WHITE;

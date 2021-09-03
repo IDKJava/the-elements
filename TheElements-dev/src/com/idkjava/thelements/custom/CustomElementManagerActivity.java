@@ -19,11 +19,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.idkjava.thelements.R;
-import com.idkjava.thelements.ReportingActivity;
 import com.idkjava.thelements.proto.Messages.CustomElement;
 
-public class CustomElementManagerActivity extends ReportingActivity
+public class CustomElementManagerActivity extends FragmentActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

@@ -13,11 +13,12 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
-import com.idkjava.thelements.ReportingActivity;
 
-public class CustomElementAdvancedActivity extends ReportingActivity
+public class CustomElementAdvancedActivity extends FragmentActivity
 {
 	private CustomElementActivity mParent;
 	//private Button saveButton;

@@ -18,6 +18,8 @@ import android.view.Window;
 import android.webkit.WebView;
 import android.widget.Button;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.money.ProductManager;
@@ -25,7 +27,7 @@ import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.winsontan520.wversionmanager.library.WVersionManager;
 import com.winsontan520.wversionmanager.library.WVersionManager.WVersionManagerEventListener;
 
-public class MenuActivity extends ReportingActivity {
+public class MenuActivity extends FragmentActivity {
     public static Button start_game_button;
     public static Button custom_elements_button;
     public static Button store_button;

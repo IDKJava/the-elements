@@ -67,7 +67,7 @@ void convertMouseCoords(int x, int y, float* gameX, float* gameY) {
 
 //Called from SandViewRenderer
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobject thiz, jint width, jint height)
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jclass thiz, jint width, jint height)
 {
     LOGI("nativeResize()");
 
@@ -107,7 +107,7 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeResize(JNIEnv* env, jobj
 }
 // TODO: I think this should be removed, but I don't have the time to figure it out right now
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jobject thiz, jboolean shouldLoadDemo)
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, jclass thiz, jboolean shouldLoadDemo)
 {
     char loadLoc[256];
 
@@ -128,14 +128,14 @@ Java_com_idkjava_thelements_game_SandViewRenderer_nativeLoadState(JNIEnv* env, j
     loadState2(loadLoc);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jobject thiz)
+Java_com_idkjava_thelements_game_SandViewRenderer_nativeRender(JNIEnv* env, jclass thiz)
 {
     glRenderThreaded();
 }
 
 //Save/load functions
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz, jbyteArray saveLoc)
+JNIEXPORT jchar JNICALL
+Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jclass thiz, jbyteArray saveLoc)
 {
 #ifdef USE_PROFILING
     // TODO
@@ -165,8 +165,8 @@ Java_com_idkjava_thelements_game_SaveManager_saveState(JNIEnv* env, jobject thiz
     copyFile(tempLoc, saveLoc3);
     return TRUE;
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz, jbyteArray loadLoc)
+JNIEXPORT jchar JNICALL
+Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jclass thiz, jbyteArray loadLoc)
 {
     jsize len = env->GetArrayLength(loadLoc);
     jbyte* loadLoc2 = (jbyte*) malloc(len * sizeof(jbyte));
@@ -193,8 +193,8 @@ Java_com_idkjava_thelements_game_SaveManager_loadState(JNIEnv* env, jobject thiz
     free(loadLoc3);
     return TRUE;
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz)
+JNIEXPORT jchar JNICALL
+Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jclass thiz)
 {
     LOGI("saveTempState");
     char saveLoc[256];
@@ -204,8 +204,8 @@ Java_com_idkjava_thelements_MainActivity_saveTempState(JNIEnv* env, jobject thiz
     strcat(saveLoc, SAVE2_EXTENSION);
     return saveState2(saveLoc);
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thiz)
+JNIEXPORT jchar JNICALL
+Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jclass thiz)
 {
     char loadLoc[256];
     strcpy(loadLoc, ROOT_FOLDER);
@@ -217,7 +217,7 @@ Java_com_idkjava_thelements_MainActivity_loadDemoState(JNIEnv* env, jobject thiz
 
 //General utility functions
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
+Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jclass thiz)
 {
     // Initialization
     atmosphereSetup();
@@ -232,7 +232,7 @@ Java_com_idkjava_thelements_MainActivity_nativeInit(JNIEnv* env, jobject thiz)
 #endif
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_nativeRefreshElements(JNIEnv* env, jobject thiz)
+Java_com_idkjava_thelements_MainActivity_nativeRefreshElements(JNIEnv* env, jclass thiz)
 {
 	// Reload all elements, recreate eleList.lst
 	elementSetup();
@@ -246,7 +246,7 @@ Java_com_idkjava_thelements_MainActivity_clearScreen(JNIEnv* env, jobject thiz)
 
 //Setter functions
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jobject thiz, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
+Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, jclass thiz, jboolean leftBorderState, jboolean topBorderState, jboolean rightBorderState, jboolean bottomBorderState)
 {
     cAtmosphere->borderLeft = leftBorderState;
     cAtmosphere->borderTop = topBorderState;
@@ -254,17 +254,17 @@ Java_com_idkjava_thelements_preferences_Preferences_setBorderState(JNIEnv* env, 
     cAtmosphere->borderBottom = bottomBorderState;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jobject thiz, jboolean accelState)
+Java_com_idkjava_thelements_preferences_Preferences_setAccelState(JNIEnv* env, jclass thiz, jboolean accelState)
 {
     accelOn = (char) accelState;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jobject thiz, jboolean flippedState)
+Java_com_idkjava_thelements_preferences_Preferences_setFlippedState(JNIEnv* env, jclass thiz, jboolean flippedState)
 {
     flipped = (char) flippedState;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jobject thiz, jchar redValue, jchar greenValue, jchar blueValue)
+Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* env, jclass thiz, jchar redValue, jchar greenValue, jchar blueValue)
 {
     //Set the eraser color to the background color, used as the reference whenever background color is needed
     cAtmosphere->backgroundRed = redValue;
@@ -285,17 +285,17 @@ Java_com_idkjava_thelements_preferences_Preferences_setBackgroundColor(JNIEnv* e
     */
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jobject thiz, jchar temp)
+Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereTemp(JNIEnv* env, jclass thiz, jchar temp)
 {
     cAtmosphere->heat = temp;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jobject thiz, jfloat gravity)
+Java_com_idkjava_thelements_preferences_Preferences_setAtmosphereGravity(JNIEnv* env, jclass thiz, jfloat gravity)
 {
     cAtmosphere->gravity = gravity;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject thiz, jint zoom)
+Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jclass thiz, jint zoom)
 {
     if(zoom != zoomFactor)
     {
@@ -304,24 +304,24 @@ Java_com_idkjava_thelements_preferences_Preferences_setZoom(JNIEnv* env, jobject
     }
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jobject thiz, jboolean playState)
+Java_com_idkjava_thelements_MainActivity_setPlayState(JNIEnv* env, jclass thiz, jboolean playState)
 {
     play = (char) playState;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jobject thiz, jchar element)
+Java_com_idkjava_thelements_MainActivity_setElement(JNIEnv* env, jclass thiz, jchar element)
 {
 	if (element >= 0 && element < numElements) {
 		cElement = elements[element];
 	}
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jobject thiz, jchar brushSizeValue)
+Java_com_idkjava_thelements_MainActivity_setBrushSize(JNIEnv* env, jclass thiz, jchar brushSizeValue)
 {
     brushSize = brushSizeValue;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jclass thiz, jint w, jint h, jbyteArray pixels) {
     int numChannels = 4;
     bhTexWidth = w;
     bhTexHeight = h;
@@ -331,7 +331,7 @@ Java_com_idkjava_thelements_ElementsApplication_setBHTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, bhArr, 0);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_ElementsApplication_setWHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+Java_com_idkjava_thelements_ElementsApplication_setWHTex(JNIEnv* env, jclass thiz, jint w, jint h, jbyteArray pixels) {
     int numChannels = 4;
     whTexWidth = w;
     whTexHeight = h;
@@ -341,7 +341,7 @@ Java_com_idkjava_thelements_ElementsApplication_setWHTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, whArr, 0);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_ElementsApplication_setCHTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+Java_com_idkjava_thelements_ElementsApplication_setCHTex(JNIEnv* env, jclass thiz, jint w, jint h, jbyteArray pixels) {
     int numChannels = 4;
     chTexWidth = w;
     chTexHeight = h;
@@ -351,7 +351,7 @@ Java_com_idkjava_thelements_ElementsApplication_setCHTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, chArr, 0);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_ElementsApplication_setNGTex(JNIEnv* env, jobject thiz, jint w, jint h, jbyteArray pixels) {
+Java_com_idkjava_thelements_ElementsApplication_setNGTex(JNIEnv* env, jclass thiz, jint w, jint h, jbyteArray pixels) {
     int numChannels = 4;
     ngTexWidth = w;
     ngTexHeight = h;
@@ -361,15 +361,15 @@ Java_com_idkjava_thelements_ElementsApplication_setNGTex(JNIEnv* env, jobject th
     env->ReleaseByteArrayElements(pixels, ngArr, 0);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setBrushProps(JNIEnv* env, jobject thiz, jint brushType) {
+Java_com_idkjava_thelements_game_SandView_setBrushProps(JNIEnv* env, jclass thiz, jint brushType) {
     brushProps = brushType;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setDragProps(JNIEnv* env, jobject thiz, jint renderType) {
+Java_com_idkjava_thelements_game_SandView_setDragProps(JNIEnv* env, jclass thiz, jint renderType) {
     renderOverlayType = renderType;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jclass thiz, jint x, jint y) {
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
     rectValid = true;
@@ -377,18 +377,18 @@ Java_com_idkjava_thelements_game_SandView_rectStart(JNIEnv* env, jobject thiz, j
     rectSY = rectEY = mY;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_rectMove(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_rectMove(JNIEnv* env, jclass thiz, jint x, jint y) {
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
     rectEX = mX;
     rectEY = mY;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_rectEnd(JNIEnv* env, jobject thiz) {
+Java_com_idkjava_thelements_game_SandView_rectEnd(JNIEnv* env, jclass thiz) {
     rectValid = false;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jclass thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
@@ -398,7 +398,7 @@ Java_com_idkjava_thelements_game_SandView_brushStartLocation(JNIEnv* env, jobjec
     pthread_mutex_unlock(&brush_mutex);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jclass thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
@@ -407,7 +407,7 @@ Java_com_idkjava_thelements_game_SandView_brushMoveLocation(JNIEnv* env, jobject
     pthread_mutex_unlock(&brush_mutex);
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jclass thiz, jint x, jint y) {
     pthread_mutex_lock(&brush_mutex);
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
@@ -418,7 +418,7 @@ Java_com_idkjava_thelements_game_SandView_brushEndLocation(JNIEnv* env, jobject 
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jclass thiz, jint x, jint y) {
     if (world != WORLD_SPACE) {
         return false;
     }
@@ -428,7 +428,7 @@ Java_com_idkjava_thelements_game_SandView_makeBlackHole(JNIEnv* env, jobject thi
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jclass thiz, jint x, jint y) {
     if (world != WORLD_SPACE) {
         return false;
     }
@@ -438,7 +438,7 @@ Java_com_idkjava_thelements_game_SandView_makeWhiteHole(JNIEnv* env, jobject thi
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz, jint x, jint y) {
+Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jclass thiz, jint x, jint y) {
     if (world != WORLD_SPACE) {
         return false;
     }
@@ -448,7 +448,7 @@ Java_com_idkjava_thelements_game_SandView_makeCurlHole(JNIEnv* env, jobject thiz
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jclass thiz,
     jint sx, jint sy, jint ex, jint ey) {
     if (world != WORLD_SPACE) {
         return false;
@@ -459,10 +459,10 @@ Java_com_idkjava_thelements_game_SandView_makeNullGravity(JNIEnv* env, jobject t
     return makeNullGravity(startX, startY, endX, endY);
 }
 
-JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject thiz, jint x, jint y) {
+JNIEXPORT void JNICALL
+Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jclass thiz, jint x, jint y) {
     if (world != WORLD_SPACE) {
-        return false;
+        return;
     }
     float mX, mY;
     convertMouseCoords(x, y, &mX, &mY);
@@ -495,11 +495,10 @@ Java_com_idkjava_thelements_game_SandView_removeGravObject(JNIEnv* env, jobject 
     for (int j = closest; j < numSpaceObjs; ++j) {
         spaceObjs[j] = spaceObjs[j+1];
     }
-    return false;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawRect(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_drawRect(JNIEnv* env, jclass thiz,
     jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
@@ -513,7 +512,7 @@ Java_com_idkjava_thelements_game_SandView_drawRect(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawTri(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_drawTri(JNIEnv* env, jclass thiz,
     jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
@@ -526,7 +525,7 @@ Java_com_idkjava_thelements_game_SandView_drawTri(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawCircle(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_drawCircle(JNIEnv* env, jclass thiz,
     jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
@@ -548,8 +547,8 @@ Java_com_idkjava_thelements_game_SandView_drawCircle(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawLine(JNIEnv* env, jobject thiz,
-                                                   jint startX, jint startY, jint endX, jint endY) {
+Java_com_idkjava_thelements_game_SandView_drawLine(JNIEnv* env, jclass thiz,
+                  jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
     convertMouseCoords(endX, endY, &ex, &ey);
@@ -559,7 +558,7 @@ Java_com_idkjava_thelements_game_SandView_drawLine(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawLineDashed(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_drawLineDashed(JNIEnv* env, jclass thiz,
     jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
@@ -583,7 +582,7 @@ Java_com_idkjava_thelements_game_SandView_drawLineDashed(JNIEnv* env, jobject th
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_drawSlingshot(JNIEnv* env, jobject thiz,
+Java_com_idkjava_thelements_game_SandView_drawSlingshot(JNIEnv* env, jclass thiz,
     jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
@@ -598,31 +597,31 @@ Java_com_idkjava_thelements_game_SandView_drawSlingshot(JNIEnv* env, jobject thi
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jobject thiz, jchar mode)
+Java_com_idkjava_thelements_MainActivity_setFilterMode(JNIEnv* env, jclass thiz, jchar mode)
 {
   filterType = mode;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setWorld(JNIEnv* env, jobject thiz, jint newWorld) {
+Java_com_idkjava_thelements_MainActivity_setWorld(JNIEnv* env, jclass thiz, jint newWorld) {
   world = newWorld;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_panView(JNIEnv* env, jobject thiz, jint dx, jint dy) {
+Java_com_idkjava_thelements_game_SandView_panView(JNIEnv* env, jclass thiz, jint dx, jint dy) {
   // Scale to view coords and pan by the given delta
   centerX += (dx/(float)screenWidth)*viewWidth;
   centerY += (dy/(float)screenHeight)*viewHeight;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jobject thiz, jfloat scale)
+Java_com_idkjava_thelements_game_SandView_setPinchScale(JNIEnv* env, jclass thiz, jfloat scale)
 {
   zoomScale = scale;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_commitPinch(JNIEnv* env, jobject thiz)
+Java_com_idkjava_thelements_game_SandView_commitPinch(JNIEnv* env, jclass thiz)
 {
   viewWidth = viewWidth * zoomScale;
   viewHeight = viewHeight * zoomScale;
@@ -631,13 +630,13 @@ Java_com_idkjava_thelements_game_SandView_commitPinch(JNIEnv* env, jobject thiz)
 
 
 //Getter functions
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jobject thiz)
+JNIEXPORT jchar JNICALL
+Java_com_idkjava_thelements_MainActivity_getElement(JNIEnv* env, jclass thiz)
 {
     return cElement->index;
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject thiz, int i)
+JNIEXPORT jint JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jclass thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->red;
@@ -646,8 +645,8 @@ Java_com_idkjava_thelements_MainActivity_getElementRed(JNIEnv* env, jobject thiz
 		return 0;
 	}
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject thiz, int i)
+JNIEXPORT jint JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jclass thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->green;
@@ -656,8 +655,8 @@ Java_com_idkjava_thelements_MainActivity_getElementGreen(JNIEnv* env, jobject th
 		return 0;
 	}
 }
-JNIEXPORT char JNICALL
-Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject thiz, int i)
+JNIEXPORT jint JNICALL
+Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jclass thiz, int i)
 {
 	if (i >= 0 && i < numElements) {
 		return elements[i]->blue;
@@ -667,7 +666,7 @@ Java_com_idkjava_thelements_MainActivity_getElementBlue(JNIEnv* env, jobject thi
 	}
 }
 JNIEXPORT jbyteArray JNICALL
-Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jobject thiz, int i)
+Java_com_idkjava_thelements_MainActivity_getElementInfo(JNIEnv* env, jclass thiz, int i)
 {
     // TODO(gkanwar): Rename CustomElement message to ElementInfo,
     // since this is not actually a custom.
@@ -715,33 +714,33 @@ Java_com_idkjava_thelements_MainActivity_getMaxSpecials(JNIEnv* env, jobject thi
     return MAX_SPECIALS;
 }
 JNIEXPORT int JNICALL
-Java_com_idkjava_thelements_MainActivity_getWorld(JNIEnv* env, jobject thiz) {
+Java_com_idkjava_thelements_MainActivity_getWorld(JNIEnv* env, jclass thiz) {
     return world;
 }
 JNIEXPORT int JNICALL
-Java_com_idkjava_thelements_MainActivity_getSurfaceWidth(JNIEnv* env, jobject thiz) {
+Java_com_idkjava_thelements_MainActivity_getSurfaceWidth(JNIEnv* env, jclass thiz) {
     return screenWidth;
 }
 JNIEXPORT int JNICALL
-Java_com_idkjava_thelements_MainActivity_getSurfaceHeight(JNIEnv* env, jobject thiz) {
+Java_com_idkjava_thelements_MainActivity_getSurfaceHeight(JNIEnv* env, jclass thiz) {
     return screenHeight;
 }
 
 //Accelerometer related
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jobject thiz, float xGravityIn)
+Java_com_idkjava_thelements_MainActivity_setXGravity(JNIEnv* env, jclass thiz, float xGravityIn)
 {
     xGravity = xGravityIn;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jobject thiz, float yGravityIn)
+Java_com_idkjava_thelements_MainActivity_setYGravity(JNIEnv* env, jclass thiz, float yGravityIn)
 {
     yGravity = yGravityIn;
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_game_SandView_addPortal(JNIEnv* env, jobject thiz,
-                                                   jint startX, jint startY, jint endX, jint endY) {
+Java_com_idkjava_thelements_game_SandView_addPortal(JNIEnv* env, jclass thiz,
+                   jint startX, jint startY, jint endX, jint endY) {
     float sx, sy, ex, ey;
     convertMouseCoords(startX, startY, &sx, &sy);
     convertMouseCoords(endX, endY, &ex, &ey);
@@ -751,13 +750,8 @@ Java_com_idkjava_thelements_game_SandView_addPortal(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_loadFromImage(JNIEnv* env,
-                                                            jobject thiz,
-                                                            jintArray pixels,
-                                                            jint offsetx,
-                                                            jint offsety,
-                                                            jint w,
-                                                            jint h)
+Java_com_idkjava_thelements_MainActivity_loadFromImage(JNIEnv* env, jclass thiz, jintArray pixels,
+                           jint offsetx, jint offsety, jint w, jint h)
 {
   LOGI("loading from image");
   int* bitPixels = env->GetIntArrayElements(pixels, 0);
@@ -766,7 +760,7 @@ Java_com_idkjava_thelements_MainActivity_loadFromImage(JNIEnv* env,
 
 //Upgrading save files (for backwards compatibility)
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_SplashActivity_upgradeCustomElement(JNIEnv* env, jobject thiz, jstring filename)
+Java_com_idkjava_thelements_SplashActivity_upgradeCustomElement(JNIEnv* env, jclass thiz, jstring filename)
 {
     jboolean success = (jboolean) true;
     const char* nativeFilename = env->GetStringUTFChars(filename, NULL);
@@ -793,7 +787,7 @@ Java_com_idkjava_thelements_SplashActivity_upgradeCustomElement(JNIEnv* env, job
     return success;
 }
 JNIEXPORT jboolean JNICALL
-Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject thiz, jstring filename)
+Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jclass thiz, jstring filename)
 {
     jboolean success = (jboolean) true;
     const char* nativeFilename = env->GetStringUTFChars(filename, NULL);
@@ -823,7 +817,7 @@ Java_com_idkjava_thelements_SplashActivity_upgradeSaveFile(JNIEnv* env, jobject 
     return success;
 }
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jobject thiz, jstring newRoot) {
+Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jclass thiz, jstring newRoot) {
     const char* nativeRoot = env->GetStringUTFChars(newRoot, NULL);
     char *nativeRootCpy = new char[256];
     strncpy(nativeRootCpy, nativeRoot, 256);
@@ -832,7 +826,7 @@ Java_com_idkjava_thelements_SplashActivity_setRootDir(JNIEnv* env, jobject thiz,
 }
 
 JNIEXPORT void JNICALL
-Java_com_idkjava_thelements_MainActivity_setPaidCameraOn(JNIEnv* env, jobject thiz, jboolean cameraOn)
+Java_com_idkjava_thelements_MainActivity_setPaidCameraOn(JNIEnv* env, jclass thiz, jboolean cameraOn)
 {
     paidCameraOn = cameraOn;
 }

@@ -173,7 +173,7 @@ bool specialPortal(int firstParticle, int secondParticle)
         final_position_x = (int) (secondPortal->x + final_offset_x);
         final_position_y = (int) (secondPortal->y + final_offset_y);
 
-        // FIXME: in bounds check required
+        if (!coordInBounds(final_position_x, final_position_y)) continue;
         particleAtTarget = allCoords[getIndex(final_position_x, final_position_y)];
         if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
             if (getParticleSpecialVal(particleAtTarget, SPECIAL_PORTAL) == firstPortal->pairIdx) {
@@ -182,50 +182,52 @@ bool specialPortal(int firstParticle, int secondParticle)
         }
         break;
     }
-    // FIXME: if no valid space found we should just exit here (add a boolean flag or something?)
 
-    // Move the particle if we can...
-    if (coordInBounds(final_position_x, final_position_y)) {
-        // you could create an infinite loop of portals which would freeze the game
-        if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
-            return false;
-        }
-        // If we moved, we need to adjust the velocity as well
-        // First we get the velocity vector in the vector space of the first portal
-        float xv = a_xVel[firstParticle];
-        float yv = a_yVel[firstParticle];
-
-        // For velocity, we don't want to adjust the magnitude of the vector, so normalize
-        // the length to be 1.
-        float perp_norm = sqrt(portal_perp_x*portal_perp_x +  portal_perp_y*portal_perp_y);
-        float l_norm = sqrt(portal_l_x*portal_l_x +  portal_l_y*portal_l_y);
-
-        float det_unit = det/(perp_norm*l_norm);
-        float v_c_x = ((portal_perp_y/perp_norm * xv) - (portal_perp_x/perp_norm * yv))/det_unit;
-        float v_c_y = (-(portal_l_y/l_norm * xv) + (portal_l_x/l_norm * yv))/det_unit;
-
-        float perp2_norm = sqrt(portal2_perp_x*portal2_perp_x +  portal2_perp_y*portal2_perp_y);
-        float l2_norm = sqrt(portal2_l_x*portal2_l_x +  portal2_l_y*portal2_l_y);
-
-        float final_vel_x = portal2_l_x/l2_norm * v_c_x + portal2_perp_x/perp2_norm * v_c_y;
-        float final_vel_y = portal2_l_y/l2_norm * v_c_x + portal2_perp_y/perp2_norm * v_c_y;
-
-        a_xVel[firstParticle] = final_vel_x;
-        a_yVel[firstParticle] = final_vel_y;
-
-        a_x[firstParticle] = (float) final_position_x;
-        a_y[firstParticle] = (float) final_position_y;
-        // FIXME: our code doesn't support chaining collisions like this, and I don't think
-        // there is a nice way to do it in general. Maybe better to just return false
-        // when particleAtTarget == -1 is detected above.
-        if (particleAtTarget != -1)
-        {
-            collide(firstParticle, particleAtTarget);
-        }
-        // FIXME: we need to set a_hasMoved[firstParticle] = true so that allCoords is correctly updated
-        return true;
+    if (!coordInBounds(final_position_x, final_position_y)) {
+        return false;
+    }
+    if (particleAtTarget != -1) { // TODO: Is there a way to support collisions through portals?
+        return false;
     }
 
-    return false;
+    /// Move the particle if we can...
+    // you could create an infinite loop of portals which would freeze the game
+    if (particleAtTarget != -1 && a_element[particleAtTarget]->index == PORTAL_ELEMENT) {
+        return false;
+    }
+    // If we moved, we need to adjust the velocity as well
+    // First we get the velocity vector in the vector space of the first portal
+    float xv = a_xVel[firstParticle];
+    float yv = a_yVel[firstParticle];
+
+    // For velocity, we don't want to adjust the magnitude of the vector, so normalize
+    // the length to be 1.
+    float perp_norm = sqrt(portal_perp_x*portal_perp_x +  portal_perp_y*portal_perp_y);
+    float l_norm = sqrt(portal_l_x*portal_l_x +  portal_l_y*portal_l_y);
+
+    float det_unit = det/(perp_norm*l_norm);
+    float v_c_x = ((portal_perp_y/perp_norm * xv) - (portal_perp_x/perp_norm * yv))/det_unit;
+    float v_c_y = (-(portal_l_y/l_norm * xv) + (portal_l_x/l_norm * yv))/det_unit;
+
+    float perp2_norm = sqrt(portal2_perp_x*portal2_perp_x +  portal2_perp_y*portal2_perp_y);
+    float l2_norm = sqrt(portal2_l_x*portal2_l_x +  portal2_l_y*portal2_l_y);
+
+    float final_vel_x = portal2_l_x/l2_norm * v_c_x + portal2_perp_x/perp2_norm * v_c_y;
+    float final_vel_y = portal2_l_y/l2_norm * v_c_x + portal2_perp_y/perp2_norm * v_c_y;
+
+    a_xVel[firstParticle] = final_vel_x;
+    a_yVel[firstParticle] = final_vel_y;
+
+    a_x[firstParticle] = (float) final_position_x;
+    a_y[firstParticle] = (float) final_position_y;
+    // FIXME: our code doesn't support chaining collisions like this, and I don't think
+    // there is a nice way to do it in general. For now, I just return false
+    // when particleAtTarget == -1 is detected above.
+//    if (particleAtTarget != -1)
+//    {
+//        collide(firstParticle, particleAtTarget);
+//    }
+    a_hasMoved[firstParticle] = true;
+    return true;
 }
 

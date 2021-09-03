@@ -8,7 +8,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-public class FixMeActivity extends Activity
+import androidx.activity.ComponentActivity;
+
+public class FixMeActivity extends ComponentActivity
 {
 	private TextView logOutput;
 	

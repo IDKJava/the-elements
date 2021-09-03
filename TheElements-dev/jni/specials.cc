@@ -273,20 +273,24 @@ bool specialFlow(int particle, int sp) {
           leftUpAng = ang+dir*M_PI*3.0/4.0, rightUpAng = ang-dir*M_PI*3.0/4.0;
     float leftX = x+sqrt(2.0)*cos(leftAng), leftY = y+sqrt(2.0)*sin(leftAng);
     int leftInd = getIndex(leftX, leftY);
-    int leftPart = allCoords[leftInd];
+    bool leftInBounds = coordInBounds(leftX, leftY);
+    int leftPart = leftInBounds ? allCoords[leftInd] : -1;
     float rightX = x+sqrt(2.0)*cos(rightAng), rightY = y+sqrt(2.0)*sin(rightAng);
     int rightInd = getIndex(rightX, rightY);
-    int rightPart = allCoords[rightInd];
+    bool rightInBounds = coordInBounds(rightX, rightY);
+    int rightPart = rightInBounds ? allCoords[rightInd] : -1;
     float leftUpX = x+sqrt(2.0)*cos(leftUpAng), leftUpY = y+sqrt(2.0)*sin(leftUpAng);
     int leftUpInd = getIndex(leftUpX, leftUpY);
-    int leftUpPart = allCoords[leftUpInd];
+    bool leftUpInBounds = coordInBounds(leftUpX, leftUpY);
+    int leftUpPart = leftUpInBounds ? allCoords[leftUpInd] : -1;
     float rightUpX = x+sqrt(2.0)*cos(rightUpAng), rightUpY = y+sqrt(2.0)*sin(rightUpAng);
     int rightUpInd = getIndex(rightUpX, rightUpY);
-    int rightUpPart = allCoords[rightUpInd];
+    bool rightUpInBounds = coordInBounds(rightUpX, rightUpY);
+    int rightUpPart = rightUpInBounds ? allCoords[rightUpInd] : -1;
 
     // If movement is possible, we do the allcoords update ourselves, because
     // this extends outside the simple 2-particle collision
-    if (coordInBounds(leftX, leftY) &&
+    if (leftInBounds &&
         (leftPart == -1 || a_element[leftPart]->density < thisDensity)) {
         a_x[particle] = leftX;
         a_y[particle] = leftY;
@@ -305,7 +309,7 @@ bool specialFlow(int particle, int sp) {
         }
         return true;
     }
-    else if (coordInBounds(rightX, rightY) &&
+    else if (rightInBounds &&
         (rightPart == -1 || a_element[rightPart]->density < thisDensity)) {
         a_x[particle] = rightX;
         a_y[particle] = rightY;
@@ -324,7 +328,7 @@ bool specialFlow(int particle, int sp) {
         }
         return true;
     }
-    else if (coordInBounds(leftUpX, leftUpY) && leftUpPart != sp &&
+    else if (leftUpInBounds && leftUpPart != sp &&
         (leftUpPart == -1 || a_element[leftUpPart]->density < thisDensity)) {
         a_x[particle] = leftUpX;
         a_y[particle] = leftUpY;
@@ -343,7 +347,7 @@ bool specialFlow(int particle, int sp) {
         }
         return true;
     }
-    else if (coordInBounds(rightUpX, rightUpY) &&
+    else if (rightUpInBounds &&
         (rightUpPart == -1 || a_element[rightUpPart]->density < thisDensity)) {
         a_x[particle] = rightUpX;
         a_y[particle] = rightUpY;

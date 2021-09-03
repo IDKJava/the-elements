@@ -16,7 +16,7 @@
 hsl elementHSL[NUM_BASE_ELEMENTS];
 int closestElementForHL[SIZE][SIZE][SIZE];
 
-const bool freeElements[] = {
+const bool freeElements[NUM_BASE_ELEMENTS] = {
     // ----Special----
     false,               // 0 = Spawn
     false,                // 1 = Drag
@@ -51,6 +51,7 @@ const bool freeElements[] = {
     false, // 29 = Insect Killer
     false,  // 30 = Electricity
     false,        // 31 = Metal
+    false,        // 32 = Portal
 };
 
 

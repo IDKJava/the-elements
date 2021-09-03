@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.money.ProductManager;
 
@@ -12,7 +14,7 @@ import com.idkjava.thelements.money.ProductManager;
  * Activity to offer the user the choice of world to start in. Displays locked worlds differently,
  * and links to the buy page if the user selects them.
  */
-public class SelectWorldActivity extends ReportingActivity {
+public class SelectWorldActivity extends FragmentActivity {
     View earthWorldButton;
     View spaceWorldButton;
 

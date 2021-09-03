@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
@@ -395,6 +396,8 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
         for (int i = 0; i < baseElementsList.length; i++) {
             // Portal is an element in the backend but shouldn't show up in element list
             // since we only create it with the portal tool
+            // TODO: Should just move PORTAL_ELEMENT to the start of the elements list
+            // (below the NORMAL_ELEMENT cutoff)
             if (i + NORMAL_ELEMENT != PORTAL_ELEMENT) {
                 elementsList.add(baseElementsList[i].toString());
             }
@@ -1084,7 +1087,7 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
 
     /**
      * Sets a filter rendering mode
-     * 
+     *
      * @param mode
      *            0 - none 1 - motion blur
      */
@@ -1109,9 +1112,9 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
     private static native void setPaidCameraOn(boolean cameraOn);
 
     // @formatter:on
+    
 
     static {
-        System.loadLibrary("c++_shared");
         System.loadLibrary("protobuf");
         System.loadLibrary("thelements");
     }

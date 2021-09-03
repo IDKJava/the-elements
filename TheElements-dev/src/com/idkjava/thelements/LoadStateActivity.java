@@ -15,6 +15,8 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.idkjava.thelements.game.SaveManager;
 import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.proto.Messages;
@@ -23,7 +25,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-public class LoadStateActivity extends ReportingActivity
+public class LoadStateActivity extends FragmentActivity
 {
 	private static ImageButton actionButton;
 	private static TableRow tr;

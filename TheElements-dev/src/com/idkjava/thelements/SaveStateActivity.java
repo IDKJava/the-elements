@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.game.SaveManager;
 
-public class SaveStateActivity extends ReportingActivity
+public class SaveStateActivity extends FragmentActivity
 {
 	public static Button saveButton;
 	public static EditText statename;
