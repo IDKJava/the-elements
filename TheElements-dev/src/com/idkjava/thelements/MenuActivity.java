@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -20,9 +19,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
-import com.idkjava.thelements.money.ProductManager;
 import com.idkjava.thelements.preferences.PreferencesActivity;
 import com.winsontan520.wversionmanager.library.WVersionManager;
 import com.winsontan520.wversionmanager.library.WVersionManager.WVersionManagerEventListener;
@@ -93,12 +90,7 @@ public class MenuActivity extends FragmentActivity {
         fix_me_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Fix me button (main menu)")
-                                .build()
-                );
+                ElementsApplication.sTracker.logEvent("fix_me_attempt", null);
                 startActivity(new Intent(MenuActivity.this, FixMeActivity.class));
             }
         });
@@ -132,32 +124,23 @@ public class MenuActivity extends FragmentActivity {
 
             @Override
             public void onUpdateNowClicked() {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Update Now Clicked")
-                                .build()
-                );
+                Bundle bundle = new Bundle();
+                bundle.putString("response", "update_now");
+                ElementsApplication.sTracker.logEvent("update_prompt", bundle);
             }
 
             @Override
             public void onSkipVersionClicked() {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Skip Version Clicked")
-                                .build()
-                );
+                Bundle bundle = new Bundle();
+                bundle.putString("response", "skip_version");
+                ElementsApplication.sTracker.logEvent("update_prompt", bundle);
             }
 
             @Override
             public void onRemindLaterClicked() {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Remind Later Clicked")
-                                .build()
-                );
+                Bundle bundle = new Bundle();
+                bundle.putString("response", "remind_later");
+                ElementsApplication.sTracker.logEvent("update_prompt", bundle);
             }
         });
 

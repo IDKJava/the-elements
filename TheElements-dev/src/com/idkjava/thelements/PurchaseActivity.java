@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.HitBuilders;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.idkjava.thelements.error.ActivityErrorHandler;
 import com.idkjava.thelements.error.ErrorHandler;
 import com.idkjava.thelements.money.ProductManager;
@@ -29,6 +29,15 @@ public class PurchaseActivity extends FragmentActivity {
         mProductManager = ElementsApplication.getProductManager();
         mProductManager.bindErrorHandler(handler);
         mProductManager.launchPurchase(this, sku);
+    }
+
+    private void trackSelectItem(String sku, String name) {
+        Bundle bundle = new Bundle();
+        Bundle item = new Bundle();
+        item.putString("item_id", sku);
+        item.putString("item_name", name);
+        bundle.putBundle("items", item);
+        ElementsApplication.sTracker.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle);
     }
 
     @Override
@@ -53,12 +62,7 @@ public class PurchaseActivity extends FragmentActivity {
                     handler.error(R.string.space_world_owned_error);
                 }
                 else {
-                    ElementsApplication.getTracker().send(
-                            new HitBuilders.EventBuilder()
-                                    .setCategory("ButtonPress")
-                                    .setAction("Purchase Space World")
-                                    .build()
-                    );
+                    trackSelectItem(ProductManager.SKU_GRAVITY_PACK, "Gravity Pack");
                     firePurchase(ProductManager.SKU_GRAVITY_PACK, handler);
                 }
             }
@@ -71,12 +75,7 @@ public class PurchaseActivity extends FragmentActivity {
                     handler.error(R.string.tool_pack_owned_error);
                 }
                 else {
-                    ElementsApplication.getTracker().send(
-                            new HitBuilders.EventBuilder()
-                                    .setCategory("ButtonPress")
-                                    .setAction("Purchase Tool Pack")
-                                    .build()
-                    );
+                    trackSelectItem(ProductManager.SKU_TOOL_PACK, "Tool Pack");
                     firePurchase(ProductManager.SKU_TOOL_PACK, handler);
                 }
             }
@@ -89,12 +88,7 @@ public class PurchaseActivity extends FragmentActivity {
                     handler.error(R.string.camera_tool_owned_error);
                 }
                 else {
-                    ElementsApplication.getTracker().send(
-                            new HitBuilders.EventBuilder()
-                                    .setCategory("ButtonPress")
-                                    .setAction("Purchase Camera Tool")
-                                    .build()
-                    );
+                    trackSelectItem(ProductManager.SKU_CAMERA_TOOL, "Camera Tool");
                     firePurchase(ProductManager.SKU_CAMERA_TOOL, handler);
                 }
             }
@@ -108,12 +102,7 @@ public class PurchaseActivity extends FragmentActivity {
                     handler.error(R.string.portal_tool_owned_error);
                 }
                 else {
-                    ElementsApplication.getTracker().send(
-                            new HitBuilders.EventBuilder()
-                                    .setCategory("ButtonPress")
-                                    .setAction("Purchase Portal Tool")
-                                    .build()
-                    );
+                    trackSelectItem(ProductManager.SKU_PORTAL_TOOL, "Portal Tool");
                     firePurchase(ProductManager.SKU_PORTAL_TOOL, handler);
                 }
             }

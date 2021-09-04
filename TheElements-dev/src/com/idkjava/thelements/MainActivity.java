@@ -31,6 +31,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.sax.Element;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -52,9 +53,6 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.ExceptionReporter;
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
 import com.idkjava.thelements.custom.CustomElementManager;
 import com.idkjava.thelements.custom.CustomElementManagerActivity;
 import com.idkjava.thelements.dialog.ElementAdapter;
@@ -239,7 +237,6 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
 
     private static float mDPI;
 
-    private Tracker mTracker;
     private int curWorld = WORLD_EARTH;
 
     private boolean checkWorldOwned(int world) {
@@ -465,13 +462,7 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
                 madeAnElement &&
                 !shownRatePrompt)
         {
-            ((ElementsApplication)getApplication()).getTracker().send(
-                    new HitBuilders.EventBuilder()
-                            .setCategory("Info")
-                            .setAction("shown_rate_prompt")
-                            .setNonInteraction(true)
-                            .build()
-            );
+            ElementsApplication.sTracker.logEvent("shown_rate_prompt", null);
             editor.putBoolean("shown_rate_prompt", true);
             new Handler().postDelayed(new Runnable() {
                 @Override
@@ -715,23 +706,12 @@ public class MainActivity extends FragmentActivity implements DialogInterface.On
                     IconListItem item = worldList.get(which);
                     switch (item.nameRes) {
                         case R.string.earth_world:
-                            ((ElementsApplication)getApplication()).getTracker().send(
-                                new HitBuilders.EventBuilder()
-                                    .setCategory("ButtonPress")
-                                    .setAction("Earth world select")
-                                    .build()
-                            );
                             if (checkWorldOwned(WORLD_EARTH)) {
                                 setCurWorld(WORLD_EARTH);
                             }
                             break;
                         case R.string.space_world:
-                            ((ElementsApplication)getApplication()).getTracker().send(
-                                    new HitBuilders.EventBuilder()
-                                            .setCategory("ButtonPress")
-                                            .setAction("Space world select")
-                                            .build()
-                            );                            if (checkWorldOwned(WORLD_SPACE)) {
+                            if (checkWorldOwned(WORLD_SPACE)) {
                                 setCurWorld(WORLD_SPACE);
                             }
                             break;

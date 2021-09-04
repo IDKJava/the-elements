@@ -1,6 +1,5 @@
 package com.idkjava.thelements.game;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.ElementsApplication;
 import com.idkjava.thelements.MainActivity;
 import com.idkjava.thelements.R;
@@ -64,12 +63,6 @@ public class Control extends LinearLayout {
         custom_elements_button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ElementsApplication.getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Custom elements button (app)")
-                                .build()
-                );
                 activity.startActivity(new Intent(activity,
                         CustomElementManagerActivity.class));
             }

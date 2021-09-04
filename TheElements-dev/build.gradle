@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 task buildProto(type: Exec) {
 //    println 'setting ANDROID_NDK_HOME='
@@ -41,8 +42,8 @@ dependencies {
     implementation "androidx.activity:activity:$activity_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation 'androidx.fragment:fragment:1.4.0-alpha07'
-    implementation 'com.google.android.gms:play-services-analytics:17.0.1'
     implementation "com.android.billingclient:billing:4.0.0"
+    implementation 'com.google.firebase:firebase-analytics:19.0.1'
 }
 
 android {
@@ -51,6 +52,11 @@ android {
         minSdkVersion 16
         compileSdkVersion 29
         targetSdkVersion 29
+        copy {
+            from "src/com/idkjava/thelements/keys/"
+            into "."
+            include "google-services.json"
+        }
     }
 
     externalNativeBuild {

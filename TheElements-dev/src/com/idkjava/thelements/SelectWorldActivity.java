@@ -7,7 +7,6 @@ import android.widget.ImageView;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.money.ProductManager;
 
 /**
@@ -28,12 +27,9 @@ public class SelectWorldActivity extends FragmentActivity {
         earthWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Select world Earth")
-                                .build()
-                );
+                Bundle bundle = new Bundle();
+                bundle.putString("world_name", "Earth");
+                ElementsApplication.sTracker.logEvent("select_world", bundle);
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_EARTH);
                 startActivity(mainIntent);
@@ -44,12 +40,9 @@ public class SelectWorldActivity extends FragmentActivity {
         spaceWorldButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((ElementsApplication)getApplication()).getTracker().send(
-                        new HitBuilders.EventBuilder()
-                                .setCategory("ButtonPress")
-                                .setAction("Select world Space")
-                                .build()
-                );
+                Bundle bundle = new Bundle();
+                bundle.putString("world_name", "Space");
+                ElementsApplication.sTracker.logEvent("select_world", bundle);
                 // World owned check is done in MainActivity
                 Intent mainIntent = new Intent(SelectWorldActivity.this, MainActivity.class);
                 mainIntent.putExtra("world", MainActivity.WORLD_SPACE);

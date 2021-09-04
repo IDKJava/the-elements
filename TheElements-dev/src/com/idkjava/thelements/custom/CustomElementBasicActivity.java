@@ -35,7 +35,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.idkjava.thelements.ElementsApplication;
@@ -262,15 +261,11 @@ public class CustomElementBasicActivity extends FragmentActivity
                 if(CustomElementBasicActivity.this.saveElement())
                 {
                     dialog.dismiss();
-                    ElementsApplication.getTracker().send(
-                            new HitBuilders.EventBuilder()
-                                    .setCategory("Action")
-                                    .setAction("made_element")
-                                    .build()
-                    );
+                    // TODO: Send more info about element properties?
+                    ElementsApplication.sTracker.logEvent("made_element", null);
                     SharedPreferences settings = ElementsApplication.getPrefs();
                     SharedPreferences.Editor editor = settings.edit();
-                    editor.putBoolean("made_element", true);
+                    editor.putBoolean("element_created", true);
                     editor.commit();
                     finish();
                 }
@@ -325,12 +320,7 @@ public class CustomElementBasicActivity extends FragmentActivity
         // Log the custom element name
         Hashtable<String, String> params = new Hashtable<String, String>();
         params.put("Name", custom.getFilename());
-        ElementsApplication.getTracker().send(
-                new HitBuilders.EventBuilder()
-                        .setCategory("Action")
-                        .setAction("element_saved")
-                        .build()
-        );
+        ElementsApplication.sTracker.logEvent("element_saved", null);
         return true;
     }
     

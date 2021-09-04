@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.analytics.HitBuilders;
 import com.idkjava.thelements.game.SaveManager;
 
 public class SaveStateActivity extends FragmentActivity
@@ -41,12 +40,7 @@ public class SaveStateActivity extends FragmentActivity
 						{
 							Toast.makeText(getApplicationContext(), R.string.save_state_failed, Toast.LENGTH_SHORT).show();
 						}
-						((ElementsApplication)getApplication()).getTracker().send(
-								new HitBuilders.EventBuilder()
-										.setCategory("ButtonPress")
-										.setAction("Save")
-										.build()
-						);
+						ElementsApplication.sTracker.logEvent("save_game", null);
 						finish();
 					}
 				}
