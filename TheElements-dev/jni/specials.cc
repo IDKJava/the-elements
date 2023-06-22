@@ -105,7 +105,7 @@ void specialGrow(int particle)
     {
         for (diffY = -1; diffY <= 1; diffY++)
         {
-            if (tempY + diffY >= 0 && tempY + diffY < workHeight && tempX + diffX >= 0 && tempX + diffX < workWidth)
+            if (coordInBounds(tempX+diffX, tempY+diffY))
             {
                 tempAllCoords = allCoords[getIndex(tempX+diffX,tempY+diffY)];
                 if (tempAllCoords != -1 && a_element[tempAllCoords]->index == getElementSpecialVal(a_element[particle], SPECIAL_GROW) && rand() % 10 == 0)
@@ -162,7 +162,7 @@ void specialExplode(int particle)
             {
                 for (diffY = -explosiveness; diffY <= explosiveness; diffY++)
                 {
-                    if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+                    if (coordInBounds(tempX+diffX, tempY+diffY))
                     {
                         tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
                         if (tempAllCoords != -1)
@@ -186,7 +186,7 @@ void specialExplode(int particle)
         {
             for(diffY = -2; diffY <= 2; diffY++)
             {
-                if (tempX + diffX >= 0 && tempX + diffX < workWidth && tempY + diffY >= 0 && tempY + diffY < workHeight)
+                if (coordInBounds(tempX+diffX, tempY+diffY))
                 {
                     tempAllCoords = allCoords[getIndex(tempX + diffX, tempY + diffY)];
                     if(tempAllCoords != -1)
@@ -372,7 +372,9 @@ bool specialFlow(int particle, int sp) {
 void specialJump(int particle)
 {
     struct Element* tempElement = a_element[particle];
-    if ((a_y[particle]+1 == workHeight) || (allCoords[getIndex(a_x[particle], a_y[particle]+1)] != -1))
+    if ((a_y[particle]+1 == workHeight) || (
+            coordInBounds(a_x[particle], a_y[particle]+1) &&
+            allCoords[getIndex(a_x[particle], a_y[particle]+1)] != -1))
     {
         int randVal = rand()%100;
         int jumpVal = getElementSpecialVal(tempElement, SPECIAL_JUMP);
@@ -661,7 +663,7 @@ void specialConductive(int particle)
         int tempI, k, transfered = FALSE;
         for (k = 0; k < 4; k++)
         {
-            if (curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
+            if (coordInBounds(curX+i, curY+j))
             {
                 tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                 if (tempAllCoords != -1)
@@ -717,7 +719,7 @@ void specialConductive(int particle)
             j = i + j;
             for (k = 0; k < 4; k++ )
             {
-                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
+                if (coordInBounds(curX+i, curY+j))
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords != -1)
@@ -768,7 +770,7 @@ void specialConductive(int particle)
         {
             for ( k = 0; k < 4; k++)
             {
-                if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
+                if (coordInBounds(curX+i, curY+j))
                 {
                     tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                     if (tempAllCoords == -1)
@@ -815,7 +817,7 @@ void specialConductive(int particle)
                 j = i + j;
                 for (k = 0; k < 4; k++ )
                 {
-                    if ( curX + i < workWidth && curX + i >= 0 && curY + j < workHeight && curY + j >= 0)
+                    if (coordInBounds(curX+i, curY+j))
                     {
                         tempAllCoords = allCoords[getIndex(curX+i,curY+j)];
                         if (tempAllCoords == -1)
